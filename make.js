@@ -24,17 +24,8 @@ var config = {
   meta: {
     './node_modules/@angular/*': { build: false },
     './node_modules/rxjs/*': { build: false },
-    './node_modules/lodash/*': { build:false},
-    './node_modules/@types/lodash/*': { build:false}
+    './node_modules/lodash/*': { build: false}
   }
 };
 
 builder.config(config);
-// builder
-// .buildStatic('ng2-cf', path.resolve(__dirname, 'bundles/', name + '.js'), {format: 'umd'})
-// .then(function() {
-//   console.log('Build complete.');
-// })
-// .catch(function(err) {
-//   console.log('Error', err);
-// });
