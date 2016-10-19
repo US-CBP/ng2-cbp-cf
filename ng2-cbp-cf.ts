@@ -8,15 +8,19 @@ import './lib/styles/cbp-theme.css';
 import './lib';
 
 import {
+    ButtonDirective,
+    ButtonGroupComponent,
     DropdownTreeFieldComponent,
     DropdownTreeItemComponent,
     HeaderComponent,
-    UniqueSelectionDispatcher,
-    TableComponent,
     PaginationComponent,
+    PayPeriodCalendarComponent,
     RadioButtonComponent,
     RadioGroupComponent,
-    PayPeriodCalendarComponent }    from './src';
+    TableComponent,
+    ToggleButtonDirective,
+    UniqueSelectionDispatcher
+}                                           from './src';
 
 
 @NgModule({
@@ -26,24 +30,30 @@ import {
         HttpModule
     ],
     declarations: [
+        ButtonDirective,
+        ButtonGroupComponent,
         DropdownTreeFieldComponent,
         DropdownTreeItemComponent,
         HeaderComponent,
-        TableComponent,
         PaginationComponent,
+        PayPeriodCalendarComponent,
         RadioButtonComponent,
         RadioGroupComponent,
-        PayPeriodCalendarComponent
+        TableComponent,
+        ToggleButtonDirective
     ],
     exports: [
+        ButtonDirective,
+        ButtonGroupComponent,
         DropdownTreeFieldComponent,
         DropdownTreeItemComponent,
         HeaderComponent,
-        TableComponent,
         PaginationComponent,
+        PayPeriodCalendarComponent,
         RadioButtonComponent,
         RadioGroupComponent,
-        PayPeriodCalendarComponent
+        TableComponent,
+        ToggleButtonDirective
     ],
     providers: [
         UniqueSelectionDispatcher
