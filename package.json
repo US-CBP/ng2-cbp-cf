@@ -1,5 +1,5 @@
 {
-  "name": "ng2-cf",
+  "name": "ng2-cbp-cf",
   "version": "0.0.1",
   "description": "CBP Common Framework for Angular2",
   "homepage": "",
@@ -57,7 +57,6 @@
     "@types/hammerjs": "~2.0.33",
     "@types/jasmine": "~2.2.34",
     "@types/node": "~6.0.41",
-    "@types/lodash": "^4.14.37",
     "angular2-template-loader": "~0.5.0",
     "autoprefixer": "~6.5.0",
     "awesome-typescript-loader": "~2.2.4",
