@@ -103,6 +103,8 @@ export class ButtonDirective implements OnInit {
     }
 
     ngOnInit() {
+        this.addClasses(["btn"]);
+
         this.addClasses(this.role.classes);
         this.addClasses(this.size.classes);
 
