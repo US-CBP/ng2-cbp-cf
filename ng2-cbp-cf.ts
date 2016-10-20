@@ -10,6 +10,10 @@ import './lib';
 import {
     ButtonDirective,
     ButtonGroupComponent,
+    ButtonRole,
+    ButtonRoles,
+    ButtonSize,
+    ButtonSizes,
     DropdownTreeFieldComponent,
     DropdownTreeItemComponent,
     HeaderComponent,
@@ -22,6 +26,7 @@ import {
     UniqueSelectionDispatcher
 }                                           from './src';
 
+export * from './src';
 
 @NgModule({
     imports: [
@@ -64,4 +69,3 @@ import {
 })
 export class CommonFrameworkModule {
 }
-

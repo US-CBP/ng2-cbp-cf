@@ -24,7 +24,7 @@ var config = {
   meta: {
     './node_modules/@angular/*': { build: false },
     './node_modules/rxjs/*': { build: false },
-    './node_modules/lodash/*': { build: false}
+    './node_modules/lodash/*': { build: false }
   }
 };
 

@@ -1,5 +1,4 @@
 ﻿import {
-    forwardRef,
     Component,
     EventEmitter,
     Input,
