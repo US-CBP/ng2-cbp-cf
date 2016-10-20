@@ -1,14 +1,20 @@
-﻿import { CommonModule } from "@angular/common";
-import { FormsModule } from "@angular/forms";
-import { ComponentFixture, TestBed, fakeAsync, tick } from "@angular/core/testing";
-import * as moment from "moment/moment";
+﻿import { CommonModule }                 from "@angular/common";
+import {
+    ComponentFixture,
+    TestBed,
+    fakeAsync,
+    tick
+}                                       from "@angular/core/testing";
+import { FormsModule }                  from "@angular/forms";
+import * as moment                      from "moment/moment";
 
-import { standardISOFormat } from "../shared/date.values";
+import { standardISOFormat }            from "../shared/date.values";
 
-import { PayPeriodCalendarComponent } from "./pay-period-calendar.component";
-import { PayPeriodCalendarService } from "./pay-period-calendar.service";
-import { PayPeriod } from "./pay-period.model";
-import { PayPeriodMonth } from "./pay-period-month.model";
+import { PayPeriodCalendarComponent }   from "./pay-period-calendar.component";
+import { PayPeriodCalendarService }     from "./pay-period-calendar.service";
+import { PayPeriod }                    from "./pay-period.model";
+import { PayPeriodMonth }               from "./pay-period-month.model";
+import { ButtonDirective }              from "../button";
 
 describe("PayPeriodCalendarComponent", () => {
     let months: PayPeriodMonth[];
@@ -25,7 +31,7 @@ describe("PayPeriodCalendarComponent", () => {
 
         TestBed.configureTestingModule({
             imports: [CommonModule, FormsModule],
-            declarations: [PayPeriodCalendarComponent],
+            declarations: [ButtonDirective, PayPeriodCalendarComponent],
             providers: [{ provide: PayPeriodCalendarService, useValue: serviceStub }]
         });
         fixture = TestBed.createComponent(PayPeriodCalendarComponent);
