@@ -1,1 +1,1 @@
-﻿export * from "./dropdown-tree-item.component";
+﻿export * from './dropdown-tree-item.component';
