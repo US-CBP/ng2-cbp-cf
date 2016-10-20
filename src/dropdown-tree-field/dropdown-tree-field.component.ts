@@ -2,6 +2,7 @@
     Component,
     ElementRef,
     EventEmitter,
+    HostListener,
     Input,
     OnChanges,
     OnDestroy,
@@ -32,7 +33,7 @@ export class DropdownTreeFieldComponent implements OnInit, OnChanges, OnDestroy 
     @Input() showFullSelectedPath: boolean = false;
     @Input() selectedNode: TreeNode;
     @Input() nodes: TreeNode[];
-    @Output() nodeSelected = new EventEmitter<TreeNode>();
+    @Output() nodeSelected: EventEmitter<TreeNode> = new EventEmitter<TreeNode>();
 
     @ViewChild('dropdownContainer') dropdownContainerElement: ElementRef;
     @ViewChild('combobox') comboboxElement: ElementRef;
@@ -51,8 +52,8 @@ export class DropdownTreeFieldComponent implements OnInit, OnChanges, OnDestroy 
     dropdownTop: number;
     dropdownWidth: number;
 
-    static readonly focusClass = 'dt--selection-focus';
-    static readonly openClass = 'dt--selection-open';
+    static readonly focusClass: string = 'dt--selection-focus';
+    static readonly openClass: string = 'dt--selection-open';
 
     private stateSubscription: Subscription;
     private parentMap: Map<TreeNode, TreeNode>;
@@ -232,6 +233,18 @@ export class DropdownTreeFieldComponent implements OnInit, OnChanges, OnDestroy 
         }
 
         $event.preventDefault();
+        $event.stopPropagation();
+    }
+
+    @HostListener('window:click', ['$event'])
+    private onWindowClick($event: MouseEvent) {
+        if(this.isDropdownOpen) {
+            this.closeDropdown();
+        }
+    }
+
+    @HostListener('click', ['$event'])
+    private onHostClick($event: MouseEvent) {
         $event.stopPropagation();
     }
 
