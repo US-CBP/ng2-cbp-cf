@@ -1,8 +1,11 @@
-﻿import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable } from "rxjs";
+﻿import { Injectable }           from '@angular/core';
+import {
+    BehaviorSubject,
+    Observable
+}                               from 'rxjs';
 
-import { DropdownTreeState } from "./dropdown-tree-state.model";
-import { TreeNode } from "./tree-node.model";
+import { DropdownTreeState }    from './dropdown-tree-state.model';
+import { TreeNode }             from './tree-node.model';
 
 @Injectable()
 export class DropdownTreeService {

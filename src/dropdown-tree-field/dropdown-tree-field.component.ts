@@ -8,19 +8,19 @@
     OnInit,
     Output,
     ViewChild
-}                               from "@angular/core";
-import { Subscription }         from "rxjs";
+}                               from '@angular/core';
+import { Subscription }         from 'rxjs';
 
-import { DropdownTreeService }  from "./dropdown-tree.service";
-import { DropdownTreeState }    from "./dropdown-tree-state.model";
-import { TreeNode }             from "./tree-node.model";
+import { DropdownTreeService }  from './dropdown-tree.service';
+import { DropdownTreeState }    from './dropdown-tree-state.model';
+import { TreeNode }             from './tree-node.model';
 
 let nextId = 1;
 
 @Component({
-    selector: "cf-dropdown-tree-field",
-    templateUrl: "./dropdown-tree-field.component.html",
-    styleUrls: ["./dropdown-tree-field.component.scss"],
+    selector: 'cf-dropdown-tree-field',
+    templateUrl: './dropdown-tree-field.component.html',
+    styleUrls: ['./dropdown-tree-field.component.scss'],
     providers: [
         DropdownTreeService
     ]
@@ -34,8 +34,8 @@ export class DropdownTreeFieldComponent implements OnInit, OnChanges, OnDestroy 
     @Input() nodes: TreeNode[];
     @Output() nodeSelected = new EventEmitter<TreeNode>();
 
-    @ViewChild("dropdownContainer") dropdownContainerElement: ElementRef;
-    @ViewChild("combobox") comboboxElement: ElementRef;
+    @ViewChild('dropdownContainer') dropdownContainerElement: ElementRef;
+    @ViewChild('combobox') comboboxElement: ElementRef;
 
     treeId: string;
     treeItemIdPrefix: string;
@@ -51,8 +51,8 @@ export class DropdownTreeFieldComponent implements OnInit, OnChanges, OnDestroy 
     dropdownTop: number;
     dropdownWidth: number;
 
-    static readonly focusClass = "dt--selection-focus";
-    static readonly openClass = "dt--selection-open";
+    static readonly focusClass = 'dt--selection-focus';
+    static readonly openClass = 'dt--selection-open';
 
     private stateSubscription: Subscription;
     private parentMap: Map<TreeNode, TreeNode>;
@@ -62,7 +62,7 @@ export class DropdownTreeFieldComponent implements OnInit, OnChanges, OnDestroy 
 
     ngOnInit() {
         this.treeId = `${this.id}-tree`;
-        this.treeItemIdPrefix = this.treeId + "-";
+        this.treeItemIdPrefix = this.treeId + '-';
         this.defaultNode = this.initializeDefaultNode();
         this.initializeNodes();
 
@@ -117,19 +117,19 @@ export class DropdownTreeFieldComponent implements OnInit, OnChanges, OnDestroy 
 
     onComboboxKeydown($event: KeyboardEvent) {
         if(!this.isDropdownOpen) {
-            if(this.isKey($event, "ArrowDown", true)) {
+            if(this.isKey($event, 'ArrowDown', true)) {
                 this.openDropdown();
 
                 $event.stopPropagation();
                 $event.preventDefault();
             }
         } else {
-            if(this.isKey($event, "ArrowUp", true) || this.isKey($event, "Escape")) {
+            if(this.isKey($event, 'ArrowUp', true) || this.isKey($event, 'Escape')) {
                 this.closeDropdown();
 
                 $event.stopPropagation();
                 $event.preventDefault();
-            } else if(this.isKey($event, "ArrowUp")) {
+            } else if(this.isKey($event, 'ArrowUp')) {
                 let previousNode = this.previousVisibleNode();
                 if(previousNode != null) {
                     this.service.highlightNode(previousNode);
@@ -138,7 +138,7 @@ export class DropdownTreeFieldComponent implements OnInit, OnChanges, OnDestroy 
 
                 $event.stopPropagation();
                 $event.preventDefault();
-            } else if(this.isKey($event, "ArrowUp", false, true)) {
+            } else if(this.isKey($event, 'ArrowUp', false, true)) {
                 let previousNode = this.previousVisibleNode();
                 if(previousNode != null) {
                     this.service.highlightNode(previousNode);
@@ -146,7 +146,7 @@ export class DropdownTreeFieldComponent implements OnInit, OnChanges, OnDestroy 
 
                 $event.stopPropagation();
                 $event.preventDefault();
-            } else if(this.isKey($event, "ArrowDown")) {
+            } else if(this.isKey($event, 'ArrowDown')) {
                 let nextNode = this.nextVisibleNode();
                 if(nextNode != null) {
                     this.service.highlightNode(nextNode);
@@ -155,7 +155,7 @@ export class DropdownTreeFieldComponent implements OnInit, OnChanges, OnDestroy 
 
                 $event.stopPropagation();
                 $event.preventDefault();
-            } else if(this.isKey($event, "ArrowDown", false, true)) {
+            } else if(this.isKey($event, 'ArrowDown', false, true)) {
                 let nextNode = this.nextVisibleNode();
                 if(nextNode != null) {
                     this.service.highlightNode(nextNode);
@@ -163,7 +163,7 @@ export class DropdownTreeFieldComponent implements OnInit, OnChanges, OnDestroy 
 
                 $event.stopPropagation();
                 $event.preventDefault();
-            } else if(this.isKey($event, "ArrowLeft")) {
+            } else if(this.isKey($event, 'ArrowLeft')) {
                 let highlightedNode = this.service.currentState().highlightedNode;
                 if(this.service.isNodeExpanded(highlightedNode)) {
                     this.service.collapseNode(highlightedNode);
@@ -177,7 +177,7 @@ export class DropdownTreeFieldComponent implements OnInit, OnChanges, OnDestroy 
 
                 $event.stopPropagation();
                 $event.preventDefault();
-            } else if(this.isKey($event, "ArrowRight")) {
+            } else if(this.isKey($event, 'ArrowRight')) {
                 let highlightedNode = this.service.currentState().highlightedNode;
                 if(this.service.isNodeExpanded(highlightedNode)) {
                     this.service.highlightNode(highlightedNode.children[0]);
@@ -188,29 +188,29 @@ export class DropdownTreeFieldComponent implements OnInit, OnChanges, OnDestroy 
 
                 $event.stopPropagation();
                 $event.preventDefault();
-            } else if(this.isKey($event, "Home")) {
+            } else if(this.isKey($event, 'Home')) {
                 this.service.highlightNode(this.visibleNodes[0]);
                 this.service.selectNode(this.visibleNodes[0]);
 
                 $event.stopPropagation();
                 $event.preventDefault();
-            } else if(this.isKey($event, "Home", false, true)) {
+            } else if(this.isKey($event, 'Home', false, true)) {
                 this.service.highlightNode(this.visibleNodes[0]);
 
                 $event.stopPropagation();
                 $event.preventDefault();
-            } else if(this.isKey($event, "End")) {
+            } else if(this.isKey($event, 'End')) {
                 this.service.highlightNode(this.visibleNodes[this.visibleNodes.length - 1]);
                 this.service.selectNode(this.visibleNodes[this.visibleNodes.length - 1]);
 
                 $event.stopPropagation();
                 $event.preventDefault();
-            } else if(this.isKey($event, "End", false, true)) {
+            } else if(this.isKey($event, 'End', false, true)) {
                 this.service.highlightNode(this.visibleNodes[this.visibleNodes.length - 1]);
 
                 $event.stopPropagation();
                 $event.preventDefault();
-            } else if(this.isKey($event, " ") || this.isKey($event, " ", false, true)) {
+            } else if(this.isKey($event, ' ') || this.isKey($event, ' ', false, true)) {
                 let highlightedNode = this.service.currentState().highlightedNode;
                 this.service.selectNode(highlightedNode);
             }
@@ -227,7 +227,7 @@ export class DropdownTreeFieldComponent implements OnInit, OnChanges, OnDestroy 
     onTreeClick($event: MouseEvent) {
         this.comboboxElement.nativeElement.focus();
 
-        if((<Element>$event.target).classList.contains("text")) {
+        if((<Element>$event.target).classList.contains('text')) {
             this.closeDropdown();
         }
 
@@ -319,7 +319,7 @@ export class DropdownTreeFieldComponent implements OnInit, OnChanges, OnDestroy 
         if(this.defaultLabel != null) {
             return (this.defaultNode != null && this.defaultNode.text === this.defaultLabel) ? this.defaultNode : this.createDefaultNode(this.defaultLabel);
         } else if(this.selectedNode == null) {
-            return (this.defaultNode != null && this.defaultNode.text === "") ? this.defaultNode : this.createDefaultNode("");
+            return (this.defaultNode != null && this.defaultNode.text === '') ? this.defaultNode : this.createDefaultNode('');
         } else {
             return null;
         }
@@ -327,7 +327,7 @@ export class DropdownTreeFieldComponent implements OnInit, OnChanges, OnDestroy 
 
     private createDefaultNode(text: string): TreeNode {
         return {
-            id: "-default-node",
+            id: '-default-node',
             text: text,
             children: []
         };
@@ -335,7 +335,7 @@ export class DropdownTreeFieldComponent implements OnInit, OnChanges, OnDestroy 
 
     private buildFullSelectedPathText(currentNode: TreeNode): string {
         if(currentNode == null) {
-            return "";
+            return '';
         }
 
         let parent = this.parentMap.get(currentNode);
@@ -388,5 +388,5 @@ export class DropdownTreeFieldComponent implements OnInit, OnChanges, OnDestroy 
 }
 
 function createUniqueId() {
-    return "dropdown-tree-field-" + nextId++;
+    return 'dropdown-tree-field-' + nextId++;
 }
