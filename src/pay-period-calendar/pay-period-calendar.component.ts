@@ -1,9 +1,16 @@
-﻿import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
-import * as moment from "moment/moment";
+﻿import {
+    Component,
+    EventEmitter,
+    Input,
+    OnInit,
+    Output
+}                                   from "@angular/core";
+import * as moment                  from "moment/moment";
 
 import { PayPeriodCalendarService } from "./pay-period-calendar.service";
-import { PayPeriod } from "./pay-period.model";
-import { PayPeriodMonth } from "./pay-period-month.model";
+import { PayPeriod }                from "./pay-period.model";
+import { PayPeriodMonth }           from "./pay-period-month.model";
+import { ButtonRoles }              from "../button";
 
 @Component({
     selector: "cf-pay-period-calendar",
@@ -22,6 +29,8 @@ export class PayPeriodCalendarComponent implements OnInit {
     nextMonths: Map<PayPeriodMonth, PayPeriodMonth>;
     previousMonths: Map<PayPeriodMonth, PayPeriodMonth>;
     payPeriodsOfMonth: PayPeriod[];
+
+    ButtonRoles: any = ButtonRoles;
 
     private monthsByYear: Map<number, PayPeriodMonth[]>;
     private _shownYear: number;
