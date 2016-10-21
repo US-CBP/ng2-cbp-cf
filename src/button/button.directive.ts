@@ -4,23 +4,24 @@
     Input,
     OnInit,
     Renderer
-}                   from "@angular/core";
+}                   from '@angular/core';
 
 import {
     ButtonRole,
     ButtonRoles
-}                   from "./button-roles.model";
+}                   from './button-roles.model';
 import {
     ButtonSize,
     ButtonSizes
-}                   from "./button-sizes.model";
-
+}                   from './button-sizes.model';
+/* tslint:disable */
 @Directive({
-    selector: "button[cfButton], a[cfButton]"
+    selector: 'button[cfButton], a[cfButton]'
 })
+/* tslint:enable */
 export class ButtonDirective implements OnInit {
-    static readonly blockStyle: string = "btn-block";
-    static readonly iconOnlyStyle: string = "btn-icon-only";
+    static readonly blockStyle: string = 'btn-block';
+    static readonly iconOnlyStyle: string = 'btn-icon-only';
 
     private _role: ButtonRole = ButtonRoles.default;
     private _size: ButtonSize = ButtonSizes.normal;
@@ -30,7 +31,7 @@ export class ButtonDirective implements OnInit {
     constructor(private element: ElementRef, private renderer: Renderer) {
     }
 
-    @Input("cfRole")
+    @Input('cfRole')
     get role(): ButtonRole {
         return this._role;
     }
@@ -46,7 +47,7 @@ export class ButtonDirective implements OnInit {
         }
     }
 
-    @Input("cfSize")
+    @Input('cfSize')
     get size(): ButtonSize {
         return this._size;
     }
@@ -62,7 +63,7 @@ export class ButtonDirective implements OnInit {
         }
     }
 
-    @Input("cfBlock")
+    @Input('cfBlock')
     get block(): boolean {
         return this._block;
     }
@@ -82,7 +83,7 @@ export class ButtonDirective implements OnInit {
         }
     }
 
-    @Input("cfIconOnly")
+    @Input('cfIconOnly')
     get iconOnly(): boolean {
         return this._iconOnly;
     }
@@ -103,7 +104,7 @@ export class ButtonDirective implements OnInit {
     }
 
     ngOnInit() {
-        this.addClasses(["btn"]);
+        this.addClasses(['btn']);
 
         this.addClasses(this.role.classes);
         this.addClasses(this.size.classes);

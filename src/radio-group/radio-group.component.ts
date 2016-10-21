@@ -1,6 +1,5 @@
 ﻿import {
     forwardRef,
-    OpaqueToken,
     AfterContentInit,
     Component,
     ContentChildren,
@@ -8,16 +7,16 @@
     Input,
     Output,
     QueryList
-}                           from "@angular/core";
+}                           from '@angular/core';
 import {
     NG_VALUE_ACCESSOR,
     ControlValueAccessor
-}                           from "@angular/forms";
+}                           from '@angular/forms';
 
 import {
     RadioButtonComponent,
     RadioChange
-}                           from "../radio-button";
+}                           from '../radio-button';
 
 let nextId = 1;
 
@@ -28,8 +27,8 @@ export const radioGroupControlValueAccessor = {
 };
 
 @Component({
-    selector: "cf-radio-group",
-    templateUrl: "radio-group.component.html",
+    selector: 'cf-radio-group',
+    templateUrl: 'radio-group.component.html',
     providers: [radioGroupControlValueAccessor]
 })
 export class RadioGroupComponent implements AfterContentInit, ControlValueAccessor {
@@ -78,7 +77,9 @@ export class RadioGroupComponent implements AfterContentInit, ControlValueAccess
         return this._value;
     }
     set value(newValue: any) {
+        /* tslint:disable */
         if(this._value != newValue) {
+        /* tslint:enable */
             this._value = newValue;
 
             this.updateSelectedRadioFromValue();
@@ -129,10 +130,14 @@ export class RadioGroupComponent implements AfterContentInit, ControlValueAccess
     }
 
     private updateSelectedRadioFromValue() {
+        /* tslint:disable */
         let isAlreadySelected = this._selected != null && this._selected.value == this._value;
+        /* tslint:enable */
 
         if(this._radios != null && !isAlreadySelected) {
+            /* tslint:disable */
             let matchingRadio = this._radios.filter(radio => radio.value == this._value)[0];
+            /* tslint:enable */
 
             if(matchingRadio != null) {
                 this.selected = matchingRadio;

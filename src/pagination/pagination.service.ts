@@ -7,7 +7,7 @@ import * as _ from 'lodash';
 @Injectable()
 export class PaginationService {
 
-    constructor() { 
+    constructor() {
     }
 
     getPager(totalItems, currentPage, pageSize) {
@@ -18,9 +18,9 @@ export class PaginationService {
         pageSize = pageSize || 10;
 
         // calculate total pages
-        var totalPages = Math.ceil(totalItems / pageSize);
+        let totalPages = Math.ceil(totalItems / pageSize);
 
-        var startPage, endPage;
+        let startPage, endPage;
         if (totalPages <= 5) {
             // less than 10 total pages so show all
             startPage = 2;
@@ -40,11 +40,11 @@ export class PaginationService {
         }
 
         // calculate start and end item indexes
-        var startIndex = (currentPage - 1) * pageSize;
-        var endIndex = Math.min(startIndex + pageSize - 1, totalItems - 1);
+        let startIndex = (currentPage - 1) * pageSize;
+        let endIndex = Math.min(startIndex + pageSize - 1, totalItems - 1);
 
         // create an array of pages to ng-repeat in the pager control
-        var pages = _.range(startPage, endPage + 1);
+        let pages = _.range(startPage, endPage + 1);
 
         // return object with all pager properties required by the view
         let pager = {} as Pager;

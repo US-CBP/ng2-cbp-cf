@@ -7,5 +7,5 @@ export interface HeaderMenu {
     href: string;
     route: string;
     className: string;
-    menu: HeaderMenuItem[]
+    menu: HeaderMenuItem[];
 }

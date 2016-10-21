@@ -6,14 +6,13 @@
     OnInit,
     Optional,
     Output
-}                               from "@angular/core";
-import { Subscription }         from "rxjs";
+}                               from '@angular/core';
+import { Subscription }         from 'rxjs';
 
-import { RadioGroupComponent }  from "../radio-group";
+import { RadioGroupComponent }  from '../radio-group';
 import {
-    UniqueSelectionDispatcher,
-    UniqueSelectionDispatcherValue
-}                               from "../shared";
+    UniqueSelectionDispatcher
+}                               from '../shared';
 
 let nextId = 1;
 
@@ -23,14 +22,14 @@ export class RadioChange {
 }
 
 @Component({
-    selector: "cf-radio-button",
-    templateUrl: "radio-button.component.html"
+    selector: 'cf-radio-button',
+    templateUrl: 'radio-button.component.html'
 })
 export class RadioButtonComponent implements OnInit, OnDestroy {
     @Input() id: string = `cf-radio-button-${nextId++}`;
     @Input() name: string;
-    @Input("aria-label") ariaLabel: string;
-    @Input("aria-labelledby") ariaLabelledby: string;
+    @Input('aria-label') ariaLabel: string;
+    @Input('aria-labelledby') ariaLabelledby: string;
 
     @Output() change = new EventEmitter<RadioChange>();
 
@@ -63,8 +62,9 @@ export class RadioButtonComponent implements OnInit, OnDestroy {
         }
 
         this._checked = newValue;
-
+        /* tslint:disable */
         if(newValue && this.radioGroup != null && this.radioGroup.value != this.value) {
+        /* tslint:enable */
             this.radioGroup.selected = this;
         }
     }
@@ -82,7 +82,9 @@ export class RadioButtonComponent implements OnInit, OnDestroy {
         return this._value;
     }
     set value(newValue: any) {
+        /* tslint:disable */
         if(this._value != newValue) {
+        /* tslint:enable */
             if(this.radioGroup != null && this.checked) {
                 this.radioGroup.value = newValue;
             }
@@ -92,7 +94,9 @@ export class RadioButtonComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         if(this.radioGroup != null) {
+            /* tslint:disable */
             this.checked = this.radioGroup.value == this._value;
+            /* tslint:enable */
             this.name = this.radioGroup.name;
             this.isInline = this.radioGroup.isInline;
         }

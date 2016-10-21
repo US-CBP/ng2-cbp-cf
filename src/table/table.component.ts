@@ -12,16 +12,15 @@ import { PaginationComponent,
 let nextId = 1;
 
 @Component({
-    selector: "cf-table",
+    selector: 'cf-table',
     templateUrl: 'table.component.html',
     styleUrls: ['table.component.scss']
 })
-export class TableComponent implements OnInit
-{
+export class TableComponent implements OnInit {
     @Input() id: string = `cf-table-${nextId++}`;
     @Output() gettabledata: EventEmitter<Query> = new EventEmitter<Query>();
 
-    @ViewChild(PaginationComponent) pagerObj:PaginationComponent;
+    @ViewChild(PaginationComponent) pagerObj: PaginationComponent;
 
     private _data: Table = null;
     private _query: Query = null;
@@ -79,7 +78,7 @@ export class TableComponent implements OnInit
     ngOnInit() {
     }
 
-    loadPage(query){
+    loadPage(query) {
         this.query = query;
         this.gettabledata.emit(query);
     }

@@ -1,22 +1,22 @@
-﻿import { CommonModule }                 from "@angular/common";
+﻿import { CommonModule }                 from '@angular/common';
 import {
     ComponentFixture,
     TestBed,
     fakeAsync,
     tick
-}                                       from "@angular/core/testing";
-import { FormsModule }                  from "@angular/forms";
-import * as moment                      from "moment/moment";
+}                                       from '@angular/core/testing';
+import { FormsModule }                  from '@angular/forms';
+import * as moment                      from 'moment/moment';
 
-import { standardISOFormat }            from "../shared/date.values";
+import { standardISOFormat }            from '../shared/date.values';
 
-import { PayPeriodCalendarComponent }   from "./pay-period-calendar.component";
-import { PayPeriodCalendarService }     from "./pay-period-calendar.service";
-import { PayPeriod }                    from "./pay-period.model";
-import { PayPeriodMonth }               from "./pay-period-month.model";
-import { ButtonDirective }              from "../button";
+import { PayPeriodCalendarComponent }   from './pay-period-calendar.component';
+import { PayPeriodCalendarService }     from './pay-period-calendar.service';
+import { PayPeriod }                    from './pay-period.model';
+import { PayPeriodMonth }               from './pay-period-month.model';
+import { ButtonDirective }              from '../button';
 
-describe("PayPeriodCalendarComponent", () => {
+describe('PayPeriodCalendarComponent', () => {
     let months: PayPeriodMonth[];
     let fixture: ComponentFixture<PayPeriodCalendarComponent>;
     let service: PayPeriodCalendarService;
@@ -24,7 +24,7 @@ describe("PayPeriodCalendarComponent", () => {
 
     beforeEach(() => {
         let serviceStub = {
-            loadPayPeriods: jasmine.createSpy("loadPayPeriods").and.returnValue(Promise.resolve([]))
+            loadPayPeriods: jasmine.createSpy('loadPayPeriods').and.returnValue(Promise.resolve([]))
         };
 
         months = createMonthsFromCurrent(-12, 12);
@@ -38,13 +38,13 @@ describe("PayPeriodCalendarComponent", () => {
         service = fixture.debugElement.injector.get(PayPeriodCalendarService);
 
         component = fixture.componentInstance;
-        component.loadPayPeriodsUrl = "test-url";
+        component.loadPayPeriodsUrl = 'test-url';
         component.months = months;
     });
 
-    describe("on init", () => {
-        it("should set shownYear to year of the selectedPayPeriod", () => {
-            let startDate = moment().startOf("day").startOf("month").add(2, "months");
+    describe('on init', () => {
+        it('should set shownYear to year of the selectedPayPeriod', () => {
+            let startDate = moment().startOf('day').startOf('month').add(2, 'months');
             let selectedPayPeriod = {
                 id: 201622,
                 number: 22,
@@ -58,8 +58,8 @@ describe("PayPeriodCalendarComponent", () => {
             expect(component.shownYear).toBe(startDate.year());
         });
 
-        it("should set shownMonth to month of the selectedPayPeriod", () => {
-            let startDate = moment().startOf("day").startOf("month").add(2, "months");
+        it('should set shownMonth to month of the selectedPayPeriod', () => {
+            let startDate = moment().startOf('day').startOf('month').add(2, 'months');
             let selectedPayPeriod = {
                 id: 201622,
                 number: 22,
@@ -74,8 +74,8 @@ describe("PayPeriodCalendarComponent", () => {
             expect(component.shownMonth).toBe(month);
         });
 
-        it("should set shownYear to current year when selectedPayPeriod is not in months", () => {
-            let startDate = moment().startOf("day").startOf("month").add(20, "months");
+        it('should set shownYear to current year when selectedPayPeriod is not in months', () => {
+            let startDate = moment().startOf('day').startOf('month').add(20, 'months');
             let selectedPayPeriod = {
                 id: 201622,
                 number: 22,
@@ -89,8 +89,8 @@ describe("PayPeriodCalendarComponent", () => {
             expect(component.shownYear).toBe(moment().year());
         });
 
-        it("should set shownMonth to current month when selectedPayPeriod is not in months", () => {
-            let startDate = moment().startOf("day").startOf("month").add(20, "months");
+        it('should set shownMonth to current month when selectedPayPeriod is not in months', () => {
+            let startDate = moment().startOf('day').startOf('month').add(20, 'months');
             let selectedPayPeriod = {
                 id: 201622,
                 number: 22,
@@ -106,13 +106,13 @@ describe("PayPeriodCalendarComponent", () => {
             expect(component.shownMonth).toBe(month);
         });
 
-        it("should set shownYear to current year when selectedPayPeriod is null", () => {
+        it('should set shownYear to current year when selectedPayPeriod is null', () => {
             fixture.detectChanges();
 
             expect(component.shownYear).toBe(moment().year());
         });
 
-        it("should set shownMonth to current month when selectedPayPeriod is null", () => {
+        it('should set shownMonth to current month when selectedPayPeriod is null', () => {
             fixture.detectChanges();
 
             let currentMoment = moment();
@@ -120,7 +120,7 @@ describe("PayPeriodCalendarComponent", () => {
             expect(component.shownMonth).toBe(month);
         });
 
-        it("should set shownYear to first year when selectedPayPeriod is null and current month is not in months", () => {
+        it('should set shownYear to first year when selectedPayPeriod is null and current month is not in months', () => {
             months = createMonthsFromCurrent(-13, -2);
             component.months = months;
 
@@ -129,7 +129,7 @@ describe("PayPeriodCalendarComponent", () => {
             expect(component.shownYear).toBe(months[0].year);
         });
 
-        it("should set shownMonth to current month when selectedPayPeriod is null and current month is not in months", () => {
+        it('should set shownMonth to current month when selectedPayPeriod is null and current month is not in months', () => {
             months = createMonthsFromCurrent(-13, -2);
             component.months = months;
 
@@ -138,14 +138,14 @@ describe("PayPeriodCalendarComponent", () => {
             expect(component.shownMonth).toBe(months[0]);
         });
 
-        it("should set years to distinct years in months", () => {
+        it('should set years to distinct years in months', () => {
             fixture.detectChanges();
 
             let currentYear = moment().year();
             expect(component.years).toEqual([currentYear - 1, currentYear, currentYear + 1]);
         });
 
-        it("should set monthsOfYear to months in shown year", () => {
+        it('should set monthsOfYear to months in shown year', () => {
             fixture.detectChanges();
 
             let currentYear = moment().year();
@@ -153,31 +153,31 @@ describe("PayPeriodCalendarComponent", () => {
             expect(component.monthsOfYear).toEqual(monthsOfYear);
         });
 
-        it("should call loadPayPeriods from service with shownYear and shownMonth.number", () => {
+        it('should call loadPayPeriods from service with shownYear and shownMonth.number', () => {
             fixture.detectChanges();
 
             let currentMoment = moment();
             expect(service.loadPayPeriods).toHaveBeenCalledWith(component.loadPayPeriodsUrl, currentMoment.year(), currentMoment.month() + 1);
         });
 
-        it("should set payPeriodsOfMonth to results of loadPayPeriods from service", fakeAsync(() => {
+        it('should set payPeriodsOfMonth to results of loadPayPeriods from service', fakeAsync(() => {
             let payPeriodsOfMonth = [
                 {
                     id: 201525,
                     number: 25,
-                    startDate: "2015-12-27T00:00:00",
+                    startDate: '2015-12-27T00:00:00',
                     isSelectable: true
                 },
                 {
                     id: 201601,
                     number: 1,
-                    startDate: "2016-01-10T00:00:00",
+                    startDate: '2016-01-10T00:00:00',
                     isSelectable: true
                 },
                 {
                     id: 201602,
                     number: 2,
-                    startDate: "2016-01-24T00:00:00",
+                    startDate: '2016-01-24T00:00:00',
                     isSelectable: true
                 }
             ];
@@ -190,19 +190,19 @@ describe("PayPeriodCalendarComponent", () => {
         }));
     });
 
-    describe("isFirstMonthShown", () => {
+    describe('isFirstMonthShown', () => {
         beforeEach(() => {
             fixture.detectChanges();
         });
 
-        it("should return true when first month is shown", () => {
+        it('should return true when first month is shown', () => {
             component.shownYear = months[0].year;
             component.shownMonth = months[0];
 
             expect(component.isFirstMonthShown()).toBe(true);
         });
 
-        it("should return false when first month is not shown", () => {
+        it('should return false when first month is not shown', () => {
             component.shownYear = months[1].year;
             component.shownMonth = months[1];
 
@@ -210,19 +210,19 @@ describe("PayPeriodCalendarComponent", () => {
         });
     });
 
-    describe("isLastMonthShown", () => {
+    describe('isLastMonthShown', () => {
         beforeEach(() => {
             fixture.detectChanges();
         });
 
-        it("should return true when last month is shown", () => {
+        it('should return true when last month is shown', () => {
             component.shownYear = months[months.length - 1].year;
             component.shownMonth = months[months.length - 1];
 
             expect(component.isLastMonthShown()).toBe(true);
         });
 
-        it("should return false when last month is not shown", () => {
+        it('should return false when last month is not shown', () => {
             component.shownYear = months[months.length - 2].year;
             component.shownMonth = months[months.length - 2];
 
@@ -230,7 +230,7 @@ describe("PayPeriodCalendarComponent", () => {
         });
     });
 
-    describe("showPreviousMonth", () => {
+    describe('showPreviousMonth', () => {
         beforeEach(fakeAsync(() => {
             fixture.detectChanges();
 
@@ -238,7 +238,7 @@ describe("PayPeriodCalendarComponent", () => {
             (<jasmine.Spy>service.loadPayPeriods).calls.reset();
         }));
 
-        it("should not change shownYear when shownMonth is first month", () => {
+        it('should not change shownYear when shownMonth is first month', () => {
             component.shownYear = months[0].year;
             component.shownMonth = months[0];
 
@@ -247,7 +247,7 @@ describe("PayPeriodCalendarComponent", () => {
             expect(component.shownYear).toBe(months[0].year);
         });
 
-        it("should not change shownMonth when shownMonth is first month", () => {
+        it('should not change shownMonth when shownMonth is first month', () => {
             component.shownYear = months[0].year;
             component.shownMonth = months[0];
 
@@ -256,7 +256,7 @@ describe("PayPeriodCalendarComponent", () => {
             expect(component.shownMonth).toBe(months[0]);
         });
 
-        it("should not call loadPayPeriods on service when shownMonth is first month", fakeAsync(() => {
+        it('should not call loadPayPeriods on service when shownMonth is first month', fakeAsync(() => {
             component.shownYear = months[0].year;
             component.shownMonth = months[0];
             tick();
@@ -267,7 +267,7 @@ describe("PayPeriodCalendarComponent", () => {
             expect(service.loadPayPeriods).not.toHaveBeenCalled();
         }));
 
-        it("should not change shownYear when previous month in the same year", () => {
+        it('should not change shownYear when previous month in the same year', () => {
             let currentYear = moment().year();
             let middleMonth = months.find(m => m.year === currentYear && m.number === 6);
 
@@ -279,7 +279,7 @@ describe("PayPeriodCalendarComponent", () => {
             expect(component.shownYear).toBe(currentYear);
         });
 
-        it("should change shownMonth when previous month in the same year", () => {
+        it('should change shownMonth when previous month in the same year', () => {
             let currentYear = moment().year();
             let middleMonth = months.find(m => m.year === currentYear && m.number === 6);
 
@@ -292,7 +292,7 @@ describe("PayPeriodCalendarComponent", () => {
             expect(component.shownMonth).toBe(previousMonth);
         });
 
-        it("should change shownYear when previous month in the different year", () => {
+        it('should change shownYear when previous month in the different year', () => {
             let currentYear = moment().year();
             let firstMonth = months.find(m => m.year === currentYear && m.number === 1);
 
@@ -304,7 +304,7 @@ describe("PayPeriodCalendarComponent", () => {
             expect(component.shownYear).toBe(currentYear - 1);
         });
 
-        it("should change shownMonth when previous month in the same year", () => {
+        it('should change shownMonth when previous month in the same year', () => {
             let currentYear = moment().year();
             let firstMonth = months.find(m => m.year === currentYear && m.number === 1);
 
@@ -317,7 +317,7 @@ describe("PayPeriodCalendarComponent", () => {
             expect(component.shownMonth).toBe(previousMonth);
         });
 
-        it("should call loadPayPeriods on service", fakeAsync(() => {
+        it('should call loadPayPeriods on service', fakeAsync(() => {
             let currentYear = moment().year();
             let middleMonth = months.find(m => m.year === currentYear && m.number === 6);
 
@@ -332,7 +332,7 @@ describe("PayPeriodCalendarComponent", () => {
             expect(service.loadPayPeriods).toHaveBeenCalledWith(component.loadPayPeriodsUrl, previousMonth.year, previousMonth.number);
         }));
 
-        it("should set payPeriodsOfMonth to results of loadPayPeriods from service", fakeAsync(() => {
+        it('should set payPeriodsOfMonth to results of loadPayPeriods from service', fakeAsync(() => {
             let currentYear = moment().year();
             let middleMonth = months.find(m => m.year === currentYear && m.number === 6);
 
@@ -344,19 +344,19 @@ describe("PayPeriodCalendarComponent", () => {
                 {
                     id: 201525,
                     number: 25,
-                    startDate: "2015-12-27T00:00:00",
+                    startDate: '2015-12-27T00:00:00',
                     isSelectable: true
                 },
                 {
                     id: 201601,
                     number: 1,
-                    startDate: "2016-01-10T00:00:00",
+                    startDate: '2016-01-10T00:00:00',
                     isSelectable: true
                 },
                 {
                     id: 201602,
                     number: 2,
-                    startDate: "2016-01-24T00:00:00",
+                    startDate: '2016-01-24T00:00:00',
                     isSelectable: true
                 }
             ];
@@ -370,7 +370,7 @@ describe("PayPeriodCalendarComponent", () => {
         }));
     });
 
-    describe("showNextMonth", () => {
+    describe('showNextMonth', () => {
         beforeEach(fakeAsync(() => {
             fixture.detectChanges();
 
@@ -378,7 +378,7 @@ describe("PayPeriodCalendarComponent", () => {
             (<jasmine.Spy>service.loadPayPeriods).calls.reset();
         }));
 
-        it("should not change shownYear when shownMonth is last month", () => {
+        it('should not change shownYear when shownMonth is last month', () => {
             component.shownYear = months[months.length - 1].year;
             component.shownMonth = months[months.length - 1];
 
@@ -387,7 +387,7 @@ describe("PayPeriodCalendarComponent", () => {
             expect(component.shownYear).toBe(months[months.length - 1].year);
         });
 
-        it("should not change shownMonth when shownMonth is last month", () => {
+        it('should not change shownMonth when shownMonth is last month', () => {
             component.shownYear = months[months.length - 1].year;
             component.shownMonth = months[months.length - 1];
 
@@ -396,7 +396,7 @@ describe("PayPeriodCalendarComponent", () => {
             expect(component.shownMonth).toBe(months[months.length - 1]);
         });
 
-        it("should not call loadPayPeriods on service when shownMonth is last month", fakeAsync(() => {
+        it('should not call loadPayPeriods on service when shownMonth is last month', fakeAsync(() => {
             component.shownYear = months[months.length - 1].year;
             component.shownMonth = months[months.length - 1];
             tick();
@@ -407,7 +407,7 @@ describe("PayPeriodCalendarComponent", () => {
             expect(service.loadPayPeriods).not.toHaveBeenCalled();
         }));
 
-        it("should not change shownYear when next month in the same year", () => {
+        it('should not change shownYear when next month in the same year', () => {
             let currentYear = moment().year();
             let middleMonth = months.find(m => m.year === currentYear && m.number === 6);
 
@@ -419,7 +419,7 @@ describe("PayPeriodCalendarComponent", () => {
             expect(component.shownYear).toBe(currentYear);
         });
 
-        it("should change shownMonth when next month in the same year", () => {
+        it('should change shownMonth when next month in the same year', () => {
             let currentYear = moment().year();
             let middleMonth = months.find(m => m.year === currentYear && m.number === 6);
 
@@ -432,7 +432,7 @@ describe("PayPeriodCalendarComponent", () => {
             expect(component.shownMonth).toBe(nextMonth);
         });
 
-        it("should change shownYear when next month in the different year", () => {
+        it('should change shownYear when next month in the different year', () => {
             let currentYear = moment().year();
             let lastMonth = months.find(m => m.year === currentYear && m.number === 12);
 
@@ -444,7 +444,7 @@ describe("PayPeriodCalendarComponent", () => {
             expect(component.shownYear).toBe(currentYear + 1);
         });
 
-        it("should change shownMonth when next month in the same year", () => {
+        it('should change shownMonth when next month in the same year', () => {
             let currentYear = moment().year();
             let firstMonth = months.find(m => m.year === currentYear && m.number === 12);
 
@@ -457,7 +457,7 @@ describe("PayPeriodCalendarComponent", () => {
             expect(component.shownMonth).toBe(nextMonth);
         });
 
-        it("should call loadPayPeriods on service", fakeAsync(() => {
+        it('should call loadPayPeriods on service', fakeAsync(() => {
             let currentYear = moment().year();
             let middleMonth = months.find(m => m.year === currentYear && m.number === 6);
 
@@ -472,7 +472,7 @@ describe("PayPeriodCalendarComponent", () => {
             expect(service.loadPayPeriods).toHaveBeenCalledWith(component.loadPayPeriodsUrl, nextMonth.year, nextMonth.number);
         }));
 
-        it("should set payPeriodsOfMonth to results of loadPayPeriods from service", fakeAsync(() => {
+        it('should set payPeriodsOfMonth to results of loadPayPeriods from service', fakeAsync(() => {
             let currentYear = moment().year();
             let middleMonth = months.find(m => m.year === currentYear && m.number === 6);
 
@@ -484,19 +484,19 @@ describe("PayPeriodCalendarComponent", () => {
                 {
                     id: 201525,
                     number: 25,
-                    startDate: "2015-12-27T00:00:00",
+                    startDate: '2015-12-27T00:00:00',
                     isSelectable: true
                 },
                 {
                     id: 201601,
                     number: 1,
-                    startDate: "2016-01-10T00:00:00",
+                    startDate: '2016-01-10T00:00:00',
                     isSelectable: true
                 },
                 {
                     id: 201602,
                     number: 2,
-                    startDate: "2016-01-24T00:00:00",
+                    startDate: '2016-01-24T00:00:00',
                     isSelectable: true
                 }
             ];
@@ -510,9 +510,9 @@ describe("PayPeriodCalendarComponent", () => {
         }));
     });
 
-    describe("isSelected", () => {
+    describe('isSelected', () => {
         beforeEach(() => {
-            let startDate = moment().startOf("day").startOf("month");
+            let startDate = moment().startOf('day').startOf('month');
             let selectedPayPeriod = {
                 id: 201622,
                 number: 22,
@@ -524,8 +524,8 @@ describe("PayPeriodCalendarComponent", () => {
             fixture.detectChanges();
         });
 
-        it("should return false when pay periods has different id as selected pay period", () => {
-            let startDate = moment().startOf("day").startOf("month");
+        it('should return false when pay periods has different id as selected pay period', () => {
+            let startDate = moment().startOf('day').startOf('month');
             let payPeriod = {
                 id: 201601,
                 number: 1,
@@ -536,8 +536,8 @@ describe("PayPeriodCalendarComponent", () => {
             expect(component.isSelected(payPeriod)).toBe(false);
         });
 
-        it("should return true when pay periods has same id as selected pay period", () => {
-            let startDate = moment().startOf("day").startOf("month");
+        it('should return true when pay periods has same id as selected pay period', () => {
+            let startDate = moment().startOf('day').startOf('month');
             let payPeriod = {
                 id: 201622,
                 number: 22,
@@ -549,13 +549,13 @@ describe("PayPeriodCalendarComponent", () => {
         });
     });
 
-    describe("selectPayPeriod", () => {
+    describe('selectPayPeriod', () => {
         beforeEach(() => {
             fixture.detectChanges();
         });
 
-        it("should not change selectedPayPeriod directly", () => {
-            let startDate = moment().startOf("day").startOf("month");
+        it('should not change selectedPayPeriod directly', () => {
+            let startDate = moment().startOf('day').startOf('month');
             let payPeriod = {
                 id: 201601,
                 number: 1,
@@ -568,11 +568,11 @@ describe("PayPeriodCalendarComponent", () => {
             expect(component.selectedPayPeriod).toBeUndefined();
         });
 
-        it("should raise payPeriodSelected event", () => {
-            let subscriber = jasmine.createSpy("onPayPeriodSelected");
+        it('should raise payPeriodSelected event', () => {
+            let subscriber = jasmine.createSpy('onPayPeriodSelected');
             component.payPeriodSelected.subscribe(subscriber);
 
-            let startDate = moment().startOf("day").startOf("month");
+            let startDate = moment().startOf('day').startOf('month');
             let payPeriod = {
                 id: 201601,
                 number: 1,
@@ -586,7 +586,7 @@ describe("PayPeriodCalendarComponent", () => {
         });
     });
 
-    describe("setting shownYear", () => {
+    describe('setting shownYear', () => {
         beforeEach(fakeAsync(() => {
             fixture.detectChanges();
 
@@ -594,7 +594,7 @@ describe("PayPeriodCalendarComponent", () => {
             (<jasmine.Spy>service.loadPayPeriods).calls.reset();
         }));
 
-        it("to same value should not change shownMonth", () => {
+        it('to same value should not change shownMonth', () => {
             let shownYear = component.shownYear;
             let shownMonth = component.shownMonth;
 
@@ -603,7 +603,7 @@ describe("PayPeriodCalendarComponent", () => {
             expect(component.shownMonth).toBe(shownMonth);
         });
 
-        it("to same value should not call loadPayPeriods on service", () => {
+        it('to same value should not call loadPayPeriods on service', () => {
             let shownYear = component.shownYear;
 
             component.shownYear = shownYear;
@@ -611,7 +611,7 @@ describe("PayPeriodCalendarComponent", () => {
             expect(service.loadPayPeriods).not.toHaveBeenCalled();
         });
 
-        it("to new value should change shownMonth to first month of new year", () => {
+        it('to new value should change shownMonth to first month of new year', () => {
             let shownYear = component.shownYear;
             let firstMonth = months.find(m => m.year === shownYear + 1 && m.number === 1);
 
@@ -620,7 +620,7 @@ describe("PayPeriodCalendarComponent", () => {
             expect(component.shownMonth).toBe(firstMonth);
         });
 
-        it("to new value should call loadPayPeriods on service", () => {
+        it('to new value should call loadPayPeriods on service', () => {
             let shownYear = component.shownYear;
             let firstMonth = months.find(m => m.year === shownYear + 1 && m.number === 1);
 
@@ -629,24 +629,24 @@ describe("PayPeriodCalendarComponent", () => {
             expect(service.loadPayPeriods).toHaveBeenCalledWith(component.loadPayPeriodsUrl, firstMonth.year, firstMonth.number);
         });
 
-        it("to new value should set payPeriodsOfMonth to results of loadPayPeriods from service", fakeAsync(() => {
+        it('to new value should set payPeriodsOfMonth to results of loadPayPeriods from service', fakeAsync(() => {
             let payPeriodsOfMonth = [
                 {
                     id: 201525,
                     number: 25,
-                    startDate: "2015-12-27T00:00:00",
+                    startDate: '2015-12-27T00:00:00',
                     isSelectable: true
                 },
                 {
                     id: 201601,
                     number: 1,
-                    startDate: "2016-01-10T00:00:00",
+                    startDate: '2016-01-10T00:00:00',
                     isSelectable: true
                 },
                 {
                     id: 201602,
                     number: 2,
-                    startDate: "2016-01-24T00:00:00",
+                    startDate: '2016-01-24T00:00:00',
                     isSelectable: true
                 }
             ];
@@ -660,7 +660,7 @@ describe("PayPeriodCalendarComponent", () => {
             expect(component.payPeriodsOfMonth).toEqual(payPeriodsOfMonth);
         }));
 
-        it("to new value should change shownMonth to first available month of new year when first month is not available", () => {
+        it('to new value should change shownMonth to first available month of new year when first month is not available', () => {
             let shownYear = component.shownYear;
             let firstAvailableMonth = months[0];
 
@@ -669,7 +669,7 @@ describe("PayPeriodCalendarComponent", () => {
             expect(component.shownMonth).toBe(firstAvailableMonth);
         });
 
-        it("to new value should change monthsOfYear to months for the new year", () => {
+        it('to new value should change monthsOfYear to months for the new year', () => {
             let shownYear = component.shownYear;
             let monthsOfYear = months.filter(m => m.year === shownYear - 1);
 
@@ -679,7 +679,7 @@ describe("PayPeriodCalendarComponent", () => {
         });
     });
 
-    describe("setting shownMonth", () => {
+    describe('setting shownMonth', () => {
         beforeEach(fakeAsync(() => {
             fixture.detectChanges();
 
@@ -687,7 +687,7 @@ describe("PayPeriodCalendarComponent", () => {
             (<jasmine.Spy>service.loadPayPeriods).calls.reset();
         }));
 
-        it("to same value should not call loadPayPeriods on service", () => {
+        it('to same value should not call loadPayPeriods on service', () => {
             let shownMonth = component.shownMonth;
 
             component.shownMonth = shownMonth;
@@ -695,30 +695,30 @@ describe("PayPeriodCalendarComponent", () => {
             expect(service.loadPayPeriods).not.toHaveBeenCalled();
         });
 
-        it("to new value should call loadPayPeriods on service", () => {
+        it('to new value should call loadPayPeriods on service', () => {
             component.shownMonth = months[0];
 
             expect(service.loadPayPeriods).toHaveBeenCalledWith(component.loadPayPeriodsUrl, months[0].year, months[0].number);
         });
 
-        it("to new value should set payPeriodsOfMonth to results of loadPayPeriods from service", fakeAsync(() => {
+        it('to new value should set payPeriodsOfMonth to results of loadPayPeriods from service', fakeAsync(() => {
             let payPeriodsOfMonth = [
                 {
                     id: 201525,
                     number: 25,
-                    startDate: "2015-12-27T00:00:00",
+                    startDate: '2015-12-27T00:00:00',
                     isSelectable: true
                 },
                 {
                     id: 201601,
                     number: 1,
-                    startDate: "2016-01-10T00:00:00",
+                    startDate: '2016-01-10T00:00:00',
                     isSelectable: true
                 },
                 {
                     id: 201602,
                     number: 2,
-                    startDate: "2016-01-24T00:00:00",
+                    startDate: '2016-01-24T00:00:00',
                     isSelectable: true
                 }
             ];
@@ -731,7 +731,7 @@ describe("PayPeriodCalendarComponent", () => {
         }));
     });
 
-    describe("dayOfWeek", () => {
+    describe('dayOfWeek', () => {
         let payPeriodsOfMonth: PayPeriod[];
 
         beforeEach(fakeAsync(() => {
@@ -739,19 +739,19 @@ describe("PayPeriodCalendarComponent", () => {
                 {
                     id: 201525,
                     number: 25,
-                    startDate: "2015-12-27T00:00:00",
+                    startDate: '2015-12-27T00:00:00',
                     isSelectable: true
                 },
                 {
                     id: 201601,
                     number: 1,
-                    startDate: "2016-01-10T00:00:00",
+                    startDate: '2016-01-10T00:00:00',
                     isSelectable: true
                 },
                 {
                     id: 201602,
                     number: 2,
-                    startDate: "2016-01-24T00:00:00",
+                    startDate: '2016-01-24T00:00:00',
                     isSelectable: true
                 }
             ];
@@ -761,25 +761,25 @@ describe("PayPeriodCalendarComponent", () => {
             tick();
         }));
 
-        it("returns start date day for week 1 day 0", () => {
+        it('returns start date day for week 1 day 0', () => {
             expect(component.dayOfMonth(payPeriodsOfMonth[0], 1, 0)).toBe(27);
         });
 
-        it("returns day for week 1 offset with day 0", () => {
+        it('returns day for week 1 offset with day 0', () => {
             expect(component.dayOfMonth(payPeriodsOfMonth[0], 1, 2)).toBe(29);
         });
 
-        it("returns day for week 2 offset with day 0", () => {
+        it('returns day for week 2 offset with day 0', () => {
             expect(component.dayOfMonth(payPeriodsOfMonth[0], 2, 2)).toBe(5);
         });
     });
 
     function createMonthsFromCurrent(startIndex, endIndex) {
         let results = [];
-        let currentMoment = moment().startOf("day").startOf("month");
+        let currentMoment = moment().startOf('day').startOf('month');
         for(let i = startIndex; i <= endIndex; i++) {
-            let m = currentMoment.clone().add(i, "months");
-            results.push({ year: m.year(), number: m.month() + 1, name: m.format("MMM") });
+            let m = currentMoment.clone().add(i, 'months');
+            results.push({ year: m.year(), number: m.month() + 1, name: m.format('MMM') });
         }
 
         return results;
