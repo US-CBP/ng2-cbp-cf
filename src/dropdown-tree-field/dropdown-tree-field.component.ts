@@ -236,8 +236,8 @@ export class DropdownTreeFieldComponent implements OnInit, OnChanges, OnDestroy 
         $event.stopPropagation();
     }
 
-    @HostListener('window:click', ['$event'])
-    private onWindowClick($event: MouseEvent) {
+    @HostListener('window:click')
+    private onWindowClick() {
         if(this.isDropdownOpen) {
             this.closeDropdown();
         }

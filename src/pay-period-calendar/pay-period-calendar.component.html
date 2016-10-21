@@ -2,7 +2,7 @@
     <thead>
         <tr class="nav">
             <td class="prev-month">
-                <button type="button" cf-button [cfRole]="ButtonRoles.primary" [cfIconOnly]="true" [disabled]="isFirstMonthShown()" (click)="showPreviousMonth()">
+                <button type="button" cfButton [cfRole]="ButtonRoles.primary" [cfIconOnly]="true" [disabled]="isFirstMonthShown()" (click)="showPreviousMonth()">
                     <i class="fa fa-chevron-circle-left"></i>
                     <span class="sr-only">Previous Month</span>
                 </button>
@@ -20,7 +20,7 @@
                 </div>
             </td>
             <td class="next-month">
-                <button type="button" cf-button [cfRole]="ButtonRoles.primary" [cfIconOnly]="true" [disabled]="isLastMonthShown()" (click)="showNextMonth()">
+                <button type="button" cfButton [cfRole]="ButtonRoles.primary" [cfIconOnly]="true" [disabled]="isLastMonthShown()" (click)="showNextMonth()">
                     <i class="fa fa-chevron-circle-right"></i>
                     <span class="sr-only">Next Month</span>
                 </button>
@@ -41,7 +41,7 @@
         <template ngFor let-pp [ngForOf]="payPeriodsOfMonth" [ngForTrackBy]="payPeriodTrackBy">
             <tr id="{{id}}-pay-period-{{pp.id}}-week1" class="week week1" [ngClass]="{ 'even': even, 'odd': odd, 'last': last, 'selected': isSelected(pp), 'is-selectable': pp.isSelectable }" (click)="selectPayPeriod(pp)">
                 <th scope="row" class="pp" rowspan="2">
-                    <button type="button" cf-button [cfRole]="ButtonRoles.primary" [disabled]="!pp.isSelectable" (click)="selectPayPeriod(pp); $event.stopPropagation();">{{pp.number}}</button>
+                    <button type="button" cfButton [cfRole]="ButtonRoles.primary" [disabled]="!pp.isSelectable" (click)="selectPayPeriod(pp); $event.stopPropagation();">{{pp.number}}</button>
                     <span class="selected-text" *ngIf="isSelected(pp)">(selected)</span>
                 </th>
                 <td class="day sunday">{{dayOfMonth(pp, 1, 0)}}</td>

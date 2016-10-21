@@ -16,7 +16,7 @@ import {
 }                   from "./button-sizes.model";
 
 @Directive({
-    selector: "button[cf-button], a[cf-button]"
+    selector: "button[cfButton], a[cfButton]"
 })
 export class ButtonDirective implements OnInit {
     static readonly blockStyle: string = "btn-block";

@@ -12,7 +12,7 @@
 import { ButtonDirective }  from "../button";
 
 @Directive({
-    selector: "button[cf-toggle-button], a[cf-toggle-button]"
+    selector: "button[cfToggleButton], a[cfToggleButton]"
 })
 export class ToggleButtonDirective extends ButtonDirective {
     static readonly activeStyle: string = "active";
@@ -25,7 +25,7 @@ export class ToggleButtonDirective extends ButtonDirective {
         super(element, renderer);
     }
 
-    @Input("cf-toggle-button")
+    @Input("cfToggleButton")
     get active(): boolean {
         return this._active;
     }
