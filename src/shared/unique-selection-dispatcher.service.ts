@@ -1,8 +1,8 @@
-﻿import { Injectable }   from "@angular/core";
+﻿import { Injectable }   from '@angular/core';
 import {
     BehaviorSubject,
     Observable
-}                       from "rxjs";
+}                       from 'rxjs';
 
 export interface UniqueSelectionDispatcherValue {
     id: string;

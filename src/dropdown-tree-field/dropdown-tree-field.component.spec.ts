@@ -523,7 +523,7 @@ describe('DropdownTreeItemComponent', () => {
                 isFirstChange() {
                     return false;
                 }
-            }
+            };
         }
     });
 

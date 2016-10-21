@@ -4,18 +4,18 @@
     Input,
     OnInit,
     Output
-}                                   from "@angular/core";
-import * as moment                  from "moment/moment";
+}                                   from '@angular/core';
+import * as moment                  from 'moment/moment';
 
-import { PayPeriodCalendarService } from "./pay-period-calendar.service";
-import { PayPeriod }                from "./pay-period.model";
-import { PayPeriodMonth }           from "./pay-period-month.model";
-import { ButtonRoles }              from "../button";
+import { PayPeriodCalendarService } from './pay-period-calendar.service';
+import { PayPeriod }                from './pay-period.model';
+import { PayPeriodMonth }           from './pay-period-month.model';
+import { ButtonRoles }              from '../button';
 
 @Component({
-    selector: "cf-pay-period-calendar",
-    templateUrl: "pay-period-calendar.component.html",
-    styleUrls: ["pay-period-calendar.component.scss"]
+    selector: 'cf-pay-period-calendar',
+    templateUrl: 'pay-period-calendar.component.html',
+    styleUrls: ['pay-period-calendar.component.scss']
 })
 export class PayPeriodCalendarComponent implements OnInit {
     @Input() id: string;
@@ -188,6 +188,6 @@ export class PayPeriodCalendarComponent implements OnInit {
     }
 
     dayOfMonth(pp: PayPeriod, week: number, dayOfWeek: number): number {
-        return moment(pp.startDate).add(week - 1, "weeks").add(dayOfWeek, "days").date();
+        return moment(pp.startDate).add(week - 1, 'weeks').add(dayOfWeek, 'days').date();
     }
 }

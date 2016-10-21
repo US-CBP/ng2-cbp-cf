@@ -27,6 +27,9 @@ let nextId = 1;
     ]
 })
 export class DropdownTreeFieldComponent implements OnInit, OnChanges, OnDestroy {
+    static readonly focusClass = 'dt--selection-focus';
+    static readonly openClass = 'dt--selection-open';
+
     @Input() id: string = createUniqueId();
     @Input() label: string;
     @Input() defaultLabel: string;
@@ -51,9 +54,6 @@ export class DropdownTreeFieldComponent implements OnInit, OnChanges, OnDestroy 
     dropdownLeft: number;
     dropdownTop: number;
     dropdownWidth: number;
-
-    static readonly focusClass: string = 'dt--selection-focus';
-    static readonly openClass: string = 'dt--selection-open';
 
     private stateSubscription: Subscription;
     private parentMap: Map<TreeNode, TreeNode>;
@@ -236,17 +236,21 @@ export class DropdownTreeFieldComponent implements OnInit, OnChanges, OnDestroy 
         $event.stopPropagation();
     }
 
+    /* tslint:disable */
     @HostListener('window:click')
     private onWindowClick() {
         if(this.isDropdownOpen) {
             this.closeDropdown();
         }
     }
+    /* tslint:enable */
 
+    /* tslint:disable */
     @HostListener('click', ['$event'])
     private onHostClick($event: MouseEvent) {
         $event.stopPropagation();
     }
+    /* tslint:enable */
 
     private isKey($event: KeyboardEvent, key: string, altKey: boolean = false, ctrlKey: boolean = false): boolean {
         return $event.key === key &&
@@ -288,7 +292,7 @@ export class DropdownTreeFieldComponent implements OnInit, OnChanges, OnDestroy 
         this.isDropdownOpen = true;
         this.resetVisibleNodes();
 
-        var highlightedNode = this.calculateHighlightedOnOpen();
+        let highlightedNode = this.calculateHighlightedOnOpen();
         this.service.highlightNode(highlightedNode);
 
         this.containerClasses.push(DropdownTreeFieldComponent.openClass);

@@ -37,13 +37,14 @@
             "timeEnd",
             "trace"
         ],
+        "no-consecutive-blank-lines": true,
         "no-construct": true,
         "no-debugger": true,
         "no-duplicate-key": true,
         "no-duplicate-variable": true,
         "no-empty": false,
         "no-eval": true,
-        "no-inferrable-types": true,
+        //"no-inferrable-types": true,
         "no-shadowed-variable": true,
         "no-string-literal": false,
         "no-switch-case-fall-through": true,
@@ -63,7 +64,7 @@
         ],
         "quotemark": [
             true,
-            "double"
+            "single"
         ],
         "radix": true,
         "semicolon": [
@@ -91,7 +92,6 @@
             "check-separator",
             "check-type"
         ],
-
         "directive-selector-name": [ true, "camelCase" ],
         "component-selector-name": [ true, "kebab-case" ],
         "directive-selector-type": [ true, "attribute" ],
@@ -99,12 +99,16 @@
         "use-input-property-decorator": true,
         "use-output-property-decorator": true,
         "use-host-property-decorator": true,
-        "no-input-rename": true,
-        "no-output-rename": true,
-        "use-life-cycle-interface": true,
-        "use-pipe-transform-interface": true,
-        "component-class-suffix": true,
-        "directive-class-suffix": true,
+        //"no-input-rename": true,
+        //"no-output-rename": true,
+        //"use-life-cycle-interface": true,
+        //"use-pipe-transform-interface": true,
+        //"component-class-suffix": true,
+        //"directive-class-suffix": true,
+        //"import-destructuring-spacing": true,
+        //"templates-use-public": true,
+        //"no-access-missing-member": true,
+        //"invoke-injectable": true
         "directive-selector-prefix": [ true, "cf" ],
         "component-selector-prefix": [ true, "cf" ],
         "pipe-naming": [ true, "camelCase", "cf" ]

@@ -7,15 +7,17 @@
     Input,
     Output,
     Renderer
-}                           from "@angular/core";
+}                           from '@angular/core';
 
-import { ButtonDirective }  from "../button";
+import { ButtonDirective }  from '../button';
 
 @Directive({
-    selector: "button[cfToggleButton], a[cfToggleButton]"
+    /* tslint:disable */
+    selector: 'button[cfToggleButton], a[cfToggleButton]'
+    /* tslint:enable */
 })
 export class ToggleButtonDirective extends ButtonDirective {
-    static readonly activeStyle: string = "active";
+    static readonly activeStyle: string = 'active';
 
     @Output() change: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -25,7 +27,7 @@ export class ToggleButtonDirective extends ButtonDirective {
         super(element, renderer);
     }
 
-    @Input("cfToggleButton")
+    @Input('cfToggleButton')
     get active(): boolean {
         return this._active;
     }
@@ -45,12 +47,12 @@ export class ToggleButtonDirective extends ButtonDirective {
         }
     }
 
-    @HostBinding("attr.aria-pressed")
+    @HostBinding('attr.aria-pressed')
     get ariaPressed(): boolean {
         return this.active ? true : undefined;
     }
 
-    @HostListener("click")
+    @HostListener('click')
     onClick() {
         this.active = !this.active;
 

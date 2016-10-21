@@ -4,7 +4,7 @@ import { Router }            from '@angular/router';
 import { Header }            from './header.model';
 
 @Component({
-    selector: "cf-header",
+    selector: 'cf-header',
     templateUrl: 'header.component.html',
     styleUrls: ['header.component.scss']
 })
