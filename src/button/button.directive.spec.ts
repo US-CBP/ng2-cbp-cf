@@ -257,8 +257,8 @@ describe("ButtonDirective", () => {
 
 @Component({
     template: `
-        <button cf-button>Default</button>
-        <button cf-button [cfRole]="role">With Value</button>
+        <button cfButton>Default</button>
+        <button cfButton [cfRole]="role">With Value</button>
 `
 })
 class TestRoleComponent {
@@ -267,8 +267,8 @@ class TestRoleComponent {
 
 @Component({
     template: `
-        <button cf-button>Default</button>
-        <button cf-button [cfSize]="size">With Value</button>
+        <button cfButton>Default</button>
+        <button cfButton [cfSize]="size">With Value</button>
 `
 })
 class TestSizeComponent {
@@ -277,8 +277,8 @@ class TestSizeComponent {
 
 @Component({
     template: `
-        <button cf-button>Default</button>
-        <button cf-button [cfBlock]="block">With Value</button>
+        <button cfButton>Default</button>
+        <button cfButton [cfBlock]="block">With Value</button>
 `
 })
 class TestBlockComponent {
@@ -287,8 +287,8 @@ class TestBlockComponent {
 
 @Component({
     template: `
-        <button cf-button>Default <i class="fa fa-arrow-right"></i></button>
-        <button cf-button [cfIconOnly]="iconOnly">With Value <i class="fa fa-arrow-right"></i></button>
+        <button cfButton>Default <i class="fa fa-arrow-right"></i></button>
+        <button cfButton [cfIconOnly]="iconOnly">With Value <i class="fa fa-arrow-right"></i></button>
 `
 })
 class TestIconOnlyComponent {

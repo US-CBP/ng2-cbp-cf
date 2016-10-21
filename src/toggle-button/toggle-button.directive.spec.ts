@@ -126,8 +126,8 @@ describe("ToggleButtonDirective", () => {
 
 @Component({
     template: `
-        <button [cf-toggle-button]="active" (change)="onInitiallyActiveChange($event)">Active</button>
-        <button [cf-toggle-button]="inactive" (change)="onInitiallyInactiveChange($event)">Inactive</button>
+        <button [cfToggleButton]="active" (change)="onInitiallyActiveChange($event)">Active</button>
+        <button [cfToggleButton]="inactive" (change)="onInitiallyInactiveChange($event)">Inactive</button>
 `
 })
 class TestActiveComponent {

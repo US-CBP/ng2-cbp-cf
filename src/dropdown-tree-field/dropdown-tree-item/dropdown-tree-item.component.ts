@@ -7,23 +7,23 @@
     OnDestroy,
     OnInit,
     ViewChild
-}                               from "@angular/core";
-import { Subscription }         from "rxjs";
+}                               from '@angular/core';
+import { Subscription }         from 'rxjs';
 
-import { DropdownTreeService }  from "../dropdown-tree.service";
-import { DropdownTreeState }    from "../dropdown-tree-state.model";
-import { TreeNode }             from "../tree-node.model";
+import { DropdownTreeService }  from '../dropdown-tree.service';
+import { DropdownTreeState }    from '../dropdown-tree-state.model';
+import { TreeNode }             from '../tree-node.model';
 
 @Component({
-    selector: "cf-dropdown-tree-item",
-    templateUrl: "dropdown-tree-item.component.html",
+    selector: 'cf-dropdown-tree-item',
+    templateUrl: 'dropdown-tree-item.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DropdownTreeItemComponent implements OnInit, OnDestroy {
     @Input() idPrefix: string;
     @Input() node: TreeNode;
 
-    @ViewChild("text") textElement: ElementRef;
+    @ViewChild('text') textElement: ElementRef;
 
     id: string;
     treeItemClasses: string[];
@@ -51,27 +51,27 @@ export class DropdownTreeItemComponent implements OnInit, OnDestroy {
         this.treeItemClasses = [];
 
         if(this.node.children != null && this.node.children.length > 0) {
-            this.treeItemClasses.push("tree--has-children");
+            this.treeItemClasses.push('tree--has-children');
             this.isExpanded = state.expandedNodes.has(this.node);
             this.showChildren = this.isExpanded;
 
             if(this.isExpanded) {
-                this.treeItemClasses.push("tree--expanded");
+                this.treeItemClasses.push('tree--expanded');
             } else {
-                this.treeItemClasses.push("tree--collapsed");
+                this.treeItemClasses.push('tree--collapsed');
             }
         } else {
-            this.treeItemClasses.push("tree--no-children");
+            this.treeItemClasses.push('tree--no-children');
             this.isExpanded = undefined;
             this.showChildren = false;
         }
 
         if(state.highlightedNode === this.node) {
-            this.treeItemClasses.push("tree--highlighted");
+            this.treeItemClasses.push('tree--highlighted');
         }
 
         if(state.selectedNode === this.node) {
-            this.treeItemClasses.push("tree--selected");
+            this.treeItemClasses.push('tree--selected');
             this.isSelected = true;
 
             this.textElement.nativeElement.scrollIntoView();

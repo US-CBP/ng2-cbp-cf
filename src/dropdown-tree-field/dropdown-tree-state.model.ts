@@ -1,4 +1,4 @@
-﻿import { TreeNode } from "./tree-node.model";
+﻿import { TreeNode } from './tree-node.model';
 
 export interface DropdownTreeState {
     highlightedNode: TreeNode;

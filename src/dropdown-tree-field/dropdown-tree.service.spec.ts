@@ -1,9 +1,9 @@
-﻿﻿import { DropdownTreeService } from "./dropdown-tree.service";
-import { TreeNode } from "./tree-node.model";
+﻿﻿import { DropdownTreeService }  from './dropdown-tree.service';
+import { TreeNode }             from './tree-node.model';
 
 let currentId = 1;
 
-describe("DropdownTreeService", () => {
+describe('DropdownTreeService', () => {
     let service: DropdownTreeService;
     let highlightedNode: TreeNode;
     let selectedNode: TreeNode;
@@ -15,21 +15,21 @@ describe("DropdownTreeService", () => {
         selectedNode = createNode();
         expandedNodes = new Set<TreeNode>();
         service = new DropdownTreeService();
-        observer = jasmine.createSpy("observer");
+        observer = jasmine.createSpy('observer');
 
         service.setState(highlightedNode, selectedNode, expandedNodes);
         service.stateObservable.subscribe(observer);
         observer.calls.reset();
     });
 
-    describe("highlightNode", () => {
-        it("does not notify observers when node is already highlighted", () => {
+    describe('highlightNode', () => {
+        it('does not notify observers when node is already highlighted', () => {
             service.highlightNode(highlightedNode);
 
             expect(observer).not.toHaveBeenCalled();
         });
 
-        it("notifies observers when new node is highlighted", () => {
+        it('notifies observers when new node is highlighted', () => {
             let newNode = createNode();
 
             service.highlightNode(newNode);
@@ -38,14 +38,14 @@ describe("DropdownTreeService", () => {
         });
     });
 
-    describe("selectNode", () => {
-        it("does not notify observers when node is already selected", () => {
+    describe('selectNode', () => {
+        it('does not notify observers when node is already selected', () => {
             service.selectNode(selectedNode);
 
             expect(observer).not.toHaveBeenCalled();
         });
 
-        it("notifies observers when new node is selected", () => {
+        it('notifies observers when new node is selected', () => {
             let newNode = createNode();
 
             service.selectNode(newNode);
@@ -54,8 +54,8 @@ describe("DropdownTreeService", () => {
         });
     });
 
-    describe("expandNode", () => {
-        it("does not notify observers when node has no children", () => {
+    describe('expandNode', () => {
+        it('does not notify observers when node has no children', () => {
             let node = createNode();
 
             service.expandNode(node);
@@ -63,7 +63,7 @@ describe("DropdownTreeService", () => {
             expect(observer).not.toHaveBeenCalled();
         });
 
-        it("does not notify observers when node is already expanded", () => {
+        it('does not notify observers when node is already expanded', () => {
             let node = createNode();
             node.children.push(createNode());
             expandedNodes.add(node);
@@ -73,7 +73,7 @@ describe("DropdownTreeService", () => {
             expect(observer).not.toHaveBeenCalled();
         });
 
-        it("notifies observers when node is collapsed", () => {
+        it('notifies observers when node is collapsed', () => {
             let node = createNode();
             node.children.push(createNode());
 
@@ -89,8 +89,8 @@ describe("DropdownTreeService", () => {
         });
     });
 
-    describe("collapseNode", () => {
-        it("does not notify observers when node has no children", () => {
+    describe('collapseNode', () => {
+        it('does not notify observers when node has no children', () => {
             let node = createNode();
             expandedNodes.add(node);
 
@@ -99,7 +99,7 @@ describe("DropdownTreeService", () => {
             expect(observer).not.toHaveBeenCalled();
         });
 
-        it("does not notify observers when node is already collapsed", () => {
+        it('does not notify observers when node is already collapsed', () => {
             let node = createNode();
             node.children.push(createNode());
 
@@ -108,7 +108,7 @@ describe("DropdownTreeService", () => {
             expect(observer).not.toHaveBeenCalled();
         });
 
-        it("notifies observers when node is expanded", () => {
+        it('notifies observers when node is expanded', () => {
             let node = createNode();
             node.children.push(createNode());
             expandedNodes.add(node);
@@ -125,8 +125,8 @@ describe("DropdownTreeService", () => {
         });
     });
 
-    describe("toggleNodeExpansion", () => {
-        it("does not notify observers when node has no children", () => {
+    describe('toggleNodeExpansion', () => {
+        it('does not notify observers when node has no children', () => {
             let node = createNode();
 
             service.toggleNodeExpansion(node);
@@ -134,7 +134,7 @@ describe("DropdownTreeService", () => {
             expect(observer).not.toHaveBeenCalled();
         });
 
-        it("notifies observers when node is collapsed", () => {
+        it('notifies observers when node is collapsed', () => {
             let node = createNode();
             node.children.push(createNode());
 
@@ -149,7 +149,7 @@ describe("DropdownTreeService", () => {
             });
         });
 
-        it("notifies observers when node is expanded", () => {
+        it('notifies observers when node is expanded', () => {
             let node = createNode();
             node.children.push(createNode());
             expandedNodes.add(node);
@@ -169,7 +169,7 @@ describe("DropdownTreeService", () => {
     function createNode(): TreeNode {
         return {
             id: currentId++,
-            text: "ABC",
+            text: 'ABC',
             children: []
         };
     }
