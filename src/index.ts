@@ -1,6 +1,8 @@
 // ### order has some importance here ###
 export * from './shared';
 export * from './header';
+export * from './checkbox';
+export * from './checkbox-group';
 export * from './button';
 export * from './button-group';
 export * from './toggle-button';
