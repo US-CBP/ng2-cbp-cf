@@ -14,6 +14,8 @@ import {
     ButtonRoles,
     ButtonSize,
     ButtonSizes,
+    CheckboxComponent,
+    CheckboxGroupComponent,
     DropdownTreeFieldComponent,
     DropdownTreeItemComponent,
     HeaderComponent,
@@ -37,6 +39,8 @@ export * from './src';
     declarations: [
         ButtonDirective,
         ButtonGroupComponent,
+        CheckboxComponent,
+        CheckboxGroupComponent,
         DropdownTreeFieldComponent,
         DropdownTreeItemComponent,
         HeaderComponent,
@@ -50,6 +54,8 @@ export * from './src';
     exports: [
         ButtonDirective,
         ButtonGroupComponent,
+        CheckboxComponent,
+        CheckboxGroupComponent,
         DropdownTreeFieldComponent,
         DropdownTreeItemComponent,
         HeaderComponent,

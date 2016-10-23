@@ -23,7 +23,8 @@ export class RadioChange {
 
 @Component({
     selector: 'cf-radio-button',
-    templateUrl: 'radio-button.component.html'
+    templateUrl: 'radio-button.component.html',
+    styleUrls: ['radio-button.component.scss']
 })
 export class RadioButtonComponent implements OnInit, OnDestroy {
     @Input() id: string = `cf-radio-button-${nextId++}`;
