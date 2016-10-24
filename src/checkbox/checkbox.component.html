@@ -1,0 +1,25 @@
+<div [class.checkbox]="!isInline" [class.checkbox-pad-r]="isInline" [style.display]="isInline ? 'inline' : 'block'">
+    <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+        <input type="checkbox"
+            class="mdl-checkbox__input"
+            [id]="inputId"
+            [required]="required"
+            [checked]="checked"
+            [disabled]="disabled"
+            [name]="name"
+            [tabIndex]="tabindex"
+            [indeterminate]="indeterminate"
+            [attr.aria-label]="ariaLabel"
+            [attr.aria-labelledby]="ariaLabelledby"
+            (change)="onInputChange($event)"
+            (click)="onInputClick($event)"
+            (blur)="onInputBlur()"
+             />
+        <span class="mdl-checkbox__label">
+            <ng-content></ng-content>
+        </span>
+        <div class="text-muted">
+            <ng-content select="cf-help-text"></ng-content>
+        </div>
+    </label>
+</div>
