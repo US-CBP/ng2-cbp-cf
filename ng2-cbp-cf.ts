@@ -4,7 +4,7 @@ import { BrowserModule }                    from '@angular/platform-browser';
 import { FormsModule }                      from '@angular/forms';
 import { HttpModule }                       from '@angular/http';
 
-import './lib/styles/cbp-theme.css';
+//import './lib/styles/cbp-theme.css';
 import './lib';
 
 import {
