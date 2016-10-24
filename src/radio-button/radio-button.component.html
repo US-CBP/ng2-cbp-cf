@@ -1,8 +1,9 @@
-﻿<div [class.radio]="!isInline" [style.display]="isInline ? 'inline' : 'block'">
+﻿<div [class.radio]="!isInline" [class.radio-pad-r]="isInline" [style.display]="isInline ? 'inline' : 'block'">
     <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" [attr.for]="inputId">
         <input type="radio"
                 class="mdl-radio__button"
                 [id]="inputId"
+                [value]="checked"
                 [checked]="checked"
                 [disabled]="disabled"
                 [name]="name"

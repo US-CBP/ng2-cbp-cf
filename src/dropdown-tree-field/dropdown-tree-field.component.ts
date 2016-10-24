@@ -238,7 +238,7 @@ export class DropdownTreeFieldComponent implements OnInit, OnChanges, OnDestroy 
 
     /* tslint:disable */
     @HostListener('window:click')
-    private onWindowClick() {
+    onWindowClick() {
         if(this.isDropdownOpen) {
             this.closeDropdown();
         }
@@ -247,7 +247,7 @@ export class DropdownTreeFieldComponent implements OnInit, OnChanges, OnDestroy 
 
     /* tslint:disable */
     @HostListener('click', ['$event'])
-    private onHostClick($event: MouseEvent) {
+    onHostClick($event: MouseEvent) {
         $event.stopPropagation();
     }
     /* tslint:enable */

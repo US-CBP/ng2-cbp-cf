@@ -26,14 +26,13 @@
     "module": "ng2-cf.js",
     "typings": "./ng2-cf.d.ts",
     "scripts": {
-    "clean": "del-cli bundles",
-    "lint": "npm run-s lint:js | npm run-s lint:ts",
-    "lint:js": "eslint -c .eslintrc.yml *.js",
-    "lint:ts": "tslint src/**/*.ts -e src/**/*.ngfactory.ts -e src/**/*.shim.ts",
-    "test": "karma start --single-run",
-    "test:watch": "karma start",
-    "prepublish": "ngc && node make.js",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+        "lint": "npm run-s lint:js | npm run-s lint:ts",
+        "lint:js": "eslint -c .eslintrc.yml *.js",
+        "lint:ts": "tslint src/**/*.ts -e src/**/*.ngfactory.ts -e src/**/*.shim.ts",
+        "test": "karma start --single-run",
+        "test:watch": "karma start",
+        "prepublish": "ngc && node make.js",
+        "semantic-release": "semantic-release pre && npm publish && semantic-release post"
     },
     "dependencies": {
         "@angular/common": "~2.1.0",
