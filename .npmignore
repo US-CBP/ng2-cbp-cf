@@ -17,7 +17,7 @@ coverage
 !bundles/*.js
 *.ngfactory.ts
 *.shim.ts
-
+dts/*
 #################
 ## JetBrains
 #################

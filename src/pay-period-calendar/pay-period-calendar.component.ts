@@ -81,7 +81,7 @@ export class PayPeriodCalendarComponent implements OnInit {
         this.nextMonths = new Map<PayPeriodMonth, PayPeriodMonth>();
         this.previousMonths = new Map<PayPeriodMonth, PayPeriodMonth>();
 
-        let previous = null;
+        let previous: PayPeriodMonth = null;
         for(let y of this.years) {
             for(let m of this.monthsByYear.get(y)) {
                 this.previousMonths.set(m, previous);

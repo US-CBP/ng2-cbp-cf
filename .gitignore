@@ -6,7 +6,7 @@ nbproject
 manifest.mf
 build.xml
 node_modules/*
-npm-debug.log
+npm-debug.log*
 *.js
 !config/*
 !karma.conf.js
@@ -20,6 +20,8 @@ coverage
 *.metadata.json
 *.ngfactory.ts
 *.shim.ts
+dts/*
+dist/*
 
 
 #################

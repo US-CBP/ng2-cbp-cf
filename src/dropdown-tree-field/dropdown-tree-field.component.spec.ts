@@ -1,4 +1,4 @@
-﻿﻿import { CommonModule }                 from '@angular/common';
+﻿import { CommonModule }                 from '@angular/common';
 import {
     CUSTOM_ELEMENTS_SCHEMA,
     SimpleChange
@@ -11,6 +11,7 @@ import { FormsModule }                  from '@angular/forms';
 
 import { DropdownTreeFieldComponent }   from './dropdown-tree-field.component';
 import { DropdownTreeService }          from './dropdown-tree.service';
+import { DropdownTreeState }            from './dropdown-tree-state.model';
 import { TreeNode }                     from './tree-node.model';
 
 let currentId = 1;
@@ -60,7 +61,7 @@ describe('DropdownTreeItemComponent', () => {
             fixture.detectChanges();
 
             expect(stateSpy).toHaveBeenCalledWith({
-                asymmetricMatch(actual) {
+                asymmetricMatch(actual: DropdownTreeState) {
                     return actual.expandedNodes.size === 2 &&
                         actual.expandedNodes.has(nodes[0]) &&
                         actual.expandedNodes.has(nodes[0].children[2]);
@@ -74,7 +75,7 @@ describe('DropdownTreeItemComponent', () => {
             fixture.detectChanges();
 
             expect(stateSpy).toHaveBeenCalledWith({
-                asymmetricMatch(actual) {
+                asymmetricMatch(actual: DropdownTreeState) {
                     return actual.expandedNodes.size === 0;
                 }
             });
@@ -515,7 +516,7 @@ describe('DropdownTreeItemComponent', () => {
         });
 
         function createSimpleChange(field: string, currentValue: any): SimpleChange {
-            let previousValue = component[field];
+            let previousValue: any = component[field];
             component[field] = currentValue;
             return {
                 previousValue,

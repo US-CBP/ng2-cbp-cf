@@ -78,7 +78,7 @@ export class TableComponent implements OnInit {
     ngOnInit() {
     }
 
-    loadPage(query) {
+    loadPage(query: Query) {
         this.query = query;
         this.gettabledata.emit(query);
     }

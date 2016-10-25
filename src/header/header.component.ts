@@ -16,7 +16,7 @@ export class HeaderComponent implements OnInit {
         this.router = router;
     }
 
-    goTo(item) {
+    goTo(item: any) {
         if (item.route) {
             this.router.navigate( [ item.route, {} ]);
         } else if (item.href) {

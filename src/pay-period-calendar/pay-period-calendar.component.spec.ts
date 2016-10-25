@@ -774,8 +774,8 @@ describe('PayPeriodCalendarComponent', () => {
         });
     });
 
-    function createMonthsFromCurrent(startIndex, endIndex) {
-        let results = [];
+    function createMonthsFromCurrent(startIndex: number, endIndex: number) {
+        let results: any[] = [];
         let currentMoment = moment().startOf('day').startOf('month');
         for(let i = startIndex; i <= endIndex; i++) {
             let m = currentMoment.clone().add(i, 'months');

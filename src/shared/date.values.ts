@@ -1,2 +1,2 @@
-﻿export const standardISOFormat = 'YYYY-MM-DDTHH:mm:ss';
-export const standardDisplayFormat = 'MM/DD/YYYY';
+﻿export const standardISOFormat: string = 'YYYY-MM-DDTHH:mm:ss';
+export const standardDisplayFormat: string = 'MM/DD/YYYY';
