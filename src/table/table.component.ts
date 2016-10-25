@@ -1,15 +1,31 @@
-import { Component,
+import {
+    Component,
     OnInit,
     EventEmitter,
     Output,
     Input,
-    ViewChild }                 from '@angular/core';
+    QueryList,
+    ViewChildren,
+    ViewChild
+}                               from '@angular/core';
+import * as _ from 'lodash';
 
 import { Table }                from './table.model';
-import { PaginationComponent,
-    Query }                     from '../pagination';
+import {
+    PaginationComponent,
+    Query }
+                                from '../pagination';
+import {
+    CheckboxComponent,
+    CheckboxChange
+}                               from '../checkbox';
 
 let nextId = 1;
+
+export class TableSelectionChange {
+    source: TableComponent;
+    items: any[];
+}
 
 @Component({
     selector: 'cf-table',
@@ -19,13 +35,17 @@ let nextId = 1;
 export class TableComponent implements OnInit {
     @Input() id: string = `cf-table-${nextId++}`;
     @Output() gettabledata: EventEmitter<Query> = new EventEmitter<Query>();
+    @Output() selectionchange: EventEmitter<TableSelectionChange> = new EventEmitter<TableSelectionChange>();
 
     @ViewChild(PaginationComponent) pagerObj: PaginationComponent;
+    @ViewChildren(CheckboxComponent) checkboxesObj: QueryList<CheckboxComponent> = null;
 
     private _data: Table = null;
     private _query: Query = null;
+    private _selectedItems = null;
 
     constructor() {
+        this._selectedItems = [] as any;
     }
 
     @Input()
@@ -48,18 +68,27 @@ export class TableComponent implements OnInit {
         this._query = qy;
     }
 
-    hasNoHeader() {
+    hasHeader() {
         let dt = this.data;
-        if (dt.options && dt.options.hasNoHeader) {
-            return false;
-        } else {
+        if (dt.options && dt.options.hasHeader) {
             return true;
+        } else {
+            return false;
         }
     }
 
     hasStripedAltRow() {
         let dt = this.data;
         if (dt.options && dt.options.hasStripedAltRow) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    hasFloatingHeader() {
+        let dt = this.data;
+        if (dt.options && dt.options.hasFloatingHeader) {
             return true;
         } else {
             return false;
@@ -83,4 +112,45 @@ export class TableComponent implements OnInit {
         this.gettabledata.emit(query);
     }
 
+    toggleSelectAll(event: CheckboxChange) {
+        this.checkboxesObj.forEach((checkbox) => {
+            checkbox.checked = event.checked;
+        });
+        this.toggleAllSelectedData(event.checked);
+    }
+
+    toggleSelectionItem(event: CheckboxChange, item: any) {
+        this.toggleItemSelectedData(item, event.checked);
+        this._emitSelectionChangeEvent();
+    }
+
+    private toggleItemSelectedData(item: any, selected: boolean) {
+        if(selected) {
+            if(!_.find(this._selectedItems, item)) {
+                this._selectedItems.push(item);
+            }
+        } else {
+            let idx = _.findIndex(this._selectedItems, item);
+            if(idx !== -1) {
+                this._selectedItems.splice(idx, 1);
+            }
+        }
+    }
+
+    private toggleAllSelectedData(selected: boolean) {
+        if(selected) {
+            this._selectedItems = _.clone(this.data.data);
+        } else {
+            this._selectedItems = [];
+        }
+        this._emitSelectionChangeEvent();
+    }
+
+    private _emitSelectionChangeEvent() {
+        let event = new TableSelectionChange();
+        event.source = this;
+        event.items = this._selectedItems;
+
+        this.selectionchange.emit(event);
+    }
 }

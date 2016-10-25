@@ -1,6 +1,7 @@
 export interface TableOptions {
-    hasNoHeader: boolean;
+    hasHeader: boolean;
     hasStripedAltRow: boolean;
+    hasFloatingHeader: boolean;
     isRowSelectable: boolean;
     isColSortable: boolean;
     isMultiColSortable: boolean;
