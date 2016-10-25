@@ -20,7 +20,7 @@ import {
 
 let nextId = 1;
 
-export const radioGroupControlValueAccessor = {
+export const radioGroupControlValueAccessor: any = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => RadioGroupComponent),
     multi: true

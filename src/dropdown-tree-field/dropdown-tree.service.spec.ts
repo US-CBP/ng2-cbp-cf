@@ -1,4 +1,5 @@
 ﻿﻿import { DropdownTreeService }  from './dropdown-tree.service';
+import { DropdownTreeState }    from './dropdown-tree-state.model';
 import { TreeNode }             from './tree-node.model';
 
 let currentId = 1;
@@ -80,7 +81,7 @@ describe('DropdownTreeService', () => {
             service.expandNode(node);
 
             expect(observer).toHaveBeenCalledWith({
-                asymmetricMatch(actual) {
+                asymmetricMatch(actual: DropdownTreeState) {
                     return actual.highlightedNode === highlightedNode &&
                         actual.selectedNode === selectedNode &&
                         actual.expandedNodes.has(node);
@@ -116,7 +117,7 @@ describe('DropdownTreeService', () => {
             service.collapseNode(node);
 
             expect(observer).toHaveBeenCalledWith({
-                asymmetricMatch(actual) {
+                asymmetricMatch(actual: DropdownTreeState) {
                     return actual.highlightedNode === highlightedNode &&
                         actual.selectedNode === selectedNode &&
                         !actual.expandedNodes.has(node);
@@ -141,7 +142,7 @@ describe('DropdownTreeService', () => {
             service.toggleNodeExpansion(node);
 
             expect(observer).toHaveBeenCalledWith({
-                asymmetricMatch(actual) {
+                asymmetricMatch(actual: DropdownTreeState) {
                     return actual.highlightedNode === highlightedNode &&
                         actual.selectedNode === selectedNode &&
                         actual.expandedNodes.has(node);
@@ -157,7 +158,7 @@ describe('DropdownTreeService', () => {
             service.toggleNodeExpansion(node);
 
             expect(observer).toHaveBeenCalledWith({
-                asymmetricMatch(actual) {
+                asymmetricMatch(actual: DropdownTreeState) {
                     return actual.highlightedNode === highlightedNode &&
                         actual.selectedNode === selectedNode &&
                         !actual.expandedNodes.has(node);

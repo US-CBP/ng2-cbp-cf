@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
-        "baseUrl": ".",
+        "baseUrl": "..",
+        "declaration": true,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "lib": [
@@ -10,8 +11,9 @@
         "module": "es6",
         "moduleResolution": "node",
         "noEmitHelpers": true,
+        "outDir": "dts",
         "removeComments": true,
-        "target": "es5",
+        "target": "es6",
         "types": [
             "node",
             "jasmine"
@@ -20,9 +22,7 @@
     "exclude": [
         "node_modules",
         "dist",
-        "build"
-    ],
-    "awesomeTypescriptLoaderOptions": {
-        "useWebpackText":  true
-    }
+        "build",
+        "**/*.spec.ts"
+    ]
 }

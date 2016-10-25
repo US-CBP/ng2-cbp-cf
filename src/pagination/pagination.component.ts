@@ -51,7 +51,7 @@ export class PaginationComponent implements OnInit {
         }
     }
 
-    setPage(page, forceRefresh: boolean = false) {
+    setPage(page: number, forceRefresh: boolean = false) {
         let tc = this.totalCount;
         if(!tc || page < 1 || page > tc) {
             return;

@@ -34,12 +34,10 @@ Stack
 -----
 
 - Angular 2
-- systemJs
-- ngc
+- Webpack 2
 - RxJS
 - SASS
 - Typescript 2
-- Webpack 2 --> for testing
 - Jasmine
 - Karma
 

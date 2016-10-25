@@ -4,8 +4,10 @@ import { BrowserModule }                    from '@angular/platform-browser';
 import { FormsModule }                      from '@angular/forms';
 import { HttpModule }                       from '@angular/http';
 
-//import './lib/styles/cbp-theme.css';
-import './lib';
+import 'cbp-theme/dist/cbp-theme.css';
+import 'cbp-theme/dist/jquery.js';
+import 'cbp-theme/dist/inputmask.js';
+import 'cbp-theme/dist/cbp-theme.js';
 
 import {
     ButtonDirective,

@@ -10,10 +10,10 @@ export class PayPeriodCalendarService {
     constructor(private http: Http) {
     }
 
-    loadPayPeriods(url, year, month): Promise<PayPeriod[]> {
+    loadPayPeriods(url: string, year: number, month: number): Promise<PayPeriod[]> {
         let params = new URLSearchParams();
-        params.set('year', year);
-        params.set('month', month);
+        params.set('year', year.toString());
+        params.set('month', month.toString());
 
         return this.http.get(url, { search: params })
             .toPromise()
