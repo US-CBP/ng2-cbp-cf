@@ -11,12 +11,8 @@ npm-debug.log*
 !config/*
 !karma.conf.js
 !webpack.config.js
-!lib/*
-!lib/**/*
 *.map
 *.d.ts
-!make.js
-!examples/**/*.js
 coverage
 *.metadata.json
 *.ngfactory.ts

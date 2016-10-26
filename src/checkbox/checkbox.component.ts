@@ -38,10 +38,12 @@ export class CheckboxComponent implements ControlValueAccessor {
     @Input() @BooleanFieldValue() required: boolean = false;
     @Input() disabled: boolean = false;
     @Input() tabindex: number = 0;
+    @Input('in-cbp-table') inCbpTable: string = '';
 
     @Output() change: EventEmitter<CheckboxChange> = new EventEmitter<CheckboxChange>();
 
     isInline: boolean = false;
+    focus: boolean = false;
 
     private _indeterminate: boolean = false;
     private _checked: boolean;
@@ -62,7 +64,7 @@ export class CheckboxComponent implements ControlValueAccessor {
     }
     set checked(checked: boolean) {
         /* tslint:disable */
-        if (checked != this.checked) {
+        if (checked != this._checked) {
         /* tslint:enable */
             this._indeterminate = false;
             this._checked = checked;
@@ -90,16 +92,26 @@ export class CheckboxComponent implements ControlValueAccessor {
 
     onInputChange($event: Event) {
         $event.stopPropagation();
-
-        if (!this.disabled) {
+        if(!this.disabled) {
             this.toggle();
-
             this._emitChangeEvent();
         }
+        window.setTimeout(() => {
+            this.focus = false;
+        }, 0.0001);
+    }
+
+    onInputFocus() {
+        this.focus = true;
     }
 
     onInputBlur() {
+        this.focus = false;
         this.onTouched();
+    }
+
+    onMouseUp() {
+        this.focus = false;
     }
 
     private _emitChangeEvent() {
