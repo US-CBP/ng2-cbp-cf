@@ -1,0 +1,30 @@
+﻿<div class="mdl-selectfield mdl-selectfield--floating-label mdl-js-selectfield is-upgraded"
+     data-upgraded=",MaterialSelectfield"
+     [class.mdl-selectfield--multiple]="multiple"
+     [class.is-dirty]="isDirty"
+     [class.is-focused]="isFocused"
+     [class.is-disabled]="disabled"
+     [class.is-invalid]="isInvalid">
+
+    <select #select
+            class="mdl-selectfield__select"
+            [id]="selectId"
+
+            [autofocus]="autofocus"
+            [disabled]="disabled"
+            [attr.form]="form"
+            [multiple]="multiple"
+            [name]="name"
+            [required]="required"
+            [attr.selected]="selected"
+            [size]="size"
+
+            (blur)="onSelectBlur()"
+            (focus)="onSelectFocus()">
+
+        <ng-content></ng-content>
+    </select>
+    <label class="mdl-selectfield__label" [attr.for]="selectId">
+        <ng-content select="cf-label"></ng-content>
+    </label>
+</div>

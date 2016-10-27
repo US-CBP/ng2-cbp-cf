@@ -10,5 +10,6 @@ export * from './dropdown-tree-field';
 export * from './pay-period-calendar';
 export * from './radio-button';
 export * from './radio-group';
+export * from './select-field';
 export * from './pagination';
 export * from './table';
