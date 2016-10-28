@@ -28,6 +28,7 @@ import {
     PayPeriodCalendarComponent,
     RadioButtonComponent,
     RadioGroupComponent,
+    SelectFieldComponent,
     TableComponent,
     ToggleButtonDirective,
     UniqueSelectionDispatcher
@@ -53,6 +54,7 @@ export * from './src';
         PayPeriodCalendarComponent,
         RadioButtonComponent,
         RadioGroupComponent,
+        SelectFieldComponent,
         TableComponent,
         ToggleButtonDirective
     ],
@@ -68,6 +70,7 @@ export * from './src';
         PayPeriodCalendarComponent,
         RadioButtonComponent,
         RadioGroupComponent,
+        SelectFieldComponent,
         TableComponent,
         ToggleButtonDirective
     ],
