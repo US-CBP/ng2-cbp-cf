@@ -9,7 +9,6 @@ import {
     NG_VALUE_ACCESSOR,
     ControlValueAccessor
 }                           from '@angular/forms';
-import { By }               from '@angular/platform-browser';
 
 let nextId = 1;
 
@@ -35,11 +34,12 @@ export class SelectFieldComponent implements ControlValueAccessor {
     @Input() selected: boolean = false;
     @Input() size: number = 0;
 
-    private _controlValueAccessorChangeFn: (value: any) => void = (value) => { };
-    @ViewChild('select') private _select: ElementRef;
-
-    onTouched: () => any = () => { };
     isFocused: boolean = false;
+
+    @ViewChild('select') private _select: ElementRef;
+    private _controlValueAccessorChangeFn: (value: any) => void = (value) => {};
+
+    onTouched: () => any = () => {};
 
     constructor() {
     }

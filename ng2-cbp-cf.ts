@@ -23,7 +23,10 @@ import {
     CheckboxGroupComponent,
     DropdownTreeFieldComponent,
     DropdownTreeItemComponent,
+    DualListComponent,
     HeaderComponent,
+    ListGroupItemComponent,
+    ListGroupComponent,
     PaginationComponent,
     PayPeriodCalendarComponent,
     RadioButtonComponent,
@@ -36,44 +39,34 @@ import {
 
 export * from './src';
 
+const components = [
+    ButtonDirective,
+    ButtonGroupComponent,
+    CheckboxComponent,
+    CheckboxGroupComponent,
+    DropdownTreeFieldComponent,
+    DropdownTreeItemComponent,
+    DualListComponent,
+    HeaderComponent,
+    ListGroupItemComponent,
+    ListGroupComponent,
+    PaginationComponent,
+    PayPeriodCalendarComponent,
+    RadioButtonComponent,
+    RadioGroupComponent,
+    SelectFieldComponent,
+    TableComponent,
+    ToggleButtonDirective
+];
+
 @NgModule({
     imports: [
         BrowserModule,
         FormsModule,
         HttpModule
     ],
-    declarations: [
-        ButtonDirective,
-        ButtonGroupComponent,
-        CheckboxComponent,
-        CheckboxGroupComponent,
-        DropdownTreeFieldComponent,
-        DropdownTreeItemComponent,
-        HeaderComponent,
-        PaginationComponent,
-        PayPeriodCalendarComponent,
-        RadioButtonComponent,
-        RadioGroupComponent,
-        SelectFieldComponent,
-        TableComponent,
-        ToggleButtonDirective
-    ],
-    exports: [
-        ButtonDirective,
-        ButtonGroupComponent,
-        CheckboxComponent,
-        CheckboxGroupComponent,
-        DropdownTreeFieldComponent,
-        DropdownTreeItemComponent,
-        HeaderComponent,
-        PaginationComponent,
-        PayPeriodCalendarComponent,
-        RadioButtonComponent,
-        RadioGroupComponent,
-        SelectFieldComponent,
-        TableComponent,
-        ToggleButtonDirective
-    ],
+    declarations: components,
+    exports: components,
     providers: [
         UniqueSelectionDispatcher
     ],

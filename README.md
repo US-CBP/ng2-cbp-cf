@@ -59,7 +59,6 @@ $ npm link
 #### Open a new terminal
 #### Go to your project or ng2-cbp-quickStart repo
 $ npm link ng2-cbp-cf
-$ npm run server:dev
 ```
 #### go to http://localhost:3000
 
