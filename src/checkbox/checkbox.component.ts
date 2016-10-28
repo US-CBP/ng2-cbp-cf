@@ -51,8 +51,7 @@ export class CheckboxComponent implements ControlValueAccessor {
 
     onTouched: () => any = () => {};
 
-    constructor() {
-    }
+    constructor() {}
 
     get inputId(): string {
         return `${this.id}-input`;

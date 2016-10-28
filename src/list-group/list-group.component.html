@@ -1,0 +1,9 @@
+<ul class="list-group"
+    role="listbox"
+    [id]="id"
+    [ngStyle]="{'max-height': maxheight, 'max-width': maxwidth, 'height': height, 'width':width}"
+    (drop)="dropContainer($event)"
+    (dragover)="dragoverContainer($event)"
+    (dragleave)="dragleaveContainer($event)">
+    <ng-content></ng-content>
+</ul>

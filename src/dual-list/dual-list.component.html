@@ -1,0 +1,54 @@
+<div class="cf-dual-list">
+    <div>
+        <cf-list-group [width]="width" [height]="height" [multiSelect]="true"
+            (dropListGroup)="dropDeselected($event)"
+            (dragoverListGroup)="allowDropSelected($event)"
+            (dragleaveListGroup)="dragLeave()">
+            <cf-list-group-item *ngFor="let item of availableL.list; let idx=index;"
+                (click)="selectItem($event, item)"
+                [active]="isPickedToBeSelected(item)"
+                is-draggable="true"
+                (dragstartListGroupItem)="dragSelected($event, item)"
+                (dragendListGroupItem)="dragEnd()">
+                    <span *ngFor="let attr of attrToShow"
+                        [innerHTML]="item[attr]">
+                    </span>
+            </cf-list-group-item>
+        </cf-list-group>
+    </div>
+    <div class="vertical-align">
+        <button type="button" cfButton [cfSize]="ButtonSizes.normal" [cfRole]="ButtonRoles.primary"
+            (click)="moveSelectAll()">
+            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+        </button>
+        <button type="button" cfButton [cfSize]="ButtonSizes.normal" [cfRole]="ButtonRoles.primary"
+            (click)="moveSelectedItem()">
+            <i class="fa fa-angle-right" aria-hidden="true"></i>
+        </button>
+        <button type="button" cfButton [cfSize]="ButtonSizes.normal" [cfRole]="ButtonRoles.primary"
+            (click)="moveDeselectItem()">
+            <i class="fa fa-angle-left" aria-hidden="true"></i>
+        </button>
+        <button type="button" cfButton [cfSize]="ButtonSizes.normal" [cfRole]="ButtonRoles.primary"
+            (click)="moveDeselectAll()">
+            <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+        </button>
+    </div>
+    <div>
+        <cf-list-group [width]="width" [height]="height" [multiSelect]="true"
+            (dropListGroup)="dropSelected($event)"
+            (dragoverListGroup)="allowDropDeselected($event)"
+            (dragleaveListGroup)="dragLeave()">
+            <cf-list-group-item *ngFor="let item of selectedL.list; let idx=index;"
+                    (click)="deselectItem($event, item);"
+                    [active]="isPickedToBeDeselected(item)"
+                    is-draggable="true"
+                    (dragstartListGroupItem)="dragDeselected($event, item)"
+                    (dragendListGroupItem)="dragEnd(available)">
+                    <span *ngFor="let attr of attrToShow"
+                        [innerHTML]="item[attr]">
+                    </span>
+            </cf-list-group-item>
+        </cf-list-group>
+    </div>
+</div>

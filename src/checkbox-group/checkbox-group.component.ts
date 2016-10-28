@@ -1,5 +1,5 @@
 import {
-    AfterContentInit ,
+    AfterContentInit,
     Component,
     ContentChildren,
     Input,

@@ -1,0 +1,11 @@
+<li class="list-group-item"
+    role="option"
+    [id]="id"
+    [class.active]="active"
+    [attr.aria-selected]="active"
+    (click)="clickItem($event)"
+    [draggable]="draggable"
+    (dragstart)="dragstartContainer($event)"
+    (dragend)="dragendContainer($event)">
+    <ng-content></ng-content>
+</li>
