@@ -57,8 +57,14 @@ export class DropdownTreeFieldComponent implements OnInit, OnChanges, OnDestroy 
 
     private stateSubscription: Subscription;
     private parentMap: Map<TreeNode, TreeNode>;
+    private _preventWindowClickClose: boolean = false;
+    private _isFocused: boolean = false;
 
     constructor(private service: DropdownTreeService) {
+    }
+
+    get isFocused(): boolean {
+        return this._isFocused;
     }
 
     ngOnInit() {
@@ -98,6 +104,7 @@ export class DropdownTreeFieldComponent implements OnInit, OnChanges, OnDestroy 
         if(this.containerClasses.indexOf(DropdownTreeFieldComponent.focusClass) === -1) {
             this.containerClasses.push(DropdownTreeFieldComponent.focusClass);
         }
+        this._isFocused = true;
     }
 
     onComboboxBlur() {
@@ -105,6 +112,7 @@ export class DropdownTreeFieldComponent implements OnInit, OnChanges, OnDestroy 
         if(index !== -1) {
             this.containerClasses.splice(index, 1);
         }
+        this._isFocused = false;
     }
 
     onComboboxClick() {
@@ -239,16 +247,18 @@ export class DropdownTreeFieldComponent implements OnInit, OnChanges, OnDestroy 
     /* tslint:disable */
     @HostListener('window:click')
     onWindowClick() {
-        if(this.isDropdownOpen) {
+        if(this._preventWindowClickClose) {
+            this._preventWindowClickClose = false;
+        } else if(this.isDropdownOpen) {
             this.closeDropdown();
         }
     }
     /* tslint:enable */
 
     /* tslint:disable */
-    @HostListener('click', ['$event'])
-    onHostClick($event: MouseEvent) {
-        $event.stopPropagation();
+    @HostListener('click')
+    onHostClick() {
+        this._preventWindowClickClose = true;
     }
     /* tslint:enable */
 
