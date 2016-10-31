@@ -7,10 +7,7 @@ import {
     ViewEncapsulation
 }                           from '@angular/core';
 import { BasicList }        from './basic-list';
-import {
-    ButtonRoles,
-    ButtonSizes
-}                           from '../button';
+
 import {
     NG_VALUE_ACCESSOR,
     ControlValueAccessor
@@ -50,9 +47,6 @@ export class DualListComponent implements ControlValueAccessor {
     @Input() attrToSort: string[] = [];
 
     @Output() change: EventEmitter<DualListChange> = new EventEmitter<DualListChange>();
-
-    ButtonRoles: any = ButtonRoles;
-    ButtonSizes: any = ButtonSizes;
 
     availableL: BasicList = new BasicList(DualListComponent.AVAILABLE_LIST_NAME);
     selectedL: BasicList = new BasicList(DualListComponent.SELECTED_LIST_NAME);
