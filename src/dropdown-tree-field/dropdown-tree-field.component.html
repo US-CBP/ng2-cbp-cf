@@ -1,4 +1,4 @@
-﻿<div class="dropdown-tree-field dtf--floating-label is-dirty">
+﻿<div class="dropdown-tree-field dtf--floating-label is-dirty" [class.is-focused]="isFocused">
     <input type="text" id="{{id}}-input" class="dropdown-tree dt--hidden-accesible" [attr.aria-expanded]="isDropdownOpen" tabindex="-1" aria-hidden="true" />
     <span #dropdownContainer class="dropdown-tree dt--container dt--container-default" [ngClass]="containerClasses" dir="ltr">
         <span class="dt--selection">
