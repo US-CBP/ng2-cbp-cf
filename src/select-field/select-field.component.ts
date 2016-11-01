@@ -9,10 +9,6 @@ import {
     NG_VALUE_ACCESSOR,
     ControlValueAccessor
 }                           from '@angular/forms';
-<<<<<<< 95b94f25ba0e5a39031b784bc747cf9334670c3a
-=======
-import { By }               from '@angular/platform-browser';
->>>>>>> add select field
 
 let nextId = 1;
 
