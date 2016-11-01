@@ -104,6 +104,7 @@ export class DropdownTreeFieldComponent implements OnInit, OnDestroy {
             this._nodes = newValue;
 
             this._initializeNodes();
+            this.selectedText = this._calculateSelectedText(this._effectiveSelectedNode);
         }
     }
 
@@ -271,6 +272,7 @@ export class DropdownTreeFieldComponent implements OnInit, OnDestroy {
             this._preventWindowClickClose = false;
         } else if(this.isDropdownOpen) {
             this._closeDropdown();
+            this.isFocused = false;
         }
     }
     /* tslint:enable */
@@ -399,6 +401,9 @@ export class DropdownTreeFieldComponent implements OnInit, OnDestroy {
     }
 
     private _calculateSelectedText(selectedNode: TreeNode): string {
+        if(selectedNode == null || this._parentMap == null) {
+            return '';
+        }
         return this.showFullSelectedPath ? this._buildFullSelectedPathText(selectedNode) : selectedNode.text;
     }
 
