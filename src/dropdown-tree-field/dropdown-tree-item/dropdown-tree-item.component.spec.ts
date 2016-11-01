@@ -1,10 +1,14 @@
 ﻿import { CommonModule }                 from '@angular/common';
-import { CUSTOM_ELEMENTS_SCHEMA }       from '@angular/core';
+import {
+    CUSTOM_ELEMENTS_SCHEMA,
+    DebugElement
+}                                       from '@angular/core';
 import {
     ComponentFixture,
     TestBed
 }                                       from '@angular/core/testing';
 import { FormsModule }                  from '@angular/forms';
+import { By }                           from '@angular/platform-browser';
 
 import { DropdownTreeItemComponent }    from './dropdown-tree-item.component';
 import { DropdownTreeService }          from '../dropdown-tree.service';
@@ -17,6 +21,7 @@ describe('DropdownTreeItemComponent', () => {
     let component: DropdownTreeItemComponent;
     let service: DropdownTreeService;
     let expandedNodes: Set<TreeNode>;
+    let li: DebugElement;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -34,6 +39,8 @@ describe('DropdownTreeItemComponent', () => {
 
         component = fixture.componentInstance;
         expandedNodes = new Set<TreeNode>();
+
+        li = fixture.debugElement.query(By.css('li'));
     });
 
     describe('for node without children', () => {
@@ -43,16 +50,24 @@ describe('DropdownTreeItemComponent', () => {
             fixture.detectChanges();
         });
 
-        it('on service state changes treeItemClasses contains tree--no-children', () => {
+        it('on service state changes hasChildren is false', () => {
             service.setState(createNode(), createNode(), expandedNodes);
 
-            expect(component.treeItemClasses).toEqual(jasmine.arrayContaining(['tree--no-children']));
+            expect(component.hasChildren).toBe(false);
         });
 
-        it('on service state changes treeItemClasses does not contain tree--has-children', () => {
+        it('on service state changes the li has tree--no-children class', () => {
             service.setState(createNode(), createNode(), expandedNodes);
+            fixture.detectChanges();
 
-            expect(component.treeItemClasses).not.toEqual(jasmine.arrayContaining(['tree--has-children']));
+            expect(li.classes['tree--no-children']).toBe(true);
+        });
+
+        it('on service state changes the li does not have tree--has-children class', () => {
+            service.setState(createNode(), createNode(), expandedNodes);
+            fixture.detectChanges();
+
+            expect(li.classes['tree--has-children']).toBeFalsy();
         });
 
         it('on service state changes isExpanded is undefined', () => {
@@ -61,28 +76,50 @@ describe('DropdownTreeItemComponent', () => {
             expect(component.isExpanded).toBeUndefined();
         });
 
+        it('on service state changes the li does not have tree--expanded class', () => {
+            service.setState(createNode(), createNode(), expandedNodes);
+            fixture.detectChanges();
+
+            expect(li.classes['tree--expanded']).toBeFalsy();
+        });
+
+        it('on service state changes the li does not have tree--collapsed class', () => {
+            service.setState(createNode(), createNode(), expandedNodes);
+            fixture.detectChanges();
+
+            expect(li.classes['tree--collapsed']).toBeFalsy();
+        });
+
         it('on service state changes showChildren is false', () => {
             service.setState(createNode(), createNode(), expandedNodes);
 
             expect(component.showChildren).toBe(false);
         });
 
-        it('on service state changes treeItemClasses contains tree--highlighted when highlightedNode is node', () => {
+        it('on service state changes isHighlighted is true when highlightedNode is node', () => {
             service.setState(component.node, createNode(), expandedNodes);
 
-            expect(component.treeItemClasses).toEqual(jasmine.arrayContaining(['tree--highlighted']));
+            expect(component.isHighlighted).toBe(true);
         });
 
-        it('on service state changes treeItemClasses does not contain tree--highlighted when highlightedNode is different node', () => {
+        it('on service state changes the li has tree--highlighted class when highlightedNode is node', () => {
+            service.setState(component.node, createNode(), expandedNodes);
+            fixture.detectChanges();
+
+            expect(li.classes['tree--highlighted']).toBe(true);
+        });
+
+        it('on service state changes isHighlighted is false when highlightedNode is different node', () => {
             service.setState(createNode(), createNode(), expandedNodes);
 
-            expect(component.treeItemClasses).not.toEqual(jasmine.arrayContaining(['tree--highlighted']));
+            expect(component.isHighlighted).toBe(false);
         });
 
-        it('on service state changes treeItemClasses contains tree--selected when selectedNode is node', () => {
-            service.setState(createNode(), component.node, expandedNodes);
+        it('on service state changes the li does not have tree--highlighted class when highlightedNode is different node', () => {
+            service.setState(createNode(), createNode(), expandedNodes);
+            fixture.detectChanges();
 
-            expect(component.treeItemClasses).toEqual(jasmine.arrayContaining(['tree--selected']));
+            expect(li.classes['tree--highlighted']).toBeFalsy();
         });
 
         it('on service state changes isSelected is true when selectedNode is node', () => {
@@ -91,16 +128,24 @@ describe('DropdownTreeItemComponent', () => {
             expect(component.isSelected).toBe(true);
         });
 
-        it('on service state changes treeItemClasses does not contain tree--selected when selectedNode is different node', () => {
-            service.setState(createNode(), createNode(), expandedNodes);
+        it('on service state changes the li has tree--selected class when selectedNode is node', () => {
+            service.setState(createNode(), component.node, expandedNodes);
+            fixture.detectChanges();
 
-            expect(component.treeItemClasses).not.toEqual(jasmine.arrayContaining(['tree--selected']));
+            expect(li.classes['tree--selected']).toBe(true);
         });
 
         it('on service state changes isSelected is false when selectedNode is different node', () => {
             service.setState(createNode(), createNode(), expandedNodes);
 
             expect(component.isSelected).toBe(false);
+        });
+
+        it('on service state changes the li does not have tree--selected class when selectedNode is different node', () => {
+            service.setState(createNode(), createNode(), expandedNodes);
+            fixture.detectChanges();
+
+            expect(li.classes['tree--selected']).toBeFalsy();
         });
 
         it('onNodeMouseEnter should call highlightNode on service', () => {
@@ -130,16 +175,24 @@ describe('DropdownTreeItemComponent', () => {
             fixture.detectChanges();
         });
 
-        it('on service state changes treeItemClasses does not contain tree--no-children', () => {
+        it('on service state changes hasChildren is true', () => {
             service.setState(createNode(), createNode(), expandedNodes);
 
-            expect(component.treeItemClasses).not.toEqual(jasmine.arrayContaining(['tree--no-children']));
+            expect(component.hasChildren).toBe(true);
         });
 
-        it('on service state changes treeItemClasses contains tree--has-children', () => {
+        it('on service state changes the li does not have tree--no-children class', () => {
             service.setState(createNode(), createNode(), expandedNodes);
+            fixture.detectChanges();
 
-            expect(component.treeItemClasses).toEqual(jasmine.arrayContaining(['tree--has-children']));
+            expect(li.classes['tree--no-children']).toBeFalsy();
+        });
+
+        it('on service state changes the li has tree--has-children class', () => {
+            service.setState(createNode(), createNode(), expandedNodes);
+            fixture.detectChanges();
+
+            expect(li.classes['tree--has-children']).toBe(true);
         });
 
         it('on service state changes isExpanded is false when node is not in expandedNodes', () => {
@@ -148,22 +201,24 @@ describe('DropdownTreeItemComponent', () => {
             expect(component.isExpanded).toBe(false);
         });
 
+        it('on service state changes the li does not have tree--expanded class when node is not in expandedNodes', () => {
+            service.setState(createNode(), createNode(), expandedNodes);
+            fixture.detectChanges();
+
+            expect(li.classes['tree--expanded']).toBeFalsy();
+        });
+
+        it('on service state changes the li has tree--collapsed class when node is not in expandedNodes', () => {
+            service.setState(createNode(), createNode(), expandedNodes);
+            fixture.detectChanges();
+
+            expect(li.classes['tree--collapsed']).toBe(true);
+        });
+
         it('on service state changes showChildren is false when node is not in expandedNodes', () => {
             service.setState(createNode(), createNode(), expandedNodes);
 
             expect(component.showChildren).toBe(false);
-        });
-
-        it('on service state changes treeItemClasses contains tree--collapsed when node is not in expandedNodes', () => {
-            service.setState(createNode(), createNode(), expandedNodes);
-
-            expect(component.treeItemClasses).toEqual(jasmine.arrayContaining(['tree--collapsed']));
-        });
-
-        it('on service state changes treeItemClasses does not contain tree--expanded when node is not in expandedNodes', () => {
-            service.setState(createNode(), createNode(), expandedNodes);
-
-            expect(component.treeItemClasses).not.toEqual(jasmine.arrayContaining(['tree--expanded']));
         });
 
         it('on service state changes isExpanded is true when node is in expandedNodes', () => {
@@ -174,6 +229,24 @@ describe('DropdownTreeItemComponent', () => {
             expect(component.isExpanded).toBe(true);
         });
 
+        it('on service state changes the li has tree--expanded class when node is in expandedNodes', () => {
+            expandedNodes.add(component.node);
+
+            service.setState(createNode(), createNode(), expandedNodes);
+            fixture.detectChanges();
+
+            expect(li.classes['tree--expanded']).toBe(true);
+        });
+
+        it('on service state changes the li does not have tree--collapsed class when node is in expandedNodes', () => {
+            expandedNodes.add(component.node);
+
+            service.setState(createNode(), createNode(), expandedNodes);
+            fixture.detectChanges();
+
+            expect(li.classes['tree--collapsed']).toBeFalsy();
+        });
+
         it('on service state changes showChildren is true when node is in expandedNodes', () => {
             expandedNodes.add(component.node);
 
@@ -182,38 +255,30 @@ describe('DropdownTreeItemComponent', () => {
             expect(component.showChildren).toBe(true);
         });
 
-        it('on service state changes treeItemClasses does not contain tree--collapsed when node is in expandedNodes', () => {
-            expandedNodes.add(component.node);
-
-            service.setState(createNode(), createNode(), expandedNodes);
-
-            expect(component.treeItemClasses).not.toEqual(jasmine.arrayContaining(['tree--collapsed']));
-        });
-
-        it('on service state changes treeItemClasses contains tree--expanded when node is in expandedNodes', () => {
-            expandedNodes.add(component.node);
-
-            service.setState(createNode(), createNode(), expandedNodes);
-
-            expect(component.treeItemClasses).toEqual(jasmine.arrayContaining(['tree--expanded']));
-        });
-
-        it('on service state changes treeItemClasses contains tree--highlighted when highlightedNode is node', () => {
+        it('on service state changes isHighlighted is true when highlightedNode is node', () => {
             service.setState(component.node, createNode(), expandedNodes);
 
-            expect(component.treeItemClasses).toEqual(jasmine.arrayContaining(['tree--highlighted']));
+            expect(component.isHighlighted).toBe(true);
         });
 
-        it('on service state changes treeItemClasses does not contain tree--highlighted when highlightedNode is different node', () => {
+        it('on service state changes the li has tree--highlighted class when highlightedNode is node', () => {
+            service.setState(component.node, createNode(), expandedNodes);
+            fixture.detectChanges();
+
+            expect(li.classes['tree--highlighted']).toBe(true);
+        });
+
+        it('on service state changes isHighlighted is false when highlightedNode is different node', () => {
             service.setState(createNode(), createNode(), expandedNodes);
 
-            expect(component.treeItemClasses).not.toEqual(jasmine.arrayContaining(['tree--highlighted']));
+            expect(component.isHighlighted).toBe(false);
         });
 
-        it('on service state changes treeItemClasses contains tree--selected when selectedNode is node', () => {
-            service.setState(createNode(), component.node, expandedNodes);
+        it('on service state changes the li does not have tree--highlighted class when highlightedNode is different node', () => {
+            service.setState(createNode(), createNode(), expandedNodes);
+            fixture.detectChanges();
 
-            expect(component.treeItemClasses).toEqual(jasmine.arrayContaining(['tree--selected']));
+            expect(li.classes['tree--highlighted']).toBeFalsy();
         });
 
         it('on service state changes isSelected is true when selectedNode is node', () => {
@@ -222,16 +287,24 @@ describe('DropdownTreeItemComponent', () => {
             expect(component.isSelected).toBe(true);
         });
 
-        it('on service state changes treeItemClasses does not contain tree--selected when selectedNode is different node', () => {
-            service.setState(createNode(), createNode(), expandedNodes);
+        it('on service state changes the li has tree--selected class when selectedNode is node', () => {
+            service.setState(createNode(), component.node, expandedNodes);
+            fixture.detectChanges();
 
-            expect(component.treeItemClasses).not.toEqual(jasmine.arrayContaining(['tree--selected']));
+            expect(li.classes['tree--selected']).toBe(true);
         });
 
         it('on service state changes isSelected is false when selectedNode is different node', () => {
             service.setState(createNode(), createNode(), expandedNodes);
 
             expect(component.isSelected).toBe(false);
+        });
+
+        it('on service state changes the li does not have tree--selected class when selectedNode is different node', () => {
+            service.setState(createNode(), createNode(), expandedNodes);
+            fixture.detectChanges();
+
+            expect(li.classes['tree--selected']).toBeFalsy();
         });
 
         it('onNodeMouseEnter should call highlightNode on service', () => {
