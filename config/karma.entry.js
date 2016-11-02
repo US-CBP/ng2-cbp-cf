@@ -16,19 +16,16 @@ require('zone.js/dist/fake-async-test');
 
 require('ts-helpers');
 
-
 Error.stackTraceLimit = Infinity;
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 2000;
-
 
 var browser = require('@angular/platform-browser-dynamic/testing');
 var testing = require('@angular/core/testing');
 
 testing.TestBed.initTestEnvironment(
-  browser.BrowserDynamicTestingModule,
-  browser.platformBrowserDynamicTesting()
+    browser.BrowserDynamicTestingModule,
+    browser.platformBrowserDynamicTesting()
 );
-
 
 // Load spec files
 var context = require.context('../src', true, /\.spec\.ts/);
