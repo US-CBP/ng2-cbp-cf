@@ -190,8 +190,30 @@
         }
     }
 
+    .dt--selection-combobox::after {
+        background-color: $brand-info;
+        bottom: 0px;
+        content: "";
+        height: 2px;
+        left: 45%;
+        position: absolute;
+        visibility: hidden;
+        width: 10px;
+        -webkit-transition-duration: 0.2s;
+        transition-duration: 0.2s;
+        -webkit-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    &.is-focused .dt--selection .dt--selection-combobox::after {
+        left: 0;
+        visibility: visible;
+        width: 100%;
+    }
+
     &.dtf--floating-label {
         label {
+            color: #3f51b5;
             display: block;
             margin: 0;
             overflow: hidden;
@@ -207,6 +229,7 @@
             transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        &.is-focused label,
         &.is-dirty label {
             color: $brand-info;
             display: block;

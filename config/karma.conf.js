@@ -1,47 +1,49 @@
 module.exports = config => {
-  config.set({
-    basePath: '',
-    frameworks: ['jasmine'],
+    config.set({
+        basePath: '',
+        frameworks: ['jasmine'],
 
-    // list of files to exclude
-    exclude: [ ],
+        // list of files to exclude
+        exclude: [
+            './dist/**/*',
+            './dts/**/*'
+        ],
 
-    files: [
-        './config/karma.entry.js'//,
-        //{pattern: './src/**/*.html', watched: true, included: true, served: true}
-    ],
+        files: [
+            { pattern: './config/karma.entry.js', watched: false }
+        ],
 
-    preprocessors: {
-      './config/karma.entry.js': ['webpack', 'sourcemap']
-    },
+        preprocessors: {
+            './config/karma.entry.js': ['webpack', 'sourcemap']
+        },
 
-    webpack: require('./webpack.test'),
+        webpack: require('./webpack.test'),
 
-    webpackServer: {
-      noInfo: true
-    },
+        webpackServer: {
+            noInfo: true
+        },
 
-    webpackMiddleware: {
-        stats: 'minimal'
-    },
+        webpackMiddleware: {
+            stats: 'minimal'
+        },
 
-    coverageReporter: {
-        dir : 'coverage/',
-        reporters: [
-            { type: 'text-summary' },
-            { type: 'json' },
-            { type: 'html' }
-        ]
-    },
+        coverageReporter: {
+            dir: 'coverage/',
+            reporters: [
+                { type: 'text-summary' },
+                { type: 'json' },
+                { type: 'html' }
+            ]
+        },
 
-    reporters: ['progress'],
+        reporters: ['progress'],
 
-    logLevel: config.LOG_INFO,
+        logLevel: config.LOG_INFO,
 
-    autoWatch: true,
+        autoWatch: true,
 
-    singleRun: false,
+        singleRun: false,
 
-    browsers: ['Chrome']
-  });
+        browsers: ['Chrome']
+    });
 };

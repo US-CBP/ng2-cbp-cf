@@ -1,4 +1,15 @@
-﻿<li role="treeitem" id="{{id}}" class="item" [ngClass]="treeItemClasses" [attr.aria-selected]="isSelected" [attr.aria-expanded]="isExpanded">
+﻿<li role="treeitem"
+    id="{{id}}"
+    class="item"
+    [class.tree--has-children]="hasChildren"
+    [class.tree--no-children]="!hasChildren"
+    [class.tree--expanded]="isExpanded"
+    [class.tree--collapsed]="isExpanded === false"
+    [class.tree--highlighted]="isHighlighted"
+    [class.tree--selected]="isSelected"
+    [attr.aria-selected]="isSelected"
+    [attr.aria-expanded]="isExpanded">
+
     <span class="arrow" (click)="onExpanderClick()">
         <span>
             <b role="presentation"></b>

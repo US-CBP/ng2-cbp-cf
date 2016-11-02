@@ -8,6 +8,7 @@ const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const ProgressPlugin = require('webpack/lib/ProgressPlugin');
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 const WebpackShellPlugin = require('webpack-shell-plugin');
+const WatchIgnorePlugin = require('webpack/lib/WatchIgnorePlugin');
 
 //=========================================================
 //  VARS
@@ -155,6 +156,12 @@ config.externals = {
 if(ENV_DEVELOPMENT) {
     config.devtool = 'inline-source-map';
     config.plugins.push(new ProgressPlugin());
+    config.plugins.push(
+        new WatchIgnorePlugin([
+            path.resolve('dist'),
+            path.resolve('dts')
+        ])
+    );
 }
 
 //=====================================
