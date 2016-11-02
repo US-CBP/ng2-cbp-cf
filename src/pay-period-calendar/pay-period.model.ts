@@ -1,6 +1,6 @@
 ﻿export interface PayPeriod {
     id: number;
     number: number;
-    startDate: string;
+    startDate: Date;
     isSelectable: boolean;
 }
