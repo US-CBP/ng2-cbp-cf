@@ -8,8 +8,6 @@ import {
 import { FormsModule }                  from '@angular/forms';
 import * as moment                      from 'moment/moment';
 
-import { standardISOFormat }            from '../shared/date.values';
-
 import {
     PayPeriodCalendarComponent,
     PayPeriodLoader
@@ -46,7 +44,7 @@ describe('PayPeriodCalendarComponent', () => {
             let selectedPayPeriod = {
                 id: 201622,
                 number: 22,
-                startDate: startDate.format(standardISOFormat),
+                startDate: startDate.toDate(),
                 isSelectable: true
             };
 
@@ -61,7 +59,7 @@ describe('PayPeriodCalendarComponent', () => {
             let selectedPayPeriod = {
                 id: 201622,
                 number: 22,
-                startDate: startDate.format(standardISOFormat),
+                startDate: startDate.toDate(),
                 isSelectable: true
             };
 
@@ -77,7 +75,7 @@ describe('PayPeriodCalendarComponent', () => {
             let selectedPayPeriod = {
                 id: 201622,
                 number: 22,
-                startDate: startDate.format(standardISOFormat),
+                startDate: startDate.toDate(),
                 isSelectable: true
             };
 
@@ -92,7 +90,7 @@ describe('PayPeriodCalendarComponent', () => {
             let selectedPayPeriod = {
                 id: 201622,
                 number: 22,
-                startDate: startDate.format(standardISOFormat),
+                startDate: startDate.toDate(),
                 isSelectable: true
             };
 
@@ -515,7 +513,7 @@ describe('PayPeriodCalendarComponent', () => {
             let selectedPayPeriod = {
                 id: 201622,
                 number: 22,
-                startDate: startDate.format(standardISOFormat),
+                startDate: startDate.toDate(),
                 isSelectable: true
             };
             component.selectedPayPeriod = selectedPayPeriod;
@@ -528,7 +526,7 @@ describe('PayPeriodCalendarComponent', () => {
             let payPeriod = {
                 id: 201601,
                 number: 1,
-                startDate: startDate.format(standardISOFormat),
+                startDate: startDate.toDate(),
                 isSelectable: true
             };
 
@@ -540,7 +538,7 @@ describe('PayPeriodCalendarComponent', () => {
             let payPeriod = {
                 id: 201622,
                 number: 22,
-                startDate: startDate.format(standardISOFormat),
+                startDate: startDate.toDate(),
                 isSelectable: true
             };
 
@@ -558,7 +556,7 @@ describe('PayPeriodCalendarComponent', () => {
             let payPeriod = {
                 id: 201601,
                 number: 1,
-                startDate: startDate.format(standardISOFormat),
+                startDate: startDate.toDate(),
                 isSelectable: true
             };
 
@@ -575,7 +573,7 @@ describe('PayPeriodCalendarComponent', () => {
             let payPeriod = {
                 id: 201601,
                 number: 1,
-                startDate: startDate.format(standardISOFormat),
+                startDate: startDate.toDate(),
                 isSelectable: true
             };
 
@@ -738,19 +736,19 @@ describe('PayPeriodCalendarComponent', () => {
                 {
                     id: 201525,
                     number: 25,
-                    startDate: '2015-12-27T00:00:00',
+                    startDate: moment('2015-12-27T00:00:00').toDate(),
                     isSelectable: true
                 },
                 {
                     id: 201601,
                     number: 1,
-                    startDate: '2016-01-10T00:00:00',
+                    startDate: moment('2016-01-10T00:00:00').toDate(),
                     isSelectable: true
                 },
                 {
                     id: 201602,
                     number: 2,
-                    startDate: '2016-01-24T00:00:00',
+                    startDate: moment('2016-01-24T00:00:00').toDate(),
                     isSelectable: true
                 }
             ];
