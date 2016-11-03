@@ -13,8 +13,14 @@ import { ButtonDirective }  from '../button';
 
 @Directive({
     /* tslint:disable */
-    selector: 'button[cfToggleButton], a[cfToggleButton]'
+    selector: 'button[cfToggleButton], a[cfToggleButton]',
     /* tslint:enable */
+    host: {
+        '[class.btn]': 'true',
+        '[class.btn-hover]': 'borderless',
+        '[class.btn-block]': 'block',
+        '[class.btn-icon-only]': 'iconOnly'
+    }
 })
 export class ToggleButtonDirective extends ButtonDirective {
     static readonly activeStyle: string = 'active';

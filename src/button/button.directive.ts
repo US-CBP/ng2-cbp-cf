@@ -14,19 +14,24 @@ import {
     ButtonSize,
     ButtonSizes
 }                   from './button-sizes.model';
-/* tslint:disable */
 @Directive({
-    selector: 'button[cfButton], a[cfButton]'
+    /* tslint:disable */
+    selector: 'button[cfButton], a[cfButton]',
+    /* tslint:enable */
+    host: {
+        '[class.btn]': 'true',
+        '[class.btn-hover]': 'borderless',
+        '[class.btn-block]': 'block',
+        '[class.btn-icon-only]': 'iconOnly'
+    }
 })
-/* tslint:enable */
 export class ButtonDirective implements OnInit {
-    static readonly blockStyle: string = 'btn-block';
-    static readonly iconOnlyStyle: string = 'btn-icon-only';
+    @Input('cfBorderless') borderless: boolean = false;
+    @Input('cfBlock') block: boolean = false;
+    @Input('cfIconOnly') iconOnly: boolean = false;
 
     private _role: ButtonRole = ButtonRoles.default;
     private _size: ButtonSize = ButtonSizes.normal;
-    private _block: boolean = false;
-    private _iconOnly: boolean = false;
 
     constructor(private element: ElementRef, private renderer: Renderer) {
     }
@@ -63,59 +68,9 @@ export class ButtonDirective implements OnInit {
         }
     }
 
-    @Input('cfBlock')
-    get block(): boolean {
-        return this._block;
-    }
-    set block(newValue: boolean) {
-        newValue = newValue || false;
-
-        if(this._block !== newValue) {
-            if(this._block) {
-                this.removeClasses([ButtonDirective.blockStyle]);
-            }
-
-            this._block = newValue;
-
-            if(newValue) {
-                this.addClasses([ButtonDirective.blockStyle]);
-            }
-        }
-    }
-
-    @Input('cfIconOnly')
-    get iconOnly(): boolean {
-        return this._iconOnly;
-    }
-    set iconOnly(newValue: boolean) {
-        newValue = newValue || false;
-
-        if(this._iconOnly !== newValue) {
-            if(this._iconOnly) {
-                this.removeClasses([ButtonDirective.iconOnlyStyle]);
-            }
-
-            this._iconOnly = newValue;
-
-            if(newValue) {
-                this.addClasses([ButtonDirective.iconOnlyStyle]);
-            }
-        }
-    }
-
     ngOnInit() {
-        this.addClasses(['btn']);
-
         this.addClasses(this.role.classes);
         this.addClasses(this.size.classes);
-
-        if(this.block) {
-            this.addClasses([ButtonDirective.blockStyle]);
-        }
-
-        if(this.iconOnly) {
-            this.addClasses([ButtonDirective.iconOnlyStyle]);
-        }
     }
 
     protected addClasses(classes: string[]) {
