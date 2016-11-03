@@ -17,13 +17,13 @@ import {
 @Directive({
     /* tslint:disable */
     selector: 'button[cfButton], a[cfButton]',
-    /* tslint:enable */
     host: {
         '[class.btn]': 'true',
         '[class.btn-hover]': 'borderless',
         '[class.btn-block]': 'block',
         '[class.btn-icon-only]': 'iconOnly'
     }
+    /* tslint:enable */
 })
 export class ButtonDirective implements OnInit {
     @Input('cfBorderless') borderless: boolean = false;
