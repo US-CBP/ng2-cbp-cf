@@ -26,71 +26,53 @@ export class DropdownTreeItemComponent implements OnInit, OnDestroy {
     @ViewChild('text') textElement: ElementRef;
 
     id: string;
-    treeItemClasses: string[];
+    isHighlighted: boolean;
     isSelected: boolean;
     isExpanded: boolean;
+    hasChildren: boolean;
     showChildren: boolean;
 
-    private stateSubscription: Subscription;
+    private _stateSubscription: Subscription;
 
-    constructor(private service: DropdownTreeService, private changeDetector: ChangeDetectorRef) {
+    constructor(private _service: DropdownTreeService, private _changeDetector: ChangeDetectorRef) {
     }
 
     ngOnInit() {
-        this.id = this.service.createTreeItemId(this.idPrefix, this.node);
-        this.stateSubscription = this.service.stateObservable.subscribe(this.onStateChange.bind(this));
+        this.id = this._service.createTreeItemId(this.idPrefix, this.node);
+        this._stateSubscription = this._service.stateObservable.subscribe(this._onStateChange.bind(this));
     }
 
     ngOnDestroy() {
-        if(this.stateSubscription != null) {
-            this.stateSubscription.unsubscribe();
+        if(this._stateSubscription != null) {
+            this._stateSubscription.unsubscribe();
         }
     }
 
-    private onStateChange(state: DropdownTreeState) {
-        this.treeItemClasses = [];
+    private _onStateChange(state: DropdownTreeState) {
+        this.hasChildren = this.node.children != null && this.node.children.length > 0;
+        this.isExpanded = this.hasChildren ? state.expandedNodes.has(this.node) : undefined;
+        this.showChildren = this.hasChildren && this.isExpanded;
 
-        if(this.node.children != null && this.node.children.length > 0) {
-            this.treeItemClasses.push('tree--has-children');
-            this.isExpanded = state.expandedNodes.has(this.node);
-            this.showChildren = this.isExpanded;
+        this.isHighlighted = state.highlightedNode === this.node;
 
-            if(this.isExpanded) {
-                this.treeItemClasses.push('tree--expanded');
-            } else {
-                this.treeItemClasses.push('tree--collapsed');
-            }
-        } else {
-            this.treeItemClasses.push('tree--no-children');
-            this.isExpanded = undefined;
-            this.showChildren = false;
-        }
+        this.isSelected = state.selectedNode === this.node;
 
-        if(state.highlightedNode === this.node) {
-            this.treeItemClasses.push('tree--highlighted');
-        }
-
-        if(state.selectedNode === this.node) {
-            this.treeItemClasses.push('tree--selected');
-            this.isSelected = true;
-
+        if(this.isSelected) {
             this.textElement.nativeElement.scrollIntoView();
-        } else {
-            this.isSelected = false;
         }
 
-        this.changeDetector.markForCheck();
+        this._changeDetector.markForCheck();
     }
 
     onExpanderClick() {
-        this.service.toggleNodeExpansion(this.node);
+        this._service.toggleNodeExpansion(this.node);
     }
 
     onNodeClick() {
-        this.service.selectNode(this.node);
+        this._service.selectNode(this.node);
     }
 
     onNodeMouseEnter() {
-        this.service.highlightNode(this.node);
+        this._service.highlightNode(this.node);
     }
 }

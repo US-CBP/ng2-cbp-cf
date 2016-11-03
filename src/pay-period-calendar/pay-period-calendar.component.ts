@@ -7,7 +7,6 @@
 }                                   from '@angular/core';
 import * as moment                  from 'moment/moment';
 
-import { PayPeriodCalendarService } from './pay-period-calendar.service';
 import { PayPeriod }                from './pay-period.model';
 import { PayPeriodMonth }           from './pay-period-month.model';
 import { ButtonRoles }              from '../button';
@@ -19,48 +18,54 @@ import { ButtonRoles }              from '../button';
 })
 export class PayPeriodCalendarComponent implements OnInit {
     @Input() id: string;
-    @Input() loadPayPeriodsUrl: string;
     @Input() selectedPayPeriod: PayPeriod;
-    @Input() months: PayPeriodMonth[];
+    @Input() payPeriodsOfMonth: PayPeriod[];
     @Output() payPeriodSelected = new EventEmitter<PayPeriod>();
+    @Output() monthSelected = new EventEmitter<PayPeriodMonth>();
 
     years: number[];
     monthsOfYear: PayPeriodMonth[];
     nextMonths: Map<PayPeriodMonth, PayPeriodMonth>;
     previousMonths: Map<PayPeriodMonth, PayPeriodMonth>;
-    payPeriodsOfMonth: PayPeriod[];
 
     ButtonRoles: any = ButtonRoles;
 
-    private monthsByYear: Map<number, PayPeriodMonth[]>;
+    private _months: PayPeriodMonth[];
+    private _monthsByYear: Map<number, PayPeriodMonth[]>;
     private _shownYear: number;
     private _shownMonth: PayPeriodMonth;
+    private _initialized: boolean = false;
 
-    constructor(private service: PayPeriodCalendarService) {
+    constructor() {
     }
 
     ngOnInit() {
-        this.initializeMonths();
-        this.initializeYears();
-        this.initializeNextPrevious();
-        this.initializeShownValues();
-
-        this.monthsOfYear = this.monthsByYear.get(this._shownYear);
-        this.loadPayPeriods();
+        this._initialize();
+        this._initialized = true;
     }
 
-    private initializeMonths() {
-        this.monthsByYear = new Map<number, PayPeriodMonth[]>();
-        this.months.forEach(m => {
-            let months = this.monthsByYear.get(m.year);
+    private _initialize() {
+        this._initializeMonths();
+        this._initializeYears();
+        this._initializeNextPrevious();
+        this._initializeShownValues();
+
+        this.monthsOfYear = this._monthsByYear.get(this._shownYear);
+        this._emitMonthSelected();
+    }
+
+    private _initializeMonths() {
+        this._monthsByYear = new Map<number, PayPeriodMonth[]>();
+        this._months.forEach(m => {
+            let months = this._monthsByYear.get(m.year);
             if(months == null) {
                 months = [];
-                this.monthsByYear.set(m.year, months);
+                this._monthsByYear.set(m.year, months);
             }
             months.push(m);
         });
 
-        this.monthsByYear.forEach(months => {
+        this._monthsByYear.forEach(months => {
             months.sort((m1, m2) => {
                 if(m1.number === m2.number) {
                     return 0;
@@ -73,17 +78,17 @@ export class PayPeriodCalendarComponent implements OnInit {
         });
     }
 
-    private initializeYears() {
-        this.years = Array.from(this.monthsByYear.keys()).sort();
+    private _initializeYears() {
+        this.years = Array.from(this._monthsByYear.keys()).sort();
     }
 
-    private initializeNextPrevious() {
+    private _initializeNextPrevious() {
         this.nextMonths = new Map<PayPeriodMonth, PayPeriodMonth>();
         this.previousMonths = new Map<PayPeriodMonth, PayPeriodMonth>();
 
         let previous: PayPeriodMonth = null;
         for(let y of this.years) {
-            for(let m of this.monthsByYear.get(y)) {
+            for(let m of this._monthsByYear.get(y)) {
                 this.previousMonths.set(m, previous);
 
                 if(previous != null) {
@@ -96,15 +101,15 @@ export class PayPeriodCalendarComponent implements OnInit {
         this.nextMonths.set(previous, null);
     }
 
-    private initializeShownValues() {
+    private _initializeShownValues() {
         let startDateMoment = this.selectedPayPeriod == null ? moment() : moment(this.selectedPayPeriod.startDate);
         let year = startDateMoment.year();
-        let months = this.monthsByYear.get(year);
+        let months = this._monthsByYear.get(year);
 
         if(months == null) {
             startDateMoment = moment();
             year = startDateMoment.year();
-            months = this.monthsByYear.get(year);
+            months = this._monthsByYear.get(year);
         }
 
         let monthNumber = startDateMoment.month() + 1;
@@ -112,21 +117,33 @@ export class PayPeriodCalendarComponent implements OnInit {
 
         if(month == null) {
             year = this.years[0];
-            month = this.findFirstAvailableMonth(year);
+            month = this._findFirstAvailableMonth(year);
         }
 
         this._shownYear = year;
         this._shownMonth = month;
     }
 
-    private loadPayPeriods() {
-        this.service.loadPayPeriods(this.loadPayPeriodsUrl, this._shownYear, this._shownMonth.number).then(payPeriods => {
-            this.payPeriodsOfMonth = payPeriods;
-        });
+    private _emitMonthSelected() {
+        this.monthSelected.emit(this._shownMonth);
     }
 
-    private findFirstAvailableMonth(year: number): PayPeriodMonth {
-        return this.monthsByYear.get(year)[0];
+    private _findFirstAvailableMonth(year: number): PayPeriodMonth {
+        return this._monthsByYear.get(year)[0];
+    }
+
+    @Input()
+    get months(): PayPeriodMonth[] {
+        return this._months;
+    }
+    set months(newValue: PayPeriodMonth[]) {
+        if(this._months !== newValue) {
+            this._months = newValue;
+
+            if(this._initialized) {
+                this._initialize();
+            }
+        }
     }
 
     get shownYear(): number {
@@ -135,7 +152,7 @@ export class PayPeriodCalendarComponent implements OnInit {
     set shownYear(value: number) {
         if(this._shownYear !== value) {
             this._shownYear = value;
-            this.monthsOfYear = this.monthsByYear.get(value);
+            this.monthsOfYear = this._monthsByYear.get(value);
             this.shownMonth = this.monthsOfYear[0];
         }
     }
@@ -147,7 +164,7 @@ export class PayPeriodCalendarComponent implements OnInit {
         if(this._shownMonth !== value) {
             this._shownMonth = value;
             this.shownYear = value.year;
-            this.loadPayPeriods();
+            this._emitMonthSelected();
         }
     }
 

@@ -1,6 +1,7 @@
-﻿<div class="mdl-selectfield mdl-selectfield--floating-label mdl-js-selectfield is-upgraded"
+﻿<div class="mdl-selectfield mdl-js-selectfield is-upgraded"
      data-upgraded=",MaterialSelectfield"
      [class.mdl-selectfield--multiple]="multiple"
+     [class.mdl-selectfield--floating-label]="usePlaceholderLabel !== true"
      [class.is-dirty]="isDirty"
      [class.is-focused]="isFocused"
      [class.is-disabled]="disabled"
@@ -9,7 +10,6 @@
     <select #select
             class="mdl-selectfield__select"
             [id]="selectId"
-
             [autofocus]="autofocus"
             [disabled]="disabled"
             [attr.form]="form"
@@ -18,9 +18,9 @@
             [required]="required"
             [attr.selected]="selected"
             [size]="size"
-
             (blur)="onSelectBlur()"
-            (focus)="onSelectFocus()">
+            (focus)="onSelectFocus()"
+            (change)="onSelectChange($event.target.value)">
 
         <ng-content></ng-content>
     </select>

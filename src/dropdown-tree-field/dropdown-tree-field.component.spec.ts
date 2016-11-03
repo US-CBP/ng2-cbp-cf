@@ -1,13 +1,14 @@
 ﻿import { CommonModule }                 from '@angular/common';
 import {
     CUSTOM_ELEMENTS_SCHEMA,
-    SimpleChange
+    DebugElement
 }                                       from '@angular/core';
 import {
     ComponentFixture,
     TestBed
 }                                       from '@angular/core/testing';
 import { FormsModule }                  from '@angular/forms';
+import { By }                           from '@angular/platform-browser';
 
 import { DropdownTreeFieldComponent }   from './dropdown-tree-field.component';
 import { DropdownTreeService }          from './dropdown-tree.service';
@@ -21,6 +22,7 @@ describe('DropdownTreeItemComponent', () => {
     let component: DropdownTreeFieldComponent;
     let service: DropdownTreeService;
     let nodes: TreeNode[];
+    let dropdownContainer: DebugElement;
 
     beforeEach(() => {
         nodes = createNodeTree();
@@ -36,6 +38,8 @@ describe('DropdownTreeItemComponent', () => {
 
         component = fixture.componentInstance;
         component.nodes = nodes;
+
+        dropdownContainer = fixture.debugElement.query(By.css('span.dropdown-tree.dt--container'));
     });
 
     describe('ngOnInit', () => {
@@ -85,12 +89,6 @@ describe('DropdownTreeItemComponent', () => {
             fixture.detectChanges();
 
             expect(component.isDropdownOpen).toBe(false);
-        });
-
-        it('defaults containerClasses to empty array', () => {
-            fixture.detectChanges();
-
-            expect(component.containerClasses).toEqual([]);
         });
 
         it('defaults ariaOwnsId to undefined', () => {
@@ -197,7 +195,7 @@ describe('DropdownTreeItemComponent', () => {
         });
     });
 
-    describe('ngOnChanges', () => {
+    describe('setting selectedNode', () => {
         let stateSpy: jasmine.Spy;
 
         beforeEach(() => {
@@ -205,19 +203,18 @@ describe('DropdownTreeItemComponent', () => {
             service.stateObservable.subscribe(stateSpy);
         });
 
-        it('with selectedNode change sets selectedNode on service', () => {
+        it('sets selectedNode on service', () => {
             let selectedNode = nodes[0].children[2].children[1];
             component.selectedNode = selectedNode;
             fixture.detectChanges();
             stateSpy.calls.reset();
 
-            let change = createSimpleChange('selectedNode', nodes[1]);
-            component.ngOnChanges({ selectedNode: change });
+            component.selectedNode = nodes[1];
 
             expect(stateSpy).toHaveBeenCalledWith(jasmine.objectContaining({ selectedNode: nodes[1] }));
         });
 
-        it('with selectedNode change does not raise nodeSelected', () => {
+        it('does not raise nodeSelected', () => {
             let selectedNode = nodes[0].children[2].children[1];
             component.selectedNode = selectedNode;
             fixture.detectChanges();
@@ -226,60 +223,55 @@ describe('DropdownTreeItemComponent', () => {
             let nodeSelected = jasmine.createSpy('nodeSelected');
             component.nodeSelected.subscribe(nodeSelected);
 
-            let change = createSimpleChange('selectedNode', nodes[1]);
-            component.ngOnChanges({ selectedNode: change });
+            component.selectedNode = nodes[1];
 
             expect(nodeSelected).not.toHaveBeenCalled();
         });
 
-        it('with selectedNode change sets selectedText', () => {
+        it('sets selectedText', () => {
             let selectedNode = nodes[0].children[2].children[1];
             component.selectedNode = selectedNode;
             fixture.detectChanges();
 
-            let change = createSimpleChange('selectedNode', nodes[1]);
-            component.ngOnChanges({ selectedNode: change });
+            component.selectedNode = nodes[1];
 
             expect(component.selectedText).toBe(nodes[1].text);
         });
 
-        it('with selectedNode change sets defaultNode to not null when new selectedNode is null and defaultLabel is null', () => {
+        it('sets defaultNode to not null when new selectedNode is null and defaultLabel is null', () => {
             let selectedNode = nodes[0].children[2].children[1];
             component.selectedNode = selectedNode;
             fixture.detectChanges();
             stateSpy.calls.reset();
 
-            let change = createSimpleChange('selectedNode', null);
-            component.ngOnChanges({ selectedNode: change });
+            component.selectedNode = null;
 
             expect(component.defaultNode).not.toBe(null);
         });
 
-        it('with selectedNode change sets selectedNode on service to defaultNode when new selectedNode is null', () => {
+        it('sets selectedNode on service to defaultNode when new selectedNode is null', () => {
             let selectedNode = nodes[0].children[2].children[1];
             component.selectedNode = selectedNode;
             fixture.detectChanges();
             stateSpy.calls.reset();
 
-            let change = createSimpleChange('selectedNode', null);
-            component.ngOnChanges({ selectedNode: change });
+            component.selectedNode = null;
 
             expect(stateSpy).toHaveBeenCalledWith(jasmine.objectContaining({ selectedNode: component.defaultNode }));
         });
 
-        it('with selectedNode change sets selectedText to defaultNode text when new selectedNode is null', () => {
+        it('sets selectedText to defaultNode text when new selectedNode is null', () => {
             let selectedNode = nodes[0].children[2].children[1];
             component.selectedNode = selectedNode;
             fixture.detectChanges();
             stateSpy.calls.reset();
 
-            let change = createSimpleChange('selectedNode', null);
-            component.ngOnChanges({ selectedNode: change });
+            component.selectedNode = null;
 
             expect(component.selectedText).toBe(component.defaultNode.text);
         });
 
-        it('with selectedNode change does not raise nodeSelected when new selectedNode is null', () => {
+        it('does not raise nodeSelected when new selectedNode is null', () => {
             let selectedNode = nodes[0].children[2].children[1];
             component.selectedNode = selectedNode;
             fixture.detectChanges();
@@ -288,37 +280,43 @@ describe('DropdownTreeItemComponent', () => {
             let nodeSelected = jasmine.createSpy('nodeSelected');
             component.nodeSelected.subscribe(nodeSelected);
 
-            let change = createSimpleChange('selectedNode', null);
-            component.ngOnChanges({ selectedNode: change });
+            component.selectedNode = null;
 
             expect(nodeSelected).not.toHaveBeenCalled();
         });
 
-        it('with selectedNode change to value sets defaultNode to not null when defaultLabel is null', () => {
+        it('to value sets defaultNode to not null when defaultLabel is null', () => {
             component.selectedNode = null;
             fixture.detectChanges();
             stateSpy.calls.reset();
 
-            let change = createSimpleChange('selectedNode', nodes[0].children[2].children[1]);
-            component.ngOnChanges({ selectedNode: change });
+            component.selectedNode = nodes[0].children[2].children[1];
 
             expect(component.defaultNode).toBe(null);
         });
+    });
 
-        it('with defaultLabel change to null sets defaultNode to null when previous defaultLabel is not null', () => {
+    describe('setting defaultLabel', () => {
+        let stateSpy: jasmine.Spy;
+
+        beforeEach(() => {
+            stateSpy = jasmine.createSpy('state');
+            service.stateObservable.subscribe(stateSpy);
+        });
+
+        it('to null sets defaultNode to null when previous defaultLabel is not null', () => {
             let selectedNode = nodes[0].children[2].children[1];
             component.selectedNode = selectedNode;
             component.defaultLabel = 'Select One';
             fixture.detectChanges();
             stateSpy.calls.reset();
 
-            let change = createSimpleChange('defaultLabel', null);
-            component.ngOnChanges({ defaultLabel: change });
+            component.defaultLabel = null;
 
             expect(component.defaultNode).toBe(null);
         });
 
-        it('with defaultLabel change to null sets defaultNode to new instance when previous defaultLabel is not null and selectedNode is null', () => {
+        it('to null sets defaultNode to new instance when previous defaultLabel is not null and selectedNode is null', () => {
             component.selectedNode = null;
             component.defaultLabel = 'Select One';
             fixture.detectChanges();
@@ -326,49 +324,45 @@ describe('DropdownTreeItemComponent', () => {
 
             let previousValue = component.defaultNode;
 
-            let change = createSimpleChange('defaultLabel', null);
-            component.ngOnChanges({ defaultLabel: change });
+            component.defaultLabel = null;
 
             expect(component.defaultNode).not.toBe(previousValue);
         });
 
-        it('with defaultLabel change to null sets defaultNode text to empty string when previous defaultLabel is not null and selectedNode is null', () => {
+        it('to null sets defaultNode text to empty string when previous defaultLabel is not null and selectedNode is null', () => {
             component.selectedNode = null;
             component.defaultLabel = 'Select One';
             fixture.detectChanges();
             stateSpy.calls.reset();
 
-            let change = createSimpleChange('defaultLabel', null);
-            component.ngOnChanges({ defaultLabel: change });
+            component.defaultLabel = null;
 
             expect(component.defaultNode.text).toBe('');
         });
 
-        it('with defaultLabel change to null sets selectedNode on service to new default value when previous defaultLabel is not null and selectedNode is null', () => {
+        it('to null sets selectedNode on service to new default value when previous defaultLabel is not null and selectedNode is null', () => {
             component.selectedNode = null;
             component.defaultLabel = 'Select One';
             fixture.detectChanges();
             stateSpy.calls.reset();
 
-            let change = createSimpleChange('defaultLabel', null);
-            component.ngOnChanges({ defaultLabel: change });
+            component.defaultLabel = null;
 
             expect(stateSpy).toHaveBeenCalledWith(jasmine.objectContaining({ selectedNode: component.defaultNode }));
         });
 
-        it('with defaultLabel change to null sets selectedText to new defaultNode text when previous defaultLabel is not null and selectedNode is null', () => {
+        it('to null sets selectedText to new defaultNode text when previous defaultLabel is not null and selectedNode is null', () => {
             component.selectedNode = null;
             component.defaultLabel = 'Select One';
             fixture.detectChanges();
             stateSpy.calls.reset();
 
-            let change = createSimpleChange('defaultLabel', null);
-            component.ngOnChanges({ defaultLabel: change });
+            component.defaultLabel = null;
 
             expect(component.selectedText).toBe(component.defaultNode.text);
         });
 
-        it('with defaultLabel change to null does not raise nodeSelected when previous defaultLabel is not null and selectedNode is null', () => {
+        it('to null does not raise nodeSelected when previous defaultLabel is not null and selectedNode is null', () => {
             component.selectedNode = null;
             component.defaultLabel = 'Select One';
             fixture.detectChanges();
@@ -377,13 +371,12 @@ describe('DropdownTreeItemComponent', () => {
             let nodeSelected = jasmine.createSpy('nodeSelected');
             component.nodeSelected.subscribe(nodeSelected);
 
-            let change = createSimpleChange('defaultLabel', null);
-            component.ngOnChanges({ defaultLabel: change });
+            component.defaultLabel = null;
 
             expect(nodeSelected).not.toHaveBeenCalled();
         });
 
-        it('with defaultLabel change sets defaultNode to new instance when previous defaultLabel is not null', () => {
+        it('sets defaultNode to new instance when previous defaultLabel is not null', () => {
             let selectedNode = nodes[0].children[2].children[1];
             component.selectedNode = selectedNode;
             component.defaultLabel = 'Select One';
@@ -392,50 +385,46 @@ describe('DropdownTreeItemComponent', () => {
 
             let previousValue = component.defaultNode;
 
-            let change = createSimpleChange('defaultLabel', 'New Select One');
-            component.ngOnChanges({ defaultLabel: change });
+            component.defaultLabel = 'New Select One';
 
             expect(component.defaultNode).not.toBe(previousValue);
         });
 
-        it('with defaultLabel change sets defaultNode text to new value when previous defaultLabel is not null', () => {
+        it('sets defaultNode text to new value when previous defaultLabel is not null', () => {
             let selectedNode = nodes[0].children[2].children[1];
             component.selectedNode = selectedNode;
             component.defaultLabel = 'Select One';
             fixture.detectChanges();
             stateSpy.calls.reset();
 
-            let change = createSimpleChange('defaultLabel', 'New Select One');
-            component.ngOnChanges({ defaultLabel: change });
+            component.defaultLabel = 'New Select One';
 
             expect(component.defaultNode.text).toBe('New Select One');
         });
 
-        it('with defaultLabel change sets selectedNode on service to new default value when previous defaultLabel is not null and selectedNode is null', () => {
+        it('sets selectedNode on service to new default value when previous defaultLabel is not null and selectedNode is null', () => {
             component.selectedNode = null;
             component.defaultLabel = 'Select One';
             fixture.detectChanges();
             stateSpy.calls.reset();
 
-            let change = createSimpleChange('defaultLabel', 'New Select One');
-            component.ngOnChanges({ defaultLabel: change });
+            component.defaultLabel = 'New Select One';
 
             expect(stateSpy).toHaveBeenCalledWith(jasmine.objectContaining({ selectedNode: component.defaultNode }));
         });
 
-        it('with defaultLabel change sets selectedText to new defaultNode text when previous defaultLabel is not null and selectedNode is null', () => {
+        it('sets selectedText to new defaultNode text when previous defaultLabel is not null and selectedNode is null', () => {
             component.selectedNode = null;
             component.defaultLabel = 'Select One';
             fixture.detectChanges();
             stateSpy.calls.reset();
 
-            let change = createSimpleChange('defaultLabel', 'New Select One');
-            component.ngOnChanges({ defaultLabel: change });
+            component.defaultLabel = 'New Select One';
 
             expect(component.selectedText).toBe(component.defaultNode.text);
         });
 
-        it('with defaultLabel change does not raise nodeSelected when previous defaultLabel is not null and selectedNode is null', () => {
+        it('does not raise nodeSelected when previous defaultLabel is not null and selectedNode is null', () => {
             component.selectedNode = null;
             component.defaultLabel = 'Select One';
             fixture.detectChanges();
@@ -444,63 +433,58 @@ describe('DropdownTreeItemComponent', () => {
             let nodeSelected = jasmine.createSpy('nodeSelected');
             component.nodeSelected.subscribe(nodeSelected);
 
-            let change = createSimpleChange('defaultLabel', 'New Select One');
-            component.ngOnChanges({ defaultLabel: change });
+            component.defaultLabel = 'New Select One';
 
             expect(nodeSelected).not.toHaveBeenCalled();
         });
 
-        it('with defaultLabel change sets defaultNode to not null when previous defaultLabel is null', () => {
+        it('sets defaultNode to not null when previous defaultLabel is null', () => {
             let selectedNode = nodes[0].children[2].children[1];
             component.selectedNode = selectedNode;
             component.defaultLabel = null;
             fixture.detectChanges();
             stateSpy.calls.reset();
 
-            let change = createSimpleChange('defaultLabel', 'Select One');
-            component.ngOnChanges({ defaultLabel: change });
+            component.defaultLabel = 'Select One';
 
             expect(component.defaultNode).not.toBe(null);
         });
 
-        it('with defaultLabel change sets defaultNode text to new value when previous defaultLabel is null', () => {
+        it('sets defaultNode text to new value when previous defaultLabel is null', () => {
             let selectedNode = nodes[0].children[2].children[1];
             component.selectedNode = selectedNode;
             component.defaultLabel = null;
             fixture.detectChanges();
             stateSpy.calls.reset();
 
-            let change = createSimpleChange('defaultLabel', 'Select One');
-            component.ngOnChanges({ defaultLabel: change });
+            component.defaultLabel = 'Select One';
 
             expect(component.defaultNode.text).toBe('Select One');
         });
 
-        it('with defaultLabel change sets selectedNode on service to new default value when previous defaultLabel is null and selectedNode is null', () => {
+        it('sets selectedNode on service to new default value when previous defaultLabel is null and selectedNode is null', () => {
             component.selectedNode = null;
             component.defaultLabel = null;
             fixture.detectChanges();
             stateSpy.calls.reset();
 
-            let change = createSimpleChange('defaultLabel', 'Select One');
-            component.ngOnChanges({ defaultLabel: change });
+            component.defaultLabel = 'Select One';
 
             expect(stateSpy).toHaveBeenCalledWith(jasmine.objectContaining({ selectedNode: component.defaultNode }));
         });
 
-        it('with defaultLabel change sets selectedText to new defaultNode text when previous defaultLabel is null and selectedNode is null', () => {
+        it('sets selectedText to new defaultNode text when previous defaultLabel is null and selectedNode is null', () => {
             component.selectedNode = null;
             component.defaultLabel = null;
             fixture.detectChanges();
             stateSpy.calls.reset();
 
-            let change = createSimpleChange('defaultLabel', 'Select One');
-            component.ngOnChanges({ defaultLabel: change });
+            component.defaultLabel = 'Select One';
 
             expect(component.selectedText).toBe(component.defaultNode.text);
         });
 
-        it('with defaultLabel change does not raise nodeSelected when previous defaultLabel is null and selectedNode is null', () => {
+        it('does not raise nodeSelected when previous defaultLabel is null and selectedNode is null', () => {
             component.selectedNode = null;
             component.defaultLabel = null;
             fixture.detectChanges();
@@ -509,23 +493,10 @@ describe('DropdownTreeItemComponent', () => {
             let nodeSelected = jasmine.createSpy('nodeSelected');
             component.nodeSelected.subscribe(nodeSelected);
 
-            let change = createSimpleChange('defaultLabel', 'Select One');
-            component.ngOnChanges({ defaultLabel: change });
+            component.defaultLabel = 'Select One';
 
             expect(nodeSelected).not.toHaveBeenCalled();
         });
-
-        function createSimpleChange(field: string, currentValue: any): SimpleChange {
-            let previousValue: any = component[field];
-            component[field] = currentValue;
-            return {
-                previousValue,
-                currentValue,
-                isFirstChange() {
-                    return false;
-                }
-            };
-        }
     });
 
     describe('on state change on service', () => {
@@ -594,46 +565,23 @@ describe('DropdownTreeItemComponent', () => {
     });
 
     describe('onComboboxFocus', () => {
-        beforeEach(() => {
+        it('adds dt--selection-focus class to dropdown container', () => {
+            component.onComboboxFocus();
             fixture.detectChanges();
 
-            component.containerClasses.push('existing-class');
-        });
-
-        it('adds focusClass when containerClasses does not contain focusClass', () => {
-            component.onComboboxFocus();
-
-            expect(component.containerClasses).toEqual(['existing-class', DropdownTreeFieldComponent.focusClass]);
-        });
-
-        it('does not add another focusClass when containerClasses does contains focusClass', () => {
-            component.containerClasses.push(DropdownTreeFieldComponent.focusClass);
-
-            component.onComboboxFocus();
-
-            expect(component.containerClasses).toEqual(['existing-class', DropdownTreeFieldComponent.focusClass]);
+            expect(dropdownContainer.classes['dt--selection-focus']).toBe(true);
         });
     });
 
     describe('onComboboxBlur', () => {
-        beforeEach(() => {
+        it('removes dt--selection-focus class to dropdown container', () => {
+            component.onComboboxFocus();
             fixture.detectChanges();
 
-            component.containerClasses.push('existing-class');
-        });
-
-        it('does not change containerClasses when containerClasses does not contain focusClass', () => {
             component.onComboboxBlur();
+            fixture.detectChanges();
 
-            expect(component.containerClasses).toEqual(['existing-class']);
-        });
-
-        it('removes focusClass when containerClasses does contains focusClass', () => {
-            component.containerClasses.push(DropdownTreeFieldComponent.focusClass);
-
-            component.onComboboxBlur();
-
-            expect(component.containerClasses).toEqual(['existing-class']);
+            expect(dropdownContainer.classes['dt--selection-focus']).toBeFalsy();
         });
     });
 
@@ -649,10 +597,18 @@ describe('DropdownTreeItemComponent', () => {
                 expect(component.isDropdownOpen).toBe(true);
             });
 
-            it('sets containerClasses to contain focusClass and openClass', () => {
+            it('adds dt--selection-focus class to dropdown container', () => {
                 component.onComboboxClick();
+                fixture.detectChanges();
 
-                expect(component.containerClasses).toEqual([DropdownTreeFieldComponent.focusClass, DropdownTreeFieldComponent.openClass]);
+                expect(dropdownContainer.classes['dt--selection-focus']).toBe(true);
+            });
+
+            it('adds dt--selection-open class to dropdown container', () => {
+                component.onComboboxClick();
+                fixture.detectChanges();
+
+                expect(dropdownContainer.classes['dt--selection-open']).toBe(true);
             });
 
             it('sets ariaOwnsId to id of the tree element', () => {
@@ -729,6 +685,7 @@ describe('DropdownTreeItemComponent', () => {
         describe('when open', () => {
             beforeEach(() => {
                 component.onComboboxClick();
+                fixture.detectChanges();
             });
 
             it('sets isDropdownOpen to false', () => {
@@ -737,10 +694,18 @@ describe('DropdownTreeItemComponent', () => {
                 expect(component.isDropdownOpen).toBe(false);
             });
 
-            it('sets containerClasses to only contain focusClass', () => {
+            it('adds dt--selection-focus class to dropdown container', () => {
                 component.onComboboxClick();
+                fixture.detectChanges();
 
-                expect(component.containerClasses).toEqual([DropdownTreeFieldComponent.focusClass]);
+                expect(dropdownContainer.classes['dt--selection-focus']).toBe(true);
+            });
+
+            it('removes dt--selection-open class to dropdown container', () => {
+                component.onComboboxClick();
+                fixture.detectChanges();
+
+                expect(dropdownContainer.classes['dt--selection-open']).toBeFalsy();
             });
 
             it('sets ariaOwnsId to undefined', () => {

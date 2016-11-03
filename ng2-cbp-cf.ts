@@ -32,6 +32,7 @@ import {
     RadioButtonComponent,
     RadioGroupComponent,
     SelectFieldComponent,
+    SelectFieldOptionDirective,
     TableComponent,
     ToggleButtonDirective,
     UniqueSelectionDispatcher
@@ -55,6 +56,7 @@ const components = [
     RadioButtonComponent,
     RadioGroupComponent,
     SelectFieldComponent,
+    SelectFieldOptionDirective,
     TableComponent,
     ToggleButtonDirective
 ];
