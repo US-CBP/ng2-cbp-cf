@@ -1,41 +1,39 @@
 ﻿import { CommonModule }                 from '@angular/common';
+import { CUSTOM_ELEMENTS_SCHEMA }       from '@angular/core';
 import {
     ComponentFixture,
-    TestBed,
-    fakeAsync,
-    tick
+    TestBed
 }                                       from '@angular/core/testing';
 import { FormsModule }                  from '@angular/forms';
 import * as moment                      from 'moment/moment';
 
-import {
-    PayPeriodCalendarComponent,
-    PayPeriodLoader
-}                                       from './pay-period-calendar.component';
+import { PayPeriodCalendarComponent }   from './pay-period-calendar.component';
 import { PayPeriod }                    from './pay-period.model';
 import { PayPeriodMonth }               from './pay-period-month.model';
 import { ButtonDirective }              from '../button';
+import { SelectFieldComponent }         from '../select-field';
 
 describe('PayPeriodCalendarComponent', () => {
     let months: PayPeriodMonth[];
     let fixture: ComponentFixture<PayPeriodCalendarComponent>;
     let component: PayPeriodCalendarComponent;
-    let payPeriodLoader: PayPeriodLoader;
+    let monthSelected: jasmine.Spy;
 
     beforeEach(() => {
-        payPeriodLoader = jasmine.createSpy('payPeriodLoader').and.returnValue(Promise.resolve([]));
+        monthSelected = jasmine.createSpy('monthSelected');
 
         months = createMonthsFromCurrent(-12, 12);
 
         TestBed.configureTestingModule({
             imports: [CommonModule, FormsModule],
-            declarations: [ButtonDirective, PayPeriodCalendarComponent]
+            declarations: [ButtonDirective, SelectFieldComponent, PayPeriodCalendarComponent],
+            schemas: [CUSTOM_ELEMENTS_SCHEMA]
         });
         fixture = TestBed.createComponent(PayPeriodCalendarComponent);
 
         component = fixture.componentInstance;
         component.months = months;
-        component.payPeriodLoader = payPeriodLoader;
+        component.monthSelected.subscribe(monthSelected);
     });
 
     describe('on init', () => {
@@ -149,42 +147,13 @@ describe('PayPeriodCalendarComponent', () => {
             expect(component.monthsOfYear).toEqual(monthsOfYear);
         });
 
-        it('should call payPeriodLoader with shownMonth', () => {
+        it('should raise monthSelected event with shownMonth', () => {
             fixture.detectChanges();
 
             let currentMoment = moment();
             let month = months.find(m => m.year === currentMoment.year() && m.number === currentMoment.month() + 1);
-            expect(payPeriodLoader).toHaveBeenCalledWith(month);
+            expect(monthSelected).toHaveBeenCalledWith(month);
         });
-
-        it('should set payPeriodsOfMonth to results of payPeriodLoader', fakeAsync(() => {
-            let payPeriodsOfMonth = [
-                {
-                    id: 201525,
-                    number: 25,
-                    startDate: '2015-12-27T00:00:00',
-                    isSelectable: true
-                },
-                {
-                    id: 201601,
-                    number: 1,
-                    startDate: '2016-01-10T00:00:00',
-                    isSelectable: true
-                },
-                {
-                    id: 201602,
-                    number: 2,
-                    startDate: '2016-01-24T00:00:00',
-                    isSelectable: true
-                }
-            ];
-            (<jasmine.Spy>payPeriodLoader).and.returnValue(Promise.resolve(payPeriodsOfMonth));
-
-            fixture.detectChanges();
-
-            tick();
-            expect(component.payPeriodsOfMonth).toEqual(payPeriodsOfMonth);
-        }));
     });
 
     describe('isFirstMonthShown', () => {
@@ -228,12 +197,10 @@ describe('PayPeriodCalendarComponent', () => {
     });
 
     describe('showPreviousMonth', () => {
-        beforeEach(fakeAsync(() => {
+        beforeEach(() => {
             fixture.detectChanges();
-
-            tick();
-            (<jasmine.Spy>payPeriodLoader).calls.reset();
-        }));
+            monthSelected.calls.reset();
+        });
 
         it('should not change shownYear when shownMonth is first month', () => {
             component.shownYear = months[0].year;
@@ -253,16 +220,15 @@ describe('PayPeriodCalendarComponent', () => {
             expect(component.shownMonth).toBe(months[0]);
         });
 
-        it('should not call payPeriodLoader when shownMonth is first month', fakeAsync(() => {
+        it('should not raise monthSelected event when shownMonth is first month', () => {
             component.shownYear = months[0].year;
             component.shownMonth = months[0];
-            tick();
-            (<jasmine.Spy>payPeriodLoader).calls.reset();
+            monthSelected.calls.reset();
 
             component.showPreviousMonth();
 
-            expect(payPeriodLoader).not.toHaveBeenCalled();
-        }));
+            expect(monthSelected).not.toHaveBeenCalled();
+        });
 
         it('should not change shownYear when previous month in the same year', () => {
             let currentYear = moment().year();
@@ -314,66 +280,26 @@ describe('PayPeriodCalendarComponent', () => {
             expect(component.shownMonth).toBe(previousMonth);
         });
 
-        it('should call payPeriodLoader', fakeAsync(() => {
+        it('should raise monthSelected event', () => {
             let currentYear = moment().year();
             let middleMonth = months.find(m => m.year === currentYear && m.number === 6);
 
             component.shownYear = currentYear;
             component.shownMonth = middleMonth;
-            tick();
-            (<jasmine.Spy>payPeriodLoader).calls.reset();
+            monthSelected.calls.reset();
 
             component.showPreviousMonth();
 
             let previousMonth = months.find(m => m.year === currentYear && m.number === 5);
-            expect(payPeriodLoader).toHaveBeenCalledWith(previousMonth);
-        }));
-
-        it('should set payPeriodsOfMonth to results of payPeriodLoader', fakeAsync(() => {
-            let currentYear = moment().year();
-            let middleMonth = months.find(m => m.year === currentYear && m.number === 6);
-
-            component.shownYear = currentYear;
-            component.shownMonth = middleMonth;
-            tick();
-
-            let payPeriodsOfMonth = [
-                {
-                    id: 201525,
-                    number: 25,
-                    startDate: '2015-12-27T00:00:00',
-                    isSelectable: true
-                },
-                {
-                    id: 201601,
-                    number: 1,
-                    startDate: '2016-01-10T00:00:00',
-                    isSelectable: true
-                },
-                {
-                    id: 201602,
-                    number: 2,
-                    startDate: '2016-01-24T00:00:00',
-                    isSelectable: true
-                }
-            ];
-            (<jasmine.Spy>payPeriodLoader).and.returnValue(Promise.resolve(payPeriodsOfMonth));
-            (<jasmine.Spy>payPeriodLoader).calls.reset();
-
-            component.showPreviousMonth();
-
-            tick();
-            expect(component.payPeriodsOfMonth).toEqual(payPeriodsOfMonth);
-        }));
+            expect(monthSelected).toHaveBeenCalledWith(previousMonth);
+        });
     });
 
     describe('showNextMonth', () => {
-        beforeEach(fakeAsync(() => {
+        beforeEach(() => {
             fixture.detectChanges();
-
-            tick();
-            (<jasmine.Spy>payPeriodLoader).calls.reset();
-        }));
+            monthSelected.calls.reset();
+        });
 
         it('should not change shownYear when shownMonth is last month', () => {
             component.shownYear = months[months.length - 1].year;
@@ -393,16 +319,15 @@ describe('PayPeriodCalendarComponent', () => {
             expect(component.shownMonth).toBe(months[months.length - 1]);
         });
 
-        it('should not call payPeriodLoader when shownMonth is last month', fakeAsync(() => {
+        it('should not raise monthSelected event when shownMonth is last month', () => {
             component.shownYear = months[months.length - 1].year;
             component.shownMonth = months[months.length - 1];
-            tick();
-            (<jasmine.Spy>payPeriodLoader).calls.reset();
+            monthSelected.calls.reset();
 
             component.showNextMonth();
 
-            expect(payPeriodLoader).not.toHaveBeenCalled();
-        }));
+            expect(monthSelected).not.toHaveBeenCalled();
+        });
 
         it('should not change shownYear when next month in the same year', () => {
             let currentYear = moment().year();
@@ -454,57 +379,19 @@ describe('PayPeriodCalendarComponent', () => {
             expect(component.shownMonth).toBe(nextMonth);
         });
 
-        it('should call payPeriodLoader', fakeAsync(() => {
+        it('should raise monthSelected event', () => {
             let currentYear = moment().year();
             let middleMonth = months.find(m => m.year === currentYear && m.number === 6);
 
             component.shownYear = currentYear;
             component.shownMonth = middleMonth;
-            tick();
-            (<jasmine.Spy>payPeriodLoader).calls.reset();
+            monthSelected.calls.reset();
 
             component.showNextMonth();
 
             let nextMonth = months.find(m => m.year === currentYear && m.number === 7);
-            expect(payPeriodLoader).toHaveBeenCalledWith(nextMonth);
-        }));
-
-        it('should set payPeriodsOfMonth to results of payPeriodLoader', fakeAsync(() => {
-            let currentYear = moment().year();
-            let middleMonth = months.find(m => m.year === currentYear && m.number === 6);
-
-            component.shownYear = currentYear;
-            component.shownMonth = middleMonth;
-            tick();
-
-            let payPeriodsOfMonth = [
-                {
-                    id: 201525,
-                    number: 25,
-                    startDate: '2015-12-27T00:00:00',
-                    isSelectable: true
-                },
-                {
-                    id: 201601,
-                    number: 1,
-                    startDate: '2016-01-10T00:00:00',
-                    isSelectable: true
-                },
-                {
-                    id: 201602,
-                    number: 2,
-                    startDate: '2016-01-24T00:00:00',
-                    isSelectable: true
-                }
-            ];
-            (<jasmine.Spy>payPeriodLoader).and.returnValue(Promise.resolve(payPeriodsOfMonth));
-            (<jasmine.Spy>payPeriodLoader).calls.reset();
-
-            component.showNextMonth();
-
-            tick();
-            expect(component.payPeriodsOfMonth).toEqual(payPeriodsOfMonth);
-        }));
+            expect(monthSelected).toHaveBeenCalledWith(nextMonth);
+        });
     });
 
     describe('isSelected', () => {
@@ -584,12 +471,10 @@ describe('PayPeriodCalendarComponent', () => {
     });
 
     describe('setting shownYear', () => {
-        beforeEach(fakeAsync(() => {
+        beforeEach(() => {
             fixture.detectChanges();
-
-            tick();
-            (<jasmine.Spy>payPeriodLoader).calls.reset();
-        }));
+            monthSelected.calls.reset();
+        });
 
         it('to same value should not change shownMonth', () => {
             let shownYear = component.shownYear;
@@ -600,12 +485,12 @@ describe('PayPeriodCalendarComponent', () => {
             expect(component.shownMonth).toBe(shownMonth);
         });
 
-        it('to same value should not call payPeriodLoader', () => {
+        it('to same value should not raise monthSelected event', () => {
             let shownYear = component.shownYear;
 
             component.shownYear = shownYear;
 
-            expect(payPeriodLoader).not.toHaveBeenCalled();
+            expect(monthSelected).not.toHaveBeenCalled();
         });
 
         it('to new value should change shownMonth to first month of new year', () => {
@@ -617,45 +502,14 @@ describe('PayPeriodCalendarComponent', () => {
             expect(component.shownMonth).toBe(firstMonth);
         });
 
-        it('to new value should call payPeriodLoader', () => {
+        it('to new value should raise monthSelected event', () => {
             let shownYear = component.shownYear;
             let firstMonth = months.find(m => m.year === shownYear + 1 && m.number === 1);
 
             component.shownYear = shownYear + 1;
 
-            expect(payPeriodLoader).toHaveBeenCalledWith(firstMonth);
+            expect(monthSelected).toHaveBeenCalledWith(firstMonth);
         });
-
-        it('to new value should set payPeriodsOfMonth to results of payPeriodLoader', fakeAsync(() => {
-            let payPeriodsOfMonth = [
-                {
-                    id: 201525,
-                    number: 25,
-                    startDate: '2015-12-27T00:00:00',
-                    isSelectable: true
-                },
-                {
-                    id: 201601,
-                    number: 1,
-                    startDate: '2016-01-10T00:00:00',
-                    isSelectable: true
-                },
-                {
-                    id: 201602,
-                    number: 2,
-                    startDate: '2016-01-24T00:00:00',
-                    isSelectable: true
-                }
-            ];
-            (<jasmine.Spy>payPeriodLoader).and.returnValue(Promise.resolve(payPeriodsOfMonth));
-
-            let shownYear = component.shownYear;
-
-            component.shownYear = shownYear + 1;
-
-            tick();
-            expect(component.payPeriodsOfMonth).toEqual(payPeriodsOfMonth);
-        }));
 
         it('to new value should change shownMonth to first available month of new year when first month is not available', () => {
             let shownYear = component.shownYear;
@@ -677,61 +531,31 @@ describe('PayPeriodCalendarComponent', () => {
     });
 
     describe('setting shownMonth', () => {
-        beforeEach(fakeAsync(() => {
+        beforeEach(() => {
             fixture.detectChanges();
 
-            tick();
-            (<jasmine.Spy>payPeriodLoader).calls.reset();
-        }));
+            monthSelected.calls.reset();
+        });
 
-        it('to same value should not call payPeriodLoader', () => {
+        it('to same value should not raise monthSelected event', () => {
             let shownMonth = component.shownMonth;
 
             component.shownMonth = shownMonth;
 
-            expect(payPeriodLoader).not.toHaveBeenCalled();
+            expect(monthSelected).not.toHaveBeenCalled();
         });
 
-        it('to new value should call payPeriodLoader', () => {
+        it('to new value should raise monthSelected event', () => {
             component.shownMonth = months[0];
 
-            expect(payPeriodLoader).toHaveBeenCalledWith(months[0]);
+            expect(monthSelected).toHaveBeenCalledWith(months[0]);
         });
-
-        it('to new value should set payPeriodsOfMonth to results of payPeriodLoader', fakeAsync(() => {
-            let payPeriodsOfMonth = [
-                {
-                    id: 201525,
-                    number: 25,
-                    startDate: '2015-12-27T00:00:00',
-                    isSelectable: true
-                },
-                {
-                    id: 201601,
-                    number: 1,
-                    startDate: '2016-01-10T00:00:00',
-                    isSelectable: true
-                },
-                {
-                    id: 201602,
-                    number: 2,
-                    startDate: '2016-01-24T00:00:00',
-                    isSelectable: true
-                }
-            ];
-            (<jasmine.Spy>payPeriodLoader).and.returnValue(Promise.resolve(payPeriodsOfMonth));
-
-            component.shownMonth = months[0];
-
-            tick();
-            expect(component.payPeriodsOfMonth).toEqual(payPeriodsOfMonth);
-        }));
     });
 
     describe('dayOfWeek', () => {
         let payPeriodsOfMonth: PayPeriod[];
 
-        beforeEach(fakeAsync(() => {
+        beforeEach(() => {
             payPeriodsOfMonth = [
                 {
                     id: 201525,
@@ -752,11 +576,10 @@ describe('PayPeriodCalendarComponent', () => {
                     isSelectable: true
                 }
             ];
-            (<jasmine.Spy>payPeriodLoader).and.returnValue(Promise.resolve(payPeriodsOfMonth));
+            component.payPeriodsOfMonth = payPeriodsOfMonth;
 
             fixture.detectChanges();
-            tick();
-        }));
+        });
 
         it('returns start date day for week 1 day 0', () => {
             expect(component.dayOfMonth(payPeriodsOfMonth[0], 1, 0)).toBe(27);
