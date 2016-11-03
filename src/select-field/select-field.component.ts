@@ -1,8 +1,13 @@
 ﻿import {
     forwardRef,
     Component,
+    Directive,
     ElementRef,
+    Host,
     Input,
+    OnDestroy,
+    Optional,
+    Renderer,
     ViewChild
 }                           from '@angular/core';
 import {
@@ -17,6 +22,21 @@ export const selectFieldControlValueAccessor: any = {
     useExisting: forwardRef(() => SelectFieldComponent),
     multi: true
 };
+
+function _buildValueString(id: string, value: any): string {
+    if(id == null) {
+        return `${value}`;
+    }
+    if(value !== null && (typeof value === 'function' || typeof value === 'object')) {
+        value = 'Object';
+    }
+
+    return `${id}: ${value}`.slice(0, 50);
+}
+
+function _extractId(valueString: string) {
+    return valueString.split(':')[0];
+}
 
 @Component({
     selector: 'cf-select-field',
@@ -33,28 +53,24 @@ export class SelectFieldComponent implements ControlValueAccessor {
     @Input() required: boolean = false;
     @Input() selected: boolean = false;
     @Input() size: number = 0;
+    @Input() usePlaceholderLabel: boolean = false;
 
     isFocused: boolean = false;
+    value: any;
+    optionMap: Map<string, any> = new Map<string, any>();
 
     @ViewChild('select') private _select: ElementRef;
-    private _controlValueAccessorChangeFn: (value: any) => void = (value) => {};
+    private _idCounter: number = 0;
 
-    onTouched: () => any = () => {};
+    onSelectChange: (value: any) => void = (value) => { };
 
-    constructor() {
+    private _onTouched: () => any = () => {};
+
+    constructor(private _renderer: Renderer) {
     }
 
     get selectId(): string {
         return `${this.id}-input`;
-    }
-
-    @Input()
-    get value(): string {
-        return (<HTMLSelectElement>this._select.nativeElement).value;
-    }
-    set value(newValue: string) {
-        (<HTMLSelectElement>this._select.nativeElement).value = newValue;
-        this._controlValueAccessorChangeFn(newValue);
     }
 
     get isDirty(): boolean {
@@ -63,6 +79,7 @@ export class SelectFieldComponent implements ControlValueAccessor {
     }
 
     get isInvalid(): boolean {
+        // TODO: use ngModel on host if provided
         return !(<HTMLSelectElement>this._select.nativeElement).validity.valid;
     }
 
@@ -72,22 +89,95 @@ export class SelectFieldComponent implements ControlValueAccessor {
 
     onSelectBlur() {
         this.isFocused = false;
-        this.onTouched();
+        this._onTouched();
+    }
+
+    registerOption(): string {
+        return (this._idCounter++).toString();
+    }
+
+    private _getOptionId(value: any): string {
+        for(let id of Array.from(this.optionMap.keys())) {
+            let v = this.optionMap.get(id);
+            if(value === v || typeof value === 'number' && typeof v === 'number' && isNaN(value) && isNaN(v)) {
+                return id;
+            }
+        }
+        return null;
+    }
+
+    private _getOptionValue(valueString: string): any {
+        let value = this.optionMap.get(_extractId(valueString));
+        return (value != null) ? value : valueString;
     }
 
     writeValue(value: any) {
-        this.value = value.toString();
+        this.value = value;
+        let valueString = _buildValueString(this._getOptionId(value), value);
+        this._renderer.setElementProperty(this._select.nativeElement, 'value', valueString);
     }
 
     registerOnChange(fn: (value: any) => void) {
-        this._controlValueAccessorChangeFn = fn;
+        this.onSelectChange = (valueString: string) => {
+            this.value = valueString;
+            fn(this._getOptionValue(valueString));
+        };
     }
 
     registerOnTouched(fn: any) {
-        this.onTouched = fn;
+        this._onTouched = fn;
     }
 
     setDisabledState(isDisabled: boolean) {
         this.disabled = isDisabled;
+    }
+}
+
+@Directive({
+    /* tslint:disable */
+    selector: 'option'
+    /* tslint:enable */
+})
+export class SelectFieldOptionDirective implements OnDestroy {
+    id: string;
+
+    constructor(
+        private _element: ElementRef,
+        private _renderer: Renderer,
+        @Optional() @Host() private _selectField: SelectFieldComponent) {
+
+        if(this._selectField != null) {
+            this.id = this._selectField.registerOption();
+        }
+    }
+
+    ngOnDestroy() {
+        if(this._selectField != null) {
+            this._selectField.optionMap.delete(this.id);
+            this._selectField.writeValue(this._selectField.value);
+        }
+    }
+
+    @Input()
+    set ngValue(value: any) {
+        if(this._selectField == null) {
+            return;
+        }
+
+        this._selectField.optionMap.set(this.id, value);
+        this._setElementValue(_buildValueString(this.id, value));
+        this._selectField.writeValue(this._selectField.value);
+    }
+
+    @Input()
+    set value(value: any) {
+        this._setElementValue(value);
+        if(this._selectField != null) {
+            this._selectField.writeValue(this._selectField.value);
+        }
+    }
+
+    private _setElementValue(value: string) {
+        this._renderer.setElementProperty(this._element.nativeElement, 'value', value);
     }
 }
