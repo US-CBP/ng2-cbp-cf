@@ -2,25 +2,23 @@
     <thead>
         <tr class="nav">
             <td class="prev-month">
-                <button type="button" cfButton [cfRole]="ButtonRoles.primary" [cfIconOnly]="true" [disabled]="isFirstMonthShown()" (click)="showPreviousMonth()">
+                <button type="button" cfButton [cfIconOnly]="true" [cfBorderless]="true" [disabled]="isFirstMonthShown()" (click)="showPreviousMonth()">
                     <i class="fa fa-chevron-circle-left"></i>
                     <span class="sr-only">Previous Month</span>
                 </button>
             </td>
             <td class="quick-select" colspan="6">
-                <div class="mdl-selectfield mdl-js-selectfield">
-                    <select id="{{id}}-pay-period-year" class="mdl-selectfield__select year" aria-label="Year" [(ngModel)]="shownYear">
-                        <option *ngFor="let year of years" [value]="year">{{year}}</option>
-                    </select>
-                </div>
-                <div class="mdl-selectfield mdl-js-selectfield">
-                    <select id="{{id}}-pay-period-month" class="mdl-selectfield__select month" aria-label="Month" [(ngModel)]="shownMonth">
-                        <option *ngFor="let month of monthsOfYear" [value]="month">{{month.name}}</option>
-                    </select>
-                </div>
+                <cf-select-field id="{{id}}-pay-period-year" [usePlaceholderLabel]="true" [(ngModel)]="shownYear">
+                    <option *ngFor="let year of years" [ngValue]="year">{{year}}</option>
+                    <cf-label>Year</cf-label>
+                </cf-select-field>
+                <cf-select-field id="{{id}}-pay-period-month" [usePlaceholderLabel]="true" [(ngModel)]="shownMonth">
+                    <option *ngFor="let month of monthsOfYear" [ngValue]="month">{{month.name}}</option>
+                    <cf-label>Month</cf-label>
+                </cf-select-field>
             </td>
             <td class="next-month">
-                <button type="button" cfButton [cfRole]="ButtonRoles.primary" [cfIconOnly]="true" [disabled]="isLastMonthShown()" (click)="showNextMonth()">
+                <button type="button" cfButton [cfIconOnly]="true" [cfBorderless]="true" [disabled]="isLastMonthShown()" (click)="showNextMonth()">
                     <i class="fa fa-chevron-circle-right"></i>
                     <span class="sr-only">Next Month</span>
                 </button>
@@ -28,13 +26,13 @@
         </tr>
         <tr class="headers">
             <th scope="col" class="pp"><abbr title="Pay Period">PP</abbr></th>
-            <th scope="col" class="day sunday"><abbr title="Sunday">S</abbr></th>
-            <th scope="col" class="day monday"><abbr title="Monday">M</abbr></th>
-            <th scope="col" class="day tuesday"><abbr title="Tuesday">T</abbr></th>
-            <th scope="col" class="day wednesday"><abbr title="Wednesday">W</abbr></th>
-            <th scope="col" class="day thursday"><abbr title="Thursday">T</abbr></th>
-            <th scope="col" class="day friday"><abbr title="Friday">F</abbr></th>
-            <th scope="col" class="day saturday"><abbr title="Saturday">S</abbr></th>
+            <th scope="col" class="day sunday"><abbr title="Sunday">Su</abbr></th>
+            <th scope="col" class="day monday"><abbr title="Monday">Mo</abbr></th>
+            <th scope="col" class="day tuesday"><abbr title="Tuesday">Tu</abbr></th>
+            <th scope="col" class="day wednesday"><abbr title="Wednesday">We</abbr></th>
+            <th scope="col" class="day thursday"><abbr title="Thursday">Th</abbr></th>
+            <th scope="col" class="day friday"><abbr title="Friday">Fr</abbr></th>
+            <th scope="col" class="day saturday"><abbr title="Saturday">Sa</abbr></th>
         </tr>
     </thead>
     <tbody>
