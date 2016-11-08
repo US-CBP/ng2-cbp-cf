@@ -1,2 +1,120 @@
-﻿.pay-period-calendar {
+﻿@import '../shared/_variables.scss';
+
+.pay-period-calendar {
+    font-size: 0.9em;
+    width: 22em;
+
+    .pay-period-calendar-nav {
+        > div {
+            display: inline-block;
+        }
+
+        .prev-month {
+            padding-left: 0.5em;
+            text-align: left;
+            width: 15%;
+        }
+
+        .quick-select {
+            width: 35%;
+
+            >>> cf-select-field .mdl-selectfield {
+                font-size: 1em;
+                width: 4em;
+                padding: 5px 0;
+
+                .mdl-selectfield--label {
+                    font-size: 1em;
+                }
+
+                &:after {
+                    border: none;
+                }
+            }
+
+            &.year {
+                padding-right: 0.5em;
+                text-align: right;
+            }
+
+            &.month {
+                padding-left: 0.5em;
+                text-align: left;
+            }
+        }
+
+        .next-month {
+            padding-right: 0.5em;
+            text-align: right;
+            width: 15%;
+        }
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+
+        thead {
+            tr {
+                &.pay-period-calendar-day-headers {
+                    background-color: #e3e3e3;
+                    font-weight: 600;
+
+                    th {
+                        border-bottom: 2px solid #d5d5d5;
+                        padding: 0.7em 0.3em;
+                        text-align: center;
+
+                        &.day {
+                            width: 12%;
+                        }
+                    }
+                }
+            }
+        }
+
+        tbody {
+            tr {
+                &.even {
+                    background-color: #f5f5f5;
+                }
+
+                &.week1 {
+                    th, td {
+                        border-top: 1px solid #d5d5d5;
+                    }
+                }
+
+                &.selected {
+                    background-color: $gray-lighter;
+
+                    th.pp {
+                        .selected-text {
+                            position: absolute;
+                            left: -2000px;
+                        }
+                    }
+
+                    td.day {
+                        color: $brand-info;
+                        font-weight: 600;
+                    }
+                }
+
+                &.not-selectable {
+                    td.day {
+                        color: #ccc;
+                    }
+                }
+
+                th, td {
+                    text-align: center;
+
+                    &.day {
+                        padding: 0.3em;
+                    }
+                }
+            }
+        }
+    }
 }
