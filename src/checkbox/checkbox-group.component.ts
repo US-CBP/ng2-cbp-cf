@@ -3,7 +3,8 @@ import {
     Component,
     ContentChildren,
     Input,
-    QueryList
+    QueryList,
+    forwardRef
 }                           from '@angular/core';
 
 import {
@@ -15,7 +16,7 @@ import {
     templateUrl: 'checkbox-group.component.html',
 })
 export class CheckboxGroupComponent implements AfterContentInit {
-    @ContentChildren(CheckboxComponent) _checkboxes: QueryList<CheckboxComponent>;
+    @ContentChildren(forwardRef(() => CheckboxComponent)) _checkboxes: QueryList<CheckboxComponent>;
     private _isInline: boolean = false;
 
     constructor() {}

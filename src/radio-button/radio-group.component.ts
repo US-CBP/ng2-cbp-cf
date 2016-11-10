@@ -16,7 +16,7 @@ import {
 import {
     RadioButtonComponent,
     RadioChange
-}                           from '../radio-button';
+}                           from './radio-button.component';
 
 let nextId = 1;
 

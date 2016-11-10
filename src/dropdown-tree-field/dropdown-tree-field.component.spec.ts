@@ -1,15 +1,13 @@
-﻿import { CommonModule }                 from '@angular/common';
-import {
-    CUSTOM_ELEMENTS_SCHEMA,
+﻿import {
     DebugElement
 }                                       from '@angular/core';
 import {
     ComponentFixture,
     TestBed
 }                                       from '@angular/core/testing';
-import { FormsModule }                  from '@angular/forms';
 import { By }                           from '@angular/platform-browser';
 
+import { DropdownTreeFieldModule }      from './dropdown-tree-field.module';
 import { DropdownTreeFieldComponent }   from './dropdown-tree-field.component';
 import { DropdownTreeService }          from './dropdown-tree.service';
 import { DropdownTreeState }            from './dropdown-tree-state.model';
@@ -28,10 +26,7 @@ describe('DropdownTreeItemComponent', () => {
         nodes = createNodeTree();
 
         TestBed.configureTestingModule({
-            imports: [CommonModule, FormsModule],
-            declarations: [DropdownTreeFieldComponent],
-            schemas: [CUSTOM_ELEMENTS_SCHEMA],
-            providers: [DropdownTreeService]
+            imports: [DropdownTreeFieldModule.forRoot()]
         });
         fixture = TestBed.createComponent(DropdownTreeFieldComponent);
         service = fixture.debugElement.injector.get(DropdownTreeService);

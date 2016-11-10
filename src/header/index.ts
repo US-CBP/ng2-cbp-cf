@@ -3,3 +3,4 @@ export { HeaderMenu } from './header-menu.model';
 export { HeaderUser } from './header-user.model';
 export { Header } from './header.model';
 export * from './header.component';
+export * from './header.module';

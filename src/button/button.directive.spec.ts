@@ -1,7 +1,5 @@
 ﻿import { CommonModule }             from '@angular/common';
-import {
-    Component
-}                                   from '@angular/core';
+import { Component }                from '@angular/core';
 import {
     ComponentFixture,
     TestBed
@@ -17,6 +15,7 @@ import {
     ButtonSizes
 }                                   from './button-sizes.model';
 import { ButtonDirective }          from './button.directive';
+import { ButtonModule }             from './button.module';
 
 describe('ButtonDirective', () => {
     describe('role', () => {
@@ -25,8 +24,8 @@ describe('ButtonDirective', () => {
 
         beforeEach(() => {
             TestBed.configureTestingModule({
-                imports: [CommonModule],
-                declarations: [ButtonDirective, TestRoleComponent]
+                imports: [CommonModule, ButtonModule.forRoot()],
+                declarations: [TestRoleComponent]
             });
 
             fixture = TestBed.createComponent(TestRoleComponent);
@@ -81,8 +80,8 @@ describe('ButtonDirective', () => {
 
         beforeEach(() => {
             TestBed.configureTestingModule({
-                imports: [CommonModule],
-                declarations: [ButtonDirective, TestSizeComponent]
+                imports: [CommonModule, ButtonModule.forRoot()],
+                declarations: [TestSizeComponent]
             });
 
             fixture = TestBed.createComponent(TestSizeComponent);
@@ -141,8 +140,8 @@ describe('ButtonDirective', () => {
 
         beforeEach(() => {
             TestBed.configureTestingModule({
-                imports: [CommonModule],
-                declarations: [ButtonDirective, TestBlockComponent]
+                imports: [CommonModule, ButtonModule.forRoot()],
+                declarations: [TestBlockComponent]
             });
 
             fixture = TestBed.createComponent(TestBlockComponent);
@@ -200,8 +199,8 @@ describe('ButtonDirective', () => {
 
         beforeEach(() => {
             TestBed.configureTestingModule({
-                imports: [CommonModule],
-                declarations: [ButtonDirective, TestIconOnlyComponent]
+                imports: [CommonModule, ButtonModule.forRoot()],
+                declarations: [TestIconOnlyComponent]
             });
 
             fixture = TestBed.createComponent(TestIconOnlyComponent);
