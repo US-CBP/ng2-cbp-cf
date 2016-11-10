@@ -1,7 +1,12 @@
-import { Component, OnInit,
-    Input }                  from '@angular/core';
-import { Router }            from '@angular/router';
-import { Header }            from './header.model';
+import {
+    Component,
+    OnInit,
+    Input
+}                           from '@angular/core';
+import { Router }           from '@angular/router';
+import { Header }           from './header.model';
+
+import { ButtonRoles }      from '../button';
 
 @Component({
     selector: 'cf-header',
@@ -10,15 +15,17 @@ import { Header }            from './header.model';
 })
 export class HeaderComponent implements OnInit {
     @Input() data: Header;
-    private router: Router;
+    @Input() disableFeedback: boolean = false;
+    @Input() disableSearch: boolean = false;
 
-    constructor(router: Router) {
-        this.router = router;
+    ButtonRoles: any = ButtonRoles;
+
+    constructor(private _router: Router) {
     }
 
     goTo(item: any) {
         if (item.route) {
-            this.router.navigate( [ item.route, {} ]);
+            this._router.navigate( [ item.route, {} ]);
         } else if (item.href) {
             window.location.href = item.href;
         }

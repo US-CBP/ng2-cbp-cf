@@ -1,22 +1,26 @@
-﻿import { CommonModule }     from '@angular/common';
+﻿import { CommonModule }             from '@angular/common';
 import {
     ModuleWithProviders,
     NgModule
-}                           from '@angular/core';
+}                                   from '@angular/core';
+import { RouterModule }             from '@angular/router';
 
-import { HeaderComponent }  from './header.component';
-import { ButtonModule }     from '../button';
+import { HeaderComponent }          from './header.component';
+import { HeaderMenuItemComponent }  from './header-menu-item';
+import { ButtonModule }             from '../button';
 
 @NgModule({
     imports: [
         CommonModule,
+        RouterModule,
         ButtonModule
     ],
     exports: [
         HeaderComponent
     ],
     declarations: [
-        HeaderComponent
+        HeaderComponent,
+        HeaderMenuItemComponent
     ]
 })
 export class HeaderModule {
