@@ -55,9 +55,10 @@ export class DropdownTreeItemComponent implements OnInit, OnDestroy {
 
         this.isHighlighted = state.highlightedNode === this.node;
 
+        let originalIsSelected = this.isSelected;
         this.isSelected = state.selectedNode === this.node;
 
-        if(this.isSelected) {
+        if(this.isSelected && !originalIsSelected) {
             this.textElement.nativeElement.scrollIntoView();
         }
 
