@@ -9,7 +9,7 @@
 }                               from '@angular/core';
 import { Subscription }         from 'rxjs';
 
-import { RadioGroupComponent }  from '../radio-group';
+import { RadioGroupComponent }  from './radio-group.component';
 import {
     UniqueSelectionDispatcher
 }                               from '../shared';

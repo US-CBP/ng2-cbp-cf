@@ -1,26 +1,34 @@
-﻿import { Component, CUSTOM_ELEMENTS_SCHEMA, DebugElement } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NgControl, FormsModule } from '@angular/forms';
-import { By } from '@angular/platform-browser';
+﻿import {
+    Component,
+    CUSTOM_ELEMENTS_SCHEMA,
+    DebugElement
+}                               from '@angular/core';
+import {
+    ComponentFixture,
+    TestBed
+}                               from '@angular/core/testing';
+import {
+    NgControl,
+    FormsModule
+}                               from '@angular/forms';
+import { By }                   from '@angular/platform-browser';
 
-import { RadioButtonComponent, RadioChange } from './radio-button.component';
-import { RadioGroupComponent } from '../radio-group';
-import { UniqueSelectionDispatcher } from '../shared';
+import {
+    RadioButtonComponent,
+    RadioChange
+}                               from './radio-button.component';
+import { RadioGroupComponent }  from './radio-group.component';
+import { RadioButtonModule }    from './radio-button.module';
 
 describe('RadioButtonComponent', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [FormsModule],
+            imports: [FormsModule, RadioButtonModule.forRoot()],
             declarations: [
                 RadiosInsideRadioGroup,
                 RadioGroupWithNgModel,
-                StandaloneRadioButtons,
-                RadioButtonComponent,
-                RadioGroupComponent
-            ],
-            providers: [
-                UniqueSelectionDispatcher
+                StandaloneRadioButtons
             ],
             schemas: [
                 CUSTOM_ELEMENTS_SCHEMA

@@ -1,8 +1,9 @@
-import { NgModule, ModuleWithProviders,
-            CUSTOM_ELEMENTS_SCHEMA }        from '@angular/core';
-import { BrowserModule }                    from '@angular/platform-browser';
+import { CommonModule }                     from '@angular/common';
+import {
+    ModuleWithProviders,
+    NgModule
+}                                           from '@angular/core';
 import { FormsModule }                      from '@angular/forms';
-import { HttpModule }                       from '@angular/http';
 
 import 'cbp-theme/dist/cbp-theme.css';
 import 'cbp-theme/dist/jquery.js';
@@ -13,68 +14,62 @@ import 'cbp-theme/dist/inputmask.js';
 import 'cbp-theme/dist/cbp-theme.js';
 
 import {
-    ButtonDirective,
-    ButtonGroupComponent,
-    ButtonRole,
-    ButtonRoles,
-    ButtonSize,
-    ButtonSizes,
-    CheckboxComponent,
-    CheckboxGroupComponent,
-    DropdownTreeFieldComponent,
-    DropdownTreeItemComponent,
-    DualListComponent,
-    HeaderComponent,
-    ListGroupItemComponent,
-    ListGroupComponent,
-    PaginationComponent,
-    PayPeriodCalendarComponent,
-    RadioButtonComponent,
-    RadioGroupComponent,
-    SelectFieldComponent,
-    SelectFieldOptionDirective,
-    TableComponent,
-    ToggleButtonDirective,
-    UniqueSelectionDispatcher
+    ButtonModule,
+    CheckboxModule,
+    DropdownTreeFieldModule,
+    DualListModule,
+    HeaderModule,
+    ListGroupModule,
+    PaginationModule,
+    PayPeriodCalendarModule,
+    RadioButtonModule,
+    SelectFieldModule,
+    TableModule,
+    ToggleButtonModule
 }                                           from './src';
 
 export * from './src';
 
-const components = [
-    ButtonDirective,
-    ButtonGroupComponent,
-    CheckboxComponent,
-    CheckboxGroupComponent,
-    DropdownTreeFieldComponent,
-    DropdownTreeItemComponent,
-    DualListComponent,
-    HeaderComponent,
-    ListGroupItemComponent,
-    ListGroupComponent,
-    PaginationComponent,
-    PayPeriodCalendarComponent,
-    RadioButtonComponent,
-    RadioGroupComponent,
-    SelectFieldComponent,
-    SelectFieldOptionDirective,
-    TableComponent,
-    ToggleButtonDirective
+const modules: any[] = [
+    ButtonModule,
+    CheckboxModule,
+    DropdownTreeFieldModule,
+    DualListModule,
+    HeaderModule,
+    ListGroupModule,
+    PayPeriodCalendarModule,
+    RadioButtonModule,
+    SelectFieldModule,
+    TableModule,
+    ToggleButtonModule
 ];
 
 @NgModule({
     imports: [
-        BrowserModule,
-        FormsModule,
-        HttpModule
+        ButtonModule.forRoot(),
+        CheckboxModule.forRoot(),
+        DropdownTreeFieldModule.forRoot(),
+        DualListModule.forRoot(),
+        HeaderModule.forRoot(),
+        ListGroupModule.forRoot(),
+        PaginationModule.forRoot(),
+        PayPeriodCalendarModule.forRoot(),
+        RadioButtonModule.forRoot(),
+        SelectFieldModule.forRoot(),
+        TableModule.forRoot(),
+        ToggleButtonModule.forRoot()
     ],
-    declarations: components,
-    exports: components,
-    providers: [
-        UniqueSelectionDispatcher
-    ],
-    schemas: [
-        CUSTOM_ELEMENTS_SCHEMA
-    ]
+    exports: modules
+})
+export class CommonFrameworkRootModule {
+}
+
+@NgModule({
+    imports: modules,
+    exports: modules
 })
 export class CommonFrameworkModule {
+    static forRoot(): ModuleWithProviders {
+        return { ngModule: CommonFrameworkRootModule };
+    }
 }

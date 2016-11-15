@@ -1,7 +1,4 @@
-﻿import { CommonModule }             from '@angular/common';
-import {
-    Component
-}                                   from '@angular/core';
+﻿import { Component }                from '@angular/core';
 import {
     ComponentFixture,
     TestBed
@@ -9,6 +6,7 @@ import {
 import { By }                       from '@angular/platform-browser';
 
 import { ToggleButtonDirective }    from './toggle-button.directive';
+import { ToggleButtonModule }       from './toggle-button.module';
 
 describe('ToggleButtonDirective', () => {
     let fixture: ComponentFixture<TestActiveComponent>;
@@ -16,8 +14,8 @@ describe('ToggleButtonDirective', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [CommonModule],
-            declarations: [ToggleButtonDirective, TestActiveComponent]
+            imports: [ToggleButtonModule.forRoot()],
+            declarations: [TestActiveComponent]
         });
 
         fixture = TestBed.createComponent(TestActiveComponent);

@@ -99,7 +99,7 @@ export class SelectFieldComponent implements ControlValueAccessor {
     private _getOptionId(value: any): string {
         for(let id of Array.from(this.optionMap.keys())) {
             let v = this.optionMap.get(id);
-            if(value === v || typeof value === 'number' && typeof v === 'number' && isNaN(value) && isNaN(v)) {
+            if(value === v || (value == null && v == null) || (typeof value === 'number' && typeof v === 'number' && isNaN(value) && isNaN(v))) {
                 return id;
             }
         }
@@ -107,8 +107,8 @@ export class SelectFieldComponent implements ControlValueAccessor {
     }
 
     private _getOptionValue(valueString: string): any {
-        let value = this.optionMap.get(_extractId(valueString));
-        return (value != null) ? value : valueString;
+        let id = _extractId(valueString);
+        return this.optionMap.has(id) ? this.optionMap.get(id) : valueString;
     }
 
     writeValue(value: any) {

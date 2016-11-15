@@ -4,25 +4,28 @@ import {
     flushMicrotasks,
     ComponentFixture,
     TestBed,
-} from '@angular/core/testing';
+}                       from '@angular/core/testing';
 import {
     NgControl,
     FormsModule,
-} from '@angular/forms';
+}                       from '@angular/forms';
 import {
     Component,
-    CUSTOM_ELEMENTS_SCHEMA,
     DebugElement
-} from '@angular/core';
-import {By} from '@angular/platform-browser';
-import {CheckboxComponent, CheckboxChange} from '../checkbox';
+}                       from '@angular/core';
+import { By }           from '@angular/platform-browser';
+import {
+    CheckboxComponent,
+    CheckboxChange,
+    CheckboxModule
+}                       from '../checkbox';
 
 describe('CheckboxComponent', () => {
     let fixture: ComponentFixture<any>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            imports: [FormsModule],
+            imports: [FormsModule, CheckboxModule.forRoot()],
             declarations: [
                 SingleCheckbox,
                 CheckboxWithFormDirectives,
@@ -31,11 +34,7 @@ describe('CheckboxComponent', () => {
                 CheckboxWithAriaLabel,
                 CheckboxWithAriaLabelledby,
                 CheckboxWithNameAttribute,
-                CheckboxWithChangeEvent,
-                CheckboxComponent,
-            ],
-            schemas: [
-                CUSTOM_ELEMENTS_SCHEMA
+                CheckboxWithChangeEvent
             ]
         });
 
@@ -457,7 +456,7 @@ describe('CheckboxComponent', () => {
 @Component({
     template: `
     <div (click)="parentElementClicked = true" (keyup)="parentElementKeyedUp = true">
-        <cf-checkbox 
+        <cf-checkbox
             id="simple-check"
             [required]="isRequired"
             [checked]="isChecked" 

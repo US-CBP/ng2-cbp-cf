@@ -1,0 +1,10 @@
+﻿<a [attr.data-toggle]="toggle"
+   *ngIf="item.href"
+   [href]="item.href"
+   [title]="item.title"
+   [innerHTML]="item.html"></a>
+<a [attr.data-toggle]="toggle"
+   *ngIf="item.route"
+   [routerLink]="item.route"
+   [title]="item.title"
+   [innerHTML]="item.html"></a>

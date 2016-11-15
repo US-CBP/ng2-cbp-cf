@@ -2,3 +2,4 @@
 export { PayPeriod } from './pay-period.model';
 
 export * from './pay-period-calendar.component';
+export * from './pay-period-calendar.module';
