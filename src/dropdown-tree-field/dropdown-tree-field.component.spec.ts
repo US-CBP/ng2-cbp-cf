@@ -15,7 +15,7 @@ import { TreeNode }                     from './tree-node.model';
 
 let currentId = 1;
 
-describe('DropdownTreeItemComponent', () => {
+describe('DropdownTreeFieldComponent', () => {
     let fixture: ComponentFixture<DropdownTreeFieldComponent>;
     let component: DropdownTreeFieldComponent;
     let service: DropdownTreeService;
