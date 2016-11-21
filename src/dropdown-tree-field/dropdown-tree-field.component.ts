@@ -397,14 +397,17 @@ export class DropdownTreeFieldComponent implements OnInit, OnDestroy {
         }
 
         let parent = this._parentMap.get(currentNode);
-        return parent == null ? currentNode.text : `${this._buildFullSelectedPathText(parent)} / ${currentNode.text}`;
+        let selectedText = currentNode.selectedText || currentNode.text;
+        return parent == null ? selectedText : `${this._buildFullSelectedPathText(parent)} / ${selectedText}`;
     }
 
     private _calculateSelectedText(selectedNode: TreeNode): string {
         if(selectedNode == null || this._parentMap == null) {
             return '';
         }
-        return this.showFullSelectedPath ? this._buildFullSelectedPathText(selectedNode) : selectedNode.text;
+        return this.showFullSelectedPath ?
+            this._buildFullSelectedPathText(selectedNode) :
+            (selectedNode.selectedText || selectedNode.text);
     }
 
     private _processNodeForMaps(currentNode: TreeNode, parentNode: TreeNode) {

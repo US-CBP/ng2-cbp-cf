@@ -161,6 +161,15 @@ describe('DropdownTreeItemComponent', () => {
             expect(component.selectedText).toBe(selectedNode.text);
         });
 
+        it('sets selectedText to selectedNode selectedText when showFullSelectedPath is false and selectedNode is not null and selectedText is populated', () => {
+            selectedNode.selectedText = 'Selected Text';
+            component.showFullSelectedPath = false;
+
+            fixture.detectChanges();
+
+            expect(component.selectedText).toBe(selectedNode.selectedText);
+        });
+
         it('sets selectedText to defaultLabel when showFullSelectedPath is false and selectedNode is null', () => {
             component.selectedNode = null;
             component.defaultLabel = 'Select One';
@@ -177,6 +186,24 @@ describe('DropdownTreeItemComponent', () => {
             fixture.detectChanges();
 
             expect(component.selectedText).toBe(`${nodes[0].text} / ${nodes[0].children[2].text} / ${selectedNode.text}`);
+        });
+
+        it('sets selectedText to selectedNode selectedText preceded by parent nodes\' text when showFullSelectedPath is true and selectedNode is not null and selectedText is populated', () => {
+            selectedNode.selectedText = 'Selected Text';
+            component.showFullSelectedPath = true;
+
+            fixture.detectChanges();
+
+            expect(component.selectedText).toBe(`${nodes[0].text} / ${nodes[0].children[2].text} / ${selectedNode.selectedText}`);
+        });
+
+        it('sets selectedText to selectedNode text preceded by parent nodes\' selectedText when showFullSelectedPath is true and selectedNode is not null and parent selectedText is populated', () => {
+            nodes[0].selectedText = 'Selected Text';
+            component.showFullSelectedPath = true;
+
+            fixture.detectChanges();
+
+            expect(component.selectedText).toBe(`${nodes[0].selectedText} / ${nodes[0].children[2].text} / ${selectedNode.text}`);
         });
 
         it('sets selectedText to defaultLabel when showFullSelectedPath is true and selectedNode is null', () => {
