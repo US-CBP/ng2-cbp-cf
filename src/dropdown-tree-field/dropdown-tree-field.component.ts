@@ -4,15 +4,11 @@
     EventEmitter,
     HostListener,
     Input,
-    OnDestroy,
     OnInit,
     Output,
     ViewChild
 }                               from '@angular/core';
-import { Subscription }         from 'rxjs';
 
-import { DropdownTreeService }  from './dropdown-tree.service';
-import { DropdownTreeState }    from './dropdown-tree-state.model';
 import { TreeNode }             from './tree-node.model';
 
 let nextId = 1;
@@ -20,12 +16,9 @@ let nextId = 1;
 @Component({
     selector: 'cf-dropdown-tree-field',
     templateUrl: './dropdown-tree-field.component.html',
-    styleUrls: ['./dropdown-tree-field.component.scss'],
-    providers: [
-        DropdownTreeService
-    ]
+    styleUrls: ['./dropdown-tree-field.component.scss']
 })
-export class DropdownTreeFieldComponent implements OnInit, OnDestroy {
+export class DropdownTreeFieldComponent implements OnInit {
     @Input() id: string = createUniqueId();
     @Input() label: string;
     @Output() nodeSelected: EventEmitter<TreeNode> = new EventEmitter<TreeNode>();
@@ -41,22 +34,23 @@ export class DropdownTreeFieldComponent implements OnInit, OnDestroy {
     ariaActiveDescendentId: string = undefined;
     defaultNode: TreeNode;
     selectedText: string;
+    highlightedNode: TreeNode;
+    effectiveSelectedNode: TreeNode;
+    expandedNodes: Set<TreeNode>;
 
     dropdownLeft: number;
     dropdownTop: number;
     dropdownWidth: number;
 
-    private _stateSubscription: Subscription;
     private _parentMap: Map<TreeNode, TreeNode>;
     private _preventWindowClickClose: boolean = false;
     private _visibleNodes: TreeNode[];
     private _defaultLabel: string;
     private _showFullSelectedPath: boolean = false;
     private _selectedNode: TreeNode;
-    private _effectiveSelectedNode: TreeNode;
     private _nodes: TreeNode[];
 
-    constructor(private _service: DropdownTreeService) {
+    constructor() {
     }
 
     @Input()
@@ -79,7 +73,7 @@ export class DropdownTreeFieldComponent implements OnInit, OnDestroy {
         if(this._showFullSelectedPath !== newValue) {
             this._showFullSelectedPath = newValue;
 
-            this.selectedText = this._calculateSelectedText(this._effectiveSelectedNode);
+            this.selectedText = this._calculateSelectedText(this.effectiveSelectedNode);
         }
     }
 
@@ -104,29 +98,29 @@ export class DropdownTreeFieldComponent implements OnInit, OnDestroy {
             this._nodes = newValue;
 
             this._initializeNodes();
-            this.selectedText = this._calculateSelectedText(this._effectiveSelectedNode);
         }
     }
 
     ngOnInit() {
         this.treeId = `${this.id}-tree`;
         this.treeItemIdPrefix = this.treeId + '-';
-        this.defaultNode = this._initializeDefaultNode();
         this._initializeNodes();
-
-        if(this.selectedNode != null) {
-            this.selectedText = this._calculateSelectedText(this.selectedNode);
-        } else {
-            this.selectedText = this._calculateSelectedText(this.defaultNode);
-        }
-
-        this._stateSubscription = this._service.stateObservable.subscribe(this._onStateChange.bind(this));
     }
 
-    ngOnDestroy() {
-        if(this._stateSubscription != null) {
-            this._stateSubscription.unsubscribe();
-        }
+    collapseNode(node: TreeNode) {
+        let newExpandedNodes = new Set<TreeNode>(this.expandedNodes);
+        newExpandedNodes.delete(node);
+
+        this.expandedNodes = newExpandedNodes;
+        this._resetVisibleNodes();
+    }
+
+    expandNode(node: TreeNode) {
+        let newExpandedNodes = new Set<TreeNode>(this.expandedNodes);
+        newExpandedNodes.add(node);
+
+        this.expandedNodes = newExpandedNodes;
+        this._resetVisibleNodes();
     }
 
     onComboboxFocus() {
@@ -162,8 +156,8 @@ export class DropdownTreeFieldComponent implements OnInit, OnDestroy {
             } else if(this._isKey($event, 'ArrowUp')) {
                 let previousNode = this._previousVisibleNode();
                 if(previousNode != null) {
-                    this._service.highlightNode(previousNode);
-                    this._service.selectNode(previousNode);
+                    this.highlightedNode = previousNode;
+                    this._emitSelectedNode(previousNode);
                 }
 
                 $event.stopPropagation();
@@ -171,7 +165,7 @@ export class DropdownTreeFieldComponent implements OnInit, OnDestroy {
             } else if(this._isKey($event, 'ArrowUp', false, true)) {
                 let previousNode = this._previousVisibleNode();
                 if(previousNode != null) {
-                    this._service.highlightNode(previousNode);
+                    this.highlightedNode = previousNode;
                 }
 
                 $event.stopPropagation();
@@ -179,8 +173,8 @@ export class DropdownTreeFieldComponent implements OnInit, OnDestroy {
             } else if(this._isKey($event, 'ArrowDown')) {
                 let nextNode = this._nextVisibleNode();
                 if(nextNode != null) {
-                    this._service.highlightNode(nextNode);
-                    this._service.selectNode(nextNode);
+                    this.highlightedNode = nextNode;
+                    this._emitSelectedNode(nextNode);
                 }
 
                 $event.stopPropagation();
@@ -188,61 +182,59 @@ export class DropdownTreeFieldComponent implements OnInit, OnDestroy {
             } else if(this._isKey($event, 'ArrowDown', false, true)) {
                 let nextNode = this._nextVisibleNode();
                 if(nextNode != null) {
-                    this._service.highlightNode(nextNode);
+                    this.highlightedNode = nextNode;
                 }
 
                 $event.stopPropagation();
                 $event.preventDefault();
             } else if(this._isKey($event, 'ArrowLeft')) {
-                let highlightedNode = this._service.currentState().highlightedNode;
-                if(this._service.isNodeExpanded(highlightedNode)) {
-                    this._service.collapseNode(highlightedNode);
+                if(this.expandedNodes.has(this.highlightedNode)) {
+                    this.collapseNode(this.highlightedNode);
                 } else {
-                    let parentNode = this._parentMap.get(highlightedNode);
+                    let parentNode = this._parentMap.get(this.highlightedNode);
                     if(parentNode != null) {
-                        this._service.highlightNode(parentNode);
-                        this._service.selectNode(parentNode);
+                        this.highlightedNode = parentNode;
+                        this._emitSelectedNode(parentNode);
                     }
                 }
 
                 $event.stopPropagation();
                 $event.preventDefault();
             } else if(this._isKey($event, 'ArrowRight')) {
-                let highlightedNode = this._service.currentState().highlightedNode;
-                if(this._service.isNodeExpanded(highlightedNode)) {
-                    this._service.highlightNode(highlightedNode.children[0]);
-                    this._service.selectNode(highlightedNode.children[0]);
+                let originalHighlightedNode = this.highlightedNode;
+                if(this.expandedNodes.has(originalHighlightedNode)) {
+                    this.highlightedNode = originalHighlightedNode.children[0];
+                    this._emitSelectedNode(originalHighlightedNode.children[0]);
                 } else {
-                    this._service.expandNode(highlightedNode);
+                    this.expandNode(originalHighlightedNode);
                 }
 
                 $event.stopPropagation();
                 $event.preventDefault();
             } else if(this._isKey($event, 'Home')) {
-                this._service.highlightNode(this._visibleNodes[0]);
-                this._service.selectNode(this._visibleNodes[0]);
+                this.highlightedNode = this._visibleNodes[0];
+                this._emitSelectedNode(this._visibleNodes[0]);
 
                 $event.stopPropagation();
                 $event.preventDefault();
             } else if(this._isKey($event, 'Home', false, true)) {
-                this._service.highlightNode(this._visibleNodes[0]);
+                this.highlightedNode = this._visibleNodes[0];
 
                 $event.stopPropagation();
                 $event.preventDefault();
             } else if(this._isKey($event, 'End')) {
-                this._service.highlightNode(this._visibleNodes[this._visibleNodes.length - 1]);
-                this._service.selectNode(this._visibleNodes[this._visibleNodes.length - 1]);
+                this.highlightedNode = this._visibleNodes[this._visibleNodes.length - 1];
+                this._emitSelectedNode(this._visibleNodes[this._visibleNodes.length - 1]);
 
                 $event.stopPropagation();
                 $event.preventDefault();
             } else if(this._isKey($event, 'End', false, true)) {
-                this._service.highlightNode(this._visibleNodes[this._visibleNodes.length - 1]);
+                this.highlightedNode = this._visibleNodes[this._visibleNodes.length - 1];
 
                 $event.stopPropagation();
                 $event.preventDefault();
             } else if(this._isKey($event, ' ') || this._isKey($event, ' ', false, true)) {
-                let highlightedNode = this._service.currentState().highlightedNode;
-                this._service.selectNode(highlightedNode);
+                this._emitSelectedNode(this.highlightedNode);
             }
         }
     }
@@ -263,6 +255,22 @@ export class DropdownTreeFieldComponent implements OnInit, OnDestroy {
 
         $event.preventDefault();
         $event.stopPropagation();
+    }
+
+    onNodeCollapsed(node: TreeNode) {
+        this.collapseNode(node);
+    }
+
+    onNodeExpanded(node: TreeNode) {
+        this.expandNode(node);
+    }
+
+    onNodeHighlighted(node: TreeNode) {
+        this.highlightedNode = node;
+    }
+
+    onNodeSelected(node: TreeNode) {
+        this._emitSelectedNode(node);
     }
 
     /* tslint:disable */
@@ -294,13 +302,13 @@ export class DropdownTreeFieldComponent implements OnInit, OnDestroy {
 
     private _initializeNodes() {
         this._initializeMaps();
+        this._reinitializeState();
 
-        let expandedNodes = new Set<TreeNode>();
+        this.highlightedNode = this.isDropdownOpen ? this.effectiveSelectedNode : null;
+
+        this.expandedNodes = new Set<TreeNode>();
         if(this.selectedNode != null) {
-            this._expandNodesToNode(this.selectedNode, expandedNodes);
-            this._service.setState(this.isDropdownOpen ? this.selectedNode : null, this.selectedNode, expandedNodes);
-        } else {
-            this._service.setState(this.isDropdownOpen ? this.defaultNode : null, this.defaultNode, expandedNodes);
+            this._expandNodesToNode(this.selectedNode);
         }
 
         this._resetVisibleNodes();
@@ -309,20 +317,17 @@ export class DropdownTreeFieldComponent implements OnInit, OnDestroy {
     private _reinitializeState() {
         this.defaultNode = this._initializeDefaultNode();
 
-        this._effectiveSelectedNode = this.selectedNode == null ? this.defaultNode : this.selectedNode;
-        this._service.selectNode(this._effectiveSelectedNode);
-        this.selectedText = this._calculateSelectedText(this._effectiveSelectedNode);
+        this.effectiveSelectedNode = this.selectedNode == null ? this.defaultNode : this.selectedNode;
+        this.selectedText = this._calculateSelectedText(this.effectiveSelectedNode);
     }
 
     private _previousVisibleNode(): TreeNode {
-        let highlightedNode = this._service.currentState().highlightedNode;
-        let highlightedNodeIndex = this._visibleNodes.indexOf(highlightedNode);
+        let highlightedNodeIndex = this._visibleNodes.indexOf(this.highlightedNode);
         return (highlightedNodeIndex > 0) ? this._visibleNodes[highlightedNodeIndex - 1] : null;
     }
 
     private _nextVisibleNode(): TreeNode {
-        let highlightedNode = this._service.currentState().highlightedNode;
-        let highlightedNodeIndex = this._visibleNodes.indexOf(highlightedNode);
+        let highlightedNodeIndex = this._visibleNodes.indexOf(this.highlightedNode);
         return (highlightedNodeIndex < this._visibleNodes.length - 1) ? this._visibleNodes[highlightedNodeIndex + 1] : null;
     }
 
@@ -333,18 +338,17 @@ export class DropdownTreeFieldComponent implements OnInit, OnDestroy {
         this.isDropdownOpen = true;
         this._resetVisibleNodes();
 
-        let highlightedNode = this._calculateHighlightedOnOpen();
-        this._service.highlightNode(highlightedNode);
+        this.highlightedNode = this._calculateHighlightedOnOpen();
 
         this.ariaOwnsId = this.treeId;
-        this.ariaActiveDescendentId = this._service.createTreeItemId(this.treeItemIdPrefix, highlightedNode);
+        this.ariaActiveDescendentId = this.treeItemIdPrefix + this.highlightedNode.id.toString();
     }
 
     private _closeDropdown() {
         this.isFocused = true;
         this.isDropdownOpen = false;
         this._resetVisibleNodes();
-        this._service.highlightNode(null);
+        this.highlightedNode = null;
 
         this.ariaOwnsId = undefined;
         this.ariaActiveDescendentId = undefined;
@@ -358,17 +362,10 @@ export class DropdownTreeFieldComponent implements OnInit, OnDestroy {
         }
     }
 
-    private _onStateChange(state: DropdownTreeState) {
-        if(this.selectedNode !== state.selectedNode && !(this.selectedNode == null && state.selectedNode === this.defaultNode)) {
-            this.nodeSelected.emit(state.selectedNode === this.defaultNode ? null : state.selectedNode);
-        }
-        this._resetVisibleNodes();
-    }
-
-    private _expandNodesToNode(nodeToFind: TreeNode, expandedNodes: Set<TreeNode>) {
+    private _expandNodesToNode(nodeToFind: TreeNode) {
         let parentNode = this._parentMap.get(nodeToFind);
         while(parentNode != null) {
-            expandedNodes.add(parentNode);
+            this.expandedNodes.add(parentNode);
             parentNode = this._parentMap.get(parentNode);
         }
     }
@@ -426,7 +423,7 @@ export class DropdownTreeFieldComponent implements OnInit, OnDestroy {
 
     private _processNodeForVisible(currentNode: TreeNode) {
         this._visibleNodes.push(currentNode);
-        if(currentNode.children != null && currentNode.children.length > 0 && this._service.isNodeExpanded(currentNode)) {
+        if(currentNode.children != null && currentNode.children.length > 0 && this.expandedNodes.has(currentNode)) {
             currentNode.children.forEach(node => this._processNodeForVisible(node));
         }
     }
@@ -448,6 +445,12 @@ export class DropdownTreeFieldComponent implements OnInit, OnDestroy {
         this.dropdownLeft = rect.left;
         this.dropdownTop = rect.bottom;
         this.dropdownWidth = rect.width;
+    }
+
+    private _emitSelectedNode(node: TreeNode) {
+        if(this.selectedNode !== node && !(this.selectedNode == null && node === this.defaultNode)) {
+            this.nodeSelected.emit(node === this.defaultNode ? null : node);
+        }
     }
 }
 

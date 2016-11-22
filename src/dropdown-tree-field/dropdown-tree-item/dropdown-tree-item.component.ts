@@ -1,17 +1,14 @@
 ﻿import {
     ChangeDetectionStrategy,
-    ChangeDetectorRef,
     Component,
     ElementRef,
+    EventEmitter,
     Input,
-    OnDestroy,
+    Output,
     OnInit,
     ViewChild
 }                               from '@angular/core';
-import { Subscription }         from 'rxjs';
 
-import { DropdownTreeService }  from '../dropdown-tree.service';
-import { DropdownTreeState }    from '../dropdown-tree-state.model';
 import { TreeNode }             from '../tree-node.model';
 
 @Component({
@@ -19,9 +16,12 @@ import { TreeNode }             from '../tree-node.model';
     templateUrl: 'dropdown-tree-item.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DropdownTreeItemComponent implements OnInit, OnDestroy {
+export class DropdownTreeItemComponent implements OnInit {
     @Input() idPrefix: string;
-    @Input() node: TreeNode;
+    @Output() nodeCollapsed: EventEmitter<TreeNode> = new EventEmitter<TreeNode>();
+    @Output() nodeExpanded: EventEmitter<TreeNode> = new EventEmitter<TreeNode>();
+    @Output() nodeHighlighted: EventEmitter<TreeNode> = new EventEmitter<TreeNode>();
+    @Output() nodeSelected: EventEmitter<TreeNode> = new EventEmitter<TreeNode>();
 
     @ViewChild('text') textElement: ElementRef;
 
@@ -32,48 +32,118 @@ export class DropdownTreeItemComponent implements OnInit, OnDestroy {
     hasChildren: boolean;
     showChildren: boolean;
 
-    private _stateSubscription: Subscription;
+    private _node: TreeNode;
+    private _highlightedNode: TreeNode;
+    private _selectedNode: TreeNode;
+    private _expandedNodes: Set<TreeNode>;
 
-    constructor(private _service: DropdownTreeService, private _changeDetector: ChangeDetectorRef) {
+    constructor() {
     }
 
     ngOnInit() {
-        this.id = this._service.createTreeItemId(this.idPrefix, this.node);
-        this._stateSubscription = this._service.stateObservable.subscribe(this._onStateChange.bind(this));
+        return this.idPrefix + this.node.id.toString();
     }
 
-    ngOnDestroy() {
-        if(this._stateSubscription != null) {
-            this._stateSubscription.unsubscribe();
+    @Input()
+    get node(): TreeNode {
+        return this._node;
+    }
+    set node(newValue: TreeNode) {
+        if(this._node !== newValue) {
+            this._node = newValue;
+            this.hasChildren = this._node.children != null && this._node.children.length > 0;
+
+            this._processExpansion();
+            this._processHighlightedNode();
+            this._processSelectedNode();
         }
     }
 
-    private _onStateChange(state: DropdownTreeState) {
-        this.hasChildren = this.node.children != null && this.node.children.length > 0;
-        this.isExpanded = this.hasChildren ? state.expandedNodes.has(this.node) : undefined;
-        this.showChildren = this.hasChildren && this.isExpanded;
+    @Input()
+    get highlightedNode(): TreeNode {
+        return this._highlightedNode;
+    }
+    set highlightedNode(newValue: TreeNode) {
+        if(this._highlightedNode !== newValue) {
+            this._highlightedNode = newValue;
 
-        this.isHighlighted = state.highlightedNode === this.node;
+            this._processHighlightedNode();
+        }
+    }
 
-        let originalIsSelected = this.isSelected;
-        this.isSelected = state.selectedNode === this.node;
+    @Input()
+    get selectedNode(): TreeNode {
+        return this._selectedNode;
+    }
+    set selectedNode(newValue: TreeNode) {
+        if(this._selectedNode !== newValue) {
+            this._selectedNode = newValue;
 
-        if(this.isSelected && !originalIsSelected) {
+            this._processSelectedNode();
+        }
+    }
+
+    @Input()
+    get expandedNodes(): Set<TreeNode> {
+        return this._expandedNodes;
+    }
+    set expandedNodes(newValue: Set<TreeNode>) {
+        if(this._expandedNodes !== newValue) {
+            this._expandedNodes = newValue;
+
+            this._processExpansion();
+        }
+    }
+
+    private _processExpansion() {
+        if(this.node && this.expandedNodes) {
+            this.isExpanded = this.hasChildren ? this.expandedNodes.has(this.node) : undefined;
+            this.showChildren = this.hasChildren && this.isExpanded;
+        }
+    }
+
+    private _processHighlightedNode() {
+        this.isHighlighted = this.highlightedNode === this.node;
+    }
+
+    private _processSelectedNode() {
+        this.isSelected = this.selectedNode === this.node;
+        if(this.isSelected) {
             this.textElement.nativeElement.scrollIntoView();
         }
-
-        this._changeDetector.markForCheck();
     }
 
     onExpanderClick() {
-        this._service.toggleNodeExpansion(this.node);
+        if(this.hasChildren) {
+            if(this.isExpanded) {
+                this.nodeCollapsed.emit(this.node);
+            } else {
+                this.nodeExpanded.emit(this.node);
+            }
+        }
     }
 
-    onNodeClick() {
-        this._service.selectNode(this.node);
+    onChildNodeCollapsed(childNode: TreeNode) {
+        this.nodeCollapsed.emit(childNode);
+    }
+
+    onChildNodeExpanded(childNode: TreeNode) {
+        this.nodeExpanded.emit(childNode);
     }
 
     onNodeMouseEnter() {
-        this._service.highlightNode(this.node);
+        this.nodeHighlighted.emit(this.node);
+    }
+
+    onChildNodeHighlighted(childNode: TreeNode) {
+        this.nodeHighlighted.emit(childNode);
+    }
+
+    onNodeClick() {
+        this.nodeSelected.emit(this.node);
+    }
+
+    onChildNodeSelected(childNode: TreeNode) {
+        this.nodeSelected.emit(childNode);
     }
 }
