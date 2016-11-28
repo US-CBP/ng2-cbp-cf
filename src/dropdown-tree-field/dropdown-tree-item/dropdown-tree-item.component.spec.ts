@@ -12,6 +12,7 @@ import { By }                           from '@angular/platform-browser';
 
 import { DropdownTreeItemComponent }    from './dropdown-tree-item.component';
 import { TreeNode }                     from '../tree-node.model';
+import { DropdownTreeService }          from '../dropdown-tree.service';
 
 let currentId = 1;
 
@@ -24,7 +25,8 @@ describe('DropdownTreeItemComponent', () => {
         TestBed.configureTestingModule({
             imports: [CommonModule, FormsModule],
             declarations: [DropdownTreeItemComponent],
-            schemas: [CUSTOM_ELEMENTS_SCHEMA]
+            schemas: [CUSTOM_ELEMENTS_SCHEMA],
+            providers: [DropdownTreeService]
         });
         fixture = TestBed.createComponent(DropdownTreeItemComponent);
 

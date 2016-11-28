@@ -1,4 +1,6 @@
 ﻿import {
+    AfterViewChecked,
+    ChangeDetectionStrategy,
     Component,
     ElementRef,
     EventEmitter,
@@ -6,25 +8,31 @@
     Input,
     OnInit,
     Output,
-    ViewChild
+    QueryList,
+    ViewChild,
+    ViewChildren
 }                               from '@angular/core';
 
 import { TreeNode }             from './tree-node.model';
+import { DropdownTreeService }  from './dropdown-tree.service';
 
 let nextId = 1;
 
 @Component({
     selector: 'cf-dropdown-tree-field',
     templateUrl: './dropdown-tree-field.component.html',
-    styleUrls: ['./dropdown-tree-field.component.scss']
+    styleUrls: ['./dropdown-tree-field.component.scss'],
+    providers: [DropdownTreeService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DropdownTreeFieldComponent implements OnInit {
+export class DropdownTreeFieldComponent implements OnInit, AfterViewChecked {
     @Input() id: string = createUniqueId();
     @Input() label: string;
     @Output() nodeSelected: EventEmitter<TreeNode> = new EventEmitter<TreeNode>();
 
     @ViewChild('dropdownContainer') dropdownContainerElement: ElementRef;
     @ViewChild('combobox') comboboxElement: ElementRef;
+    @ViewChildren('tree') treeElementQuery: QueryList<ElementRef>;
 
     treeId: string;
     treeItemIdPrefix: string;
@@ -50,7 +58,7 @@ export class DropdownTreeFieldComponent implements OnInit {
     private _selectedNode: TreeNode;
     private _nodes: TreeNode[];
 
-    constructor() {
+    constructor(private _service: DropdownTreeService) {
     }
 
     @Input()
@@ -105,6 +113,22 @@ export class DropdownTreeFieldComponent implements OnInit {
         this.treeId = `${this.id}-tree`;
         this.treeItemIdPrefix = this.treeId + '-';
         this._initializeNodes();
+    }
+
+    ngAfterViewChecked() {
+        if(this._service.elementToScrollTo != null) {
+
+            let treeNativeElement = <HTMLElement>this.treeElementQuery.first.nativeElement;
+            let nodeNativeElement = <HTMLElement>this._service.elementToScrollTo.nativeElement;
+
+            if(nodeNativeElement.offsetTop < treeNativeElement.scrollTop) {
+                treeNativeElement.scrollTop = nodeNativeElement.offsetTop;
+            } else if(nodeNativeElement.offsetTop + nodeNativeElement.offsetHeight > treeNativeElement.scrollTop + treeNativeElement.offsetHeight) {
+                treeNativeElement.scrollTop = (nodeNativeElement.offsetTop + nodeNativeElement.offsetHeight) - treeNativeElement.offsetHeight;
+            }
+
+            this._service.elementToScrollTo = null;
+        }
     }
 
     collapseNode(node: TreeNode) {

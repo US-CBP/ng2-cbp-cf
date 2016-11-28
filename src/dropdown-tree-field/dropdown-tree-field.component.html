@@ -37,7 +37,7 @@
 
         <span class="dt--dropdown dt--dropdown-below" dir="ltr" [style.width]="dropdownWidth">
             <span class="dt--results">
-                <ul [id]="treeId" role="tree" class="tree tree-root" aria-expanded="true" aria-hidden="false">
+                <ul #tree [id]="treeId" role="tree" class="tree tree-root" aria-expanded="true" aria-hidden="false">
                     <cf-dropdown-tree-item *ngIf="defaultNode"
                                            [idPrefix]="treeItemIdPrefix"
                                            [node]="defaultNode"

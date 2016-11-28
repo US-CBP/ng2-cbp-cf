@@ -7,9 +7,10 @@
     Output,
     OnInit,
     ViewChild
-}                               from '@angular/core';
+}                                       from '@angular/core';
 
-import { TreeNode }             from '../tree-node.model';
+import { TreeNode }                     from '../tree-node.model';
+import { DropdownTreeService }          from '../dropdown-tree.service';
 
 @Component({
     selector: 'cf-dropdown-tree-item',
@@ -37,7 +38,7 @@ export class DropdownTreeItemComponent implements OnInit {
     private _selectedNode: TreeNode;
     private _expandedNodes: Set<TreeNode>;
 
-    constructor() {
+    constructor(private _service: DropdownTreeService) {
     }
 
     ngOnInit() {
@@ -104,12 +105,15 @@ export class DropdownTreeItemComponent implements OnInit {
 
     private _processHighlightedNode() {
         this.isHighlighted = this.highlightedNode === this.node;
+        if(this.isHighlighted) {
+            this._service.elementToScrollTo = this.textElement;
+        }
     }
 
     private _processSelectedNode() {
         this.isSelected = this.selectedNode === this.node;
         if(this.isSelected) {
-            this.textElement.nativeElement.scrollIntoView();
+            this._service.elementToScrollTo = this.textElement;
         }
     }
 
