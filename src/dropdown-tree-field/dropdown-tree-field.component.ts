@@ -28,6 +28,7 @@ let nextId = 1;
 export class DropdownTreeFieldComponent implements OnInit, AfterViewChecked {
     @Input() id: string = createUniqueId();
     @Input() label: string;
+    @Input() isLoading: boolean = false;
     @Output() nodeSelected: EventEmitter<TreeNode> = new EventEmitter<TreeNode>();
 
     @ViewChild('dropdownContainer') dropdownContainerElement: ElementRef;
