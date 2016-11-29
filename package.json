@@ -26,9 +26,9 @@
     "engines": {
         "node": ">=6.4"
     },
-    "main": "dist/ng2-cbp-cf.js",
-    "module": "ng2-cbp-cf.js",
-    "typings": "dist/ng2-cbp-cf.d.ts",
+    "main": "index.ts",
+    "module": "index.ts",
+    "typings": "typings.d.ts",
     "scripts": {
         "prebuild": "npm run-s clean && npm run-s lint && npm run-s test",
         "build": "cross-env NODE_ENV=production webpack --display-chunks",
