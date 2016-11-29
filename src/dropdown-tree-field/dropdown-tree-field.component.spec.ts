@@ -1,6 +1,4 @@
-﻿import {
-    DebugElement
-}                                       from '@angular/core';
+﻿import { DebugElement }                 from '@angular/core';
 import {
     ComponentFixture,
     TestBed
@@ -9,18 +7,17 @@ import { By }                           from '@angular/platform-browser';
 
 import { DropdownTreeFieldModule }      from './dropdown-tree-field.module';
 import { DropdownTreeFieldComponent }   from './dropdown-tree-field.component';
-import { DropdownTreeService }          from './dropdown-tree.service';
-import { DropdownTreeState }            from './dropdown-tree-state.model';
 import { TreeNode }                     from './tree-node.model';
 
 let currentId = 1;
 
-describe('DropdownTreeItemComponent', () => {
+describe('DropdownTreeFieldComponent', () => {
     let fixture: ComponentFixture<DropdownTreeFieldComponent>;
     let component: DropdownTreeFieldComponent;
-    let service: DropdownTreeService;
     let nodes: TreeNode[];
     let dropdownContainer: DebugElement;
+    let combobox: DebugElement;
+    let nodeSelected: jasmine.Spy;
 
     beforeEach(() => {
         nodes = createNodeTree();
@@ -29,55 +26,49 @@ describe('DropdownTreeItemComponent', () => {
             imports: [DropdownTreeFieldModule.forRoot()]
         });
         fixture = TestBed.createComponent(DropdownTreeFieldComponent);
-        service = fixture.debugElement.injector.get(DropdownTreeService);
 
         component = fixture.componentInstance;
         component.nodes = nodes;
 
+        nodeSelected = jasmine.createSpy('nodeSelected');
+        component.nodeSelected.subscribe(nodeSelected);
+
         dropdownContainer = fixture.debugElement.query(By.css('span.dropdown-tree.dt--container'));
+        combobox = fixture.debugElement.query(By.css('span.dt--selection-combobox'));
     });
 
     describe('ngOnInit', () => {
         let selectedNode: TreeNode;
-        let stateSpy: jasmine.Spy;
 
         beforeEach(() => {
             selectedNode = nodes[0].children[2].children[1];
             component.selectedNode = selectedNode;
-
-            stateSpy = jasmine.createSpy('state');
-            service.stateObservable.subscribe(stateSpy);
-            stateSpy.calls.reset();
         });
 
-        it('sets selectedNode on service', () => {
+        it('sets effectiveSelectedNode to selectedNode', () => {
             fixture.detectChanges();
 
-            expect(stateSpy).toHaveBeenCalledWith(jasmine.objectContaining({ selectedNode: selectedNode }));
+            expect(component.effectiveSelectedNode).toBe(component.selectedNode);
         });
 
-        it('expands nodes to selectedNode on service', () => {
+        it('expands nodes to selectedNode', () => {
             fixture.detectChanges();
 
-            expect(stateSpy).toHaveBeenCalledWith({
-                asymmetricMatch(actual: DropdownTreeState) {
-                    return actual.expandedNodes.size === 2 &&
-                        actual.expandedNodes.has(nodes[0]) &&
-                        actual.expandedNodes.has(nodes[0].children[2]);
+            expect(component.expandedNodes).toEqual({
+                asymmetricMatch(actual: Set<TreeNode>) {
+                    return actual.size === 2 &&
+                        actual.has(nodes[0]) &&
+                        actual.has(nodes[0].children[2]);
                 }
             });
         });
 
-        it('expands no nodes on service when selectedNode is null', () => {
+        it('expands no nodes when selectedNode is null', () => {
             component.selectedNode = null;
 
             fixture.detectChanges();
 
-            expect(stateSpy).toHaveBeenCalledWith({
-                asymmetricMatch(actual: DropdownTreeState) {
-                    return actual.expandedNodes.size === 0;
-                }
-            });
+            expect(component.expandedNodes.size).toBe(0);
         });
 
         it('defaults isDropdownOpen to false', () => {
@@ -136,21 +127,21 @@ describe('DropdownTreeItemComponent', () => {
             expect(component.defaultNode.text).toBe('');
         });
 
-        it('sets selectedNode on service when selectedNode is null and defaultLabel is provided', () => {
+        it('sets effectiveSelectedNode to defaultNode when selectedNode is null and defaultLabel is provided', () => {
             component.selectedNode = null;
             component.defaultLabel = 'Select One';
 
             fixture.detectChanges();
 
-            expect(stateSpy).toHaveBeenCalledWith(jasmine.objectContaining({ selectedNode: component.defaultNode }));
+            expect(component.effectiveSelectedNode).toBe(component.defaultNode);
         });
 
-        it('sets selectedNode on service when selectedNode is null and defaultLabel is not provided', () => {
+        it('sets effectiveSelectedNode to defaultNode when selectedNode is null and defaultLabel is not provided', () => {
             component.selectedNode = null;
 
             fixture.detectChanges();
 
-            expect(stateSpy).toHaveBeenCalledWith(jasmine.objectContaining({ selectedNode: component.defaultNode }));
+            expect(component.effectiveSelectedNode).toBe(component.defaultNode);
         });
 
         it('sets selectedText to selectedNode text when showFullSelectedPath is false and selectedNode is not null', () => {
@@ -159,6 +150,15 @@ describe('DropdownTreeItemComponent', () => {
             fixture.detectChanges();
 
             expect(component.selectedText).toBe(selectedNode.text);
+        });
+
+        it('sets selectedText to selectedNode selectedText when showFullSelectedPath is false and selectedNode is not null and selectedText is populated', () => {
+            selectedNode.selectedText = 'Selected Text';
+            component.showFullSelectedPath = false;
+
+            fixture.detectChanges();
+
+            expect(component.selectedText).toBe(selectedNode.selectedText);
         });
 
         it('sets selectedText to defaultLabel when showFullSelectedPath is false and selectedNode is null', () => {
@@ -179,6 +179,28 @@ describe('DropdownTreeItemComponent', () => {
             expect(component.selectedText).toBe(`${nodes[0].text} / ${nodes[0].children[2].text} / ${selectedNode.text}`);
         });
 
+        /* tslint:disable */
+        it('sets selectedText to selectedNode selectedText preceded by parent nodes\' text when showFullSelectedPath is true and selectedNode is not null and selectedText is populated', () => {
+        /* tslint:enable */
+            selectedNode.selectedText = 'Selected Text';
+            component.showFullSelectedPath = true;
+
+            fixture.detectChanges();
+
+            expect(component.selectedText).toBe(`${nodes[0].text} / ${nodes[0].children[2].text} / ${selectedNode.selectedText}`);
+        });
+
+        /* tslint:disable */
+        it('sets selectedText to selectedNode text preceded by parent nodes\' selectedText when showFullSelectedPath is true and selectedNode is not null and parent selectedText is populated', () => {
+        /* tslint:enable */
+            nodes[0].selectedText = 'Selected Text';
+            component.showFullSelectedPath = true;
+
+            fixture.detectChanges();
+
+            expect(component.selectedText).toBe(`${nodes[0].selectedText} / ${nodes[0].children[2].text} / ${selectedNode.text}`);
+        });
+
         it('sets selectedText to defaultLabel when showFullSelectedPath is true and selectedNode is null', () => {
             component.selectedNode = null;
             component.defaultLabel = 'Select One';
@@ -191,32 +213,19 @@ describe('DropdownTreeItemComponent', () => {
     });
 
     describe('setting selectedNode', () => {
-        let stateSpy: jasmine.Spy;
-
-        beforeEach(() => {
-            stateSpy = jasmine.createSpy('state');
-            service.stateObservable.subscribe(stateSpy);
-        });
-
-        it('sets selectedNode on service', () => {
+        it('sets effectiveSelectedNode to selectedNode', () => {
             let selectedNode = nodes[0].children[2].children[1];
             component.selectedNode = selectedNode;
-            fixture.detectChanges();
-            stateSpy.calls.reset();
 
             component.selectedNode = nodes[1];
 
-            expect(stateSpy).toHaveBeenCalledWith(jasmine.objectContaining({ selectedNode: nodes[1] }));
+            expect(component.effectiveSelectedNode).toBe(nodes[1]);
         });
 
-        it('does not raise nodeSelected', () => {
+        it('does not emit nodeSelected event', () => {
             let selectedNode = nodes[0].children[2].children[1];
             component.selectedNode = selectedNode;
             fixture.detectChanges();
-            stateSpy.calls.reset();
-
-            let nodeSelected = jasmine.createSpy('nodeSelected');
-            component.nodeSelected.subscribe(nodeSelected);
 
             component.selectedNode = nodes[1];
 
@@ -237,43 +246,36 @@ describe('DropdownTreeItemComponent', () => {
             let selectedNode = nodes[0].children[2].children[1];
             component.selectedNode = selectedNode;
             fixture.detectChanges();
-            stateSpy.calls.reset();
 
             component.selectedNode = null;
 
             expect(component.defaultNode).not.toBe(null);
         });
 
-        it('sets selectedNode on service to defaultNode when new selectedNode is null', () => {
+        it('sets effectiveSelectedNode to defaultNode when new selectedNode is null', () => {
             let selectedNode = nodes[0].children[2].children[1];
             component.selectedNode = selectedNode;
             fixture.detectChanges();
-            stateSpy.calls.reset();
 
             component.selectedNode = null;
 
-            expect(stateSpy).toHaveBeenCalledWith(jasmine.objectContaining({ selectedNode: component.defaultNode }));
+            expect(component.effectiveSelectedNode).toBe(component.defaultNode);
         });
 
         it('sets selectedText to defaultNode text when new selectedNode is null', () => {
             let selectedNode = nodes[0].children[2].children[1];
             component.selectedNode = selectedNode;
             fixture.detectChanges();
-            stateSpy.calls.reset();
 
             component.selectedNode = null;
 
             expect(component.selectedText).toBe(component.defaultNode.text);
         });
 
-        it('does not raise nodeSelected when new selectedNode is null', () => {
+        it('does not emit nodeSelected event when new selectedNode is null', () => {
             let selectedNode = nodes[0].children[2].children[1];
             component.selectedNode = selectedNode;
             fixture.detectChanges();
-            stateSpy.calls.reset();
-
-            let nodeSelected = jasmine.createSpy('nodeSelected');
-            component.nodeSelected.subscribe(nodeSelected);
 
             component.selectedNode = null;
 
@@ -283,7 +285,6 @@ describe('DropdownTreeItemComponent', () => {
         it('to value sets defaultNode to not null when defaultLabel is null', () => {
             component.selectedNode = null;
             fixture.detectChanges();
-            stateSpy.calls.reset();
 
             component.selectedNode = nodes[0].children[2].children[1];
 
@@ -292,19 +293,11 @@ describe('DropdownTreeItemComponent', () => {
     });
 
     describe('setting defaultLabel', () => {
-        let stateSpy: jasmine.Spy;
-
-        beforeEach(() => {
-            stateSpy = jasmine.createSpy('state');
-            service.stateObservable.subscribe(stateSpy);
-        });
-
         it('to null sets defaultNode to null when previous defaultLabel is not null', () => {
             let selectedNode = nodes[0].children[2].children[1];
             component.selectedNode = selectedNode;
             component.defaultLabel = 'Select One';
             fixture.detectChanges();
-            stateSpy.calls.reset();
 
             component.defaultLabel = null;
 
@@ -315,7 +308,6 @@ describe('DropdownTreeItemComponent', () => {
             component.selectedNode = null;
             component.defaultLabel = 'Select One';
             fixture.detectChanges();
-            stateSpy.calls.reset();
 
             let previousValue = component.defaultNode;
 
@@ -328,29 +320,26 @@ describe('DropdownTreeItemComponent', () => {
             component.selectedNode = null;
             component.defaultLabel = 'Select One';
             fixture.detectChanges();
-            stateSpy.calls.reset();
 
             component.defaultLabel = null;
 
             expect(component.defaultNode.text).toBe('');
         });
 
-        it('to null sets selectedNode on service to new default value when previous defaultLabel is not null and selectedNode is null', () => {
+        it('to null sets effectiveSelectedNode to new defaultNode when previous defaultLabel is not null and selectedNode is null', () => {
             component.selectedNode = null;
             component.defaultLabel = 'Select One';
             fixture.detectChanges();
-            stateSpy.calls.reset();
 
             component.defaultLabel = null;
 
-            expect(stateSpy).toHaveBeenCalledWith(jasmine.objectContaining({ selectedNode: component.defaultNode }));
+            expect(component.effectiveSelectedNode).toBe(component.defaultNode);
         });
 
         it('to null sets selectedText to new defaultNode text when previous defaultLabel is not null and selectedNode is null', () => {
             component.selectedNode = null;
             component.defaultLabel = 'Select One';
             fixture.detectChanges();
-            stateSpy.calls.reset();
 
             component.defaultLabel = null;
 
@@ -361,10 +350,6 @@ describe('DropdownTreeItemComponent', () => {
             component.selectedNode = null;
             component.defaultLabel = 'Select One';
             fixture.detectChanges();
-            stateSpy.calls.reset();
-
-            let nodeSelected = jasmine.createSpy('nodeSelected');
-            component.nodeSelected.subscribe(nodeSelected);
 
             component.defaultLabel = null;
 
@@ -376,7 +361,6 @@ describe('DropdownTreeItemComponent', () => {
             component.selectedNode = selectedNode;
             component.defaultLabel = 'Select One';
             fixture.detectChanges();
-            stateSpy.calls.reset();
 
             let previousValue = component.defaultNode;
 
@@ -390,29 +374,26 @@ describe('DropdownTreeItemComponent', () => {
             component.selectedNode = selectedNode;
             component.defaultLabel = 'Select One';
             fixture.detectChanges();
-            stateSpy.calls.reset();
 
             component.defaultLabel = 'New Select One';
 
             expect(component.defaultNode.text).toBe('New Select One');
         });
 
-        it('sets selectedNode on service to new default value when previous defaultLabel is not null and selectedNode is null', () => {
+        it('sets effectiveSelectedNode to new defaultNode when previous defaultLabel is not null and selectedNode is null', () => {
             component.selectedNode = null;
             component.defaultLabel = 'Select One';
             fixture.detectChanges();
-            stateSpy.calls.reset();
 
             component.defaultLabel = 'New Select One';
 
-            expect(stateSpy).toHaveBeenCalledWith(jasmine.objectContaining({ selectedNode: component.defaultNode }));
+            expect(component.effectiveSelectedNode).toBe(component.defaultNode);
         });
 
         it('sets selectedText to new defaultNode text when previous defaultLabel is not null and selectedNode is null', () => {
             component.selectedNode = null;
             component.defaultLabel = 'Select One';
             fixture.detectChanges();
-            stateSpy.calls.reset();
 
             component.defaultLabel = 'New Select One';
 
@@ -423,10 +404,6 @@ describe('DropdownTreeItemComponent', () => {
             component.selectedNode = null;
             component.defaultLabel = 'Select One';
             fixture.detectChanges();
-            stateSpy.calls.reset();
-
-            let nodeSelected = jasmine.createSpy('nodeSelected');
-            component.nodeSelected.subscribe(nodeSelected);
 
             component.defaultLabel = 'New Select One';
 
@@ -438,7 +415,6 @@ describe('DropdownTreeItemComponent', () => {
             component.selectedNode = selectedNode;
             component.defaultLabel = null;
             fixture.detectChanges();
-            stateSpy.calls.reset();
 
             component.defaultLabel = 'Select One';
 
@@ -450,29 +426,26 @@ describe('DropdownTreeItemComponent', () => {
             component.selectedNode = selectedNode;
             component.defaultLabel = null;
             fixture.detectChanges();
-            stateSpy.calls.reset();
 
             component.defaultLabel = 'Select One';
 
             expect(component.defaultNode.text).toBe('Select One');
         });
 
-        it('sets selectedNode on service to new default value when previous defaultLabel is null and selectedNode is null', () => {
+        it('sets effectiveSelectedNode to new defaultNode when previous defaultLabel is null and selectedNode is null', () => {
             component.selectedNode = null;
             component.defaultLabel = null;
             fixture.detectChanges();
-            stateSpy.calls.reset();
 
             component.defaultLabel = 'Select One';
 
-            expect(stateSpy).toHaveBeenCalledWith(jasmine.objectContaining({ selectedNode: component.defaultNode }));
+            expect(component.effectiveSelectedNode).toBe(component.defaultNode);
         });
 
         it('sets selectedText to new defaultNode text when previous defaultLabel is null and selectedNode is null', () => {
             component.selectedNode = null;
             component.defaultLabel = null;
             fixture.detectChanges();
-            stateSpy.calls.reset();
 
             component.defaultLabel = 'Select One';
 
@@ -483,10 +456,6 @@ describe('DropdownTreeItemComponent', () => {
             component.selectedNode = null;
             component.defaultLabel = null;
             fixture.detectChanges();
-            stateSpy.calls.reset();
-
-            let nodeSelected = jasmine.createSpy('nodeSelected');
-            component.nodeSelected.subscribe(nodeSelected);
 
             component.defaultLabel = 'Select One';
 
@@ -494,30 +463,26 @@ describe('DropdownTreeItemComponent', () => {
         });
     });
 
-    describe('on state change on service', () => {
+    describe('onNodeSelected', () => {
         let selectedNode: TreeNode;
-        let nodeSelected: jasmine.Spy;
 
         beforeEach(() => {
             selectedNode = nodes[0].children[2].children[1];
             component.selectedNode = selectedNode;
-
-            nodeSelected = jasmine.createSpy('nodeSelected');
-            component.nodeSelected.subscribe(nodeSelected);
         });
 
-        it('does not raise nodeSelected when selectNode does not change', () => {
+        it('does not emit nodeSelected event when selectNode does not change', () => {
             fixture.detectChanges();
 
-            service.setState(nodes[0], selectedNode, new Set<TreeNode>());
+            component.onNodeSelected(selectedNode);
 
             expect(nodeSelected).not.toHaveBeenCalled();
         });
 
-        it('raises nodeSelected when selectedNode changes', () => {
+        it('emits nodeSelected event when selectedNode changes', () => {
             fixture.detectChanges();
 
-            service.setState(nodes[0], nodes[1], new Set<TreeNode>());
+            component.onNodeSelected(nodes[1]);
 
             expect(nodeSelected).toHaveBeenCalledWith(nodes[1]);
         });
@@ -525,26 +490,26 @@ describe('DropdownTreeItemComponent', () => {
         it('does not change component.selectedNode directly when selectedNode changes', () => {
             fixture.detectChanges();
 
-            service.setState(nodes[0], nodes[1], new Set<TreeNode>());
+            component.onNodeSelected(nodes[1]);
 
             expect(component.selectedNode).toEqual(selectedNode);
         });
 
-        it('does not raise nodeSelected when component.selectNode is null and service state.selectedNode is defaultNode', () => {
+        it('does not emit nodeSelected event when component.selectNode is null and service state.selectedNode is defaultNode', () => {
             component.selectedNode = null;
 
             fixture.detectChanges();
 
-            service.setState(nodes[0], component.defaultNode, new Set<TreeNode>());
+            component.onNodeSelected(component.defaultNode);
 
             expect(nodeSelected).not.toHaveBeenCalled();
         });
 
-        it('raises nodeSelected with null when selectedNode changes to defaultNode', () => {
+        it('emits nodeSelected event with null when selectedNode changes to defaultNode', () => {
             component.defaultLabel = 'Select One';
             fixture.detectChanges();
 
-            service.setState(nodes[0], component.defaultNode, new Set<TreeNode>());
+            component.onNodeSelected(component.defaultNode);
 
             expect(nodeSelected).toHaveBeenCalledWith(null);
         });
@@ -553,171 +518,155 @@ describe('DropdownTreeItemComponent', () => {
             fixture.detectChanges();
             let previousValue = component.selectedText;
 
-            service.setState(nodes[0], nodes[1], new Set<TreeNode>());
+            component.onNodeSelected(nodes[1]);
 
             expect(component.selectedText).toBe(previousValue);
         });
     });
 
-    describe('onComboboxFocus', () => {
+    describe('on combobox focus', () => {
         it('adds dt--selection-focus class to dropdown container', () => {
-            component.onComboboxFocus();
+            combobox.triggerEventHandler("focus", null);
             fixture.detectChanges();
 
             expect(dropdownContainer.classes['dt--selection-focus']).toBe(true);
         });
     });
 
-    describe('onComboboxBlur', () => {
+    describe('on combobox blur', () => {
         it('removes dt--selection-focus class to dropdown container', () => {
-            component.onComboboxFocus();
+            combobox.triggerEventHandler("focus", null);
             fixture.detectChanges();
 
-            component.onComboboxBlur();
+            combobox.triggerEventHandler("blur", null);
             fixture.detectChanges();
 
             expect(dropdownContainer.classes['dt--selection-focus']).toBeFalsy();
         });
     });
 
-    describe('onComboboxClick', () => {
+    describe('on combobox click', () => {
         beforeEach(() => {
             fixture.detectChanges();
         });
 
         describe('when closed', () => {
             it('sets isDropdownOpen to true', () => {
-                component.onComboboxClick();
+                combobox.triggerEventHandler("click", null);
 
                 expect(component.isDropdownOpen).toBe(true);
             });
 
             it('adds dt--selection-focus class to dropdown container', () => {
-                component.onComboboxClick();
+                combobox.triggerEventHandler("click", null);
                 fixture.detectChanges();
 
                 expect(dropdownContainer.classes['dt--selection-focus']).toBe(true);
             });
 
             it('adds dt--selection-open class to dropdown container', () => {
-                component.onComboboxClick();
+                combobox.triggerEventHandler("click", null);
                 fixture.detectChanges();
 
                 expect(dropdownContainer.classes['dt--selection-open']).toBe(true);
             });
 
             it('sets ariaOwnsId to id of the tree element', () => {
-                component.onComboboxClick();
+                combobox.triggerEventHandler("click", null);
 
                 expect(component.ariaOwnsId).toBe(component.treeId);
             });
 
             it('highlights selectedNode when visible', () => {
                 let selectedNode = nodes[0].children[2].children[1];
-                let expandedNodes = new Set<TreeNode>([
+                component.expandedNodes = new Set<TreeNode>([
                     nodes[0],
                     nodes[0].children[2],
                     nodes[0].children[2].children[1]]);
-                service.setState(null, selectedNode, expandedNodes);
                 component.selectedNode = selectedNode;
 
-                let stateSpy = jasmine.createSpy('state');
-                service.stateObservable.subscribe(stateSpy);
-                stateSpy.calls.reset();
+                combobox.triggerEventHandler("click", null);
 
-                component.onComboboxClick();
-
-                expect(stateSpy).toHaveBeenCalledWith(jasmine.objectContaining({ highlightedNode: selectedNode }));
+                expect(component.highlightedNode).toBe(selectedNode);
             });
 
             it('highlights first node when selectedNode is not visible and defaultNode does not exist', () => {
                 let selectedNode = nodes[0].children[2].children[1];
-                let expandedNodes = new Set<TreeNode>([nodes[0]]);
-                service.setState(null, selectedNode, expandedNodes);
+                component.expandedNodes = new Set<TreeNode>([nodes[0]]);
                 component.selectedNode = selectedNode;
                 component.defaultNode = null;
 
-                let stateSpy = jasmine.createSpy('state');
-                service.stateObservable.subscribe(stateSpy);
-                stateSpy.calls.reset();
+                combobox.triggerEventHandler("click", null);
 
-                component.onComboboxClick();
-
-                expect(stateSpy).toHaveBeenCalledWith(jasmine.objectContaining({ highlightedNode: nodes[0] }));
+                expect(component.highlightedNode).toBe(nodes[0]);
             });
 
             it('highlights defaultNode when selectedNode is not visible and defaultNode exists', () => {
                 let selectedNode = nodes[0].children[2].children[1];
-                let expandedNodes = new Set<TreeNode>([nodes[0]]);
-                service.setState(null, selectedNode, expandedNodes);
+                component.expandedNodes = new Set<TreeNode>([nodes[0]]);
                 component.selectedNode = selectedNode;
                 component.defaultNode = createNode();
 
-                let stateSpy = jasmine.createSpy('state');
-                service.stateObservable.subscribe(stateSpy);
-                stateSpy.calls.reset();
+                combobox.triggerEventHandler("click", null);
 
-                component.onComboboxClick();
-
-                expect(stateSpy).toHaveBeenCalledWith(jasmine.objectContaining({ highlightedNode: component.defaultNode }));
+                expect(component.highlightedNode).toBe(component.defaultNode);
             });
 
             it('sets ariaActiveDescendentId to highlightedNode element id', () => {
                 let selectedNode = nodes[0].children[2].children[1];
-                let expandedNodes = new Set<TreeNode>([
+                component.expandedNodes = new Set<TreeNode>([
                     nodes[0],
                     nodes[0].children[2],
                     nodes[0].children[2].children[1]]);
-                service.setState(null, selectedNode, expandedNodes);
                 component.selectedNode = selectedNode;
 
-                component.onComboboxClick();
+                combobox.triggerEventHandler("click", null);
 
-                expect(component.ariaActiveDescendentId).toBe(service.createTreeItemId(component.treeItemIdPrefix, selectedNode));
+                expect(component.ariaActiveDescendentId).toBe(component.treeItemIdPrefix + selectedNode.id.toString());
             });
         });
 
         describe('when open', () => {
             beforeEach(() => {
-                component.onComboboxClick();
+                combobox.triggerEventHandler("click", null);
                 fixture.detectChanges();
             });
 
             it('sets isDropdownOpen to false', () => {
-                component.onComboboxClick();
+                combobox.triggerEventHandler("click", null);
 
                 expect(component.isDropdownOpen).toBe(false);
             });
 
             it('adds dt--selection-focus class to dropdown container', () => {
-                component.onComboboxClick();
+                combobox.triggerEventHandler("click", null);
                 fixture.detectChanges();
 
                 expect(dropdownContainer.classes['dt--selection-focus']).toBe(true);
             });
 
             it('removes dt--selection-open class to dropdown container', () => {
-                component.onComboboxClick();
+                combobox.triggerEventHandler("click", null);
                 fixture.detectChanges();
 
                 expect(dropdownContainer.classes['dt--selection-open']).toBeFalsy();
             });
 
             it('sets ariaOwnsId to undefined', () => {
-                component.onComboboxClick();
+                combobox.triggerEventHandler("click", null);
 
                 expect(component.ariaOwnsId).toBeUndefined();
             });
 
             it('sets ariaActiveDescendentId to undefined', () => {
-                component.onComboboxClick();
+                combobox.triggerEventHandler("click", null);
 
                 expect(component.ariaActiveDescendentId).toBeUndefined();
             });
         });
     });
 
-    describe('onComboboxKeydown', () => {
+    describe('on combobox keydown', () => {
         beforeEach(() => {
             component.defaultLabel = 'Select One';
 
@@ -731,7 +680,7 @@ describe('DropdownTreeItemComponent', () => {
                     key: 'ArrowDown'
                 });
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
                 expect(component.isDropdownOpen).toBe(true);
             });
@@ -739,7 +688,7 @@ describe('DropdownTreeItemComponent', () => {
 
         describe('when open', () => {
             beforeEach(() => {
-                component.onComboboxClick();
+                combobox.triggerEventHandler("click", null);
             });
 
             it('Alt+ArrowUp closes the dropdown', () => {
@@ -748,7 +697,7 @@ describe('DropdownTreeItemComponent', () => {
                     key: 'ArrowUp'
                 });
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
                 expect(component.isDropdownOpen).toBe(false);
             });
@@ -758,7 +707,7 @@ describe('DropdownTreeItemComponent', () => {
                     key: 'Escape'
                 });
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
                 expect(component.isDropdownOpen).toBe(false);
             });
@@ -767,44 +716,48 @@ describe('DropdownTreeItemComponent', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'ArrowUp'
                 });
-                service.setState(nodes[1], nodes[2], new Set<TreeNode>([]));
+                component.highlightedNode = nodes[1];
+                component.selectedNode = nodes[2];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().highlightedNode).toBe(nodes[0]);
+                expect(component.highlightedNode).toBe(nodes[0]);
             });
 
             it('ArrowUp selects previous visible node of current highlighted node', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'ArrowUp'
                 });
-                service.setState(nodes[1], nodes[2], new Set<TreeNode>([]));
+                component.highlightedNode = nodes[1];
+                component.selectedNode = nodes[2];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().selectedNode).toBe(nodes[0]);
+                expect(nodeSelected).toHaveBeenCalledWith(nodes[0]);
             });
 
             it('ArrowUp does not change highlighted node when current highlighted node is first visible node', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'ArrowUp'
                 });
-                service.setState(component.defaultNode, nodes[2], new Set<TreeNode>([]));
+                component.highlightedNode = component.defaultNode;
+                component.selectedNode = nodes[2];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().highlightedNode).toBe(component.defaultNode);
+                expect(component.highlightedNode).toBe(component.defaultNode);
             });
 
             it('ArrowUp does not change selected node when current highlighted node is first visible node', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'ArrowUp'
                 });
-                service.setState(component.defaultNode, nodes[2], new Set<TreeNode>([]));
+                component.highlightedNode = component.defaultNode;
+                component.selectedNode = nodes[2];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().selectedNode).toBe(nodes[2]);
+                expect(nodeSelected).not.toHaveBeenCalled();
             });
 
             it('Ctrl+ArrowUp highlights previous visible node of current highlighted node', () => {
@@ -812,11 +765,12 @@ describe('DropdownTreeItemComponent', () => {
                     key: 'ArrowUp',
                     ctrlKey: true
                 });
-                service.setState(nodes[1], nodes[2], new Set<TreeNode>([]));
+                component.highlightedNode = nodes[1];
+                component.selectedNode = nodes[2];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().highlightedNode).toBe(nodes[0]);
+                expect(component.highlightedNode).toBe(nodes[0]);
             });
 
             it('Ctrl+ArrowUp does not change selected node', () => {
@@ -824,11 +778,12 @@ describe('DropdownTreeItemComponent', () => {
                     key: 'ArrowUp',
                     ctrlKey: true
                 });
-                service.setState(nodes[1], nodes[2], new Set<TreeNode>([]));
+                component.highlightedNode = nodes[1];
+                component.selectedNode = nodes[2];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().selectedNode).toBe(nodes[2]);
+                expect(nodeSelected).not.toHaveBeenCalled();
             });
 
             it('Ctrl+ArrowUp does not change highlighted node when current highlighted node is first visible node', () => {
@@ -836,11 +791,12 @@ describe('DropdownTreeItemComponent', () => {
                     key: 'ArrowUp',
                     ctrlKey: true
                 });
-                service.setState(component.defaultNode, nodes[2], new Set<TreeNode>([]));
+                component.highlightedNode = component.defaultNode;
+                component.selectedNode = nodes[2];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().highlightedNode).toBe(component.defaultNode);
+                expect(component.highlightedNode).toBe(component.defaultNode);
             });
 
             it('Ctrl+ArrowUp does not change selected node when current highlighted node is first visible node', () => {
@@ -848,55 +804,60 @@ describe('DropdownTreeItemComponent', () => {
                     key: 'ArrowUp',
                     ctrlKey: true
                 });
-                service.setState(component.defaultNode, nodes[2], new Set<TreeNode>([]));
+                component.highlightedNode = component.defaultNode;
+                component.selectedNode = nodes[2];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().selectedNode).toBe(nodes[2]);
+                expect(nodeSelected).not.toHaveBeenCalled();
             });
 
             it('ArrowDown highlights next visible node of current highlighted node', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'ArrowDown'
                 });
-                service.setState(nodes[1], nodes[0], new Set<TreeNode>([]));
+                component.highlightedNode = nodes[1];
+                component.selectedNode = nodes[0];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().highlightedNode).toBe(nodes[2]);
+                expect(component.highlightedNode).toBe(nodes[2]);
             });
 
             it('ArrowDown selects next visible node of current highlighted node', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'ArrowDown'
                 });
-                service.setState(nodes[1], nodes[0], new Set<TreeNode>([]));
+                component.highlightedNode = nodes[1];
+                component.selectedNode = nodes[0];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().selectedNode).toBe(nodes[2]);
+                expect(nodeSelected).toHaveBeenCalledWith(nodes[2]);
             });
 
             it('ArrowDown does not change highlighted node when current highlighted node is last visible node', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'ArrowDown'
                 });
-                service.setState(nodes[2], nodes[0], new Set<TreeNode>([]));
+                component.highlightedNode = nodes[2];
+                component.selectedNode = nodes[0];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().highlightedNode).toBe(nodes[2]);
+                expect(component.highlightedNode).toBe(nodes[2]);
             });
 
             it('ArrowDown does not change selected node when current highlighted node is last visible node', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'ArrowDown'
                 });
-                service.setState(nodes[2], nodes[0], new Set<TreeNode>([]));
+                component.highlightedNode = nodes[2];
+                component.selectedNode = nodes[0];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().selectedNode).toBe(nodes[0]);
+                expect(nodeSelected).not.toHaveBeenCalled();
             });
 
             it('Ctrl+ArrowDown highlights next visible node of current highlighted node', () => {
@@ -904,11 +865,12 @@ describe('DropdownTreeItemComponent', () => {
                     key: 'ArrowDown',
                     ctrlKey: true
                 });
-                service.setState(nodes[1], nodes[0], new Set<TreeNode>([]));
+                component.highlightedNode = nodes[1];
+                component.selectedNode = nodes[0];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().highlightedNode).toBe(nodes[2]);
+                expect(component.highlightedNode).toBe(nodes[2]);
             });
 
             it('Ctrl+ArrowDown does not change selected node', () => {
@@ -916,11 +878,12 @@ describe('DropdownTreeItemComponent', () => {
                     key: 'ArrowDown',
                     ctrlKey: true
                 });
-                service.setState(nodes[1], nodes[0], new Set<TreeNode>([]));
+                component.highlightedNode = nodes[1];
+                component.selectedNode = nodes[0];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().selectedNode).toBe(nodes[0]);
+                expect(nodeSelected).not.toHaveBeenCalled();
             });
 
             it('Ctrl+ArrowDown does not change highlighted node when current highlighted node is last visible node', () => {
@@ -928,11 +891,12 @@ describe('DropdownTreeItemComponent', () => {
                     key: 'ArrowDown',
                     ctrlKey: true
                 });
-                service.setState(nodes[2], nodes[0], new Set<TreeNode>([]));
+                component.highlightedNode = nodes[2];
+                component.selectedNode = nodes[0];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().highlightedNode).toBe(nodes[2]);
+                expect(component.highlightedNode).toBe(nodes[2]);
             });
 
             it('Ctrl+ArrowDown does not change selected node when current highlighted node is last visible node', () => {
@@ -940,196 +904,222 @@ describe('DropdownTreeItemComponent', () => {
                     key: 'ArrowDown',
                     ctrlKey: true
                 });
-                service.setState(nodes[2], nodes[0], new Set<TreeNode>([]));
+                component.highlightedNode = nodes[2];
+                component.selectedNode = nodes[0];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().selectedNode).toBe(nodes[0]);
+                expect(nodeSelected).not.toHaveBeenCalled();
             });
 
             it('ArrowLeft does not change highlighted node when current highlighted node is expanded', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'ArrowLeft'
                 });
-                service.setState(nodes[0].children[1], nodes[2], new Set<TreeNode>([
+                component.expandedNodes = new Set<TreeNode>([
                     nodes[0],
                     nodes[0].children[1]
-                ]));
+                ]);
+                component.highlightedNode = nodes[0].children[1];
+                component.selectedNode = nodes[2];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().highlightedNode).toBe(nodes[0].children[1]);
+                expect(component.highlightedNode).toBe(nodes[0].children[1]);
             });
 
             it('ArrowLeft does not change selected node when current highlighted node is expanded', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'ArrowLeft'
                 });
-                service.setState(nodes[0].children[1], nodes[2], new Set<TreeNode>([
+                component.expandedNodes = new Set<TreeNode>([
                     nodes[0],
                     nodes[0].children[1]
-                ]));
+                ]);
+                component.highlightedNode = nodes[0].children[1];
+                component.selectedNode = nodes[2];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().selectedNode).toBe(nodes[2]);
+                expect(nodeSelected).not.toHaveBeenCalled();
             });
 
             it('ArrowLeft collapses current highlighted node when current highlighted node is expanded', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'ArrowLeft'
                 });
-                service.setState(nodes[0].children[1], nodes[2], new Set<TreeNode>([
+                component.expandedNodes = new Set<TreeNode>([
                     nodes[0],
                     nodes[0].children[1]
-                ]));
+                ]);
+                component.highlightedNode = nodes[0].children[1];
+                component.selectedNode = nodes[2];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().expandedNodes.has(nodes[0].children[1])).toBe(false);
+                expect(component.expandedNodes.has(nodes[0].children[1])).toBe(false);
             });
 
             it('ArrowLeft changes highlighted node to parent of current highlighted node when current highlighted node is collapsed', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'ArrowLeft'
                 });
-                service.setState(nodes[0].children[1], nodes[2], new Set<TreeNode>([nodes[0]]));
+                component.expandedNodes = new Set<TreeNode>([nodes[0]]);
+                component.highlightedNode = nodes[0].children[1];
+                component.selectedNode = nodes[2];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().highlightedNode).toBe(nodes[0]);
+                expect(component.highlightedNode).toBe(nodes[0]);
             });
 
             it('ArrowLeft changes selected node to parent of current highlighted node when current highlighted node is collapsed', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'ArrowLeft'
                 });
-                service.setState(nodes[0].children[1], nodes[2], new Set<TreeNode>([nodes[0]]));
+                component.expandedNodes = new Set<TreeNode>([nodes[0]]);
+                component.highlightedNode = nodes[0].children[1];
+                component.selectedNode = nodes[2];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().selectedNode).toBe(nodes[0]);
+                expect(nodeSelected).toHaveBeenCalledWith(nodes[0]);
             });
 
             it('ArrowLeft does not change highlighted node when current highlighted node is collapsed and has no parent', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'ArrowLeft'
                 });
-                service.setState(nodes[0], nodes[2], new Set<TreeNode>([]));
+                component.highlightedNode = nodes[0];
+                component.selectedNode = nodes[2];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().highlightedNode).toBe(nodes[0]);
+                expect(component.highlightedNode).toBe(nodes[0]);
             });
 
             it('ArrowLeft does not change selected node when current highlighted node is collapsed and has no parent', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'ArrowLeft'
                 });
-                service.setState(nodes[0], nodes[2], new Set<TreeNode>([]));
+                component.highlightedNode = nodes[0];
+                component.selectedNode = nodes[2];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().selectedNode).toBe(nodes[2]);
+                expect(nodeSelected).not.toHaveBeenCalled();
             });
 
             it('ArrowRight does not change highlighted node when current highlighted node is collapsed', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'ArrowRight'
                 });
-                service.setState(nodes[0], nodes[2], new Set<TreeNode>([]));
+                component.highlightedNode = nodes[0];
+                component.selectedNode = nodes[2];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().highlightedNode).toBe(nodes[0]);
+                expect(component.highlightedNode).toBe(nodes[0]);
             });
 
             it('ArrowRight does not change selected node when current highlighted node is collapsed', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'ArrowRight'
                 });
-                service.setState(nodes[0], nodes[2], new Set<TreeNode>([]));
+                component.highlightedNode = nodes[0];
+                component.selectedNode = nodes[2];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().selectedNode).toBe(nodes[2]);
+                expect(nodeSelected).not.toHaveBeenCalled();
             });
 
             it('ArrowRight expands current highlighted node when current highlighted node is collapsed', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'ArrowRight'
                 });
-                service.setState(nodes[0], nodes[2], new Set<TreeNode>([]));
+                component.highlightedNode = nodes[0];
+                component.selectedNode = nodes[2];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().expandedNodes.has(nodes[0])).toBe(true);
+                expect(component.expandedNodes.has(nodes[0])).toBe(true);
             });
 
             it('ArrowRight changes highlighted node to first child of the current highlighted node when current highlighted node is expanded', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'ArrowRight'
                 });
-                service.setState(nodes[0], nodes[2], new Set<TreeNode>([nodes[0]]));
+                component.expandedNodes = new Set<TreeNode>([nodes[0]]);
+                component.highlightedNode = nodes[0];
+                component.selectedNode = nodes[2];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().highlightedNode).toBe(nodes[0].children[0]);
+                expect(component.highlightedNode).toBe(nodes[0].children[0]);
             });
 
             it('ArrowRight changes selected node to first child of the current highlighted node when current highlighted node is expanded', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'ArrowRight'
                 });
-                service.setState(nodes[0], nodes[2], new Set<TreeNode>([nodes[0]]));
+                component.expandedNodes = new Set<TreeNode>([nodes[0]]);
+                component.highlightedNode = nodes[0];
+                component.selectedNode = nodes[2];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().selectedNode).toBe(nodes[0].children[0]);
+                expect(nodeSelected).toHaveBeenCalledWith(nodes[0].children[0]);
             });
 
             it('ArrowRight does not change highlighted node when current highlighted node has no children', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'ArrowRight'
                 });
-                service.setState(nodes[0], nodes[2], new Set<TreeNode>([]));
+                component.highlightedNode = nodes[0];
+                component.selectedNode = nodes[2];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().highlightedNode).toBe(nodes[0]);
+                expect(component.highlightedNode).toBe(nodes[0]);
             });
 
             it('ArrowRight does not change selected node when current highlighted node has no children', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'ArrowRight'
                 });
-                service.setState(nodes[0], nodes[2], new Set<TreeNode>([]));
+                component.highlightedNode = nodes[0];
+                component.selectedNode = nodes[2];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().selectedNode).toBe(nodes[2]);
+                expect(nodeSelected).not.toHaveBeenCalled();
             });
 
             it('Home changes highlighted node to first visible node', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'Home'
                 });
-                service.setState(nodes[0].children[1], nodes[2], new Set<TreeNode>([nodes[0]]));
+                component.expandedNodes = new Set<TreeNode>([nodes[0]]);
+                component.highlightedNode = nodes[0].children[1];
+                component.selectedNode = nodes[2];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().highlightedNode).toBe(component.defaultNode);
+                expect(component.highlightedNode).toBe(component.defaultNode);
             });
 
             it('Home changes selected node to first visible node', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'Home'
                 });
-                service.setState(nodes[0].children[1], nodes[2], new Set<TreeNode>([nodes[0]]));
+                component.expandedNodes = new Set<TreeNode>([nodes[0]]);
+                component.highlightedNode = nodes[0].children[1];
+                component.selectedNode = nodes[2];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().selectedNode).toBe(component.defaultNode);
+                expect(nodeSelected).toHaveBeenCalledWith(null);
             });
 
             it('Ctrl+Home changes highlighted node to first visible node', () => {
@@ -1137,11 +1127,13 @@ describe('DropdownTreeItemComponent', () => {
                     key: 'Home',
                     ctrlKey: true
                 });
-                service.setState(nodes[0].children[1], nodes[2], new Set<TreeNode>([nodes[0]]));
+                component.expandedNodes = new Set<TreeNode>([nodes[0]]);
+                component.highlightedNode = nodes[0].children[1];
+                component.selectedNode = nodes[2];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().highlightedNode).toBe(component.defaultNode);
+                expect(component.highlightedNode).toBe(component.defaultNode);
             });
 
             it('Ctrl+Home does not change selected node', () => {
@@ -1149,33 +1141,39 @@ describe('DropdownTreeItemComponent', () => {
                     key: 'Home',
                     ctrlKey: true
                 });
-                service.setState(nodes[0].children[1], nodes[2], new Set<TreeNode>([nodes[0]]));
+                component.expandedNodes = new Set<TreeNode>([nodes[0]]);
+                component.highlightedNode = nodes[0].children[1];
+                component.selectedNode = nodes[2];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().selectedNode).toBe(nodes[2]);
+                expect(nodeSelected).not.toHaveBeenCalled();
             });
 
             it('End changes highlighted node to last visible node', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'End'
                 });
-                service.setState(nodes[0].children[1], nodes[0], new Set<TreeNode>([nodes[0]]));
+                component.expandedNodes = new Set<TreeNode>([nodes[0]]);
+                component.highlightedNode = nodes[0].children[1];
+                component.selectedNode = nodes[0];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().highlightedNode).toBe(nodes[2]);
+                expect(component.highlightedNode).toBe(nodes[2]);
             });
 
             it('End changes selected node to last visible node', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'End'
                 });
-                service.setState(nodes[0].children[1], nodes[0], new Set<TreeNode>([nodes[0]]));
+                component.expandedNodes = new Set<TreeNode>([nodes[0]]);
+                component.highlightedNode = nodes[0].children[1];
+                component.selectedNode = nodes[0];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().selectedNode).toBe(nodes[2]);
+                expect(nodeSelected).toHaveBeenCalledWith(nodes[2]);
             });
 
             it('Ctrl+End changes highlighted node to last visible node', () => {
@@ -1183,11 +1181,13 @@ describe('DropdownTreeItemComponent', () => {
                     key: 'End',
                     ctrlKey: true
                 });
-                service.setState(nodes[0].children[1], nodes[0], new Set<TreeNode>([nodes[0]]));
+                component.expandedNodes = new Set<TreeNode>([nodes[0]]);
+                component.highlightedNode = nodes[0].children[1];
+                component.selectedNode = nodes[0];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().highlightedNode).toBe(nodes[2]);
+                expect(component.highlightedNode).toBe(nodes[2]);
             });
 
             it('Ctrl+End does not change selected node', () => {
@@ -1195,22 +1195,26 @@ describe('DropdownTreeItemComponent', () => {
                     key: 'End',
                     ctrlKey: true
                 });
-                service.setState(nodes[0].children[1], nodes[0], new Set<TreeNode>([nodes[0]]));
+                component.expandedNodes = new Set<TreeNode>([nodes[0]]);
+                component.highlightedNode = nodes[0].children[1];
+                component.selectedNode = nodes[0];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().selectedNode).toBe(nodes[0]);
+                expect(nodeSelected).not.toHaveBeenCalled();
             });
 
             it('Space changes selected node to current highlighted node', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: ' '
                 });
-                service.setState(nodes[0].children[1], nodes[2], new Set<TreeNode>([nodes[0]]));
+                component.expandedNodes = new Set<TreeNode>([nodes[0]]);
+                component.highlightedNode = nodes[0].children[1];
+                component.selectedNode = nodes[2];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().selectedNode).toBe(nodes[0].children[1]);
+                expect(nodeSelected).toHaveBeenCalledWith(nodes[0].children[1]);
             });
 
             it('Ctrl+Space changes selected node to current highlighted node', () => {
@@ -1218,11 +1222,13 @@ describe('DropdownTreeItemComponent', () => {
                     key: ' ',
                     ctrlKey: true
                 });
-                service.setState(nodes[0].children[1], nodes[2], new Set<TreeNode>([nodes[0]]));
+                component.expandedNodes = new Set<TreeNode>([nodes[0]]);
+                component.highlightedNode = nodes[0].children[1];
+                component.selectedNode = nodes[2];
 
-                component.onComboboxKeydown($event);
+                combobox.triggerEventHandler("keydown", $event);
 
-                expect(service.currentState().selectedNode).toBe(nodes[0].children[1]);
+                expect(nodeSelected).toHaveBeenCalledWith(nodes[0].children[1]);
             });
         });
     });
