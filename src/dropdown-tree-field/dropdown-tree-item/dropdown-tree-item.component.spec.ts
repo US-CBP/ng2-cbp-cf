@@ -11,16 +11,14 @@ import { FormsModule }                  from '@angular/forms';
 import { By }                           from '@angular/platform-browser';
 
 import { DropdownTreeItemComponent }    from './dropdown-tree-item.component';
-import { DropdownTreeService }          from '../dropdown-tree.service';
 import { TreeNode }                     from '../tree-node.model';
+import { DropdownTreeService }          from '../dropdown-tree.service';
 
 let currentId = 1;
 
 describe('DropdownTreeItemComponent', () => {
     let fixture: ComponentFixture<DropdownTreeItemComponent>;
     let component: DropdownTreeItemComponent;
-    let service: DropdownTreeService;
-    let expandedNodes: Set<TreeNode>;
     let li: DebugElement;
 
     beforeEach(() => {
@@ -31,298 +29,369 @@ describe('DropdownTreeItemComponent', () => {
             providers: [DropdownTreeService]
         });
         fixture = TestBed.createComponent(DropdownTreeItemComponent);
-        service = fixture.debugElement.injector.get(DropdownTreeService);
-
-        spyOn(service, 'highlightNode');
-        spyOn(service, 'selectNode');
-        spyOn(service, 'toggleNodeExpansion');
 
         component = fixture.componentInstance;
-        expandedNodes = new Set<TreeNode>();
 
         li = fixture.debugElement.query(By.css('li'));
     });
 
-    describe('for node without children', () => {
-        beforeEach(() => {
-            component.node = createNode();
+    describe('setting node', () => {
+        let node: TreeNode;
 
-            fixture.detectChanges();
+        beforeEach(() => {
+            node = createNode();
         });
 
-        it('on service state changes hasChildren is false', () => {
-            service.setState(createNode(), createNode(), expandedNodes);
+        it('sets hasChildren to false when node has no children', () => {
+            component.node = node;
 
             expect(component.hasChildren).toBe(false);
         });
 
-        it('on service state changes the li has tree--no-children class', () => {
-            service.setState(createNode(), createNode(), expandedNodes);
-            fixture.detectChanges();
+        it('adds tree--no-children class to li when node has no children', () => {
+            component.node = node;
 
+            fixture.detectChanges();
             expect(li.classes['tree--no-children']).toBe(true);
         });
 
-        it('on service state changes the li does not have tree--has-children class', () => {
-            service.setState(createNode(), createNode(), expandedNodes);
-            fixture.detectChanges();
+        it('does not add tree--has-children class to li when node has no children', () => {
+            component.node = node;
 
+            fixture.detectChanges();
             expect(li.classes['tree--has-children']).toBeFalsy();
         });
 
-        it('on service state changes isExpanded is undefined', () => {
-            service.setState(createNode(), createNode(), expandedNodes);
+        it('sets hasChildren to true when node has children', () => {
+            node.children.push(createNode());
 
-            expect(component.isExpanded).toBeUndefined();
-        });
-
-        it('on service state changes the li does not have tree--expanded class', () => {
-            service.setState(createNode(), createNode(), expandedNodes);
-            fixture.detectChanges();
-
-            expect(li.classes['tree--expanded']).toBeFalsy();
-        });
-
-        it('on service state changes the li does not have tree--collapsed class', () => {
-            service.setState(createNode(), createNode(), expandedNodes);
-            fixture.detectChanges();
-
-            expect(li.classes['tree--collapsed']).toBeFalsy();
-        });
-
-        it('on service state changes showChildren is false', () => {
-            service.setState(createNode(), createNode(), expandedNodes);
-
-            expect(component.showChildren).toBe(false);
-        });
-
-        it('on service state changes isHighlighted is true when highlightedNode is node', () => {
-            service.setState(component.node, createNode(), expandedNodes);
-
-            expect(component.isHighlighted).toBe(true);
-        });
-
-        it('on service state changes the li has tree--highlighted class when highlightedNode is node', () => {
-            service.setState(component.node, createNode(), expandedNodes);
-            fixture.detectChanges();
-
-            expect(li.classes['tree--highlighted']).toBe(true);
-        });
-
-        it('on service state changes isHighlighted is false when highlightedNode is different node', () => {
-            service.setState(createNode(), createNode(), expandedNodes);
-
-            expect(component.isHighlighted).toBe(false);
-        });
-
-        it('on service state changes the li does not have tree--highlighted class when highlightedNode is different node', () => {
-            service.setState(createNode(), createNode(), expandedNodes);
-            fixture.detectChanges();
-
-            expect(li.classes['tree--highlighted']).toBeFalsy();
-        });
-
-        it('on service state changes isSelected is true when selectedNode is node', () => {
-            service.setState(createNode(), component.node, expandedNodes);
-
-            expect(component.isSelected).toBe(true);
-        });
-
-        it('on service state changes the li has tree--selected class when selectedNode is node', () => {
-            service.setState(createNode(), component.node, expandedNodes);
-            fixture.detectChanges();
-
-            expect(li.classes['tree--selected']).toBe(true);
-        });
-
-        it('on service state changes isSelected is false when selectedNode is different node', () => {
-            service.setState(createNode(), createNode(), expandedNodes);
-
-            expect(component.isSelected).toBe(false);
-        });
-
-        it('on service state changes the li does not have tree--selected class when selectedNode is different node', () => {
-            service.setState(createNode(), createNode(), expandedNodes);
-            fixture.detectChanges();
-
-            expect(li.classes['tree--selected']).toBeFalsy();
-        });
-
-        it('onNodeMouseEnter should call highlightNode on service', () => {
-            component.onNodeMouseEnter();
-
-            expect(service.highlightNode).toHaveBeenCalledWith(component.node);
-        });
-
-        it('onNodeClick should call selectNode on service', () => {
-            component.onNodeClick();
-
-            expect(service.selectNode).toHaveBeenCalledWith(component.node);
-        });
-
-        it('onExpanderClick should call toggleNodeExpansion on service', () => {
-            component.onExpanderClick();
-
-            expect(service.toggleNodeExpansion).toHaveBeenCalledWith(component.node);
-        });
-    });
-
-    describe('for node with children', () => {
-        beforeEach(() => {
-            component.node = createNode();
-            component.node.children.push(createNode());
-
-            fixture.detectChanges();
-        });
-
-        it('on service state changes hasChildren is true', () => {
-            service.setState(createNode(), createNode(), expandedNodes);
+            component.node = node;
 
             expect(component.hasChildren).toBe(true);
         });
 
-        it('on service state changes the li does not have tree--no-children class', () => {
-            service.setState(createNode(), createNode(), expandedNodes);
-            fixture.detectChanges();
+        it('does not add tree--no-children class to li when node has children', () => {
+            node.children.push(createNode());
 
+            component.node = node;
+
+            fixture.detectChanges();
             expect(li.classes['tree--no-children']).toBeFalsy();
         });
 
-        it('on service state changes the li has tree--has-children class', () => {
-            service.setState(createNode(), createNode(), expandedNodes);
-            fixture.detectChanges();
+        it('adds tree--has-children class to li when node has children', () => {
+            node.children.push(createNode());
 
+            component.node = node;
+
+            fixture.detectChanges();
             expect(li.classes['tree--has-children']).toBe(true);
         });
+    });
 
-        it('on service state changes isExpanded is false when node is not in expandedNodes', () => {
-            service.setState(createNode(), createNode(), expandedNodes);
+    describe('setting expandedNodes', () => {
+        let node: TreeNode;
 
-            expect(component.isExpanded).toBe(false);
+        beforeEach(() => {
+            node = createNode();
         });
 
-        it('on service state changes the li does not have tree--expanded class when node is not in expandedNodes', () => {
-            service.setState(createNode(), createNode(), expandedNodes);
-            fixture.detectChanges();
+        it('sets isExpanded to undefined when node has no children', () => {
+            component.node = node;
 
+            component.expandedNodes = new Set<TreeNode>();
+
+            expect(component.isExpanded).toBeUndefined();
+        });
+
+        it('does not add tree--expanded class to li when node has no children', () => {
+            component.node = node;
+
+            component.expandedNodes = new Set<TreeNode>();
+
+            fixture.detectChanges();
             expect(li.classes['tree--expanded']).toBeFalsy();
         });
 
-        it('on service state changes the li has tree--collapsed class when node is not in expandedNodes', () => {
-            service.setState(createNode(), createNode(), expandedNodes);
-            fixture.detectChanges();
+        it('does not add tree--collapsed class to li when node has no children', () => {
+            component.node = node;
 
-            expect(li.classes['tree--collapsed']).toBe(true);
+            component.expandedNodes = new Set<TreeNode>();
+
+            fixture.detectChanges();
+            expect(li.classes['tree--collapsed']).toBeFalsy();
         });
 
-        it('on service state changes showChildren is false when node is not in expandedNodes', () => {
-            service.setState(createNode(), createNode(), expandedNodes);
+        it('sets showChildren to false when node has no children', () => {
+            component.node = node;
+
+            component.expandedNodes = new Set<TreeNode>();
 
             expect(component.showChildren).toBe(false);
         });
 
-        it('on service state changes isExpanded is true when node is in expandedNodes', () => {
-            expandedNodes.add(component.node);
+        it('sets isExpanded to false when node is not in expandedNodes', () => {
+            node.children.push(createNode());
+            component.node = node;
 
-            service.setState(createNode(), createNode(), expandedNodes);
+            component.expandedNodes = new Set<TreeNode>();
+
+            expect(component.isExpanded).toBe(false);
+        });
+
+        it('does not add tree--expanded class to li when node is not in expandedNodes', () => {
+            node.children.push(createNode());
+            component.node = node;
+
+            component.expandedNodes = new Set<TreeNode>();
+
+            fixture.detectChanges();
+            expect(li.classes['tree--expanded']).toBeFalsy();
+        });
+
+        it('adds tree--collapsed class to li when node is not in expandedNodes', () => {
+            node.children.push(createNode());
+            component.node = node;
+
+            component.expandedNodes = new Set<TreeNode>();
+
+            fixture.detectChanges();
+            expect(li.classes['tree--collapsed']).toBe(true);
+        });
+
+        it('sets showChildren to false when node is not in expandedNodes', () => {
+            node.children.push(createNode());
+            component.node = node;
+
+            component.expandedNodes = new Set<TreeNode>();
+
+            expect(component.showChildren).toBe(false);
+        });
+
+        it('sets isExpanded to true when node is in expandedNodes', () => {
+            node.children.push(createNode());
+            component.node = node;
+
+            component.expandedNodes = new Set<TreeNode>([node]);
 
             expect(component.isExpanded).toBe(true);
         });
 
-        it('on service state changes the li has tree--expanded class when node is in expandedNodes', () => {
-            expandedNodes.add(component.node);
+        it('adds tree--expanded class to li when node is in expandedNodes', () => {
+            node.children.push(createNode());
+            component.node = node;
 
-            service.setState(createNode(), createNode(), expandedNodes);
+            component.expandedNodes = new Set<TreeNode>([node]);
+
             fixture.detectChanges();
-
             expect(li.classes['tree--expanded']).toBe(true);
         });
 
-        it('on service state changes the li does not have tree--collapsed class when node is in expandedNodes', () => {
-            expandedNodes.add(component.node);
+        it('does not add tree--collapsed class to li when node is in expandedNodes', () => {
+            node.children.push(createNode());
+            component.node = node;
 
-            service.setState(createNode(), createNode(), expandedNodes);
+            component.expandedNodes = new Set<TreeNode>([node]);
+
             fixture.detectChanges();
-
             expect(li.classes['tree--collapsed']).toBeFalsy();
         });
 
-        it('on service state changes showChildren is true when node is in expandedNodes', () => {
-            expandedNodes.add(component.node);
+        it('sets showChildren to true when node is in expandedNodes', () => {
+            node.children.push(createNode());
+            component.node = node;
 
-            service.setState(createNode(), createNode(), expandedNodes);
+            component.expandedNodes = new Set<TreeNode>([node]);
 
             expect(component.showChildren).toBe(true);
         });
+    });
 
-        it('on service state changes isHighlighted is true when highlightedNode is node', () => {
-            service.setState(component.node, createNode(), expandedNodes);
+    describe('setting highlightedNode', () => {
+        let node: TreeNode;
+
+        beforeEach(() => {
+            node = createNode();
+
+            component.node = node;
+        });
+
+        it('set isHighlighted to true when node is highlightedNode', () => {
+            component.highlightedNode = node;
 
             expect(component.isHighlighted).toBe(true);
         });
 
-        it('on service state changes the li has tree--highlighted class when highlightedNode is node', () => {
-            service.setState(component.node, createNode(), expandedNodes);
-            fixture.detectChanges();
+        it('adds tree--highlighted class to li when node is highlightedNode', () => {
+            component.highlightedNode = node;
 
+            fixture.detectChanges();
             expect(li.classes['tree--highlighted']).toBe(true);
         });
 
-        it('on service state changes isHighlighted is false when highlightedNode is different node', () => {
-            service.setState(createNode(), createNode(), expandedNodes);
+        it('set isHighlighted to false when node is not highlightedNode', () => {
+            component.highlightedNode = createNode();
 
             expect(component.isHighlighted).toBe(false);
         });
 
-        it('on service state changes the li does not have tree--highlighted class when highlightedNode is different node', () => {
-            service.setState(createNode(), createNode(), expandedNodes);
-            fixture.detectChanges();
+        it('does not add tree--highlighted class to li when node is not highlightedNode', () => {
+            component.highlightedNode = createNode();
 
+            fixture.detectChanges();
             expect(li.classes['tree--highlighted']).toBeFalsy();
         });
+    });
 
-        it('on service state changes isSelected is true when selectedNode is node', () => {
-            service.setState(createNode(), component.node, expandedNodes);
+    describe('setting selectedNode', () => {
+        let node: TreeNode;
+
+        beforeEach(() => {
+            node = createNode();
+
+            component.node = node;
+        });
+
+        it('set isSelected to true when node is selectedNode', () => {
+            component.selectedNode = node;
 
             expect(component.isSelected).toBe(true);
         });
 
-        it('on service state changes the li has tree--selected class when selectedNode is node', () => {
-            service.setState(createNode(), component.node, expandedNodes);
-            fixture.detectChanges();
+        it('adds tree--selected class to li when node is selectedNode', () => {
+            component.selectedNode = node;
 
+            fixture.detectChanges();
             expect(li.classes['tree--selected']).toBe(true);
         });
 
-        it('on service state changes isSelected is false when selectedNode is different node', () => {
-            service.setState(createNode(), createNode(), expandedNodes);
+        it('set isSelected to false when node is not selectedNode', () => {
+            component.selectedNode = createNode();
 
             expect(component.isSelected).toBe(false);
         });
 
-        it('on service state changes the li does not have tree--selected class when selectedNode is different node', () => {
-            service.setState(createNode(), createNode(), expandedNodes);
-            fixture.detectChanges();
+        it('does not add tree--selected class to li when node is not selectedNode', () => {
+            component.selectedNode = createNode();
 
+            fixture.detectChanges();
             expect(li.classes['tree--selected']).toBeFalsy();
         });
+    });
 
-        it('onNodeMouseEnter should call highlightNode on service', () => {
-            component.onNodeMouseEnter();
+    describe('onExpanderClick', () => {
+        let nodeCollapsed: jasmine.Spy;
+        let nodeExpanded: jasmine.Spy;
+        let node: TreeNode;
 
-            expect(service.highlightNode).toHaveBeenCalledWith(component.node);
+        beforeEach(() => {
+            nodeCollapsed = jasmine.createSpy('nodeCollapsed');
+            nodeExpanded = jasmine.createSpy('nodeExpanded');
+
+            component.nodeCollapsed.subscribe(nodeCollapsed);
+            component.nodeExpanded.subscribe(nodeExpanded);
+
+            node = createNode();
         });
 
-        it('onNodeClick should call selectNode on service', () => {
-            component.onNodeClick();
+        it('does not emit nodeCollapsed event when node has no children', () => {
+            component.node = node;
+            component.expandedNodes = new Set<TreeNode>();
 
-            expect(service.selectNode).toHaveBeenCalledWith(component.node);
-        });
-
-        it('onExpanderClick should call toggleNodeExpansion on service', () => {
             component.onExpanderClick();
 
-            expect(service.toggleNodeExpansion).toHaveBeenCalledWith(component.node);
+            expect(nodeCollapsed).not.toHaveBeenCalled();
+        });
+
+        it('does not emit nodeExpanded event when node has no children', () => {
+            component.node = node;
+            component.expandedNodes = new Set<TreeNode>();
+
+            component.onExpanderClick();
+
+            expect(nodeExpanded).not.toHaveBeenCalled();
+        });
+
+        it('does not emit nodeCollapsed event when node is not expanded', () => {
+            node.children.push(createNode());
+            component.node = node;
+            component.expandedNodes = new Set<TreeNode>();
+
+            component.onExpanderClick();
+
+            expect(nodeCollapsed).not.toHaveBeenCalled();
+        });
+
+        it('emits nodeExpanded event when node is not expanded', () => {
+            node.children.push(createNode());
+            component.node = node;
+            component.expandedNodes = new Set<TreeNode>();
+
+            component.onExpanderClick();
+
+            expect(nodeExpanded).toHaveBeenCalledWith(node);
+        });
+
+        it('emits nodeCollapsed event when node is expanded', () => {
+            node.children.push(createNode());
+            component.node = node;
+            component.expandedNodes = new Set<TreeNode>([node]);
+
+            component.onExpanderClick();
+
+            expect(nodeCollapsed).toHaveBeenCalledWith(node);
+        });
+
+        it('does not emit nodeExpanded event when node is expanded', () => {
+            node.children.push(createNode());
+            component.node = node;
+            component.expandedNodes = new Set<TreeNode>([node]);
+
+            component.onExpanderClick();
+
+            expect(nodeExpanded).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('onNodeMouseEnter', () => {
+        let nodeHighlighted: jasmine.Spy;
+        let node: TreeNode;
+
+        beforeEach(() => {
+            nodeHighlighted = jasmine.createSpy('nodeHighlighted');
+            component.nodeHighlighted.subscribe(nodeHighlighted);
+
+            node = createNode();
+            component.node = node;
+
+            component.highlightedNode = createNode();
+        });
+
+        it('emits nodeHighlighted event', () => {
+            component.onNodeMouseEnter();
+
+            expect(nodeHighlighted).toHaveBeenCalledWith(node);
+        });
+    });
+
+    describe('onNodeClick', () => {
+        let nodeSelected: jasmine.Spy;
+        let node: TreeNode;
+
+        beforeEach(() => {
+            nodeSelected = jasmine.createSpy('nodeSelected');
+            component.nodeSelected.subscribe(nodeSelected);
+
+            node = createNode();
+            component.node = node;
+
+            component.selectedNode = createNode();
+        });
+
+        it('emits nodeSelected event', () => {
+            component.onNodeClick();
+
+            expect(nodeSelected).toHaveBeenCalledWith(node);
         });
     });
 
