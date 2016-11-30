@@ -526,7 +526,7 @@ describe('DropdownTreeFieldComponent', () => {
 
     describe('on combobox focus', () => {
         it('adds dt--selection-focus class to dropdown container', () => {
-            combobox.triggerEventHandler("focus", null);
+            combobox.triggerEventHandler('focus', null);
             fixture.detectChanges();
 
             expect(dropdownContainer.classes['dt--selection-focus']).toBe(true);
@@ -535,10 +535,10 @@ describe('DropdownTreeFieldComponent', () => {
 
     describe('on combobox blur', () => {
         it('removes dt--selection-focus class to dropdown container', () => {
-            combobox.triggerEventHandler("focus", null);
+            combobox.triggerEventHandler('focus', null);
             fixture.detectChanges();
 
-            combobox.triggerEventHandler("blur", null);
+            combobox.triggerEventHandler('blur', null);
             fixture.detectChanges();
 
             expect(dropdownContainer.classes['dt--selection-focus']).toBeFalsy();
@@ -552,27 +552,27 @@ describe('DropdownTreeFieldComponent', () => {
 
         describe('when closed', () => {
             it('sets isDropdownOpen to true', () => {
-                combobox.triggerEventHandler("click", null);
+                combobox.triggerEventHandler('click', null);
 
                 expect(component.isDropdownOpen).toBe(true);
             });
 
             it('adds dt--selection-focus class to dropdown container', () => {
-                combobox.triggerEventHandler("click", null);
+                combobox.triggerEventHandler('click', null);
                 fixture.detectChanges();
 
                 expect(dropdownContainer.classes['dt--selection-focus']).toBe(true);
             });
 
             it('adds dt--selection-open class to dropdown container', () => {
-                combobox.triggerEventHandler("click", null);
+                combobox.triggerEventHandler('click', null);
                 fixture.detectChanges();
 
                 expect(dropdownContainer.classes['dt--selection-open']).toBe(true);
             });
 
             it('sets ariaOwnsId to id of the tree element', () => {
-                combobox.triggerEventHandler("click", null);
+                combobox.triggerEventHandler('click', null);
 
                 expect(component.ariaOwnsId).toBe(component.treeId);
             });
@@ -585,7 +585,7 @@ describe('DropdownTreeFieldComponent', () => {
                     nodes[0].children[2].children[1]]);
                 component.selectedNode = selectedNode;
 
-                combobox.triggerEventHandler("click", null);
+                combobox.triggerEventHandler('click', null);
 
                 expect(component.highlightedNode).toBe(selectedNode);
             });
@@ -596,7 +596,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.selectedNode = selectedNode;
                 component.defaultNode = null;
 
-                combobox.triggerEventHandler("click", null);
+                combobox.triggerEventHandler('click', null);
 
                 expect(component.highlightedNode).toBe(nodes[0]);
             });
@@ -607,7 +607,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.selectedNode = selectedNode;
                 component.defaultNode = createNode();
 
-                combobox.triggerEventHandler("click", null);
+                combobox.triggerEventHandler('click', null);
 
                 expect(component.highlightedNode).toBe(component.defaultNode);
             });
@@ -620,7 +620,7 @@ describe('DropdownTreeFieldComponent', () => {
                     nodes[0].children[2].children[1]]);
                 component.selectedNode = selectedNode;
 
-                combobox.triggerEventHandler("click", null);
+                combobox.triggerEventHandler('click', null);
 
                 expect(component.ariaActiveDescendentId).toBe(component.treeItemIdPrefix + selectedNode.id.toString());
             });
@@ -628,38 +628,38 @@ describe('DropdownTreeFieldComponent', () => {
 
         describe('when open', () => {
             beforeEach(() => {
-                combobox.triggerEventHandler("click", null);
+                combobox.triggerEventHandler('click', null);
                 fixture.detectChanges();
             });
 
             it('sets isDropdownOpen to false', () => {
-                combobox.triggerEventHandler("click", null);
+                combobox.triggerEventHandler('click', null);
 
                 expect(component.isDropdownOpen).toBe(false);
             });
 
             it('adds dt--selection-focus class to dropdown container', () => {
-                combobox.triggerEventHandler("click", null);
+                combobox.triggerEventHandler('click', null);
                 fixture.detectChanges();
 
                 expect(dropdownContainer.classes['dt--selection-focus']).toBe(true);
             });
 
             it('removes dt--selection-open class to dropdown container', () => {
-                combobox.triggerEventHandler("click", null);
+                combobox.triggerEventHandler('click', null);
                 fixture.detectChanges();
 
                 expect(dropdownContainer.classes['dt--selection-open']).toBeFalsy();
             });
 
             it('sets ariaOwnsId to undefined', () => {
-                combobox.triggerEventHandler("click", null);
+                combobox.triggerEventHandler('click', null);
 
                 expect(component.ariaOwnsId).toBeUndefined();
             });
 
             it('sets ariaActiveDescendentId to undefined', () => {
-                combobox.triggerEventHandler("click", null);
+                combobox.triggerEventHandler('click', null);
 
                 expect(component.ariaActiveDescendentId).toBeUndefined();
             });
@@ -680,7 +680,7 @@ describe('DropdownTreeFieldComponent', () => {
                     key: 'ArrowDown'
                 });
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(component.isDropdownOpen).toBe(true);
             });
@@ -688,7 +688,7 @@ describe('DropdownTreeFieldComponent', () => {
 
         describe('when open', () => {
             beforeEach(() => {
-                combobox.triggerEventHandler("click", null);
+                combobox.triggerEventHandler('click', null);
             });
 
             it('Alt+ArrowUp closes the dropdown', () => {
@@ -697,7 +697,7 @@ describe('DropdownTreeFieldComponent', () => {
                     key: 'ArrowUp'
                 });
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(component.isDropdownOpen).toBe(false);
             });
@@ -707,7 +707,7 @@ describe('DropdownTreeFieldComponent', () => {
                     key: 'Escape'
                 });
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(component.isDropdownOpen).toBe(false);
             });
@@ -719,7 +719,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = nodes[1];
                 component.selectedNode = nodes[2];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(component.highlightedNode).toBe(nodes[0]);
             });
@@ -731,7 +731,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = nodes[1];
                 component.selectedNode = nodes[2];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(nodeSelected).toHaveBeenCalledWith(nodes[0]);
             });
@@ -743,7 +743,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = component.defaultNode;
                 component.selectedNode = nodes[2];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(component.highlightedNode).toBe(component.defaultNode);
             });
@@ -755,7 +755,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = component.defaultNode;
                 component.selectedNode = nodes[2];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(nodeSelected).not.toHaveBeenCalled();
             });
@@ -768,7 +768,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = nodes[1];
                 component.selectedNode = nodes[2];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(component.highlightedNode).toBe(nodes[0]);
             });
@@ -781,7 +781,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = nodes[1];
                 component.selectedNode = nodes[2];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(nodeSelected).not.toHaveBeenCalled();
             });
@@ -794,7 +794,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = component.defaultNode;
                 component.selectedNode = nodes[2];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(component.highlightedNode).toBe(component.defaultNode);
             });
@@ -807,7 +807,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = component.defaultNode;
                 component.selectedNode = nodes[2];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(nodeSelected).not.toHaveBeenCalled();
             });
@@ -819,7 +819,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = nodes[1];
                 component.selectedNode = nodes[0];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(component.highlightedNode).toBe(nodes[2]);
             });
@@ -831,7 +831,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = nodes[1];
                 component.selectedNode = nodes[0];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(nodeSelected).toHaveBeenCalledWith(nodes[2]);
             });
@@ -843,7 +843,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = nodes[2];
                 component.selectedNode = nodes[0];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(component.highlightedNode).toBe(nodes[2]);
             });
@@ -855,7 +855,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = nodes[2];
                 component.selectedNode = nodes[0];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(nodeSelected).not.toHaveBeenCalled();
             });
@@ -868,7 +868,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = nodes[1];
                 component.selectedNode = nodes[0];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(component.highlightedNode).toBe(nodes[2]);
             });
@@ -881,7 +881,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = nodes[1];
                 component.selectedNode = nodes[0];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(nodeSelected).not.toHaveBeenCalled();
             });
@@ -894,7 +894,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = nodes[2];
                 component.selectedNode = nodes[0];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(component.highlightedNode).toBe(nodes[2]);
             });
@@ -907,7 +907,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = nodes[2];
                 component.selectedNode = nodes[0];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(nodeSelected).not.toHaveBeenCalled();
             });
@@ -923,7 +923,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = nodes[0].children[1];
                 component.selectedNode = nodes[2];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(component.highlightedNode).toBe(nodes[0].children[1]);
             });
@@ -939,7 +939,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = nodes[0].children[1];
                 component.selectedNode = nodes[2];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(nodeSelected).not.toHaveBeenCalled();
             });
@@ -955,7 +955,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = nodes[0].children[1];
                 component.selectedNode = nodes[2];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(component.expandedNodes.has(nodes[0].children[1])).toBe(false);
             });
@@ -968,7 +968,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = nodes[0].children[1];
                 component.selectedNode = nodes[2];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(component.highlightedNode).toBe(nodes[0]);
             });
@@ -981,7 +981,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = nodes[0].children[1];
                 component.selectedNode = nodes[2];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(nodeSelected).toHaveBeenCalledWith(nodes[0]);
             });
@@ -993,7 +993,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = nodes[0];
                 component.selectedNode = nodes[2];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(component.highlightedNode).toBe(nodes[0]);
             });
@@ -1005,7 +1005,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = nodes[0];
                 component.selectedNode = nodes[2];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(nodeSelected).not.toHaveBeenCalled();
             });
@@ -1017,7 +1017,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = nodes[0];
                 component.selectedNode = nodes[2];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(component.highlightedNode).toBe(nodes[0]);
             });
@@ -1029,7 +1029,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = nodes[0];
                 component.selectedNode = nodes[2];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(nodeSelected).not.toHaveBeenCalled();
             });
@@ -1041,7 +1041,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = nodes[0];
                 component.selectedNode = nodes[2];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(component.expandedNodes.has(nodes[0])).toBe(true);
             });
@@ -1054,7 +1054,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = nodes[0];
                 component.selectedNode = nodes[2];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(component.highlightedNode).toBe(nodes[0].children[0]);
             });
@@ -1067,7 +1067,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = nodes[0];
                 component.selectedNode = nodes[2];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(nodeSelected).toHaveBeenCalledWith(nodes[0].children[0]);
             });
@@ -1079,7 +1079,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = nodes[0];
                 component.selectedNode = nodes[2];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(component.highlightedNode).toBe(nodes[0]);
             });
@@ -1091,7 +1091,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = nodes[0];
                 component.selectedNode = nodes[2];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(nodeSelected).not.toHaveBeenCalled();
             });
@@ -1104,7 +1104,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = nodes[0].children[1];
                 component.selectedNode = nodes[2];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(component.highlightedNode).toBe(component.defaultNode);
             });
@@ -1117,7 +1117,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = nodes[0].children[1];
                 component.selectedNode = nodes[2];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(nodeSelected).toHaveBeenCalledWith(null);
             });
@@ -1131,7 +1131,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = nodes[0].children[1];
                 component.selectedNode = nodes[2];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(component.highlightedNode).toBe(component.defaultNode);
             });
@@ -1145,7 +1145,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = nodes[0].children[1];
                 component.selectedNode = nodes[2];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(nodeSelected).not.toHaveBeenCalled();
             });
@@ -1158,7 +1158,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = nodes[0].children[1];
                 component.selectedNode = nodes[0];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(component.highlightedNode).toBe(nodes[2]);
             });
@@ -1171,7 +1171,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = nodes[0].children[1];
                 component.selectedNode = nodes[0];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(nodeSelected).toHaveBeenCalledWith(nodes[2]);
             });
@@ -1185,7 +1185,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = nodes[0].children[1];
                 component.selectedNode = nodes[0];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(component.highlightedNode).toBe(nodes[2]);
             });
@@ -1199,7 +1199,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = nodes[0].children[1];
                 component.selectedNode = nodes[0];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(nodeSelected).not.toHaveBeenCalled();
             });
@@ -1212,7 +1212,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = nodes[0].children[1];
                 component.selectedNode = nodes[2];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(nodeSelected).toHaveBeenCalledWith(nodes[0].children[1]);
             });
@@ -1226,7 +1226,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.highlightedNode = nodes[0].children[1];
                 component.selectedNode = nodes[2];
 
-                combobox.triggerEventHandler("keydown", $event);
+                combobox.triggerEventHandler('keydown', $event);
 
                 expect(nodeSelected).toHaveBeenCalledWith(nodes[0].children[1]);
             });
