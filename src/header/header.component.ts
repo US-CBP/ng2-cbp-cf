@@ -1,6 +1,5 @@
 import {
     Component,
-    OnInit,
     Input
 }                           from '@angular/core';
 import { Router }           from '@angular/router';
@@ -13,7 +12,7 @@ import { ButtonRoles }      from '../button';
     templateUrl: 'header.component.html',
     styleUrls: ['header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
     @Input() data: Header;
     @Input() disableFeedback: boolean = false;
     @Input() disableSearch: boolean = false;
@@ -29,9 +28,5 @@ export class HeaderComponent implements OnInit {
         } else if (item.href) {
             window.location.href = item.href;
         }
-    }
-
-    ngOnInit() {
-        console.log('init ' + this.data);
     }
 }
