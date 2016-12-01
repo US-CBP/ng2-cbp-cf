@@ -5,6 +5,9 @@ import 'cbp-theme/dist/inputmask.js';
 // I will remove it soon when I have bootstrap menu component
 // who can be used in multi places
 import 'cbp-theme/dist/cbp-theme.js';
+import 'hammerjs';
+
+import './theme/cbp-theme.scss';
 
 export * from './src';
 export * from './ng2-cbp-cf';
