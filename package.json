@@ -57,6 +57,7 @@
         "@angular/router": "~3.2.3",
         "core-js": "~2.4.1",
         "cbp-theme": "~0.4.0",
+        "hammerjs": "~2.0.8",
         "lodash": "^4.16.4",
         "moment": "~2.15.1",
         "reflect-metadata": "~0.1.8",
@@ -64,6 +65,7 @@
         "zone.js": "~0.6.25"
     },
     "devDependencies": {
+        "@types/core-js": "~0.9.35",
         "@types/lodash": "~4.14.37",
         "@types/jasmine": "~2.2.34",
         "@types/node": "~6.0.41",
