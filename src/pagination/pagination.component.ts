@@ -1,12 +1,14 @@
-import { Component,
-    OnInit,
+import {
+    Component,
     EventEmitter,
+    Input,
+    OnInit,
     Output,
-    Input  }       from '@angular/core';
+}                               from '@angular/core';
 
-import { Query }   from './pagination-query.model';
-import { Pager }   from './pagination-pager.model';
-import { PaginationService } from './pagination.service';
+import { Pager }                from './pagination-pager.model';
+import { Query }                from './pagination-query.model';
+import { PaginationService }    from './pagination.service';
 
 let nextId = 1;
 
@@ -15,8 +17,8 @@ let nextId = 1;
     templateUrl: 'pagination.component.html',
     styleUrls: ['pagination.component.scss'],
     providers: [
-        PaginationService
-    ]
+        PaginationService,
+    ],
 })
 export class PaginationComponent implements OnInit {
     @Input() id: string = `cf-pagination-${nextId++}`;

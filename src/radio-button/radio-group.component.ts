@@ -1,40 +1,44 @@
 ﻿import {
-    forwardRef,
     AfterContentInit,
     Component,
     ContentChildren,
     EventEmitter,
     Input,
     Output,
-    QueryList
+    QueryList,
+    forwardRef,
 }                           from '@angular/core';
 import {
+    ControlValueAccessor,
     NG_VALUE_ACCESSOR,
-    ControlValueAccessor
 }                           from '@angular/forms';
 
 import {
     RadioButtonComponent,
-    RadioChange
+    RadioChange,
 }                           from './radio-button.component';
 
 let nextId = 1;
 
+/* tslint:disable:no-forward-ref */
 export const radioGroupControlValueAccessor: any = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => RadioGroupComponent),
     multi: true
 };
+/* tslint:enable */
 
 @Component({
     selector: 'cf-radio-group',
     templateUrl: 'radio-group.component.html',
-    providers: [radioGroupControlValueAccessor]
+    providers: [radioGroupControlValueAccessor],
 })
 export class RadioGroupComponent implements AfterContentInit, ControlValueAccessor {
-    @Output() change = new EventEmitter<RadioChange>();
+    @Output() change: EventEmitter<RadioChange> = new EventEmitter<RadioChange>();
 
+    /* tslint:disable:no-forward-ref */
     @ContentChildren(forwardRef(() => RadioButtonComponent)) _radios: QueryList<RadioButtonComponent> = null;
+    /* tslint:enable */
 
     private _value: any = null;
     private _name: string = `cf-radio-group-${nextId++}`;
@@ -42,7 +46,7 @@ export class RadioGroupComponent implements AfterContentInit, ControlValueAccess
     private _isInline: boolean = false;
     private _selected: RadioButtonComponent = null;
     private _isInitialized: boolean = false;
-    private _controlValueAccessorChangeFn: (value: any) => void = (value) => { };
+    private _controlValueAccessorChangeFn: (value: any) => void = value => { };
 
     onTouched: () => any = () => { };
 
@@ -77,7 +81,7 @@ export class RadioGroupComponent implements AfterContentInit, ControlValueAccess
         return this._value;
     }
     set value(newValue: any) {
-        /* tslint:disable */
+        /* tslint:disable:triple-equals */
         if(this._value != newValue) {
         /* tslint:enable */
             this._value = newValue;
@@ -130,12 +134,12 @@ export class RadioGroupComponent implements AfterContentInit, ControlValueAccess
     }
 
     private updateSelectedRadioFromValue() {
-        /* tslint:disable */
+        /* tslint:disable:triple-equals */
         let isAlreadySelected = this._selected != null && this._selected.value == this._value;
         /* tslint:enable */
 
         if(this._radios != null && !isAlreadySelected) {
-            /* tslint:disable */
+            /* tslint:disable:triple-equals */
             let matchingRadio = this._radios.filter(radio => radio.value == this._value)[0];
             /* tslint:enable */
 

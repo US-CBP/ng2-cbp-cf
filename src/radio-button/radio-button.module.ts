@@ -1,35 +1,35 @@
 ﻿import { CommonModule }                 from '@angular/common';
 import {
     ModuleWithProviders,
-    NgModule
+    NgModule,
 }                                       from '@angular/core';
 import { FormsModule }                  from '@angular/forms';
 
+import { UniqueSelectionDispatcher }    from '../shared';
 import { RadioButtonComponent }         from './radio-button.component';
 import { RadioGroupComponent }          from './radio-group.component';
-import { UniqueSelectionDispatcher }    from '../shared';
 
 @NgModule({
     imports: [
         CommonModule,
-        FormsModule
+        FormsModule,
     ],
     exports: [
         RadioButtonComponent,
-        RadioGroupComponent
+        RadioGroupComponent,
     ],
     declarations: [
         RadioButtonComponent,
-        RadioGroupComponent
-    ]
+        RadioGroupComponent,
+    ],
 })
 export class RadioButtonModule {
     static forRoot(): ModuleWithProviders {
         return {
             ngModule: RadioButtonModule,
             providers: [
-                UniqueSelectionDispatcher
-            ]
+                UniqueSelectionDispatcher,
+            ],
         };
     }
 }

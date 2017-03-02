@@ -10,11 +10,13 @@
         "module": "es6",
         "moduleResolution": "node",
         "noEmitHelpers": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": false,
         "removeComments": true,
         "target": "es5",
         "types": [
-            "node",
-            "jasmine"
+            "jasmine",
+            "node"
         ]
     },
     "exclude": [

@@ -1,30 +1,30 @@
 ﻿import { CommonModule }             from '@angular/common';
 import {
     ModuleWithProviders,
-    NgModule
+    NgModule,
 }                                   from '@angular/core';
 
-import { ListGroupComponent }       from './list-group.component';
 import { ListGroupItemComponent }   from './list-group-item';
+import { ListGroupComponent }       from './list-group.component';
 
 @NgModule({
     imports: [
-        CommonModule
+        CommonModule,
     ],
     exports: [
         ListGroupComponent,
-        ListGroupItemComponent
+        ListGroupItemComponent,
     ],
     declarations: [
         ListGroupComponent,
-        ListGroupItemComponent
-    ]
+        ListGroupItemComponent,
+    ],
 })
 export class ListGroupModule {
     static forRoot(): ModuleWithProviders {
         return {
             ngModule: ListGroupModule,
-            providers: []
+            providers: [],
         };
     }
 }

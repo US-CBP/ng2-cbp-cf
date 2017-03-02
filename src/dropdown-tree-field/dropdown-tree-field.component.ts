@@ -13,8 +13,8 @@
     ViewChildren
 }                               from '@angular/core';
 
-import { TreeNode }             from './tree-node.model';
 import { DropdownTreeService }  from './dropdown-tree.service';
+import { TreeNode }             from './tree-node.model';
 
 let nextId = 1;
 
@@ -298,7 +298,6 @@ export class DropdownTreeFieldComponent implements OnInit, AfterViewChecked {
         this._emitSelectedNode(node);
     }
 
-    /* tslint:disable */
     @HostListener('window:click')
     onWindowClick() {
         if(this._preventWindowClickClose) {
@@ -308,14 +307,11 @@ export class DropdownTreeFieldComponent implements OnInit, AfterViewChecked {
             this.isFocused = false;
         }
     }
-    /* tslint:enable */
 
-    /* tslint:disable */
     @HostListener('click')
     onHostClick() {
         this._preventWindowClickClose = true;
     }
-    /* tslint:enable */
 
     private _isKey($event: KeyboardEvent, key: string, altKey: boolean = false, ctrlKey: boolean = false): boolean {
         return $event.key === key &&
@@ -408,7 +404,7 @@ export class DropdownTreeFieldComponent implements OnInit, AfterViewChecked {
     private _createDefaultNode(text: string): TreeNode {
         return {
             id: '-default-node',
-            text: text,
+            text,
             children: []
         };
     }

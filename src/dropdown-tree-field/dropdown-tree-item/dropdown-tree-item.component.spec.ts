@@ -1,18 +1,18 @@
 ﻿import { CommonModule }                 from '@angular/common';
 import {
     CUSTOM_ELEMENTS_SCHEMA,
-    DebugElement
+    DebugElement,
 }                                       from '@angular/core';
 import {
     ComponentFixture,
-    TestBed
+    TestBed,
 }                                       from '@angular/core/testing';
 import { FormsModule }                  from '@angular/forms';
 import { By }                           from '@angular/platform-browser';
 
-import { DropdownTreeItemComponent }    from './dropdown-tree-item.component';
-import { TreeNode }                     from '../tree-node.model';
 import { DropdownTreeService }          from '../dropdown-tree.service';
+import { TreeNode }                     from '../tree-node.model';
+import { DropdownTreeItemComponent }    from './dropdown-tree-item.component';
 
 let currentId = 1;
 

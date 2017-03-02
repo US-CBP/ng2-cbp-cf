@@ -3,25 +3,26 @@
     EventEmitter,
     Input,
     OnInit,
-    Output
+    Output,
 }                                   from '@angular/core';
 import * as moment                  from 'moment/moment';
 
-import { PayPeriod }                from './pay-period.model';
-import { PayPeriodMonth }           from './pay-period-month.model';
 import { ButtonRoles }              from '../button';
+import { PayPeriodMonth }           from './pay-period-month.model';
+import { PayPeriod }                from './pay-period.model';
 
 @Component({
     selector: 'cf-pay-period-calendar',
     templateUrl: 'pay-period-calendar.component.html',
-    styleUrls: ['pay-period-calendar.component.scss']
+    styleUrls: ['pay-period-calendar.component.scss'],
 })
 export class PayPeriodCalendarComponent implements OnInit {
     @Input() id: string;
     @Input() selectedPayPeriod: PayPeriod;
     @Input() payPeriodsOfMonth: PayPeriod[];
-    @Output() payPeriodSelected = new EventEmitter<PayPeriod>();
-    @Output() monthSelected = new EventEmitter<PayPeriodMonth>();
+
+    @Output() payPeriodSelected: EventEmitter<PayPeriod> = new EventEmitter<PayPeriod>();
+    @Output() monthSelected: EventEmitter<PayPeriodMonth> = new EventEmitter<PayPeriodMonth>();
 
     years: number[];
     monthsOfYear: PayPeriodMonth[];

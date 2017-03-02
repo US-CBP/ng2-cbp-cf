@@ -4,18 +4,18 @@
     ElementRef,
     EventEmitter,
     Input,
-    Output,
     OnInit,
-    ViewChild
+    Output,
+    ViewChild,
 }                                       from '@angular/core';
 
-import { TreeNode }                     from '../tree-node.model';
 import { DropdownTreeService }          from '../dropdown-tree.service';
+import { TreeNode }                     from '../tree-node.model';
 
 @Component({
     selector: 'cf-dropdown-tree-item',
     templateUrl: 'dropdown-tree-item.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DropdownTreeItemComponent implements OnInit {
     @Input() idPrefix: string;

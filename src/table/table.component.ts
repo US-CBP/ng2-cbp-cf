@@ -1,24 +1,24 @@
 import {
     Component,
-    OnInit,
     EventEmitter,
-    Output,
     Input,
+    OnInit,
+    Output,
     QueryList,
+    ViewChild,
     ViewChildren,
-    ViewChild
 }                               from '@angular/core';
-import * as _ from 'lodash';
+import * as _                   from 'lodash';
 
-import { Table }                from './table.model';
+import {
+    CheckboxChange,
+    CheckboxComponent,
+}                               from '../checkbox';
 import {
     PaginationComponent,
-    Query }
-                                from '../pagination';
-import {
-    CheckboxComponent,
-    CheckboxChange
-}                               from '../checkbox';
+    Query,
+}                               from '../pagination';
+import { Table }                from './table.model';
 
 let nextId = 1;
 
@@ -42,7 +42,7 @@ export class TableComponent implements OnInit {
 
     private _data: Table = null;
     private _query: Query = null;
-    private _selectedItems = null;
+    private _selectedItems: any[] = null;
 
     constructor() {
         this._selectedItems = [] as any;
@@ -113,7 +113,7 @@ export class TableComponent implements OnInit {
     }
 
     toggleSelectAll(event: CheckboxChange) {
-        this.checkboxesObj.forEach((checkbox) => {
+        this.checkboxesObj.forEach(checkbox => {
             checkbox.checked = event.checked;
         });
         this.toggleAllSelectedData(event.checked);

@@ -1,5 +1,4 @@
 ﻿import {
-    forwardRef,
     Component,
     Directive,
     ElementRef,
@@ -8,20 +7,23 @@
     OnDestroy,
     Optional,
     Renderer,
-    ViewChild
+    ViewChild,
+    forwardRef,
 }                           from '@angular/core';
 import {
+    ControlValueAccessor,
     NG_VALUE_ACCESSOR,
-    ControlValueAccessor
 }                           from '@angular/forms';
 
 let nextId = 1;
 
+/* tslint:disable:no-forward-ref */
 export const selectFieldControlValueAccessor: any = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => SelectFieldComponent),
     multi: true
 };
+/* tslint:enable */
 
 function _buildValueString(id: string, value: any): string {
     if(id == null) {
@@ -41,7 +43,7 @@ function _extractId(valueString: string) {
 @Component({
     selector: 'cf-select-field',
     templateUrl: 'select-field.component.html',
-    providers: [selectFieldControlValueAccessor]
+    providers: [selectFieldControlValueAccessor],
 })
 export class SelectFieldComponent implements ControlValueAccessor {
     @Input() id: string = `cf-select-field-${nextId++}`;
@@ -62,7 +64,7 @@ export class SelectFieldComponent implements ControlValueAccessor {
     @ViewChild('select') private _select: ElementRef;
     private _idCounter: number = 0;
 
-    onSelectChange: (value: any) => void = (value) => { };
+    onSelectChange: (value: any) => void = value => { };
 
     private _onTouched: () => any = () => {};
 
@@ -134,7 +136,7 @@ export class SelectFieldComponent implements ControlValueAccessor {
 }
 
 @Directive({
-    /* tslint:disable */
+    /* tslint:disable:directive-selector */
     selector: 'option'
     /* tslint:enable */
 })

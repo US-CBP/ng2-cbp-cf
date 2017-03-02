@@ -28,7 +28,7 @@ const rules = {
     },
     componentStyles: {
         test: /\.scss$/,
-        loader: 'raw!sass'
+        loader: 'raw-loader!sass-loader'
     },
     javascript: {
         test: /\.js$/,
@@ -42,7 +42,7 @@ const rules = {
     },
     html: {
         test: /\.html$/,
-        loader: 'html?-minimize'
+        loader: 'html-loader?-minimize'
     },
     fontFile: {
         test: /\.(ttf|otf|eot|svg|woff|woff2)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
@@ -55,8 +55,8 @@ const rules = {
     imagesFile: {
         test: /\.(jpe?g|png|gif|svg)$/i,
         loaders: [
-            'file?hash=sha512&digest=hex&name=[hash].[ext]',
-            'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
+            'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
+            'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false'
         ]
     }
 };

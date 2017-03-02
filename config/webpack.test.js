@@ -17,7 +17,7 @@ const rules = {
     },
     componentStyles: {
         test: /\.scss$/,
-        loader: 'raw!sass'
+        loader: 'raw-loader!sass-loader'
     },
     typescript: {
         test: /\.ts$/,

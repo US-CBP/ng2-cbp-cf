@@ -2,25 +2,31 @@ import {
     Component,
     EventEmitter,
     Input,
-    forwardRef,
     Output,
-    ViewEncapsulation
+    ViewEncapsulation,
+    forwardRef,
 }                           from '@angular/core';
-import { BasicList }        from './basic-list';
-
 import {
+    ControlValueAccessor,
     NG_VALUE_ACCESSOR,
-    ControlValueAccessor
 }                           from '@angular/forms';
 import * as _               from 'lodash';
 
+import {
+    ButtonRoles,
+    ButtonSizes,
+}                           from '../button';
+import { BasicList }        from './basic-list';
+
 let nextId = 0;
 
+/* tslint:disable:no-forward-ref */
 export const dualListControlValueAccessor: any = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => DualListComponent),
     multi: true
 };
+/* tslint:enable */
 
 export class DualListChange {
     source: DualListComponent;
@@ -36,8 +42,8 @@ export class DualListChange {
 })
 
 export class DualListComponent implements ControlValueAccessor {
-    static AVAILABLE_LIST_NAME = 'available';
-    static SELECTED_LIST_NAME = 'selected';
+    static AVAILABLE_LIST_NAME: string = 'available';
+    static SELECTED_LIST_NAME: string = 'selected';
 
     @Input() id: string = `cf-dual-list-${nextId++}`;
     @Input() height: string = '500px';
@@ -48,19 +54,22 @@ export class DualListComponent implements ControlValueAccessor {
 
     @Output() change: EventEmitter<DualListChange> = new EventEmitter<DualListChange>();
 
+    ButtonRoles: any = ButtonRoles;
+    ButtonSizes: any = ButtonSizes;
+
     availableL: BasicList = new BasicList(DualListComponent.AVAILABLE_LIST_NAME);
     selectedL: BasicList = new BasicList(DualListComponent.SELECTED_LIST_NAME);
 
     private _source: any[] = [];
     private _selected: any[] = [];
-    private _controlValueAccessorChangeFn: (value: any) => void = (value) => {};
+    private _controlValueAccessorChangeFn: (value: any) => void = value => {};
 
     onTouched: () => any = () => {};
 
     constructor() {}
 
-    private _sortMyList(list) {
-        if (this.sort && this.attrToSort && this.attrToSort.length > 0) {
+    private _sortMyList(list: any[]) {
+        if(this.sort && this.attrToSort && this.attrToSort.length > 0) {
             list = _.orderBy(list, this.attrToSort);
         }
         return list;
@@ -71,7 +80,7 @@ export class DualListComponent implements ControlValueAccessor {
         return this._source;
     }
     set source(source: any[]) {
-        /* tslint:disable */
+        /* tslint:disable:triple-equals */
         if (source && source != this._source && source.length > 0) {
         /* tslint:enable */
             this._source = this._sortMyList(source);
@@ -84,7 +93,7 @@ export class DualListComponent implements ControlValueAccessor {
         return this._selected;
     }
     set selected(selected: any[]){
-        /* tslint:disable */
+        /* tslint:disable:triple-equals */
         if (selected && selected != this._selected && selected.length > 0) {
         /* tslint:enable */
             this._selected = this._sortMyList(selected);
@@ -127,9 +136,7 @@ export class DualListComponent implements ControlValueAccessor {
     private _moveItem(from: BasicList, to: BasicList) {
         to.list.push(...from.pick);
         // Remove the item from the source list
-        _.remove(from.list, function (item) {
-            return _.indexOf(from.pick, item) >= 0;
-        });
+        _.remove(from.list, item => _.indexOf(from.pick, item) >= 0);
         from.pick.splice(0, from.pick.length);
         from.pick = [];
         from.list = this._sortMyList(from.list);

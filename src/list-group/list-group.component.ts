@@ -7,9 +7,10 @@ import {
     OnDestroy,
     Output,
     QueryList,
-    ViewEncapsulation
+    ViewEncapsulation,
 }                                   from '@angular/core';
 import { Subscription }             from 'rxjs';
+
 import { ListGroupItemComponent }   from './list-group-item';
 
 let nextId = 0;
@@ -18,7 +19,7 @@ let nextId = 0;
     selector: 'cf-list-group',
     templateUrl: 'list-group.component.html',
     styleUrls: ['list-group.component.scss'],
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
 })
 export class ListGroupComponent implements AfterContentInit, OnDestroy {
     @ContentChildren(ListGroupItemComponent) _menuItems: QueryList<ListGroupItemComponent>;
@@ -39,8 +40,8 @@ export class ListGroupComponent implements AfterContentInit, OnDestroy {
 
     ngAfterContentInit() {
         if(!this.multiSelect) {
-            this._menuItems.forEach((item: ListGroupItemComponent) => {
-                let sub = item.click.subscribe((event) => { this.onToggleItemEvent(event); });
+            this._menuItems.forEach(item => {
+                let sub = item.click.subscribe(event => { this.onToggleItemEvent(event); });
                 this._subscription.push(sub);
             });
         }
@@ -50,9 +51,9 @@ export class ListGroupComponent implements AfterContentInit, OnDestroy {
         this._subscription.forEach((sub: Subscription) => { sub.unsubscribe(); });
     }
 
-    onToggleItemEvent(event) {
+    onToggleItemEvent(event: Event) {
         this._menuItems.forEach((item: ListGroupItemComponent) => {
-            if (event.target.id !== item.id) {
+            if((<Element>event.target).id !== item.id) {
                 item.active = false;
             }
         });

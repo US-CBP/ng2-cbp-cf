@@ -2,36 +2,36 @@
 import {
     CUSTOM_ELEMENTS_SCHEMA,
     ModuleWithProviders,
-    NgModule
+    NgModule,
 }                                       from '@angular/core';
 import { FormsModule }                  from '@angular/forms';
 
-import { PayPeriodCalendarComponent }   from './pay-period-calendar.component';
 import { ButtonModule }                 from '../button';
 import { SelectFieldModule }            from '../select-field';
+import { PayPeriodCalendarComponent }   from './pay-period-calendar.component';
 
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
         ButtonModule,
-        SelectFieldModule
+        SelectFieldModule,
     ],
     exports: [
-        PayPeriodCalendarComponent
+        PayPeriodCalendarComponent,
     ],
     declarations: [
-        PayPeriodCalendarComponent
+        PayPeriodCalendarComponent,
     ],
     schemas: [
-        CUSTOM_ELEMENTS_SCHEMA
-    ]
+        CUSTOM_ELEMENTS_SCHEMA,
+    ],
 })
 export class PayPeriodCalendarModule {
     static forRoot(): ModuleWithProviders {
         return {
             ngModule: PayPeriodCalendarModule,
-            providers: []
+            providers: [],
         };
     }
 }

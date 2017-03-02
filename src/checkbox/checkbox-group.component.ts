@@ -16,8 +16,10 @@ import {
     templateUrl: 'checkbox-group.component.html',
 })
 export class CheckboxGroupComponent implements AfterContentInit {
+    /* tslint:disable:no-forward-ref */
     @ContentChildren(forwardRef(() => CheckboxComponent)) _checkboxes: QueryList<CheckboxComponent>;
     private _isInline: boolean = false;
+    /* tslint:enable */
 
     constructor() {}
 

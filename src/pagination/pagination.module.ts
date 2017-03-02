@@ -1,29 +1,29 @@
 ﻿import { CommonModule }         from '@angular/common';
 import {
     ModuleWithProviders,
-    NgModule
+    NgModule,
 }                               from '@angular/core';
 
-import { PaginationComponent }  from './pagination.component';
 import { ButtonModule }         from '../button';
+import { PaginationComponent }  from './pagination.component';
 
 @NgModule({
     imports: [
         CommonModule,
-        ButtonModule
+        ButtonModule,
     ],
     exports: [
-        PaginationComponent
+        PaginationComponent,
     ],
     declarations: [
-        PaginationComponent
-    ]
+        PaginationComponent,
+    ],
 })
 export class PaginationModule {
     static forRoot(): ModuleWithProviders {
         return {
             ngModule: PaginationModule,
-            providers: []
+            providers: [],
         };
     }
 }

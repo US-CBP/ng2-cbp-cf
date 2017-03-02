@@ -1,12 +1,10 @@
-import { Injectable }            from '@angular/core';
+import { Injectable }   from '@angular/core';
+import * as _           from 'lodash';
 
-import { Pager }   from './pagination-pager.model';
-
-import * as _ from 'lodash';
+import { Pager }        from './pagination-pager.model';
 
 @Injectable()
 export class PaginationService {
-
     constructor() {
     }
 
@@ -20,7 +18,8 @@ export class PaginationService {
         // calculate total pages
         let totalPages: number = Math.ceil(totalItems / pageSize);
 
-        let startPage: number, endPage: number;
+        let startPage: number;
+        let endPage: number;
         if (totalPages <= 5) {
             // less than 10 total pages so show all
             startPage = 2;

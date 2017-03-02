@@ -4,8 +4,8 @@ import {
     NgModule
 }                               from '@angular/core';
 
-import { ButtonDirective }      from './button.directive';
 import { ButtonGroupComponent } from './button-group.component';
+import { ButtonDirective }      from './button.directive';
 
 @NgModule({
     imports: [

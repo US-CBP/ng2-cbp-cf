@@ -5,14 +5,14 @@
     OnDestroy,
     OnInit,
     Optional,
-    Output
+    Output,
 }                               from '@angular/core';
 import { Subscription }         from 'rxjs';
 
-import { RadioGroupComponent }  from './radio-group.component';
 import {
-    UniqueSelectionDispatcher
+    UniqueSelectionDispatcher,
 }                               from '../shared';
+import { RadioGroupComponent }  from './radio-group.component';
 
 let nextId = 1;
 
@@ -24,15 +24,17 @@ export class RadioChange {
 @Component({
     selector: 'cf-radio-button',
     templateUrl: 'radio-button.component.html',
-    styleUrls: ['radio-button.component.scss']
+    styleUrls: ['radio-button.component.scss'],
 })
 export class RadioButtonComponent implements OnInit, OnDestroy {
     @Input() id: string = `cf-radio-button-${nextId++}`;
     @Input() name: string;
+    /* tslint:disable:no-input-rename */
     @Input('aria-label') ariaLabel: string;
     @Input('aria-labelledby') ariaLabelledby: string;
+    /* tslint:enable */
 
-    @Output() change = new EventEmitter<RadioChange>();
+    @Output() change: EventEmitter<RadioChange> = new EventEmitter<RadioChange>();
 
     isInline: boolean = false;
 
@@ -63,7 +65,7 @@ export class RadioButtonComponent implements OnInit, OnDestroy {
         }
 
         this._checked = newValue;
-        /* tslint:disable */
+        /* tslint:disable:triple-equals */
         if(newValue && this.radioGroup != null && this.radioGroup.value != this.value) {
         /* tslint:enable */
             this.radioGroup.selected = this;
@@ -83,7 +85,7 @@ export class RadioButtonComponent implements OnInit, OnDestroy {
         return this._value;
     }
     set value(newValue: any) {
-        /* tslint:disable */
+        /* tslint:disable:triple-equals */
         if(this._value != newValue) {
         /* tslint:enable */
             if(this.radioGroup != null && this.checked) {
@@ -95,7 +97,7 @@ export class RadioButtonComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         if(this.radioGroup != null) {
-            /* tslint:disable */
+            /* tslint:disable:triple-equals */
             this.checked = this.radioGroup.value == this._value;
             /* tslint:enable */
             this.name = this.radioGroup.name;

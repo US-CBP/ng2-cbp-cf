@@ -1,5 +1,5 @@
+import { TableHeader }  from './table-header.model';
 import { TableOptions } from './table-options.model';
-import { TableHeader } from './table-header.model';
 
 export interface Table {
     options: TableOptions;

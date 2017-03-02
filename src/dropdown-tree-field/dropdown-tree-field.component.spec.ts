@@ -1,12 +1,12 @@
 ﻿import { DebugElement }                 from '@angular/core';
 import {
     ComponentFixture,
-    TestBed
+    TestBed,
 }                                       from '@angular/core/testing';
 import { By }                           from '@angular/platform-browser';
 
-import { DropdownTreeFieldModule }      from './dropdown-tree-field.module';
 import { DropdownTreeFieldComponent }   from './dropdown-tree-field.component';
+import { DropdownTreeFieldModule }      from './dropdown-tree-field.module';
 import { TreeNode }                     from './tree-node.model';
 
 let currentId = 1;
@@ -179,9 +179,9 @@ describe('DropdownTreeFieldComponent', () => {
             expect(component.selectedText).toBe(`${nodes[0].text} / ${nodes[0].children[2].text} / ${selectedNode.text}`);
         });
 
-        /* tslint:disable */
+        /* tslint:disable:max-line-length */
         it('sets selectedText to selectedNode selectedText preceded by parent nodes\' text when showFullSelectedPath is true and selectedNode is not null and selectedText is populated', () => {
-        /* tslint:enable */
+        /* tslint:enable: */
             selectedNode.selectedText = 'Selected Text';
             component.showFullSelectedPath = true;
 
@@ -190,7 +190,7 @@ describe('DropdownTreeFieldComponent', () => {
             expect(component.selectedText).toBe(`${nodes[0].text} / ${nodes[0].children[2].text} / ${selectedNode.selectedText}`);
         });
 
-        /* tslint:disable */
+        /* tslint:disable:max-line-length */
         it('sets selectedText to selectedNode text preceded by parent nodes\' selectedText when showFullSelectedPath is true and selectedNode is not null and parent selectedText is populated', () => {
         /* tslint:enable */
             nodes[0].selectedText = 'Selected Text';
@@ -1237,9 +1237,9 @@ describe('DropdownTreeFieldComponent', () => {
         let id = currentId++;
 
         return {
-            id: id,
+            id,
             text: 'ABC-' + id,
-            children: children
+            children
         };
     }
 

@@ -16,7 +16,7 @@ import {
 }                   from './button-sizes.model';
 
 @Directive({
-    /* tslint:disable */
+    /* tslint:disable:directive-selector use-host-property-decorator */
     selector: 'button[cfButton], a[cfButton]',
     host: {
         '[class.btn]': 'true',
@@ -27,9 +27,11 @@ import {
     /* tslint:enable */
 })
 export class ButtonDirective implements OnInit {
+    /* tslint:disable:no-input-rename */
     @Input('cfBorderless') borderless: boolean = false;
     @Input('cfBlock') block: boolean = false;
     @Input('cfIconOnly') iconOnly: boolean = false;
+    /* tslint:enable */
 
     private _role: ButtonRole = ButtonRoles.default;
     private _size: ButtonSize = ButtonSizes.normal;
