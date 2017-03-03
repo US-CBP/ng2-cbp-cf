@@ -1,6 +1,6 @@
 ﻿import {
     ElementRef,
-    Injectable
+    Injectable,
 }                   from '@angular/core';
 
 @Injectable()

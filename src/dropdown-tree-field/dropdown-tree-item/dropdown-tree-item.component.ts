@@ -41,8 +41,8 @@ export class DropdownTreeItemComponent implements OnInit {
     constructor(private _service: DropdownTreeService) {
     }
 
-    ngOnInit() {
-        return this.idPrefix + this.node.id.toString();
+    ngOnInit(): void {
+        this.id = this.idPrefix + this.node.id.toString();
     }
 
     @Input()
@@ -96,28 +96,28 @@ export class DropdownTreeItemComponent implements OnInit {
         }
     }
 
-    private _processExpansion() {
+    private _processExpansion(): void {
         if(this.node && this.expandedNodes) {
             this.isExpanded = this.hasChildren ? this.expandedNodes.has(this.node) : undefined;
             this.showChildren = this.hasChildren && this.isExpanded;
         }
     }
 
-    private _processHighlightedNode() {
+    private _processHighlightedNode(): void {
         this.isHighlighted = this.highlightedNode === this.node;
         if(this.isHighlighted) {
             this._service.elementToScrollTo = this.textElement;
         }
     }
 
-    private _processSelectedNode() {
+    private _processSelectedNode(): void {
         this.isSelected = this.selectedNode === this.node;
         if(this.isSelected) {
             this._service.elementToScrollTo = this.textElement;
         }
     }
 
-    onExpanderClick() {
+    onExpanderClick(): void {
         if(this.hasChildren) {
             if(this.isExpanded) {
                 this.nodeCollapsed.emit(this.node);
@@ -127,27 +127,27 @@ export class DropdownTreeItemComponent implements OnInit {
         }
     }
 
-    onChildNodeCollapsed(childNode: TreeNode) {
+    onChildNodeCollapsed(childNode: TreeNode): void {
         this.nodeCollapsed.emit(childNode);
     }
 
-    onChildNodeExpanded(childNode: TreeNode) {
+    onChildNodeExpanded(childNode: TreeNode): void {
         this.nodeExpanded.emit(childNode);
     }
 
-    onNodeMouseEnter() {
+    onNodeMouseEnter(): void {
         this.nodeHighlighted.emit(this.node);
     }
 
-    onChildNodeHighlighted(childNode: TreeNode) {
+    onChildNodeHighlighted(childNode: TreeNode): void {
         this.nodeHighlighted.emit(childNode);
     }
 
-    onNodeClick() {
+    onNodeClick(): void {
         this.nodeSelected.emit(this.node);
     }
 
-    onChildNodeSelected(childNode: TreeNode) {
+    onChildNodeSelected(childNode: TreeNode): void {
         this.nodeSelected.emit(childNode);
     }
 }

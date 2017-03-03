@@ -23,7 +23,7 @@ describe('DropdownTreeFieldComponent', () => {
         nodes = createNodeTree();
 
         TestBed.configureTestingModule({
-            imports: [DropdownTreeFieldModule.forRoot()]
+            imports: [DropdownTreeFieldModule.forRoot()],
         });
         fixture = TestBed.createComponent(DropdownTreeFieldComponent);
 
@@ -55,11 +55,11 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
 
             expect(component.expandedNodes).toEqual({
-                asymmetricMatch(actual: Set<TreeNode>) {
+                asymmetricMatch(actual: Set<TreeNode>): boolean {
                     return actual.size === 2 &&
                         actual.has(nodes[0]) &&
                         actual.has(nodes[0].children[2]);
-                }
+                },
             });
         });
 
@@ -677,7 +677,7 @@ describe('DropdownTreeFieldComponent', () => {
             it('Alt+ArrowDown opens the dropdown', () => {
                 let $event = new KeyboardEvent('keydown', {
                     altKey: true,
-                    key: 'ArrowDown'
+                    key: 'ArrowDown',
                 });
 
                 combobox.triggerEventHandler('keydown', $event);
@@ -694,7 +694,7 @@ describe('DropdownTreeFieldComponent', () => {
             it('Alt+ArrowUp closes the dropdown', () => {
                 let $event = new KeyboardEvent('keydown', {
                     altKey: true,
-                    key: 'ArrowUp'
+                    key: 'ArrowUp',
                 });
 
                 combobox.triggerEventHandler('keydown', $event);
@@ -704,7 +704,7 @@ describe('DropdownTreeFieldComponent', () => {
 
             it('Escape closes the dropdown', () => {
                 let $event = new KeyboardEvent('keydown', {
-                    key: 'Escape'
+                    key: 'Escape',
                 });
 
                 combobox.triggerEventHandler('keydown', $event);
@@ -714,7 +714,7 @@ describe('DropdownTreeFieldComponent', () => {
 
             it('ArrowUp highlights previous visible node of current highlighted node', () => {
                 let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowUp'
+                    key: 'ArrowUp',
                 });
                 component.highlightedNode = nodes[1];
                 component.selectedNode = nodes[2];
@@ -726,7 +726,7 @@ describe('DropdownTreeFieldComponent', () => {
 
             it('ArrowUp selects previous visible node of current highlighted node', () => {
                 let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowUp'
+                    key: 'ArrowUp',
                 });
                 component.highlightedNode = nodes[1];
                 component.selectedNode = nodes[2];
@@ -738,7 +738,7 @@ describe('DropdownTreeFieldComponent', () => {
 
             it('ArrowUp does not change highlighted node when current highlighted node is first visible node', () => {
                 let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowUp'
+                    key: 'ArrowUp',
                 });
                 component.highlightedNode = component.defaultNode;
                 component.selectedNode = nodes[2];
@@ -750,7 +750,7 @@ describe('DropdownTreeFieldComponent', () => {
 
             it('ArrowUp does not change selected node when current highlighted node is first visible node', () => {
                 let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowUp'
+                    key: 'ArrowUp',
                 });
                 component.highlightedNode = component.defaultNode;
                 component.selectedNode = nodes[2];
@@ -763,7 +763,7 @@ describe('DropdownTreeFieldComponent', () => {
             it('Ctrl+ArrowUp highlights previous visible node of current highlighted node', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'ArrowUp',
-                    ctrlKey: true
+                    ctrlKey: true,
                 });
                 component.highlightedNode = nodes[1];
                 component.selectedNode = nodes[2];
@@ -776,7 +776,7 @@ describe('DropdownTreeFieldComponent', () => {
             it('Ctrl+ArrowUp does not change selected node', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'ArrowUp',
-                    ctrlKey: true
+                    ctrlKey: true,
                 });
                 component.highlightedNode = nodes[1];
                 component.selectedNode = nodes[2];
@@ -789,7 +789,7 @@ describe('DropdownTreeFieldComponent', () => {
             it('Ctrl+ArrowUp does not change highlighted node when current highlighted node is first visible node', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'ArrowUp',
-                    ctrlKey: true
+                    ctrlKey: true,
                 });
                 component.highlightedNode = component.defaultNode;
                 component.selectedNode = nodes[2];
@@ -802,7 +802,7 @@ describe('DropdownTreeFieldComponent', () => {
             it('Ctrl+ArrowUp does not change selected node when current highlighted node is first visible node', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'ArrowUp',
-                    ctrlKey: true
+                    ctrlKey: true,
                 });
                 component.highlightedNode = component.defaultNode;
                 component.selectedNode = nodes[2];
@@ -814,7 +814,7 @@ describe('DropdownTreeFieldComponent', () => {
 
             it('ArrowDown highlights next visible node of current highlighted node', () => {
                 let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowDown'
+                    key: 'ArrowDown',
                 });
                 component.highlightedNode = nodes[1];
                 component.selectedNode = nodes[0];
@@ -826,7 +826,7 @@ describe('DropdownTreeFieldComponent', () => {
 
             it('ArrowDown selects next visible node of current highlighted node', () => {
                 let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowDown'
+                    key: 'ArrowDown',
                 });
                 component.highlightedNode = nodes[1];
                 component.selectedNode = nodes[0];
@@ -838,7 +838,7 @@ describe('DropdownTreeFieldComponent', () => {
 
             it('ArrowDown does not change highlighted node when current highlighted node is last visible node', () => {
                 let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowDown'
+                    key: 'ArrowDown',
                 });
                 component.highlightedNode = nodes[2];
                 component.selectedNode = nodes[0];
@@ -850,7 +850,7 @@ describe('DropdownTreeFieldComponent', () => {
 
             it('ArrowDown does not change selected node when current highlighted node is last visible node', () => {
                 let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowDown'
+                    key: 'ArrowDown',
                 });
                 component.highlightedNode = nodes[2];
                 component.selectedNode = nodes[0];
@@ -863,7 +863,7 @@ describe('DropdownTreeFieldComponent', () => {
             it('Ctrl+ArrowDown highlights next visible node of current highlighted node', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'ArrowDown',
-                    ctrlKey: true
+                    ctrlKey: true,
                 });
                 component.highlightedNode = nodes[1];
                 component.selectedNode = nodes[0];
@@ -876,7 +876,7 @@ describe('DropdownTreeFieldComponent', () => {
             it('Ctrl+ArrowDown does not change selected node', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'ArrowDown',
-                    ctrlKey: true
+                    ctrlKey: true,
                 });
                 component.highlightedNode = nodes[1];
                 component.selectedNode = nodes[0];
@@ -889,7 +889,7 @@ describe('DropdownTreeFieldComponent', () => {
             it('Ctrl+ArrowDown does not change highlighted node when current highlighted node is last visible node', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'ArrowDown',
-                    ctrlKey: true
+                    ctrlKey: true,
                 });
                 component.highlightedNode = nodes[2];
                 component.selectedNode = nodes[0];
@@ -902,7 +902,7 @@ describe('DropdownTreeFieldComponent', () => {
             it('Ctrl+ArrowDown does not change selected node when current highlighted node is last visible node', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'ArrowDown',
-                    ctrlKey: true
+                    ctrlKey: true,
                 });
                 component.highlightedNode = nodes[2];
                 component.selectedNode = nodes[0];
@@ -914,11 +914,11 @@ describe('DropdownTreeFieldComponent', () => {
 
             it('ArrowLeft does not change highlighted node when current highlighted node is expanded', () => {
                 let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowLeft'
+                    key: 'ArrowLeft',
                 });
                 component.expandedNodes = new Set<TreeNode>([
                     nodes[0],
-                    nodes[0].children[1]
+                    nodes[0].children[1],
                 ]);
                 component.highlightedNode = nodes[0].children[1];
                 component.selectedNode = nodes[2];
@@ -930,11 +930,11 @@ describe('DropdownTreeFieldComponent', () => {
 
             it('ArrowLeft does not change selected node when current highlighted node is expanded', () => {
                 let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowLeft'
+                    key: 'ArrowLeft',
                 });
                 component.expandedNodes = new Set<TreeNode>([
                     nodes[0],
-                    nodes[0].children[1]
+                    nodes[0].children[1],
                 ]);
                 component.highlightedNode = nodes[0].children[1];
                 component.selectedNode = nodes[2];
@@ -946,11 +946,11 @@ describe('DropdownTreeFieldComponent', () => {
 
             it('ArrowLeft collapses current highlighted node when current highlighted node is expanded', () => {
                 let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowLeft'
+                    key: 'ArrowLeft',
                 });
                 component.expandedNodes = new Set<TreeNode>([
                     nodes[0],
-                    nodes[0].children[1]
+                    nodes[0].children[1],
                 ]);
                 component.highlightedNode = nodes[0].children[1];
                 component.selectedNode = nodes[2];
@@ -962,7 +962,7 @@ describe('DropdownTreeFieldComponent', () => {
 
             it('ArrowLeft changes highlighted node to parent of current highlighted node when current highlighted node is collapsed', () => {
                 let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowLeft'
+                    key: 'ArrowLeft',
                 });
                 component.expandedNodes = new Set<TreeNode>([nodes[0]]);
                 component.highlightedNode = nodes[0].children[1];
@@ -975,7 +975,7 @@ describe('DropdownTreeFieldComponent', () => {
 
             it('ArrowLeft changes selected node to parent of current highlighted node when current highlighted node is collapsed', () => {
                 let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowLeft'
+                    key: 'ArrowLeft',
                 });
                 component.expandedNodes = new Set<TreeNode>([nodes[0]]);
                 component.highlightedNode = nodes[0].children[1];
@@ -988,7 +988,7 @@ describe('DropdownTreeFieldComponent', () => {
 
             it('ArrowLeft does not change highlighted node when current highlighted node is collapsed and has no parent', () => {
                 let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowLeft'
+                    key: 'ArrowLeft',
                 });
                 component.highlightedNode = nodes[0];
                 component.selectedNode = nodes[2];
@@ -1000,7 +1000,7 @@ describe('DropdownTreeFieldComponent', () => {
 
             it('ArrowLeft does not change selected node when current highlighted node is collapsed and has no parent', () => {
                 let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowLeft'
+                    key: 'ArrowLeft',
                 });
                 component.highlightedNode = nodes[0];
                 component.selectedNode = nodes[2];
@@ -1012,7 +1012,7 @@ describe('DropdownTreeFieldComponent', () => {
 
             it('ArrowRight does not change highlighted node when current highlighted node is collapsed', () => {
                 let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowRight'
+                    key: 'ArrowRight',
                 });
                 component.highlightedNode = nodes[0];
                 component.selectedNode = nodes[2];
@@ -1024,7 +1024,7 @@ describe('DropdownTreeFieldComponent', () => {
 
             it('ArrowRight does not change selected node when current highlighted node is collapsed', () => {
                 let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowRight'
+                    key: 'ArrowRight',
                 });
                 component.highlightedNode = nodes[0];
                 component.selectedNode = nodes[2];
@@ -1036,7 +1036,7 @@ describe('DropdownTreeFieldComponent', () => {
 
             it('ArrowRight expands current highlighted node when current highlighted node is collapsed', () => {
                 let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowRight'
+                    key: 'ArrowRight',
                 });
                 component.highlightedNode = nodes[0];
                 component.selectedNode = nodes[2];
@@ -1048,7 +1048,7 @@ describe('DropdownTreeFieldComponent', () => {
 
             it('ArrowRight changes highlighted node to first child of the current highlighted node when current highlighted node is expanded', () => {
                 let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowRight'
+                    key: 'ArrowRight',
                 });
                 component.expandedNodes = new Set<TreeNode>([nodes[0]]);
                 component.highlightedNode = nodes[0];
@@ -1061,7 +1061,7 @@ describe('DropdownTreeFieldComponent', () => {
 
             it('ArrowRight changes selected node to first child of the current highlighted node when current highlighted node is expanded', () => {
                 let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowRight'
+                    key: 'ArrowRight',
                 });
                 component.expandedNodes = new Set<TreeNode>([nodes[0]]);
                 component.highlightedNode = nodes[0];
@@ -1074,7 +1074,7 @@ describe('DropdownTreeFieldComponent', () => {
 
             it('ArrowRight does not change highlighted node when current highlighted node has no children', () => {
                 let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowRight'
+                    key: 'ArrowRight',
                 });
                 component.highlightedNode = nodes[0];
                 component.selectedNode = nodes[2];
@@ -1086,7 +1086,7 @@ describe('DropdownTreeFieldComponent', () => {
 
             it('ArrowRight does not change selected node when current highlighted node has no children', () => {
                 let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowRight'
+                    key: 'ArrowRight',
                 });
                 component.highlightedNode = nodes[0];
                 component.selectedNode = nodes[2];
@@ -1098,7 +1098,7 @@ describe('DropdownTreeFieldComponent', () => {
 
             it('Home changes highlighted node to first visible node', () => {
                 let $event = new KeyboardEvent('keydown', {
-                    key: 'Home'
+                    key: 'Home',
                 });
                 component.expandedNodes = new Set<TreeNode>([nodes[0]]);
                 component.highlightedNode = nodes[0].children[1];
@@ -1111,7 +1111,7 @@ describe('DropdownTreeFieldComponent', () => {
 
             it('Home changes selected node to first visible node', () => {
                 let $event = new KeyboardEvent('keydown', {
-                    key: 'Home'
+                    key: 'Home',
                 });
                 component.expandedNodes = new Set<TreeNode>([nodes[0]]);
                 component.highlightedNode = nodes[0].children[1];
@@ -1125,7 +1125,7 @@ describe('DropdownTreeFieldComponent', () => {
             it('Ctrl+Home changes highlighted node to first visible node', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'Home',
-                    ctrlKey: true
+                    ctrlKey: true,
                 });
                 component.expandedNodes = new Set<TreeNode>([nodes[0]]);
                 component.highlightedNode = nodes[0].children[1];
@@ -1139,7 +1139,7 @@ describe('DropdownTreeFieldComponent', () => {
             it('Ctrl+Home does not change selected node', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'Home',
-                    ctrlKey: true
+                    ctrlKey: true,
                 });
                 component.expandedNodes = new Set<TreeNode>([nodes[0]]);
                 component.highlightedNode = nodes[0].children[1];
@@ -1152,7 +1152,7 @@ describe('DropdownTreeFieldComponent', () => {
 
             it('End changes highlighted node to last visible node', () => {
                 let $event = new KeyboardEvent('keydown', {
-                    key: 'End'
+                    key: 'End',
                 });
                 component.expandedNodes = new Set<TreeNode>([nodes[0]]);
                 component.highlightedNode = nodes[0].children[1];
@@ -1165,7 +1165,7 @@ describe('DropdownTreeFieldComponent', () => {
 
             it('End changes selected node to last visible node', () => {
                 let $event = new KeyboardEvent('keydown', {
-                    key: 'End'
+                    key: 'End',
                 });
                 component.expandedNodes = new Set<TreeNode>([nodes[0]]);
                 component.highlightedNode = nodes[0].children[1];
@@ -1179,7 +1179,7 @@ describe('DropdownTreeFieldComponent', () => {
             it('Ctrl+End changes highlighted node to last visible node', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'End',
-                    ctrlKey: true
+                    ctrlKey: true,
                 });
                 component.expandedNodes = new Set<TreeNode>([nodes[0]]);
                 component.highlightedNode = nodes[0].children[1];
@@ -1193,7 +1193,7 @@ describe('DropdownTreeFieldComponent', () => {
             it('Ctrl+End does not change selected node', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: 'End',
-                    ctrlKey: true
+                    ctrlKey: true,
                 });
                 component.expandedNodes = new Set<TreeNode>([nodes[0]]);
                 component.highlightedNode = nodes[0].children[1];
@@ -1206,7 +1206,7 @@ describe('DropdownTreeFieldComponent', () => {
 
             it('Space changes selected node to current highlighted node', () => {
                 let $event = new KeyboardEvent('keydown', {
-                    key: ' '
+                    key: ' ',
                 });
                 component.expandedNodes = new Set<TreeNode>([nodes[0]]);
                 component.highlightedNode = nodes[0].children[1];
@@ -1220,7 +1220,7 @@ describe('DropdownTreeFieldComponent', () => {
             it('Ctrl+Space changes selected node to current highlighted node', () => {
                 let $event = new KeyboardEvent('keydown', {
                     key: ' ',
-                    ctrlKey: true
+                    ctrlKey: true,
                 });
                 component.expandedNodes = new Set<TreeNode>([nodes[0]]);
                 component.highlightedNode = nodes[0].children[1];
@@ -1239,7 +1239,7 @@ describe('DropdownTreeFieldComponent', () => {
         return {
             id,
             text: 'ABC-' + id,
-            children
+            children,
         };
     }
 
@@ -1249,22 +1249,22 @@ describe('DropdownTreeFieldComponent', () => {
                 createNode(),
                 createNode(
                     createNode(),
-                    createNode()
+                    createNode(),
                 ),
                 createNode(
                     createNode(),
                     createNode(
-                        createNode()
+                        createNode(),
                     ),
-                    createNode()
-                )
+                    createNode(),
+                ),
             ),
             createNode(
                 createNode(
-                    createNode()
-                )
+                    createNode(),
+                ),
             ),
-            createNode()
+            createNode(),
         ];
     }
 });

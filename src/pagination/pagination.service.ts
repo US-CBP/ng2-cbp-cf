@@ -8,7 +8,7 @@ export class PaginationService {
     constructor() {
     }
 
-    getPager(totalItems: number, currentPage: number, pageSize: number) {
+    getPager(totalItems: number, currentPage: number, pageSize: number): Pager {
         // default to first page
         currentPage = currentPage || 1;
 

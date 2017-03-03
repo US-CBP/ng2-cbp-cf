@@ -2,17 +2,17 @@
 import { Component }                from '@angular/core';
 import {
     ComponentFixture,
-    TestBed
+    TestBed,
 }                                   from '@angular/core/testing';
 import { By }                       from '@angular/platform-browser';
 
 import {
     ButtonRole,
-    ButtonRoles
+    ButtonRoles,
 }                                   from './button-roles.model';
 import {
     ButtonSize,
-    ButtonSizes
+    ButtonSizes,
 }                                   from './button-sizes.model';
 import { ButtonDirective }          from './button.directive';
 import { ButtonModule }             from './button.module';
@@ -25,7 +25,7 @@ describe('ButtonDirective', () => {
         beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [CommonModule, ButtonModule.forRoot()],
-                declarations: [TestRoleComponent]
+                declarations: [TestRoleComponent],
             });
 
             fixture = TestBed.createComponent(TestRoleComponent);
@@ -81,7 +81,7 @@ describe('ButtonDirective', () => {
         beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [CommonModule, ButtonModule.forRoot()],
-                declarations: [TestSizeComponent]
+                declarations: [TestSizeComponent],
             });
 
             fixture = TestBed.createComponent(TestSizeComponent);
@@ -141,7 +141,7 @@ describe('ButtonDirective', () => {
         beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [CommonModule, ButtonModule.forRoot()],
-                declarations: [TestBlockComponent]
+                declarations: [TestBlockComponent],
             });
 
             fixture = TestBed.createComponent(TestBlockComponent);
@@ -200,7 +200,7 @@ describe('ButtonDirective', () => {
         beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [CommonModule, ButtonModule.forRoot()],
-                declarations: [TestIconOnlyComponent]
+                declarations: [TestIconOnlyComponent],
             });
 
             fixture = TestBed.createComponent(TestIconOnlyComponent);
@@ -257,7 +257,7 @@ describe('ButtonDirective', () => {
     template: `
         <button cfButton>Default</button>
         <button cfButton [cfRole]='role'>With Value</button>
-`
+`,
 })
 class TestRoleComponent {
     role: ButtonRole = ButtonRoles.danger;
@@ -267,7 +267,7 @@ class TestRoleComponent {
     template: `
         <button cfButton>Default</button>
         <button cfButton [cfSize]='size'>With Value</button>
-`
+`,
 })
 class TestSizeComponent {
     size: ButtonSize = ButtonSizes.large;
@@ -277,7 +277,7 @@ class TestSizeComponent {
     template: `
         <button cfButton>Default</button>
         <button cfButton [cfBlock]='block'>With Value</button>
-`
+`,
 })
 class TestBlockComponent {
     block: boolean = true;
@@ -287,7 +287,7 @@ class TestBlockComponent {
     template: `
         <button cfButton>Default <i class='fa fa-arrow-right'></i></button>
         <button cfButton [cfIconOnly]='iconOnly'>With Value <i class='fa fa-arrow-right'></i></button>
-`
+`,
 })
 class TestIconOnlyComponent {
     iconOnly: boolean = true;

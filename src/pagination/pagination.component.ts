@@ -35,7 +35,7 @@ export class PaginationComponent implements OnInit {
         this.pager = {} as Pager;
     }
 
-    updateLimit(limit: number) {
+    updateLimit(limit: number): void {
         let qy: Query = this.query;
         if(qy && qy.limit && qy.limit !== limit) {
             qy.limit = limit;
@@ -43,7 +43,7 @@ export class PaginationComponent implements OnInit {
         }
     }
 
-    showPagination() {
+    showPagination(): boolean {
         let tc = this.totalCount;
         let qy = this.query;
         if(tc && tc > qy.limit) {
@@ -53,7 +53,7 @@ export class PaginationComponent implements OnInit {
         }
     }
 
-    setPage(page: number, forceRefresh: boolean = false) {
+    setPage(page: number, forceRefresh: boolean = false): void {
         let tc = this.totalCount;
         if(!tc || page < 1 || page > tc) {
             return;
@@ -85,8 +85,7 @@ export class PaginationComponent implements OnInit {
         this._query = qy;
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.getpagedata.emit(this.query);
     }
-
 }

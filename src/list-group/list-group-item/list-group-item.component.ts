@@ -27,20 +27,20 @@ export class ListGroupItemComponent {
 
     constructor() {}
 
-    toggleActive() {
+    toggleActive(): void {
         this.active = !this.active;
     }
 
-    clickItem(event: Event) {
+    clickItem(event: Event): void {
         this.toggleActive();
         this.click.emit(event);
     }
 
-    dragstartContainer(event: DragEvent) {
+    dragstartContainer(event: DragEvent): void {
         this.dragstartListGroupItem.emit(event);
     }
 
-    dragendContainer(event: DragEvent) {
+    dragendContainer(event: DragEvent): void {
         this.dragendListGroupItem.emit(event);
     }
 }

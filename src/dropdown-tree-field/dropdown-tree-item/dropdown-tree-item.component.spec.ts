@@ -26,7 +26,7 @@ describe('DropdownTreeItemComponent', () => {
             imports: [CommonModule, FormsModule],
             declarations: [DropdownTreeItemComponent],
             schemas: [CUSTOM_ELEMENTS_SCHEMA],
-            providers: [DropdownTreeService]
+            providers: [DropdownTreeService],
         });
         fixture = TestBed.createComponent(DropdownTreeItemComponent);
 
@@ -399,7 +399,7 @@ describe('DropdownTreeItemComponent', () => {
         return {
             id: currentId++,
             text: 'ABC',
-            children: []
+            children: [],
         };
     }
 });

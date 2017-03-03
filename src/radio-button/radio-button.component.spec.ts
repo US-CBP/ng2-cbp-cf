@@ -442,7 +442,7 @@ describe('RadioButtonComponent', () => {
             <cf-radio-button value='water'>Squirtle</cf-radio-button>
             <cf-radio-button value='leaf'>Bulbasaur</cf-radio-button>
         </cf-radio-group>
-`
+`,
 })
 /* tslint:disable:component-class-suffix */
 class RadiosInsideRadioGroup {
@@ -467,7 +467,7 @@ class RadiosInsideRadioGroup {
         <cf-radio-button name='fruit' value='banana' aria-label='Banana' aria-labelledby='xyz'>
         </cf-radio-button>
         <cf-radio-button name='fruit' value='raspberry'>Raspberry</cf-radio-button>
-`
+`,
 })
 /* tslint:disable:component-class-suffix */
 class StandaloneRadioButtons { }
@@ -480,7 +480,7 @@ class StandaloneRadioButtons { }
                 {{option.label}}
             </cf-radio-button>
         </cf-radio-group>
-`
+`,
 })
 /* tslint:disable:component-class-suffix */
 class RadioGroupWithNgModel {

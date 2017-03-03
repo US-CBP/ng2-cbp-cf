@@ -18,7 +18,7 @@ let nextId = 0;
 export const CF_CHECKBOX_CONTROL_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
   useExisting: forwardRef(() => CheckboxComponent),
-  multi: true
+  multi: true,
 };
 /* tslint:enable */
 
@@ -86,15 +86,15 @@ export class CheckboxComponent implements ControlValueAccessor {
         }
     }
 
-    toggle() {
+    toggle(): void {
         this.checked = !this.checked;
     }
 
-    onInputClick($event: Event) {
+    onInputClick($event: Event): void {
          $event.stopPropagation();
     }
 
-    onInputChange($event: Event) {
+    onInputChange($event: Event): void {
         $event.stopPropagation();
         if(!this.disabled) {
             this.toggle();
@@ -105,20 +105,20 @@ export class CheckboxComponent implements ControlValueAccessor {
         }, 0.0001);
     }
 
-    onInputFocus() {
+    onInputFocus(): void {
         this.focus = true;
     }
 
-    onInputBlur() {
+    onInputBlur(): void {
         this.focus = false;
         this.onTouched();
     }
 
-    onMouseUp() {
+    onMouseUp(): void {
         this.focus = false;
     }
 
-    private _emitChangeEvent() {
+    private _emitChangeEvent(): void {
         let event = new CheckboxChange();
         event.source = this;
         event.checked = this.checked;
@@ -127,15 +127,15 @@ export class CheckboxComponent implements ControlValueAccessor {
         this.change.emit(event);
     }
 
-    writeValue(value: any) {
+    writeValue(value: any): void {
         this.checked = !!value;
     }
 
-    registerOnChange(fn: (value: any) => void) {
+    registerOnChange(fn: (value: any) => void): void {
         this._controlValueAccessorChangeFn = fn;
     }
 
-    registerOnTouched(fn: any) {
+    registerOnTouched(fn: any): void {
         this.onTouched = fn;
     }
 }

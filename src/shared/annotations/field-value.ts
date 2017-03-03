@@ -11,7 +11,7 @@
  *   <component myField="">
  * @deprecated
  */
-function booleanFieldValueFactory() {
+function booleanFieldValueFactory(): Function {
     /* tslint:disable:only-arrow-functions */
     return function booleanFieldValueMetadata(target: any, key: string): void {
         const defaultValue = target[key];
@@ -19,10 +19,10 @@ function booleanFieldValueFactory() {
         target[localKey] = defaultValue;
 
         Object.defineProperty(target, key, {
-            get() { return (<any>this)[localKey]; },
-            set(value: boolean) {
+            get(): boolean { return (<any>this)[localKey]; },
+            set(value: boolean): void {
                 (<any>this)[localKey] = value != null && `${value}` !== 'false';
-            }
+            },
         });
     };
     /* tslint:enable */

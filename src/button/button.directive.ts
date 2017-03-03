@@ -3,16 +3,16 @@
     ElementRef,
     Input,
     OnInit,
-    Renderer
+    Renderer,
 }                   from '@angular/core';
 
 import {
     ButtonRole,
-    ButtonRoles
+    ButtonRoles,
 }                   from './button-roles.model';
 import {
     ButtonSize,
-    ButtonSizes
+    ButtonSizes,
 }                   from './button-sizes.model';
 
 @Directive({
@@ -22,8 +22,8 @@ import {
         '[class.btn]': 'true',
         '[class.btn-hover]': 'borderless',
         '[class.btn-block]': 'block',
-        '[class.btn-icon-only]': 'iconOnly'
-    }
+        '[class.btn-icon-only]': 'iconOnly',
+    },
     /* tslint:enable */
 })
 export class ButtonDirective implements OnInit {
@@ -71,18 +71,18 @@ export class ButtonDirective implements OnInit {
         }
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.addClasses(this.role.classes);
         this.addClasses(this.size.classes);
     }
 
-    protected addClasses(classes: string[]) {
+    protected addClasses(classes: string[]): void {
         for(let c of classes) {
             this.renderer.setElementClass(this.element.nativeElement, c, true);
         }
     }
 
-    protected removeClasses(classes: string[]) {
+    protected removeClasses(classes: string[]): void {
         for(let c of classes) {
             this.renderer.setElementClass(this.element.nativeElement, c, false);
         }

@@ -27,7 +27,7 @@ describe('PayPeriodCalendarComponent', () => {
         TestBed.configureTestingModule({
             imports: [CommonModule, FormsModule],
             declarations: [ButtonDirective, SelectFieldComponent, PayPeriodCalendarComponent],
-            schemas: [CUSTOM_ELEMENTS_SCHEMA]
+            schemas: [CUSTOM_ELEMENTS_SCHEMA],
         });
         fixture = TestBed.createComponent(PayPeriodCalendarComponent);
 
@@ -43,7 +43,7 @@ describe('PayPeriodCalendarComponent', () => {
                 id: 22,
                 number: 22,
                 startDate: startDate.toDate(),
-                isSelectable: true
+                isSelectable: true,
             };
 
             component.selectedPayPeriod = selectedPayPeriod;
@@ -58,7 +58,7 @@ describe('PayPeriodCalendarComponent', () => {
                 id: 22,
                 number: 22,
                 startDate: startDate.toDate(),
-                isSelectable: true
+                isSelectable: true,
             };
 
             component.selectedPayPeriod = selectedPayPeriod;
@@ -74,7 +74,7 @@ describe('PayPeriodCalendarComponent', () => {
                 id: 22,
                 number: 22,
                 startDate: startDate.toDate(),
-                isSelectable: true
+                isSelectable: true,
             };
 
             component.selectedPayPeriod = selectedPayPeriod;
@@ -89,7 +89,7 @@ describe('PayPeriodCalendarComponent', () => {
                 id: 22,
                 number: 22,
                 startDate: startDate.toDate(),
-                isSelectable: true
+                isSelectable: true,
             };
 
             component.selectedPayPeriod = selectedPayPeriod;
@@ -399,7 +399,7 @@ describe('PayPeriodCalendarComponent', () => {
                 id: 22,
                 number: 22,
                 startDate: startDate.toDate(),
-                isSelectable: true
+                isSelectable: true,
             };
             component.selectedPayPeriod = selectedPayPeriod;
 
@@ -412,7 +412,7 @@ describe('PayPeriodCalendarComponent', () => {
                 id: 1,
                 number: 1,
                 startDate: startDate.toDate(),
-                isSelectable: true
+                isSelectable: true,
             };
 
             expect(component.isSelected(payPeriod)).toBe(false);
@@ -424,7 +424,7 @@ describe('PayPeriodCalendarComponent', () => {
                 id: 22,
                 number: 22,
                 startDate: startDate.toDate(),
-                isSelectable: true
+                isSelectable: true,
             };
 
             expect(component.isSelected(payPeriod)).toBe(true);
@@ -442,7 +442,7 @@ describe('PayPeriodCalendarComponent', () => {
                 id: 1,
                 number: 1,
                 startDate: startDate.toDate(),
-                isSelectable: true
+                isSelectable: true,
             };
 
             component.selectPayPeriod(payPeriod);
@@ -459,7 +459,7 @@ describe('PayPeriodCalendarComponent', () => {
                 id: 1,
                 number: 1,
                 startDate: startDate.toDate(),
-                isSelectable: true
+                isSelectable: true,
             };
 
             component.selectPayPeriod(payPeriod);
@@ -582,7 +582,7 @@ describe('PayPeriodCalendarComponent', () => {
         });
     });
 
-    function createMonthsFromCurrent(startIndex: number, endIndex: number) {
+    function createMonthsFromCurrent(startIndex: number, endIndex: number): PayPeriodMonth[] {
         let results: any[] = [];
         let currentMoment = moment().startOf('day').startOf('month');
         for(let i = startIndex; i <= endIndex; i++) {

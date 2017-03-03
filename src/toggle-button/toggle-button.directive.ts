@@ -39,7 +39,7 @@ export class ToggleButtonDirective extends ButtonDirective {
     }
 
     @HostListener('click')
-    onClick() {
+    onClick(): void {
         this.active = !this.active;
 
         this.change.emit(this.active);

@@ -24,7 +24,7 @@ let nextId = 1;
 export const radioGroupControlValueAccessor: any = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => RadioGroupComponent),
-    multi: true
+    multi: true,
 };
 /* tslint:enable */
 
@@ -107,17 +107,17 @@ export class RadioGroupComponent implements AfterContentInit, ControlValueAccess
         }
     }
 
-    ngAfterContentInit() {
+    ngAfterContentInit(): void {
         this._isInitialized = true;
     }
 
-    touch() {
+    touch(): void {
         if(this.onTouched != null) {
             this.onTouched();
         }
     }
 
-    private updateRadioButtonNames() {
+    private updateRadioButtonNames(): void {
         if(this._radios != null) {
             this._radios.forEach(radio => {
                 radio.name = this.name;
@@ -125,7 +125,7 @@ export class RadioGroupComponent implements AfterContentInit, ControlValueAccess
         }
     }
 
-    private updateRadioButtonIsInlines() {
+    private updateRadioButtonIsInlines(): void {
         if(this._radios != null) {
             this._radios.forEach(radio => {
                 radio.isInline = this.isInline;
@@ -133,7 +133,7 @@ export class RadioGroupComponent implements AfterContentInit, ControlValueAccess
         }
     }
 
-    private updateSelectedRadioFromValue() {
+    private updateSelectedRadioFromValue(): void {
         /* tslint:disable:triple-equals */
         let isAlreadySelected = this._selected != null && this._selected.value == this._value;
         /* tslint:enable */
@@ -154,7 +154,7 @@ export class RadioGroupComponent implements AfterContentInit, ControlValueAccess
         }
     }
 
-    private emitChangeEvent() {
+    private emitChangeEvent(): void {
         let event = new RadioChange();
         event.source = this._selected;
         event.value = this._value;
@@ -163,19 +163,19 @@ export class RadioGroupComponent implements AfterContentInit, ControlValueAccess
         this.change.emit(event);
     }
 
-    writeValue(value: any) {
+    writeValue(value: any): void {
         this.value = value;
     }
 
-    registerOnChange(fn: (value: any) => void) {
+    registerOnChange(fn: (value: any) => void): void {
         this._controlValueAccessorChangeFn = fn;
     }
 
-    registerOnTouched(fn: any) {
+    registerOnTouched(fn: any): void {
         this.onTouched = fn;
     }
 
-    setDisabledState(value: boolean) {
+    setDisabledState(value: boolean): void {
         this.disabled = value;
     }
 }

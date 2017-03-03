@@ -95,7 +95,7 @@ export class RadioButtonComponent implements OnInit, OnDestroy {
         }
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         if(this.radioGroup != null) {
             /* tslint:disable:triple-equals */
             this.checked = this.radioGroup.value == this._value;
@@ -105,11 +105,11 @@ export class RadioButtonComponent implements OnInit, OnDestroy {
         }
     }
 
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this._subscription.unsubscribe();
     }
 
-    onInputChange($event: Event) {
+    onInputChange($event: Event): void {
         this.checked = true;
         this.emitChangeEvent();
 
@@ -120,17 +120,17 @@ export class RadioButtonComponent implements OnInit, OnDestroy {
         }
     }
 
-    onInputBlur() {
+    onInputBlur(): void {
         if(this.radioGroup != null) {
             this.radioGroup.touch();
         }
     }
 
-    onInputClick($event: Event) {
+    onInputClick($event: Event): void {
         $event.stopPropagation();
     }
 
-    private emitChangeEvent() {
+    private emitChangeEvent(): void {
         let event = new RadioChange();
         event.source = this;
         event.value = this._value;

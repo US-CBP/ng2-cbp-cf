@@ -35,8 +35,8 @@ describe('CheckboxComponent', () => {
                 CheckboxWithAriaLabel,
                 CheckboxWithAriaLabelledby,
                 CheckboxWithNameAttribute,
-                CheckboxWithChangeEvent
-            ]
+                CheckboxWithChangeEvent,
+            ],
         });
 
         TestBed.compileComponents();
@@ -467,7 +467,7 @@ describe('CheckboxComponent', () => {
             (change)="onCheckboxChange($event)">
           Simple checkbox
         </cf-checkbox>
-    </div>`
+    </div>`,
 })
 /* tslint:disable:component-class-suffix */
 class SingleCheckbox {
@@ -481,8 +481,8 @@ class SingleCheckbox {
     lastKeydownEvent: Event = null;
     changeCount: number = 0;
 
-    onCheckboxClick(event: Event) {}
-    onCheckboxChange(event: CheckboxChange) {}
+    onCheckboxClick(event: Event): void {}
+    onCheckboxChange(event: CheckboxChange): void {}
 }
 
 /** Simple component for testing an CheckboxComponent with ngModel. */
@@ -504,7 +504,7 @@ class CheckboxWithFormDirectives {
     template: `
         <cf-checkbox>Option 1</cf-checkbox>
         <cf-checkbox>Option 2</cf-checkbox>
-    `
+    `,
 }))
 /* tslint:disable:component-class-suffix */
 class MultipleCheckboxes {}
@@ -514,7 +514,7 @@ class MultipleCheckboxes {}
 @Component({
     template: `
         <cf-checkbox [tabindex]="customTabIndex" [disabled]="isDisabled">
-        </cf-checkbox>`
+        </cf-checkbox>`,
 })
 /* tslint:disable:component-class-suffix */
 class CheckboxWithTabIndex {
@@ -525,7 +525,7 @@ class CheckboxWithTabIndex {
 
 /** Simple test component with an aria-label set. */
 @Component({
-    template: `<cf-checkbox aria-label="Super effective"></cf-checkbox>`
+    template: `<cf-checkbox aria-label="Super effective"></cf-checkbox>`,
 })
 /* tslint:disable:component-class-suffix */
 class CheckboxWithAriaLabel {}
@@ -533,7 +533,7 @@ class CheckboxWithAriaLabel {}
 
 /** Simple test component with an aria-label set. */
 @Component({
-    template: `<cf-checkbox aria-labelledby="some-id"></cf-checkbox>`
+    template: `<cf-checkbox aria-labelledby="some-id"></cf-checkbox>`,
 })
 /* tslint:disable:component-class-suffix */
 class CheckboxWithAriaLabelledby {}
@@ -541,7 +541,7 @@ class CheckboxWithAriaLabelledby {}
 
 /** Simple test component with name attribute */
 @Component({
-    template: `<cf-checkbox name="test-name"></cf-checkbox>`
+    template: `<cf-checkbox name="test-name"></cf-checkbox>`,
 })
 /* tslint:disable:component-class-suffix */
 class CheckboxWithNameAttribute {}
@@ -549,7 +549,7 @@ class CheckboxWithNameAttribute {}
 
 /** Simple test component with change event */
 @Component({
-    template: `<cf-checkbox (change)="lastEvent = $event"></cf-checkbox>`
+    template: `<cf-checkbox (change)="lastEvent = $event"></cf-checkbox>`,
 })
 /* tslint:disable:component-class-suffix */
 class CheckboxWithChangeEvent {

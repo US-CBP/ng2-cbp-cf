@@ -41,10 +41,9 @@
             true,
             "never"
         ],
-        "trailing-comma": [ false ], // Consider removing
         "typedef": [
             true,
-            // "call-signature",
+            "call-signature",
             "member-variable-declaration",
             "parameter",
             "property-declaration"

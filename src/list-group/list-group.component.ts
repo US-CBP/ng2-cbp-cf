@@ -38,7 +38,7 @@ export class ListGroupComponent implements AfterContentInit, OnDestroy {
 
     constructor() {}
 
-    ngAfterContentInit() {
+    ngAfterContentInit(): void {
         if(!this.multiSelect) {
             this._menuItems.forEach(item => {
                 let sub = item.click.subscribe(event => { this.onToggleItemEvent(event); });
@@ -47,11 +47,11 @@ export class ListGroupComponent implements AfterContentInit, OnDestroy {
         }
     }
 
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this._subscription.forEach((sub: Subscription) => { sub.unsubscribe(); });
     }
 
-    onToggleItemEvent(event: Event) {
+    onToggleItemEvent(event: Event): void {
         this._menuItems.forEach((item: ListGroupItemComponent) => {
             if((<Element>event.target).id !== item.id) {
                 item.active = false;
@@ -59,15 +59,15 @@ export class ListGroupComponent implements AfterContentInit, OnDestroy {
         });
     }
 
-    dropContainer(event: DragEvent) {
+    dropContainer(event: DragEvent): void {
         this.dropListGroup.emit(event);
     }
 
-    dragoverContainer(event: DragEvent) {
+    dragoverContainer(event: DragEvent): void {
         this.dragoverListGroup.emit(event);
     }
 
-    dragleaveContainer(event: DragEvent) {
+    dragleaveContainer(event: DragEvent): void {
         this.dragleaveListGroup.emit(event);
     }
 

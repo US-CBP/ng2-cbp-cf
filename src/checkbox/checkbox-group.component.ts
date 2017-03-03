@@ -4,11 +4,11 @@ import {
     ContentChildren,
     Input,
     QueryList,
-    forwardRef
+    forwardRef,
 }                           from '@angular/core';
 
 import {
-    CheckboxComponent
+    CheckboxComponent,
 }                           from '../checkbox';
 
 @Component({
@@ -23,7 +23,7 @@ export class CheckboxGroupComponent implements AfterContentInit {
 
     constructor() {}
 
-    ngAfterContentInit() {
+    ngAfterContentInit(): void {
         this.updateCheckBoxIsInlines();
     }
 
@@ -35,7 +35,7 @@ export class CheckboxGroupComponent implements AfterContentInit {
         this._isInline = newValue;
     }
 
-    private updateCheckBoxIsInlines() {
+    private updateCheckBoxIsInlines(): void {
         if(this._checkboxes != null) {
             this._checkboxes.forEach(checkbox => {
                 checkbox.isInline = this.isInline;

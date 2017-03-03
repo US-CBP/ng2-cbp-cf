@@ -10,7 +10,7 @@
     Output,
     QueryList,
     ViewChild,
-    ViewChildren
+    ViewChildren,
 }                               from '@angular/core';
 
 import { DropdownTreeService }  from './dropdown-tree.service';
@@ -23,7 +23,7 @@ let nextId = 1;
     templateUrl: './dropdown-tree-field.component.html',
     styleUrls: ['./dropdown-tree-field.component.scss'],
     providers: [DropdownTreeService],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DropdownTreeFieldComponent implements OnInit, AfterViewChecked {
     @Input() id: string = createUniqueId();
@@ -110,13 +110,13 @@ export class DropdownTreeFieldComponent implements OnInit, AfterViewChecked {
         }
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.treeId = `${this.id}-tree`;
         this.treeItemIdPrefix = this.treeId + '-';
         this._initializeNodes();
     }
 
-    ngAfterViewChecked() {
+    ngAfterViewChecked(): void {
         if(this._service.elementToScrollTo != null) {
 
             let treeNativeElement = <HTMLElement>this.treeElementQuery.first.nativeElement;
@@ -132,7 +132,7 @@ export class DropdownTreeFieldComponent implements OnInit, AfterViewChecked {
         }
     }
 
-    collapseNode(node: TreeNode) {
+    collapseNode(node: TreeNode): void {
         let newExpandedNodes = new Set<TreeNode>(this.expandedNodes);
         newExpandedNodes.delete(node);
 
@@ -140,7 +140,7 @@ export class DropdownTreeFieldComponent implements OnInit, AfterViewChecked {
         this._resetVisibleNodes();
     }
 
-    expandNode(node: TreeNode) {
+    expandNode(node: TreeNode): void {
         let newExpandedNodes = new Set<TreeNode>(this.expandedNodes);
         newExpandedNodes.add(node);
 
@@ -148,15 +148,15 @@ export class DropdownTreeFieldComponent implements OnInit, AfterViewChecked {
         this._resetVisibleNodes();
     }
 
-    onComboboxFocus() {
+    onComboboxFocus(): void {
         this.isFocused = true;
     }
 
-    onComboboxBlur() {
+    onComboboxBlur(): void {
         this.isFocused = false;
     }
 
-    onComboboxClick() {
+    onComboboxClick(): void {
         if(this.isDropdownOpen) {
             this._closeDropdown();
         } else {
@@ -164,7 +164,7 @@ export class DropdownTreeFieldComponent implements OnInit, AfterViewChecked {
         }
     }
 
-    onComboboxKeydown($event: KeyboardEvent) {
+    onComboboxKeydown($event: KeyboardEvent): void {
         if(!this.isDropdownOpen) {
             if(this._isKey($event, 'ArrowDown', true)) {
                 this._openDropdown();
@@ -264,14 +264,14 @@ export class DropdownTreeFieldComponent implements OnInit, AfterViewChecked {
         }
     }
 
-    onLabelClick($event: MouseEvent) {
+    onLabelClick($event: MouseEvent): void {
         this.comboboxElement.nativeElement.focus();
 
         $event.preventDefault();
         $event.stopPropagation();
     }
 
-    onTreeClick($event: MouseEvent) {
+    onTreeClick($event: MouseEvent): void {
         this.comboboxElement.nativeElement.focus();
 
         if((<Element>$event.target).classList.contains('text')) {
@@ -282,24 +282,24 @@ export class DropdownTreeFieldComponent implements OnInit, AfterViewChecked {
         $event.stopPropagation();
     }
 
-    onNodeCollapsed(node: TreeNode) {
+    onNodeCollapsed(node: TreeNode): void {
         this.collapseNode(node);
     }
 
-    onNodeExpanded(node: TreeNode) {
+    onNodeExpanded(node: TreeNode): void {
         this.expandNode(node);
     }
 
-    onNodeHighlighted(node: TreeNode) {
+    onNodeHighlighted(node: TreeNode): void {
         this.highlightedNode = node;
     }
 
-    onNodeSelected(node: TreeNode) {
+    onNodeSelected(node: TreeNode): void {
         this._emitSelectedNode(node);
     }
 
     @HostListener('window:click')
-    onWindowClick() {
+    onWindowClick(): void {
         if(this._preventWindowClickClose) {
             this._preventWindowClickClose = false;
         } else if(this.isDropdownOpen) {
@@ -309,7 +309,7 @@ export class DropdownTreeFieldComponent implements OnInit, AfterViewChecked {
     }
 
     @HostListener('click')
-    onHostClick() {
+    onHostClick(): void {
         this._preventWindowClickClose = true;
     }
 
@@ -321,7 +321,7 @@ export class DropdownTreeFieldComponent implements OnInit, AfterViewChecked {
             $event.metaKey === false;
     }
 
-    private _initializeNodes() {
+    private _initializeNodes(): void {
         this._initializeMaps();
         this._reinitializeState();
 
@@ -335,7 +335,7 @@ export class DropdownTreeFieldComponent implements OnInit, AfterViewChecked {
         this._resetVisibleNodes();
     }
 
-    private _reinitializeState() {
+    private _reinitializeState(): void {
         this.defaultNode = this._initializeDefaultNode();
 
         this.effectiveSelectedNode = this.selectedNode == null ? this.defaultNode : this.selectedNode;
@@ -352,7 +352,7 @@ export class DropdownTreeFieldComponent implements OnInit, AfterViewChecked {
         return (highlightedNodeIndex < this._visibleNodes.length - 1) ? this._visibleNodes[highlightedNodeIndex + 1] : null;
     }
 
-    private _openDropdown() {
+    private _openDropdown(): void {
         this._setDropdownPosition();
 
         this.isFocused = true;
@@ -365,7 +365,7 @@ export class DropdownTreeFieldComponent implements OnInit, AfterViewChecked {
         this.ariaActiveDescendentId = this.treeItemIdPrefix + this.highlightedNode.id.toString();
     }
 
-    private _closeDropdown() {
+    private _closeDropdown(): void {
         this.isFocused = true;
         this.isDropdownOpen = false;
         this._resetVisibleNodes();
@@ -383,7 +383,7 @@ export class DropdownTreeFieldComponent implements OnInit, AfterViewChecked {
         }
     }
 
-    private _expandNodesToNode(nodeToFind: TreeNode) {
+    private _expandNodesToNode(nodeToFind: TreeNode): void {
         let parentNode = this._parentMap.get(nodeToFind);
         while(parentNode != null) {
             this.expandedNodes.add(parentNode);
@@ -405,7 +405,7 @@ export class DropdownTreeFieldComponent implements OnInit, AfterViewChecked {
         return {
             id: '-default-node',
             text,
-            children: []
+            children: [],
         };
     }
 
@@ -428,7 +428,7 @@ export class DropdownTreeFieldComponent implements OnInit, AfterViewChecked {
             (selectedNode.selectedText || selectedNode.text);
     }
 
-    private _processNodeForMaps(currentNode: TreeNode, parentNode: TreeNode) {
+    private _processNodeForMaps(currentNode: TreeNode, parentNode: TreeNode): void {
         this._parentMap.set(currentNode, parentNode);
 
         if(currentNode.children != null) {
@@ -436,20 +436,20 @@ export class DropdownTreeFieldComponent implements OnInit, AfterViewChecked {
         }
     }
 
-    private _initializeMaps() {
+    private _initializeMaps(): void {
         this._parentMap = new Map<TreeNode, TreeNode>();
 
         this.nodes.forEach(node => this._processNodeForMaps(node, null));
     }
 
-    private _processNodeForVisible(currentNode: TreeNode) {
+    private _processNodeForVisible(currentNode: TreeNode): void {
         this._visibleNodes.push(currentNode);
         if(currentNode.children != null && currentNode.children.length > 0 && this.expandedNodes.has(currentNode)) {
             currentNode.children.forEach(node => this._processNodeForVisible(node));
         }
     }
 
-    private _resetVisibleNodes() {
+    private _resetVisibleNodes(): void {
         if(this.isDropdownOpen) {
             this._visibleNodes = [];
             if(this.defaultNode != null) {
@@ -461,20 +461,20 @@ export class DropdownTreeFieldComponent implements OnInit, AfterViewChecked {
         }
     }
 
-    private _setDropdownPosition() {
+    private _setDropdownPosition(): void {
         let rect = <ClientRect>this.dropdownContainerElement.nativeElement.getBoundingClientRect();
         this.dropdownLeft = rect.left;
         this.dropdownTop = rect.bottom;
         this.dropdownWidth = rect.width;
     }
 
-    private _emitSelectedNode(node: TreeNode) {
+    private _emitSelectedNode(node: TreeNode): void {
         if(this.selectedNode !== node && !(this.selectedNode == null && node === this.defaultNode)) {
             this.nodeSelected.emit(node === this.defaultNode ? null : node);
         }
     }
 }
 
-function createUniqueId() {
+function createUniqueId(): string {
     return 'dropdown-tree-field-' + nextId++;
 }

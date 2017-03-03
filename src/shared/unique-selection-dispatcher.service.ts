@@ -1,7 +1,7 @@
 ﻿import { Injectable }   from '@angular/core';
 import {
     BehaviorSubject,
-    Observable
+    Observable,
 }                       from 'rxjs';
 
 export interface UniqueSelectionDispatcherValue {
@@ -14,7 +14,7 @@ export class UniqueSelectionDispatcher {
     private _behavior: BehaviorSubject<UniqueSelectionDispatcherValue> = new BehaviorSubject<UniqueSelectionDispatcherValue>({ id: null, name: null });
     private _observable: Observable<UniqueSelectionDispatcherValue> = this._behavior.asObservable();
 
-    notify(id: string, name: string) {
+    notify(id: string, name: string): void {
         this._behavior.next({ id, name });
     }
 
