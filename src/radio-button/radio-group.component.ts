@@ -46,7 +46,7 @@ export class RadioGroupComponent implements AfterContentInit, ControlValueAccess
     private _isInline: boolean = false;
     private _selected: RadioButtonComponent = null;
     private _isInitialized: boolean = false;
-    private _controlValueAccessorChangeFn: (value: any) => void = value => { };
+    private _controlValueAccessorChangeFn: (value: any) => void = () => { };
 
     onTouched: () => any = () => { };
 

@@ -11,7 +11,7 @@
         "moduleResolution": "node",
         "noEmitHelpers": true,
         "noUnusedLocals": true,
-        "noUnusedParameters": false,
+        "noUnusedParameters": true,
         "removeComments": true,
         "target": "es5",
         "types": [

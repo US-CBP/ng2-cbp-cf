@@ -193,7 +193,7 @@ export class PayPeriodCalendarComponent implements OnInit {
         return this.nextMonths.get(this._shownMonth) == null;
     }
 
-    payPeriodTrackBy(index: number, pp: PayPeriod): number {
+    payPeriodTrackBy(_index: number, pp: PayPeriod): number {
         return pp.id;
     }
 

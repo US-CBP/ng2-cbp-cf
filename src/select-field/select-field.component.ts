@@ -64,7 +64,7 @@ export class SelectFieldComponent implements ControlValueAccessor {
     @ViewChild('select') private _select: ElementRef;
     private _idCounter: number = 0;
 
-    onSelectChange: (value: any) => void = value => { };
+    onSelectChange: (value: any) => void = () => { };
 
     private _onTouched: () => any = () => {};
 

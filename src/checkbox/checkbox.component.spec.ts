@@ -463,8 +463,8 @@ describe('CheckboxComponent', () => {
             [indeterminate]="isIndeterminate" 
             [disabled]="isDisabled"
             (change)="changeCount = changeCount + 1"
-            (click)="onCheckboxClick($event)"
-            (change)="onCheckboxChange($event)">
+            (click)="onCheckboxClick()"
+            (change)="onCheckboxChange()">
           Simple checkbox
         </cf-checkbox>
     </div>`,
@@ -481,8 +481,8 @@ class SingleCheckbox {
     lastKeydownEvent: Event = null;
     changeCount: number = 0;
 
-    onCheckboxClick(event: Event): void {}
-    onCheckboxChange(event: CheckboxChange): void {}
+    onCheckboxClick(): void {}
+    onCheckboxChange(): void {}
 }
 
 /** Simple component for testing an CheckboxComponent with ngModel. */

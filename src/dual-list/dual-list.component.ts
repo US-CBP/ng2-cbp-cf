@@ -61,7 +61,7 @@ export class DualListComponent implements ControlValueAccessor {
 
     private _source: any[] = [];
     private _selected: any[] = [];
-    private _controlValueAccessorChangeFn: (value: any) => void = value => {};
+    private _controlValueAccessorChangeFn: (value: any) => void = () => {};
 
     onTouched: () => any = () => {};
 

@@ -131,9 +131,9 @@ class TestActiveComponent {
     active: boolean = true;
     inactive: boolean = false;
 
-    onInitiallyActiveChange(newValue: boolean): void {
+    onInitiallyActiveChange(_newValue: boolean): void {
     }
 
-    onInitiallyInactiveChange(newValue: boolean): void {
+    onInitiallyInactiveChange(_newValue: boolean): void {
     }
 }

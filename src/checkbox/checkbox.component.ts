@@ -52,7 +52,7 @@ export class CheckboxComponent implements ControlValueAccessor {
 
     private _indeterminate: boolean = false;
     private _checked: boolean;
-    private _controlValueAccessorChangeFn: (value: any) => void = value => {};
+    private _controlValueAccessorChangeFn: (value: any) => void = () => {};
 
     onTouched: () => any = () => {};
 
