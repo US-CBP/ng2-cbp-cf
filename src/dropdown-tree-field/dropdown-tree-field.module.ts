@@ -1,7 +1,7 @@
 ﻿import { CommonModule }                 from '@angular/common';
 import {
     ModuleWithProviders,
-    NgModule
+    NgModule,
 }                                       from '@angular/core';
 import { FormsModule }                  from '@angular/forms';
 
@@ -11,21 +11,21 @@ import { DropdownTreeItemComponent }    from './dropdown-tree-item';
 @NgModule({
     imports: [
         CommonModule,
-        FormsModule
+        FormsModule,
     ],
     exports: [
-        DropdownTreeFieldComponent
+        DropdownTreeFieldComponent,
     ],
     declarations: [
         DropdownTreeFieldComponent,
-        DropdownTreeItemComponent
-    ]
+        DropdownTreeItemComponent,
+    ],
 })
 export class DropdownTreeFieldModule {
     static forRoot(): ModuleWithProviders {
         return {
             ngModule: DropdownTreeFieldModule,
-            providers: []
+            providers: [],
         };
     }
 }

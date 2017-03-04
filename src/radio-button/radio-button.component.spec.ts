@@ -1,38 +1,37 @@
 ﻿import {
-    Component,
     CUSTOM_ELEMENTS_SCHEMA,
-    DebugElement
+    Component,
+    DebugElement,
 }                               from '@angular/core';
 import {
     ComponentFixture,
-    TestBed
+    TestBed,
 }                               from '@angular/core/testing';
 import {
+    FormsModule,
     NgControl,
-    FormsModule
 }                               from '@angular/forms';
 import { By }                   from '@angular/platform-browser';
 
 import {
     RadioButtonComponent,
-    RadioChange
+    RadioChange,
 }                               from './radio-button.component';
-import { RadioGroupComponent }  from './radio-group.component';
 import { RadioButtonModule }    from './radio-button.module';
+import { RadioGroupComponent }  from './radio-group.component';
 
 describe('RadioButtonComponent', () => {
-
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [FormsModule, RadioButtonModule.forRoot()],
             declarations: [
                 RadiosInsideRadioGroup,
                 RadioGroupWithNgModel,
-                StandaloneRadioButtons
+                StandaloneRadioButtons,
             ],
             schemas: [
-                CUSTOM_ELEMENTS_SCHEMA
-            ]
+                CUSTOM_ELEMENTS_SCHEMA,
+            ],
         });
     });
 
@@ -142,7 +141,7 @@ describe('RadioButtonComponent', () => {
             expect(radioInstances[0].checked).toBe(false);
 
             let spies = radioInstances
-                .map((value, index) => jasmine.createSpy(`onChangeSpy ${index}`));
+                .map((_value, index) => jasmine.createSpy(`onChangeSpy ${index}`));
 
             spies.forEach((spy, index) => radioInstances[index].change.subscribe(spy));
 
@@ -443,9 +442,11 @@ describe('RadioButtonComponent', () => {
             <cf-radio-button value='water'>Squirtle</cf-radio-button>
             <cf-radio-button value='leaf'>Bulbasaur</cf-radio-button>
         </cf-radio-group>
-`
+`,
 })
+/* tslint:disable:component-class-suffix */
 class RadiosInsideRadioGroup {
+/* tslint:enable */
     alignment: string;
     isGroupDisabled: boolean = false;
     isGroupInlined: boolean = false;
@@ -466,9 +467,11 @@ class RadiosInsideRadioGroup {
         <cf-radio-button name='fruit' value='banana' aria-label='Banana' aria-labelledby='xyz'>
         </cf-radio-button>
         <cf-radio-button name='fruit' value='raspberry'>Raspberry</cf-radio-button>
-`
+`,
 })
+/* tslint:disable:component-class-suffix */
 class StandaloneRadioButtons { }
+/* tslint:enable */
 
 @Component({
     template: `
@@ -477,11 +480,13 @@ class StandaloneRadioButtons { }
                 {{option.label}}
             </cf-radio-button>
         </cf-radio-group>
-`
+`,
 })
+/* tslint:disable:component-class-suffix */
 class RadioGroupWithNgModel {
+/* tslint:enable */
     modelValue: string;
-    options = [
+    options: any[] = [
         { label: 'Vanilla', value: 'vanilla' },
         { label: 'Chocolate', value: 'chocolate' },
         { label: 'Strawberry', value: 'strawberry' },

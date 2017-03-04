@@ -6,25 +6,27 @@
     HostListener,
     Input,
     Output,
-    Renderer
+    Renderer,
 }                           from '@angular/core';
 
 import { ButtonDirective }  from '../button';
 
 @Directive({
-    /* tslint:disable */
+    /* tslint:disable:use-host-property-decorator */
     selector: 'button[cfToggleButton], a[cfToggleButton]',
     host: {
         '[class.btn]': 'true',
         '[class.btn-hover]': 'borderless',
         '[class.btn-block]': 'block',
         '[class.btn-icon-only]': 'iconOnly',
-        '[class.active]': 'active'
-    }
+        '[class.active]': 'active',
+    },
     /* tslint:enable */
 })
 export class ToggleButtonDirective extends ButtonDirective {
+    /* tslint:disable:no-input-rename */
     @Input('cfToggleButton') active: boolean = false;
+    /* tslint:enable */
     @Output() change: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     constructor(element: ElementRef, renderer: Renderer) {
@@ -37,7 +39,7 @@ export class ToggleButtonDirective extends ButtonDirective {
     }
 
     @HostListener('click')
-    onClick() {
+    onClick(): void {
         this.active = !this.active;
 
         this.change.emit(this.active);

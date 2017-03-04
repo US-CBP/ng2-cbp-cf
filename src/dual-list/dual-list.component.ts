@@ -2,25 +2,31 @@ import {
     Component,
     EventEmitter,
     Input,
-    forwardRef,
     Output,
-    ViewEncapsulation
+    ViewEncapsulation,
+    forwardRef,
 }                           from '@angular/core';
-import { BasicList }        from './basic-list';
-
 import {
+    ControlValueAccessor,
     NG_VALUE_ACCESSOR,
-    ControlValueAccessor
 }                           from '@angular/forms';
 import * as _               from 'lodash';
 
+import {
+    ButtonRoles,
+    ButtonSizes,
+}                           from '../button';
+import { BasicList }        from './basic-list';
+
 let nextId = 0;
 
+/* tslint:disable:no-forward-ref */
 export const dualListControlValueAccessor: any = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => DualListComponent),
-    multi: true
+    multi: true,
 };
+/* tslint:enable */
 
 export class DualListChange {
     source: DualListComponent;
@@ -32,12 +38,11 @@ export class DualListChange {
     templateUrl: 'dual-list.component.html',
     styleUrls: ['dual-list.component.scss'],
     providers: [dualListControlValueAccessor],
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
 })
-
 export class DualListComponent implements ControlValueAccessor {
-    static AVAILABLE_LIST_NAME = 'available';
-    static SELECTED_LIST_NAME = 'selected';
+    static AVAILABLE_LIST_NAME: string = 'available';
+    static SELECTED_LIST_NAME: string = 'selected';
 
     @Input() id: string = `cf-dual-list-${nextId++}`;
     @Input() height: string = '500px';
@@ -48,19 +53,22 @@ export class DualListComponent implements ControlValueAccessor {
 
     @Output() change: EventEmitter<DualListChange> = new EventEmitter<DualListChange>();
 
+    ButtonRoles: any = ButtonRoles;
+    ButtonSizes: any = ButtonSizes;
+
     availableL: BasicList = new BasicList(DualListComponent.AVAILABLE_LIST_NAME);
     selectedL: BasicList = new BasicList(DualListComponent.SELECTED_LIST_NAME);
 
     private _source: any[] = [];
     private _selected: any[] = [];
-    private _controlValueAccessorChangeFn: (value: any) => void = (value) => {};
+    private _controlValueAccessorChangeFn: (value: any) => void = () => {};
 
     onTouched: () => any = () => {};
 
     constructor() {}
 
-    private _sortMyList(list) {
-        if (this.sort && this.attrToSort && this.attrToSort.length > 0) {
+    private _sortMyList(list: any[]): any[] {
+        if(this.sort && this.attrToSort && this.attrToSort.length > 0) {
             list = _.orderBy(list, this.attrToSort);
         }
         return list;
@@ -71,7 +79,7 @@ export class DualListComponent implements ControlValueAccessor {
         return this._source;
     }
     set source(source: any[]) {
-        /* tslint:disable */
+        /* tslint:disable:triple-equals */
         if (source && source != this._source && source.length > 0) {
         /* tslint:enable */
             this._source = this._sortMyList(source);
@@ -84,7 +92,7 @@ export class DualListComponent implements ControlValueAccessor {
         return this._selected;
     }
     set selected(selected: any[]){
-        /* tslint:disable */
+        /* tslint:disable:triple-equals */
         if (selected && selected != this._selected && selected.length > 0) {
         /* tslint:enable */
             this._selected = this._sortMyList(selected);
@@ -92,25 +100,25 @@ export class DualListComponent implements ControlValueAccessor {
         }
     }
 
-    dropDeselected(evt: DragEvent) {
+    dropDeselected(evt: DragEvent): void {
         this.drop(evt);
         this._moveItem(this.selectedL, this.availableL);
     }
 
-    dropSelected(evt: DragEvent) {
+    dropSelected(evt: DragEvent): void {
         this.drop(evt);
         this._moveItem(this.availableL, this.selectedL);
     }
 
-    allowDropSelected(evt: DragEvent) {
+    allowDropSelected(evt: DragEvent): void {
         this.allowDrop(evt, this.availableL);
     }
 
-    allowDropDeselected(evt: DragEvent) {
+    allowDropDeselected(evt: DragEvent): void {
         this.allowDrop(evt, this.selectedL);
     }
 
-    allowDrop(event: DragEvent, list: BasicList) {
+    allowDrop(event: DragEvent, list: BasicList): boolean {
         event.preventDefault();
         if (!list.dragStart) {
             list.dragOver = true;
@@ -118,18 +126,16 @@ export class DualListComponent implements ControlValueAccessor {
         return false;
     }
 
-    drop(event: DragEvent) {
+    drop(event: DragEvent): void {
         event.preventDefault();
         this.dragLeave();
         this.dragEnd();
     }
 
-    private _moveItem(from: BasicList, to: BasicList) {
+    private _moveItem(from: BasicList, to: BasicList): void {
         to.list.push(...from.pick);
         // Remove the item from the source list
-        _.remove(from.list, function (item) {
-            return _.indexOf(from.pick, item) >= 0;
-        });
+        _.remove(from.list, item => _.indexOf(from.pick, item) >= 0);
         from.pick.splice(0, from.pick.length);
         from.pick = [];
         from.list = this._sortMyList(from.list);
@@ -137,7 +143,7 @@ export class DualListComponent implements ControlValueAccessor {
         this._emitChangeEvent();
     }
 
-    private _emitChangeEvent() {
+    private _emitChangeEvent(): void {
         let event = new DualListChange();
         event.source = this;
         event.items = _.cloneDeep(this.selectedL.list);
@@ -146,30 +152,30 @@ export class DualListComponent implements ControlValueAccessor {
         this.change.emit(event);
     }
 
-    selectItem(event: MouseEvent, item: any) {
+    selectItem(event: MouseEvent, item: any): void {
         this._toggleItem(event, item, this.availableL);
     }
 
-    deselectItem(event: MouseEvent, item: any) {
+    deselectItem(event: MouseEvent, item: any): void {
         this._toggleItem(event, item, this.selectedL);
     }
 
-    isPickedToBeSelected(item: any) {
+    isPickedToBeSelected(item: any): boolean {
         return this._isPicked(this.availableL, item);
     }
 
-    isPickedToBeDeselected(item: any) {
+    isPickedToBeDeselected(item: any): boolean {
         return this._isPicked(this.selectedL, item);
     }
 
-    _isPicked(objList: BasicList, item: any) {
+    _isPicked(objList: BasicList, item: any): boolean {
         if(_.findIndex(objList.pick, item) !== -1) {
             return true;
         }
         return false;
     }
 
-    _toggleItem(event: MouseEvent, item: any, objList: BasicList) {
+    _toggleItem(event: MouseEvent, item: any, objList: BasicList): void {
         if (event) {
             event.stopPropagation();
         }
@@ -195,20 +201,20 @@ export class DualListComponent implements ControlValueAccessor {
         }
     }
 
-    dragLeave() {
+    dragLeave(): void {
         this.availableL.dragOver = false;
         this.selectedL.dragOver = false;
     }
 
-    dragSelected(event: DragEvent, item: any) {
+    dragSelected(event: DragEvent, item: any): void {
         this._dragToggle(event, item, this.availableL);
     }
 
-    dragDeselected(event: DragEvent, item: any) {
+    dragDeselected(event: DragEvent, item: any): void {
         this._dragToggle(event, item, this.selectedL);
     }
 
-    private _dragToggle(event: DragEvent, item: any, objList: BasicList) {
+    private _dragToggle(event: DragEvent, item: any, objList: BasicList): void {
         if(_.findIndex(objList.pick, item) === -1) {
             this._toggleItem(null, item, objList);
         }
@@ -218,44 +224,44 @@ export class DualListComponent implements ControlValueAccessor {
         event.dataTransfer.setData('text', uniqueId);
     }
 
-    dragEnd() {
+    dragEnd(): boolean {
         this.availableL.dragStart = false;
         this.selectedL.dragStart = false;
         return false;
     }
 
-    moveSelectAll() {
+    moveSelectAll(): void {
         this._moveAll(this.availableL, this.selectedL);
     }
 
-    moveSelectedItem() {
+    moveSelectedItem(): void {
         this._moveItem(this.availableL, this.selectedL);
     }
 
-    moveDeselectItem() {
+    moveDeselectItem(): void {
         this._moveItem(this.selectedL, this.availableL);
     }
 
-    moveDeselectAll() {
+    moveDeselectAll(): void {
         this._moveAll(this.selectedL, this.availableL);
     }
 
-    private _moveAll(fromList: BasicList, toList: BasicList) {
+    private _moveAll(fromList: BasicList, toList: BasicList): void {
         fromList.pick.splice(0, fromList.pick.length);
         fromList.list = _.cloneDeep(this.source);
         fromList.pick = fromList.list;
         this._moveItem(fromList, toList);
     }
 
-    writeValue(selectedValues: any) {
+    writeValue(selectedValues: any): void {
         this.selected = selectedValues;
     }
 
-    registerOnChange(fn: (value: any) => void) {
+    registerOnChange(fn: (value: any) => void): void {
         this._controlValueAccessorChangeFn = fn;
     }
 
-    registerOnTouched(fn: any) {
+    registerOnTouched(fn: any): void {
         this.onTouched = fn;
     }
 }

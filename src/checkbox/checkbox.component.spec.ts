@@ -1,23 +1,24 @@
 import {
+    Component,
+    DebugElement,
+}                       from '@angular/core';
+import {
+    ComponentFixture,
+    TestBed,
     async,
     fakeAsync,
     flushMicrotasks,
-    ComponentFixture,
-    TestBed,
 }                       from '@angular/core/testing';
 import {
-    NgControl,
     FormsModule,
+    NgControl,
 }                       from '@angular/forms';
-import {
-    Component,
-    DebugElement
-}                       from '@angular/core';
 import { By }           from '@angular/platform-browser';
+
 import {
-    CheckboxComponent,
     CheckboxChange,
-    CheckboxModule
+    CheckboxComponent,
+    CheckboxModule,
 }                       from '../checkbox';
 
 describe('CheckboxComponent', () => {
@@ -34,8 +35,8 @@ describe('CheckboxComponent', () => {
                 CheckboxWithAriaLabel,
                 CheckboxWithAriaLabelledby,
                 CheckboxWithNameAttribute,
-                CheckboxWithChangeEvent
-            ]
+                CheckboxWithChangeEvent,
+            ],
         });
 
         TestBed.compileComponents();
@@ -265,7 +266,7 @@ describe('CheckboxComponent', () => {
         });
     });
 
-        describe('with change event and no initial value', () => {
+    describe('with change event and no initial value', () => {
         let checkboxDebugElement: DebugElement;
         let checkboxNativeElement: HTMLElement;
         let checkboxInstance: CheckboxComponent;
@@ -351,7 +352,7 @@ describe('CheckboxComponent', () => {
             expect(inputElement.getAttribute('aria-labelledby')).toBe('some-id');
             });
 
-            it('should not assign aria-labelledby if none is provided', () => {
+        it('should not assign aria-labelledby if none is provided', () => {
             fixture = TestBed.createComponent(SingleCheckbox);
             checkboxDebugElement = fixture.debugElement.query(By.directive(CheckboxComponent));
             checkboxNativeElement = checkboxDebugElement.nativeElement;
@@ -449,7 +450,6 @@ describe('CheckboxComponent', () => {
             expect(inputElement.getAttribute('name')).toBe('test-name');
         });
     });
-
 });
 
 /** Simple component for testing a single checkbox. */
@@ -463,12 +463,13 @@ describe('CheckboxComponent', () => {
             [indeterminate]="isIndeterminate" 
             [disabled]="isDisabled"
             (change)="changeCount = changeCount + 1"
-            (click)="onCheckboxClick($event)"
-            (change)="onCheckboxChange($event)">
+            (click)="onCheckboxClick()"
+            (change)="onCheckboxChange()">
           Simple checkbox
         </cf-checkbox>
-    </div>`
+    </div>`,
 })
+/* tslint:disable:component-class-suffix */
 class SingleCheckbox {
     alignment: string = 'start';
     isChecked: boolean = false;
@@ -480,8 +481,8 @@ class SingleCheckbox {
     lastKeydownEvent: Event = null;
     changeCount: number = 0;
 
-    onCheckboxClick(event: Event) {}
-    onCheckboxChange(event: CheckboxChange) {}
+    onCheckboxClick(): void {}
+    onCheckboxChange(): void {}
 }
 
 /** Simple component for testing an CheckboxComponent with ngModel. */
@@ -492,7 +493,9 @@ class SingleCheckbox {
         </form>
     `,
 })
+/* tslint:disable:component-class-suffix */
 class CheckboxWithFormDirectives {
+/* tslint:enable */
     isGood: boolean = false;
 }
 
@@ -501,43 +504,55 @@ class CheckboxWithFormDirectives {
     template: `
         <cf-checkbox>Option 1</cf-checkbox>
         <cf-checkbox>Option 2</cf-checkbox>
-    `
+    `,
 }))
-class MultipleCheckboxes { }
+/* tslint:disable:component-class-suffix */
+class MultipleCheckboxes {}
+/* tslint:enable */
 
 /** Simple test component with tabIndex */
 @Component({
     template: `
         <cf-checkbox [tabindex]="customTabIndex" [disabled]="isDisabled">
-        </cf-checkbox>`
+        </cf-checkbox>`,
 })
+/* tslint:disable:component-class-suffix */
 class CheckboxWithTabIndex {
+/* tslint:enable */
     customTabIndex: number = 7;
     isDisabled: boolean = false;
 }
 
 /** Simple test component with an aria-label set. */
 @Component({
-    template: `<cf-checkbox aria-label="Super effective"></cf-checkbox>`
+    template: `<cf-checkbox aria-label="Super effective"></cf-checkbox>`,
 })
-class CheckboxWithAriaLabel { }
+/* tslint:disable:component-class-suffix */
+class CheckboxWithAriaLabel {}
+/* tslint:enable */
 
 /** Simple test component with an aria-label set. */
 @Component({
-    template: `<cf-checkbox aria-labelledby="some-id"></cf-checkbox>`
+    template: `<cf-checkbox aria-labelledby="some-id"></cf-checkbox>`,
 })
+/* tslint:disable:component-class-suffix */
 class CheckboxWithAriaLabelledby {}
+/* tslint:enable */
 
 /** Simple test component with name attribute */
 @Component({
-    template: `<cf-checkbox name="test-name"></cf-checkbox>`
+    template: `<cf-checkbox name="test-name"></cf-checkbox>`,
 })
+/* tslint:disable:component-class-suffix */
 class CheckboxWithNameAttribute {}
+/* tslint:enable */
 
 /** Simple test component with change event */
 @Component({
-    template: `<cf-checkbox (change)="lastEvent = $event"></cf-checkbox>`
+    template: `<cf-checkbox (change)="lastEvent = $event"></cf-checkbox>`,
 })
+/* tslint:disable:component-class-suffix */
 class CheckboxWithChangeEvent {
+/* tslint:enable */
   lastEvent: CheckboxChange;
 }

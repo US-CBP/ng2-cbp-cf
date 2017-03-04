@@ -2,16 +2,16 @@
 import { CUSTOM_ELEMENTS_SCHEMA }       from '@angular/core';
 import {
     ComponentFixture,
-    TestBed
+    TestBed,
 }                                       from '@angular/core/testing';
 import { FormsModule }                  from '@angular/forms';
 import * as moment                      from 'moment/moment';
 
-import { PayPeriodCalendarComponent }   from './pay-period-calendar.component';
-import { PayPeriod }                    from './pay-period.model';
-import { PayPeriodMonth }               from './pay-period-month.model';
 import { ButtonDirective }              from '../button';
 import { SelectFieldComponent }         from '../select-field';
+import { PayPeriodCalendarComponent }   from './pay-period-calendar.component';
+import { PayPeriodMonth }               from './pay-period-month.model';
+import { PayPeriod }                    from './pay-period.model';
 
 describe('PayPeriodCalendarComponent', () => {
     let months: PayPeriodMonth[];
@@ -27,7 +27,7 @@ describe('PayPeriodCalendarComponent', () => {
         TestBed.configureTestingModule({
             imports: [CommonModule, FormsModule],
             declarations: [ButtonDirective, SelectFieldComponent, PayPeriodCalendarComponent],
-            schemas: [CUSTOM_ELEMENTS_SCHEMA]
+            schemas: [CUSTOM_ELEMENTS_SCHEMA],
         });
         fixture = TestBed.createComponent(PayPeriodCalendarComponent);
 
@@ -40,10 +40,10 @@ describe('PayPeriodCalendarComponent', () => {
         it('should set shownYear to year of the selectedPayPeriod', () => {
             let startDate = moment().startOf('day').startOf('month').add(2, 'months');
             let selectedPayPeriod = {
-                id: 201622,
+                id: 22,
                 number: 22,
                 startDate: startDate.toDate(),
-                isSelectable: true
+                isSelectable: true,
             };
 
             component.selectedPayPeriod = selectedPayPeriod;
@@ -55,10 +55,10 @@ describe('PayPeriodCalendarComponent', () => {
         it('should set shownMonth to month of the selectedPayPeriod', () => {
             let startDate = moment().startOf('day').startOf('month').add(2, 'months');
             let selectedPayPeriod = {
-                id: 201622,
+                id: 22,
                 number: 22,
                 startDate: startDate.toDate(),
-                isSelectable: true
+                isSelectable: true,
             };
 
             component.selectedPayPeriod = selectedPayPeriod;
@@ -68,36 +68,34 @@ describe('PayPeriodCalendarComponent', () => {
             expect(component.shownMonth).toBe(month);
         });
 
-        it('should set shownYear to current year when selectedPayPeriod is not in months', () => {
+        it('should set shownYear to earliest valid year when selectedPayPeriod is not in months', () => {
             let startDate = moment().startOf('day').startOf('month').add(20, 'months');
             let selectedPayPeriod = {
-                id: 201622,
+                id: 22,
                 number: 22,
                 startDate: startDate.toDate(),
-                isSelectable: true
+                isSelectable: true,
             };
 
             component.selectedPayPeriod = selectedPayPeriod;
             fixture.detectChanges();
 
-            expect(component.shownYear).toBe(moment().year());
+            expect(component.shownYear).toBe(months[0].year);
         });
 
-        it('should set shownMonth to current month when selectedPayPeriod is not in months', () => {
+        it('should set shownMonth to earliest valid month when selectedPayPeriod is not in months', () => {
             let startDate = moment().startOf('day').startOf('month').add(20, 'months');
             let selectedPayPeriod = {
-                id: 201622,
+                id: 22,
                 number: 22,
                 startDate: startDate.toDate(),
-                isSelectable: true
+                isSelectable: true,
             };
 
             component.selectedPayPeriod = selectedPayPeriod;
             fixture.detectChanges();
 
-            let currentMoment = moment();
-            let month = months.find(m => m.year === currentMoment.year() && m.number === currentMoment.month() + 1);
-            expect(component.shownMonth).toBe(month);
+            expect(component.shownMonth).toBe(months[0]);
         });
 
         it('should set shownYear to current year when selectedPayPeriod is null', () => {
@@ -398,10 +396,10 @@ describe('PayPeriodCalendarComponent', () => {
         beforeEach(() => {
             let startDate = moment().startOf('day').startOf('month');
             let selectedPayPeriod = {
-                id: 201622,
+                id: 22,
                 number: 22,
                 startDate: startDate.toDate(),
-                isSelectable: true
+                isSelectable: true,
             };
             component.selectedPayPeriod = selectedPayPeriod;
 
@@ -411,10 +409,10 @@ describe('PayPeriodCalendarComponent', () => {
         it('should return false when pay periods has different id as selected pay period', () => {
             let startDate = moment().startOf('day').startOf('month');
             let payPeriod = {
-                id: 201601,
+                id: 1,
                 number: 1,
                 startDate: startDate.toDate(),
-                isSelectable: true
+                isSelectable: true,
             };
 
             expect(component.isSelected(payPeriod)).toBe(false);
@@ -423,10 +421,10 @@ describe('PayPeriodCalendarComponent', () => {
         it('should return true when pay periods has same id as selected pay period', () => {
             let startDate = moment().startOf('day').startOf('month');
             let payPeriod = {
-                id: 201622,
+                id: 22,
                 number: 22,
                 startDate: startDate.toDate(),
-                isSelectable: true
+                isSelectable: true,
             };
 
             expect(component.isSelected(payPeriod)).toBe(true);
@@ -441,10 +439,10 @@ describe('PayPeriodCalendarComponent', () => {
         it('should not change selectedPayPeriod directly', () => {
             let startDate = moment().startOf('day').startOf('month');
             let payPeriod = {
-                id: 201601,
+                id: 1,
                 number: 1,
                 startDate: startDate.toDate(),
-                isSelectable: true
+                isSelectable: true,
             };
 
             component.selectPayPeriod(payPeriod);
@@ -458,10 +456,10 @@ describe('PayPeriodCalendarComponent', () => {
 
             let startDate = moment().startOf('day').startOf('month');
             let payPeriod = {
-                id: 201601,
+                id: 1,
                 number: 1,
                 startDate: startDate.toDate(),
-                isSelectable: true
+                isSelectable: true,
             };
 
             component.selectPayPeriod(payPeriod);
@@ -553,28 +551,18 @@ describe('PayPeriodCalendarComponent', () => {
     });
 
     describe('dayOfWeek', () => {
+        let startDate: moment.Moment;
         let payPeriodsOfMonth: PayPeriod[];
 
         beforeEach(() => {
+            startDate = moment().startOf('day').startOf('week');
             payPeriodsOfMonth = [
                 {
-                    id: 201525,
-                    number: 25,
-                    startDate: moment('2015-12-27T00:00:00').toDate(),
-                    isSelectable: true
-                },
-                {
-                    id: 201601,
+                    id: 1,
                     number: 1,
-                    startDate: moment('2016-01-10T00:00:00').toDate(),
-                    isSelectable: true
+                    startDate: startDate.toDate(),
+                    isSelectable: true,
                 },
-                {
-                    id: 201602,
-                    number: 2,
-                    startDate: moment('2016-01-24T00:00:00').toDate(),
-                    isSelectable: true
-                }
             ];
             component.payPeriodsOfMonth = payPeriodsOfMonth;
 
@@ -582,19 +570,19 @@ describe('PayPeriodCalendarComponent', () => {
         });
 
         it('returns start date day for week 1 day 0', () => {
-            expect(component.dayOfMonth(payPeriodsOfMonth[0], 1, 0)).toBe(27);
+            expect(component.dayOfMonth(payPeriodsOfMonth[0], 1, 0)).toBe(startDate.clone().add(0, 'days').date());
         });
 
         it('returns day for week 1 offset with day 0', () => {
-            expect(component.dayOfMonth(payPeriodsOfMonth[0], 1, 2)).toBe(29);
+            expect(component.dayOfMonth(payPeriodsOfMonth[0], 1, 2)).toBe(startDate.clone().add(2, 'days').date());
         });
 
         it('returns day for week 2 offset with day 0', () => {
-            expect(component.dayOfMonth(payPeriodsOfMonth[0], 2, 2)).toBe(5);
+            expect(component.dayOfMonth(payPeriodsOfMonth[0], 2, 2)).toBe(startDate.clone().add(7 + 2, 'days').date());
         });
     });
 
-    function createMonthsFromCurrent(startIndex: number, endIndex: number) {
+    function createMonthsFromCurrent(startIndex: number, endIndex: number): PayPeriodMonth[] {
         let results: any[] = [];
         let currentMoment = moment().startOf('day').startOf('month');
         for(let i = startIndex; i <= endIndex; i++) {

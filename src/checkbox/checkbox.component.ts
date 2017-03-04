@@ -2,22 +2,25 @@ import {
     Component,
     EventEmitter,
     Input,
+    Output,
     forwardRef,
-    Output
 }                               from '@angular/core';
 import {
+    ControlValueAccessor,
     NG_VALUE_ACCESSOR,
-    ControlValueAccessor
 }                               from '@angular/forms';
+
 import { BooleanFieldValue }    from '../shared';
 
 let nextId = 0;
 
+/* tslint:disable:no-forward-ref */
 export const CF_CHECKBOX_CONTROL_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
   useExisting: forwardRef(() => CheckboxComponent),
-  multi: true
+  multi: true,
 };
+/* tslint:enable */
 
 export class CheckboxChange {
     source: CheckboxComponent;
@@ -28,17 +31,19 @@ export class CheckboxChange {
     selector: 'cf-checkbox',
     templateUrl: 'checkbox.component.html',
     styleUrls: ['checkbox.component.scss'],
-    providers: [CF_CHECKBOX_CONTROL_VALUE_ACCESSOR]
+    providers: [CF_CHECKBOX_CONTROL_VALUE_ACCESSOR],
 })
 export class CheckboxComponent implements ControlValueAccessor {
     @Input() id: string = `cf-checkbox-${nextId++}`;
     @Input() name: string;
-    @Input('aria-label') ariaLabel: string;
-    @Input('aria-labelledby') ariaLabelledby: string;
     @Input() @BooleanFieldValue() required: boolean = false;
     @Input() disabled: boolean = false;
     @Input() tabindex: number = 0;
+    /* tslint:disable:no-input-rename */
+    @Input('aria-label') ariaLabel: string;
+    @Input('aria-labelledby') ariaLabelledby: string;
     @Input('in-cbp-table') inCbpTable: string = '';
+    /* tslint:enable */
 
     @Output() change: EventEmitter<CheckboxChange> = new EventEmitter<CheckboxChange>();
 
@@ -47,7 +52,7 @@ export class CheckboxComponent implements ControlValueAccessor {
 
     private _indeterminate: boolean = false;
     private _checked: boolean;
-    private _controlValueAccessorChangeFn: (value: any) => void = (value) => {};
+    private _controlValueAccessorChangeFn: (value: any) => void = () => {};
 
     onTouched: () => any = () => {};
 
@@ -62,7 +67,7 @@ export class CheckboxComponent implements ControlValueAccessor {
         return this._checked;
     }
     set checked(checked: boolean) {
-        /* tslint:disable */
+        /* tslint:disable:triple-equals */
         if (checked != this._checked) {
         /* tslint:enable */
             this._indeterminate = false;
@@ -81,15 +86,15 @@ export class CheckboxComponent implements ControlValueAccessor {
         }
     }
 
-    toggle() {
+    toggle(): void {
         this.checked = !this.checked;
     }
 
-    onInputClick($event: Event) {
+    onInputClick($event: Event): void {
          $event.stopPropagation();
     }
 
-    onInputChange($event: Event) {
+    onInputChange($event: Event): void {
         $event.stopPropagation();
         if(!this.disabled) {
             this.toggle();
@@ -100,20 +105,20 @@ export class CheckboxComponent implements ControlValueAccessor {
         }, 0.0001);
     }
 
-    onInputFocus() {
+    onInputFocus(): void {
         this.focus = true;
     }
 
-    onInputBlur() {
+    onInputBlur(): void {
         this.focus = false;
         this.onTouched();
     }
 
-    onMouseUp() {
+    onMouseUp(): void {
         this.focus = false;
     }
 
-    private _emitChangeEvent() {
+    private _emitChangeEvent(): void {
         let event = new CheckboxChange();
         event.source = this;
         event.checked = this.checked;
@@ -122,15 +127,15 @@ export class CheckboxComponent implements ControlValueAccessor {
         this.change.emit(event);
     }
 
-    writeValue(value: any) {
+    writeValue(value: any): void {
         this.checked = !!value;
     }
 
-    registerOnChange(fn: (value: any) => void) {
+    registerOnChange(fn: (value: any) => void): void {
         this._controlValueAccessorChangeFn = fn;
     }
 
-    registerOnTouched(fn: any) {
+    registerOnTouched(fn: any): void {
         this.onTouched = fn;
     }
 }

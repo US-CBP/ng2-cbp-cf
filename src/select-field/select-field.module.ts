@@ -1,34 +1,34 @@
 ﻿import { CommonModule }             from '@angular/common';
 import {
     ModuleWithProviders,
-    NgModule
+    NgModule,
 }                                   from '@angular/core';
 import { FormsModule }              from '@angular/forms';
 
 import {
     SelectFieldComponent,
-    SelectFieldOptionDirective
+    SelectFieldOptionDirective,
 }                                   from './select-field.component';
 
 @NgModule({
     imports: [
         CommonModule,
-        FormsModule
+        FormsModule,
     ],
     exports: [
         SelectFieldComponent,
-        SelectFieldOptionDirective
+        SelectFieldOptionDirective,
     ],
     declarations: [
         SelectFieldComponent,
-        SelectFieldOptionDirective
-    ]
+        SelectFieldOptionDirective,
+    ],
 })
 export class SelectFieldModule {
     static forRoot(): ModuleWithProviders {
         return {
             ngModule: SelectFieldModule,
-            providers: []
+            providers: [],
         };
     }
 }

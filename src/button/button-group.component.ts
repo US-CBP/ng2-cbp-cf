@@ -2,7 +2,7 @@
 
 @Component({
     selector: 'cf-button-group',
-    templateUrl: 'button-group.component.html'
+    templateUrl: 'button-group.component.html',
 })
 export class ButtonGroupComponent {
 }

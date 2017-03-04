@@ -1,12 +1,14 @@
-import { Component,
-    OnInit,
+import {
+    Component,
     EventEmitter,
+    Input,
+    OnInit,
     Output,
-    Input  }       from '@angular/core';
+}                               from '@angular/core';
 
-import { Query }   from './pagination-query.model';
-import { Pager }   from './pagination-pager.model';
-import { PaginationService } from './pagination.service';
+import { Pager }                from './pagination-pager.model';
+import { Query }                from './pagination-query.model';
+import { PaginationService }    from './pagination.service';
 
 let nextId = 1;
 
@@ -15,8 +17,8 @@ let nextId = 1;
     templateUrl: 'pagination.component.html',
     styleUrls: ['pagination.component.scss'],
     providers: [
-        PaginationService
-    ]
+        PaginationService,
+    ],
 })
 export class PaginationComponent implements OnInit {
     @Input() id: string = `cf-pagination-${nextId++}`;
@@ -33,7 +35,7 @@ export class PaginationComponent implements OnInit {
         this.pager = {} as Pager;
     }
 
-    updateLimit(limit: number) {
+    updateLimit(limit: number): void {
         let qy: Query = this.query;
         if(qy && qy.limit && qy.limit !== limit) {
             qy.limit = limit;
@@ -41,7 +43,7 @@ export class PaginationComponent implements OnInit {
         }
     }
 
-    showPagination() {
+    showPagination(): boolean {
         let tc = this.totalCount;
         let qy = this.query;
         if(tc && tc > qy.limit) {
@@ -51,7 +53,7 @@ export class PaginationComponent implements OnInit {
         }
     }
 
-    setPage(page: number, forceRefresh: boolean = false) {
+    setPage(page: number, forceRefresh: boolean = false): void {
         let tc = this.totalCount;
         if(!tc || page < 1 || page > tc) {
             return;
@@ -83,8 +85,7 @@ export class PaginationComponent implements OnInit {
         this._query = qy;
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.getpagedata.emit(this.query);
     }
-
 }

@@ -1,7 +1,7 @@
 ﻿import { Component }                from '@angular/core';
 import {
     ComponentFixture,
-    TestBed
+    TestBed,
 }                                   from '@angular/core/testing';
 import { By }                       from '@angular/platform-browser';
 
@@ -15,7 +15,7 @@ describe('ToggleButtonDirective', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [ToggleButtonModule.forRoot()],
-            declarations: [TestActiveComponent]
+            declarations: [TestActiveComponent],
         });
 
         fixture = TestBed.createComponent(TestActiveComponent);
@@ -125,15 +125,15 @@ describe('ToggleButtonDirective', () => {
     template: `
         <button [cfToggleButton]='active' (change)='onInitiallyActiveChange($event)'>Active</button>
         <button [cfToggleButton]='inactive' (change)='onInitiallyInactiveChange($event)'>Inactive</button>
-`
+`,
 })
 class TestActiveComponent {
     active: boolean = true;
     inactive: boolean = false;
 
-    onInitiallyActiveChange(newValue: boolean) {
+    onInitiallyActiveChange(_newValue: boolean): void {
     }
 
-    onInitiallyInactiveChange(newValue: boolean) {
+    onInitiallyInactiveChange(_newValue: boolean): void {
     }
 }

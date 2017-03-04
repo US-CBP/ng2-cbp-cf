@@ -4,11 +4,11 @@ import {
     ContentChildren,
     Input,
     QueryList,
-    forwardRef
+    forwardRef,
 }                           from '@angular/core';
 
 import {
-    CheckboxComponent
+    CheckboxComponent,
 }                           from '../checkbox';
 
 @Component({
@@ -16,12 +16,14 @@ import {
     templateUrl: 'checkbox-group.component.html',
 })
 export class CheckboxGroupComponent implements AfterContentInit {
+    /* tslint:disable:no-forward-ref */
     @ContentChildren(forwardRef(() => CheckboxComponent)) _checkboxes: QueryList<CheckboxComponent>;
     private _isInline: boolean = false;
+    /* tslint:enable */
 
     constructor() {}
 
-    ngAfterContentInit() {
+    ngAfterContentInit(): void {
         this.updateCheckBoxIsInlines();
     }
 
@@ -33,7 +35,7 @@ export class CheckboxGroupComponent implements AfterContentInit {
         this._isInline = newValue;
     }
 
-    private updateCheckBoxIsInlines() {
+    private updateCheckBoxIsInlines(): void {
         if(this._checkboxes != null) {
             this._checkboxes.forEach(checkbox => {
                 checkbox.isInline = this.isInline;

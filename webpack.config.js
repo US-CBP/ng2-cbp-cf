@@ -24,39 +24,39 @@ const ENV_DEVELOPMENT = NODE_ENV === 'development';
 const rules = {
     cssStyles: {
         test: /\.css$/,
-        loader: ExtractTextPlugin.extract({ fallbackLoader: 'raw-loader', loader: 'css-loader' })
+        use: ExtractTextPlugin.extract({ fallback: 'raw-loader', use: 'css-loader' })
     },
     componentStyles: {
         test: /\.scss$/,
-        loader: 'raw!sass'
+        use: ['raw-loader', 'sass-loader']
     },
     javascript: {
         test: /\.js$/,
-        loaders: ['babel-loader'],
+        use: ['babel-loader'],
         exclude: /node_modules/
     },
     typescript: {
         test: /\.ts$/,
-        loaders: ['awesome-typescript-loader', 'angular2-template-loader'],
+        use: ['awesome-typescript-loader', 'angular2-template-loader'],
         exclude: /node_modules/
     },
     html: {
         test: /\.html$/,
-        loader: 'html?-minimize'
+        use: ['html-loader?-minimize']
     },
     fontFile: {
         test: /\.(ttf|otf|eot|svg|woff|woff2)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loaders: ['file-loader']
+        use: ['file-loader']
     },
     fontUrl: {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'url-loader?limit=10000&mimetype=application/font-woff'
+        use: ['url-loader?limit=10000&mimetype=application/font-woff']
     },
     imagesFile: {
         test: /\.(jpe?g|png|gif|svg)$/i,
-        loaders: [
-            'file?hash=sha512&digest=hex&name=[hash].[ext]',
-            'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
+        use: [
+            'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
+            'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false'
         ]
     }
 };

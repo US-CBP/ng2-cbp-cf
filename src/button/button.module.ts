@@ -1,30 +1,30 @@
 ﻿import { CommonModule }         from '@angular/common';
 import {
     ModuleWithProviders,
-    NgModule
+    NgModule,
 }                               from '@angular/core';
 
-import { ButtonDirective }      from './button.directive';
 import { ButtonGroupComponent } from './button-group.component';
+import { ButtonDirective }      from './button.directive';
 
 @NgModule({
     imports: [
-        CommonModule
+        CommonModule,
     ],
     exports: [
         ButtonDirective,
-        ButtonGroupComponent
+        ButtonGroupComponent,
     ],
     declarations: [
         ButtonDirective,
-        ButtonGroupComponent
-    ]
+        ButtonGroupComponent,
+    ],
 })
 export class ButtonModule {
     static forRoot(): ModuleWithProviders {
         return {
             ngModule: ButtonModule,
-            providers: []
+            providers: [],
         };
     }
 }

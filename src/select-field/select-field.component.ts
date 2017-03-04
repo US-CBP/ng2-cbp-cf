@@ -1,5 +1,4 @@
 ﻿import {
-    forwardRef,
     Component,
     Directive,
     ElementRef,
@@ -8,20 +7,23 @@
     OnDestroy,
     Optional,
     Renderer,
-    ViewChild
+    ViewChild,
+    forwardRef,
 }                           from '@angular/core';
 import {
+    ControlValueAccessor,
     NG_VALUE_ACCESSOR,
-    ControlValueAccessor
 }                           from '@angular/forms';
 
 let nextId = 1;
 
+/* tslint:disable:no-forward-ref */
 export const selectFieldControlValueAccessor: any = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => SelectFieldComponent),
-    multi: true
+    multi: true,
 };
+/* tslint:enable */
 
 function _buildValueString(id: string, value: any): string {
     if(id == null) {
@@ -34,14 +36,14 @@ function _buildValueString(id: string, value: any): string {
     return `${id}: ${value}`.slice(0, 50);
 }
 
-function _extractId(valueString: string) {
+function _extractId(valueString: string): string {
     return valueString.split(':')[0];
 }
 
 @Component({
     selector: 'cf-select-field',
     templateUrl: 'select-field.component.html',
-    providers: [selectFieldControlValueAccessor]
+    providers: [selectFieldControlValueAccessor],
 })
 export class SelectFieldComponent implements ControlValueAccessor {
     @Input() id: string = `cf-select-field-${nextId++}`;
@@ -62,7 +64,7 @@ export class SelectFieldComponent implements ControlValueAccessor {
     @ViewChild('select') private _select: ElementRef;
     private _idCounter: number = 0;
 
-    onSelectChange: (value: any) => void = (value) => { };
+    onSelectChange: (value: any) => void = () => { };
 
     private _onTouched: () => any = () => {};
 
@@ -83,11 +85,11 @@ export class SelectFieldComponent implements ControlValueAccessor {
         return !(<HTMLSelectElement>this._select.nativeElement).validity.valid;
     }
 
-    onSelectFocus() {
+    onSelectFocus(): void {
         this.isFocused = true;
     }
 
-    onSelectBlur() {
+    onSelectBlur(): void {
         this.isFocused = false;
         this._onTouched();
     }
@@ -111,31 +113,31 @@ export class SelectFieldComponent implements ControlValueAccessor {
         return this.optionMap.has(id) ? this.optionMap.get(id) : valueString;
     }
 
-    writeValue(value: any) {
+    writeValue(value: any): void {
         this.value = value;
         let valueString = _buildValueString(this._getOptionId(value), value);
         this._renderer.setElementProperty(this._select.nativeElement, 'value', valueString);
     }
 
-    registerOnChange(fn: (value: any) => void) {
+    registerOnChange(fn: (value: any) => void): void {
         this.onSelectChange = (valueString: string) => {
             this.value = valueString;
             fn(this._getOptionValue(valueString));
         };
     }
 
-    registerOnTouched(fn: any) {
+    registerOnTouched(fn: any): void {
         this._onTouched = fn;
     }
 
-    setDisabledState(isDisabled: boolean) {
+    setDisabledState(isDisabled: boolean): void {
         this.disabled = isDisabled;
     }
 }
 
 @Directive({
-    /* tslint:disable */
-    selector: 'option'
+    /* tslint:disable:directive-selector */
+    selector: 'option',
     /* tslint:enable */
 })
 export class SelectFieldOptionDirective implements OnDestroy {
@@ -151,7 +153,7 @@ export class SelectFieldOptionDirective implements OnDestroy {
         }
     }
 
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         if(this._selectField != null) {
             this._selectField.optionMap.delete(this.id);
             this._selectField.writeValue(this._selectField.value);
@@ -177,7 +179,7 @@ export class SelectFieldOptionDirective implements OnDestroy {
         }
     }
 
-    private _setElementValue(value: string) {
+    private _setElementValue(value: string): void {
         this._renderer.setElementProperty(this._element.nativeElement, 'value', value);
     }
 }

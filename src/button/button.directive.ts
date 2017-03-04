@@ -3,33 +3,35 @@
     ElementRef,
     Input,
     OnInit,
-    Renderer
+    Renderer,
 }                   from '@angular/core';
 
 import {
     ButtonRole,
-    ButtonRoles
+    ButtonRoles,
 }                   from './button-roles.model';
 import {
     ButtonSize,
-    ButtonSizes
+    ButtonSizes,
 }                   from './button-sizes.model';
 
 @Directive({
-    /* tslint:disable */
+    /* tslint:disable:directive-selector use-host-property-decorator */
     selector: 'button[cfButton], a[cfButton]',
     host: {
         '[class.btn]': 'true',
         '[class.btn-hover]': 'borderless',
         '[class.btn-block]': 'block',
-        '[class.btn-icon-only]': 'iconOnly'
-    }
+        '[class.btn-icon-only]': 'iconOnly',
+    },
     /* tslint:enable */
 })
 export class ButtonDirective implements OnInit {
+    /* tslint:disable:no-input-rename */
     @Input('cfBorderless') borderless: boolean = false;
     @Input('cfBlock') block: boolean = false;
     @Input('cfIconOnly') iconOnly: boolean = false;
+    /* tslint:enable */
 
     private _role: ButtonRole = ButtonRoles.default;
     private _size: ButtonSize = ButtonSizes.normal;
@@ -69,18 +71,18 @@ export class ButtonDirective implements OnInit {
         }
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.addClasses(this.role.classes);
         this.addClasses(this.size.classes);
     }
 
-    protected addClasses(classes: string[]) {
+    protected addClasses(classes: string[]): void {
         for(let c of classes) {
             this.renderer.setElementClass(this.element.nativeElement, c, true);
         }
     }
 
-    protected removeClasses(classes: string[]) {
+    protected removeClasses(classes: string[]): void {
         for(let c of classes) {
             this.renderer.setElementClass(this.element.nativeElement, c, false);
         }

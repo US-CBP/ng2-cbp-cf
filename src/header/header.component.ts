@@ -1,6 +1,6 @@
 import {
     Component,
-    Input
+    Input,
 }                           from '@angular/core';
 import { Router }           from '@angular/router';
 import { Header }           from './header.model';
@@ -10,7 +10,7 @@ import { ButtonRoles }      from '../button';
 @Component({
     selector: 'cf-header',
     templateUrl: 'header.component.html',
-    styleUrls: ['header.component.scss']
+    styleUrls: ['header.component.scss'],
 })
 export class HeaderComponent {
     @Input() data: Header;
@@ -22,7 +22,7 @@ export class HeaderComponent {
     constructor(private _router: Router) {
     }
 
-    goTo(item: any) {
+    goTo(item: any): void {
         if (item.route) {
             this._router.navigate( [ item.route, {} ]);
         } else if (item.href) {

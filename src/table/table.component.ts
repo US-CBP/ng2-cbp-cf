@@ -1,24 +1,24 @@
 import {
     Component,
-    OnInit,
     EventEmitter,
-    Output,
     Input,
+    OnInit,
+    Output,
     QueryList,
+    ViewChild,
     ViewChildren,
-    ViewChild
 }                               from '@angular/core';
-import * as _ from 'lodash';
+import * as _                   from 'lodash';
 
-import { Table }                from './table.model';
+import {
+    CheckboxChange,
+    CheckboxComponent,
+}                               from '../checkbox';
 import {
     PaginationComponent,
-    Query }
-                                from '../pagination';
-import {
-    CheckboxComponent,
-    CheckboxChange
-}                               from '../checkbox';
+    Query,
+}                               from '../pagination';
+import { Table }                from './table.model';
 
 let nextId = 1;
 
@@ -30,7 +30,7 @@ export class TableSelectionChange {
 @Component({
     selector: 'cf-table',
     templateUrl: 'table.component.html',
-    styleUrls: ['table.component.scss']
+    styleUrls: ['table.component.scss'],
 })
 export class TableComponent implements OnInit {
     @Input() id: string = `cf-table-${nextId++}`;
@@ -42,7 +42,7 @@ export class TableComponent implements OnInit {
 
     private _data: Table = null;
     private _query: Query = null;
-    private _selectedItems = null;
+    private _selectedItems: any[] = null;
 
     constructor() {
         this._selectedItems = [] as any;
@@ -68,7 +68,7 @@ export class TableComponent implements OnInit {
         this._query = qy;
     }
 
-    hasHeader() {
+    hasHeader(): boolean {
         let dt = this.data;
         if (dt.options && dt.options.hasHeader) {
             return true;
@@ -77,7 +77,7 @@ export class TableComponent implements OnInit {
         }
     }
 
-    hasStripedAltRow() {
+    hasStripedAltRow(): boolean {
         let dt = this.data;
         if (dt.options && dt.options.hasStripedAltRow) {
             return true;
@@ -86,7 +86,7 @@ export class TableComponent implements OnInit {
         }
     }
 
-    hasFloatingHeader() {
+    hasFloatingHeader(): boolean {
         let dt = this.data;
         if (dt.options && dt.options.hasFloatingHeader) {
             return true;
@@ -95,7 +95,7 @@ export class TableComponent implements OnInit {
         }
     }
 
-    showSelector() {
+    showSelector(): boolean {
         let dt = this.data;
         if (dt.options && dt.options.isRowSelectable) {
             return true;
@@ -104,27 +104,27 @@ export class TableComponent implements OnInit {
         }
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
     }
 
-    loadPage(query: Query) {
+    loadPage(query: Query): void {
         this.query = query;
         this.gettabledata.emit(query);
     }
 
-    toggleSelectAll(event: CheckboxChange) {
-        this.checkboxesObj.forEach((checkbox) => {
+    toggleSelectAll(event: CheckboxChange): void {
+        this.checkboxesObj.forEach(checkbox => {
             checkbox.checked = event.checked;
         });
         this.toggleAllSelectedData(event.checked);
     }
 
-    toggleSelectionItem(event: CheckboxChange, item: any) {
+    toggleSelectionItem(event: CheckboxChange, item: any): void {
         this.toggleItemSelectedData(item, event.checked);
         this._emitSelectionChangeEvent();
     }
 
-    private toggleItemSelectedData(item: any, selected: boolean) {
+    private toggleItemSelectedData(item: any, selected: boolean): void {
         if(selected) {
             if(!_.find(this._selectedItems, item)) {
                 this._selectedItems.push(item);
@@ -137,7 +137,7 @@ export class TableComponent implements OnInit {
         }
     }
 
-    private toggleAllSelectedData(selected: boolean) {
+    private toggleAllSelectedData(selected: boolean): void {
         if(selected) {
             this._selectedItems = _.clone(this.data.data);
         } else {
@@ -146,7 +146,7 @@ export class TableComponent implements OnInit {
         this._emitSelectionChangeEvent();
     }
 
-    private _emitSelectionChangeEvent() {
+    private _emitSelectionChangeEvent(): void {
         let event = new TableSelectionChange();
         event.source = this;
         event.items = this._selectedItems;

@@ -13,28 +13,28 @@ const WatchIgnorePlugin = require('webpack/lib/WatchIgnorePlugin');
 const rules = {
     cssStyles: {
         test: /\.css$/,
-        loader: 'null'
+        use: 'null'
     },
     componentStyles: {
         test: /\.scss$/,
-        loader: 'raw!sass'
+        use: ['raw-loader', 'sass-loader']
     },
     typescript: {
         test: /\.ts$/,
-        loader: ['awesome-typescript-loader', 'angular2-template-loader'],
+        use: ['awesome-typescript-loader', 'angular2-template-loader'],
         exclude: /node_modules/
     },
     html: {
         test: /\.html$/,
-        loader: ['html-loader']
+        use: ['html-loader']
     },
     fontFile: {
         test: /\.(ttf|otf|eot|svg|woff|woff2)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'null'
+        use: 'null'
     },
     fontUrl: {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'null'
+        use: 'null'
     }
 };
 

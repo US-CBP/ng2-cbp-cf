@@ -1,31 +1,31 @@
 ﻿import { CommonModule }         from '@angular/common';
 import {
     ModuleWithProviders,
-    NgModule
+    NgModule,
 }                               from '@angular/core';
 
-import { TableComponent }       from './table.component';
 import { CheckboxModule }       from '../checkbox';
 import { PaginationModule }     from '../pagination';
+import { TableComponent }       from './table.component';
 
 @NgModule({
     imports: [
         CommonModule,
         CheckboxModule,
-        PaginationModule
+        PaginationModule,
     ],
     exports: [
-        TableComponent
+        TableComponent,
     ],
     declarations: [
-        TableComponent
-    ]
+        TableComponent,
+    ],
 })
 export class TableModule {
     static forRoot(): ModuleWithProviders {
         return {
             ngModule: TableModule,
-            providers: []
+            providers: [],
         };
     }
 }

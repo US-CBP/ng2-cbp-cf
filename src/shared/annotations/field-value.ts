@@ -11,18 +11,20 @@
  *   <component myField="">
  * @deprecated
  */
-function booleanFieldValueFactory() {
-  return function booleanFieldValueMetadata(target: any, key: string): void {
-    const defaultValue = target[key];
-    const localKey = `__md_private_symbol_${key}`;
-    target[localKey] = defaultValue;
+function booleanFieldValueFactory(): Function {
+    /* tslint:disable:only-arrow-functions */
+    return function booleanFieldValueMetadata(target: any, key: string): void {
+        const defaultValue = target[key];
+        const localKey = `__md_private_symbol_${key}`;
+        target[localKey] = defaultValue;
 
-    Object.defineProperty(target, key, {
-      get() { return (<any>this)[localKey]; },
-      set(value: boolean) {
-        (<any>this)[localKey] = value != null && `${value}` !== 'false';
-      }
-    });
-  };
+        Object.defineProperty(target, key, {
+            get(): boolean { return (<any>this)[localKey]; },
+            set(value: boolean): void {
+                (<any>this)[localKey] = value != null && `${value}` !== 'false';
+            },
+        });
+    };
+    /* tslint:enable */
 }
 export { booleanFieldValueFactory as BooleanFieldValue };
