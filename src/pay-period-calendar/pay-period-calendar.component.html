@@ -1,26 +1,24 @@
 ﻿<div id="{{id}}-pay-period-calendar" class="pay-period-calendar">
     <div class="pay-period-calendar-nav">
         <div class="prev-month">
-            <button type="button" cfButton [cfIconOnly]="true" [cfBorderless]="true" [disabled]="isFirstMonthShown()" (click)="showPreviousMonth()">
-                <i class="fa fa-chevron-circle-left"></i>
+            <button type="button" md-icon-button [disabled]="isFirstMonthShown()" (click)="showPreviousMonth()">
+                <md-icon class="fa fa-chevron-circle-left"></md-icon>
                 <span class="sr-only">Previous Month</span>
             </button>
         </div><!--
         --><div class="quick-select year">
-            <cf-select-field id="{{id}}-pay-period-year" [usePlaceholderLabel]="true" [(ngModel)]="shownYear">
-                <option *ngFor="let year of years" [ngValue]="year">{{year}}</option>
-                <cf-label>Year</cf-label>
-            </cf-select-field>
+            <md-select id="{{id}}-pay-period-year" placeholder="Year" [(ngModel)]="shownYear">
+                <md-option *ngFor="let year of years" [value]="year">{{year}}</md-option>
+            </md-select>
         </div><!--
         --><div class="quick-select month">
-            <cf-select-field id="{{id}}-pay-period-month" [usePlaceholderLabel]="true" [(ngModel)]="shownMonth">
-                <option *ngFor="let month of monthsOfYear" [ngValue]="month">{{month.name}}</option>
-                <cf-label>Month</cf-label>
-            </cf-select-field>
+            <md-select id="{{id}}-pay-period-month" placeholder="Month" [(ngModel)]="shownMonth">
+                <md-option *ngFor="let month of monthsOfYear" [value]="month">{{month.name}}</md-option>
+            </md-select>
         </div><!--
         --><div class="next-month">
-            <button type="button" cfButton [cfIconOnly]="true" [cfBorderless]="true" [disabled]="isLastMonthShown()" (click)="showNextMonth()">
-                <i class="fa fa-chevron-circle-right"></i>
+            <button type="button" md-icon-button [disabled]="isLastMonthShown()" (click)="showNextMonth()">
+                <md-icon class="fa fa-chevron-circle-right"></md-icon>
                 <span class="sr-only">Next Month</span>
             </button>
         </div>
@@ -52,7 +50,7 @@
                     (click)="selectPayPeriod(pp)">
 
                     <th scope="row" class="pp" rowspan="2">
-                        <button type="button" cfButton [cfRole]="ButtonRoles.primary" [disabled]="!pp.isSelectable" (click)="selectPayPeriod(pp); $event.stopPropagation();">{{pp.number}}</button>
+                        <button type="button" md-raised-button color="primary" [disabled]="!pp.isSelectable" (click)="selectPayPeriod(pp); $event.stopPropagation();">{{pp.number}}</button>
                         <span class="selected-text" *ngIf="isSelected(pp)">(selected)</span>
                     </th>
                     <td class="day sunday">{{dayOfMonth(pp, 1, 0)}}</td>

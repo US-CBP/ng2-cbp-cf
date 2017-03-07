@@ -44,6 +44,9 @@ module.exports = config => {
 
         singleRun: false,
 
-        browsers: ['Chrome']
+        browsers: ['Chrome'],
+
+        browserDisconnectTimeout: 4000,
+        browserNoActivityTimeout: 30000
     });
 };

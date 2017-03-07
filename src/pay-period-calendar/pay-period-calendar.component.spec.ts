@@ -1,15 +1,12 @@
-﻿import { CommonModule }                 from '@angular/common';
-import { CUSTOM_ELEMENTS_SCHEMA }       from '@angular/core';
+﻿import { CUSTOM_ELEMENTS_SCHEMA }       from '@angular/core';
 import {
     ComponentFixture,
     TestBed,
 }                                       from '@angular/core/testing';
-import { FormsModule }                  from '@angular/forms';
 import * as moment                      from 'moment/moment';
 
-import { ButtonDirective }              from '../button';
-import { SelectFieldComponent }         from '../select-field';
 import { PayPeriodCalendarComponent }   from './pay-period-calendar.component';
+import { PayPeriodCalendarModule }      from './pay-period-calendar.module';
 import { PayPeriodMonth }               from './pay-period-month.model';
 import { PayPeriod }                    from './pay-period.model';
 
@@ -25,8 +22,8 @@ describe('PayPeriodCalendarComponent', () => {
         months = createMonthsFromCurrent(-12, 12);
 
         TestBed.configureTestingModule({
-            imports: [CommonModule, FormsModule],
-            declarations: [ButtonDirective, SelectFieldComponent, PayPeriodCalendarComponent],
+            imports: [PayPeriodCalendarModule],
+            declarations: [],
             schemas: [CUSTOM_ELEMENTS_SCHEMA],
         });
         fixture = TestBed.createComponent(PayPeriodCalendarComponent);

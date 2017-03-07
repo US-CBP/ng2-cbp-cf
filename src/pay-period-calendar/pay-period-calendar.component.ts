@@ -7,7 +7,6 @@
 }                                   from '@angular/core';
 import * as moment                  from 'moment/moment';
 
-import { ButtonRoles }              from '../button';
 import { PayPeriodMonth }           from './pay-period-month.model';
 import { PayPeriod }                from './pay-period.model';
 
@@ -28,8 +27,6 @@ export class PayPeriodCalendarComponent implements OnInit {
     monthsOfYear: PayPeriodMonth[];
     nextMonths: Map<PayPeriodMonth, PayPeriodMonth>;
     previousMonths: Map<PayPeriodMonth, PayPeriodMonth>;
-
-    ButtonRoles: any = ButtonRoles;
 
     private _months: PayPeriodMonth[];
     private _monthsByYear: Map<number, PayPeriodMonth[]>;
