@@ -7,12 +7,12 @@
             </button>
         </div><!--
         --><div class="quick-select year">
-            <md-select id="{{id}}-pay-period-year" placeholder="Year" [(ngModel)]="shownYear">
+            <md-select id="{{id}}-pay-period-year" aria-label="Year" [(ngModel)]="shownYear">
                 <md-option *ngFor="let year of years" [value]="year">{{year}}</md-option>
             </md-select>
         </div><!--
         --><div class="quick-select month">
-            <md-select id="{{id}}-pay-period-month" placeholder="Month" [(ngModel)]="shownMonth">
+            <md-select id="{{id}}-pay-period-month" aria-label="Month" [(ngModel)]="shownMonth">
                 <md-option *ngFor="let month of monthsOfYear" [value]="month">{{month.name}}</md-option>
             </md-select>
         </div><!--

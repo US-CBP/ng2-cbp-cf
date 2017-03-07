@@ -18,28 +18,17 @@
         .quick-select {
             width: 35%;
 
-            >>> cf-select-field .mdl-selectfield {
-                font-size: 1em;
-                width: 4em;
-                padding: 5px 0;
-
-                .mdl-selectfield--label {
-                    font-size: 1em;
-                }
-
-                &:after {
-                    border: none;
-                }
-            }
-
-            &.year {
-                padding-right: 0.5em;
-                text-align: right;
-            }
-
+            &.year,
             &.month {
-                padding-left: 0.5em;
-                text-align: left;
+                text-align: center;
+
+                >>> .mat-select {
+                    width: 4em;
+
+                    .mat-select-trigger {
+                        min-width: 4em;
+                    }
+                }
             }
         }
 
@@ -75,6 +64,12 @@
 
         tbody {
             tr {
+                th.pp {
+                    button {
+                        min-width: 3.4em;
+                    }
+                }
+
                 &.even {
                     background-color: #f5f5f5;
                 }
