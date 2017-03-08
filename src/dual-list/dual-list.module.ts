@@ -4,8 +4,8 @@ import {
     NgModule,
 }                               from '@angular/core';
 import { FormsModule }          from '@angular/forms';
+import { MaterialModule }       from '@angular/material';
 
-import { ButtonModule }         from '../button';
 import { ListGroupModule }      from '../list-group';
 import { DualListComponent }    from './dual-list.component';
 
@@ -13,7 +13,7 @@ import { DualListComponent }    from './dual-list.component';
     imports: [
         CommonModule,
         FormsModule,
-        ButtonModule,
+        MaterialModule,
         ListGroupModule,
     ],
     exports: [

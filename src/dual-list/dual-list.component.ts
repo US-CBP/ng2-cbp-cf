@@ -12,10 +12,6 @@ import {
 }                           from '@angular/forms';
 import * as _               from 'lodash';
 
-import {
-    ButtonRoles,
-    ButtonSizes,
-}                           from '../button';
 import { BasicList }        from './basic-list';
 
 let nextId = 0;
@@ -52,9 +48,6 @@ export class DualListComponent implements ControlValueAccessor {
     @Input() attrToSort: string[] = [];
 
     @Output() change: EventEmitter<DualListChange> = new EventEmitter<DualListChange>();
-
-    ButtonRoles: any = ButtonRoles;
-    ButtonSizes: any = ButtonSizes;
 
     availableL: BasicList = new BasicList(DualListComponent.AVAILABLE_LIST_NAME);
     selectedL: BasicList = new BasicList(DualListComponent.SELECTED_LIST_NAME);

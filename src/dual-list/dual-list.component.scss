@@ -1,20 +1,30 @@
 @import '../shared/_variables.scss';
 
-.cf-dual-list{
-    display:flex;
-    flex-direction:row;
-    align-content:flex-start;
-    .list-group{
-        &:focus{
+.cf-dual-list {
+    align-content: flex-start;
+    display: flex;
+    flex-direction: row;
+
+    .list-group {
+        border: 1px solid $gray-light;
+        overflow: auto;
+
+        &:focus {
             border-color: $brand-default-highlight;
         }
-        overflow: auto;
-        border:1px solid $gray-light;
     }
-    .vertical-align{
-        margin:0px 10px;
+
+    .vertical-align {
         display: flex;
         flex-direction: column;
         justify-content: center;
+        margin: 0px 10px;
+
+        button {
+            margin-bottom: 2px;
+        }
+        button:last-child {
+            margin-bottom: 0px;
+        }
     }
 }

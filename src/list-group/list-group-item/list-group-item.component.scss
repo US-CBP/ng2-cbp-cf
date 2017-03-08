@@ -2,8 +2,9 @@
 
 cf-list-group-item {
     .list-group-item {
-        border-radius:0px !important;
-        margin-bottom:-1px !important;
+        border-radius: 0px !important;
+        margin-bottom: -1px !important;
+
         &:hover {
             background-color: $gray-lighter;
         }
