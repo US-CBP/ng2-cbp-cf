@@ -1,0 +1,14 @@
+﻿<div class="header-navigation" role="navigation">
+    <div class="app-menu">
+        <ng-content select="cf-menu-group[cf-app-menu]"></ng-content>
+    </div>
+
+    <div class="search" *ngIf="disableSearch !== true">
+        <md-input-container floatPlaceholder="never">
+            <input mdInput type="text" placeholder="Search" [(ngModel)]="searchText" />
+        </md-input-container><!--
+        --><button type="button" md-raised-button aria-label="Search" (click)="searchClicked.emit(searchText)">
+            <md-icon fontSet="fa" fontIcon="fa-search"></md-icon>
+        </button>
+    </div>
+</div>

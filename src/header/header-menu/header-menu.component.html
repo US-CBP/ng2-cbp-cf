@@ -1,0 +1,8 @@
+﻿<button type="button" md-button [mdMenuTriggerFor]="dropdown">
+    <span><ng-content></ng-content></span>
+    <md-icon fontSet="fa" fontIcon="fa-caret-down"></md-icon>
+</button>
+
+<md-menu #dropdown="mdMenu" [overlapTrigger]="false">
+    <ng-content select="cf-header-nav-item"></ng-content>
+</md-menu>

@@ -1,0 +1,10 @@
+﻿<a *ngIf="type === 'href'" md-menu-item [href]="url">
+    <template [portalHost]="content"></template>
+</a>
+<a *ngIf="type === 'route'" md-menu-item [routerLink]="url">
+    <template [portalHost]="content"></template>
+</a>
+
+<template portal #content="cdkPortal">
+    <ng-content></ng-content>
+</template>

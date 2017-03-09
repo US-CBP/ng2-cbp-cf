@@ -1,0 +1,23 @@
+﻿<div class="header-navigation" role="navigation">
+    <div class="brand">
+        <a [href]="homeUrl">
+            <div class="cbp"></div>
+            <div class="dhs"></div>
+        </a>
+    </div>
+
+    <div class="cbp-menu">
+        <ng-content select="cf-menu-group[cf-cbp-menu]"></ng-content>
+    </div>
+
+    <div class="feedback" *ngIf="disableFeedback !== true">
+        <button type="button" md-button (click)="feedbackClicked.emit()">
+            <md-icon fontSet="fa" fontIcon="fa-comment"></md-icon>
+            <span>Feedback</span>
+        </button>
+    </div>
+
+    <div class="user-menu">
+        <ng-content select="cf-menu-group[cf-user-menu]"></ng-content>
+    </div>
+</div>

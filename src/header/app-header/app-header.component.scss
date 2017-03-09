@@ -1,0 +1,45 @@
+﻿cf-app-header {
+    background-color: #eee;
+    border-color: #e7e7e7;
+    border: 1px solid transparent;
+    color: #00416a;
+    display: block;
+    padding-right: 8px;
+    text-shadow: 0 1px 0 hsla(0, 0%, 100%, .3);
+    transition: all .2s ease-in-out;
+
+    cf-menu-group {
+        > cf-header-nav-item {
+            a.mat-menu-item {
+                color: #00416a;
+            }
+        }
+    }
+
+    .app-menu {
+        flex: 1 1 auto;
+    }
+
+    .search {
+        flex: 0 0 auto;
+
+        .mat-input-wrapper {
+            background-color: #fff;
+            line-height: 32px;
+            width: 300px;
+        }
+
+        button {
+            background-color: #003e65;
+            color: #fff;
+            height: 39px;
+            min-width: 39px;
+            padding: 0;
+            width: 39px;
+
+            .mat-icon {
+                line-height: 22px;
+            }
+        }
+    }
+}
