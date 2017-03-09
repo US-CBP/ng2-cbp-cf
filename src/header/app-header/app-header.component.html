@@ -1,14 +1,37 @@
-﻿<div class="header-navigation" role="navigation">
-    <div class="app-menu">
-        <ng-content select="cf-menu-group[cf-app-menu]"></ng-content>
+﻿<div class="header-navigation" role="navigation" fxLayout="row" fxLayoutWrap="wrap">
+    <div *ngIf="isCondensed" fxFlex="1 0 auto"></div>
+
+    <div class="app-menu" *ngIf="!isCondensed" fxFlex="1 1 auto">
+        <template [portalHost]="appMenu"></template>
     </div>
 
-    <div class="search" *ngIf="disableSearch !== true">
-        <md-input-container floatPlaceholder="never">
-            <input mdInput type="text" placeholder="Search" [(ngModel)]="searchText" />
-        </md-input-container><!--
-        --><button type="button" md-raised-button aria-label="Search" (click)="searchClicked.emit(searchText)">
-            <md-icon fontSet="fa" fontIcon="fa-search"></md-icon>
+    <div class="search" *ngIf="!isCondensed && disableSearch !== true" fxFlex="0 0 auto">
+        <template [portalHost]="search"></template>
+    </div>
+
+    <div class="expand-when-condensed" *ngIf="isCondensed" fxFlex="0 0 auto">
+        <button type="button" md-icon-button [mdMenuTriggerFor]="expansion">
+            <md-icon fontSet="fa" fontIcon="fa-bars"></md-icon>
+            <span class="sr-only">Toggle Application Navigation</span>
         </button>
     </div>
 </div>
+
+<template portal #appMenu="cdkPortal">
+    <ng-content select="cf-menu-group[cf-app-menu]"></ng-content>
+</template>
+
+<template portal #search="cdkPortal">
+    <md-input-container floatPlaceholder="never">
+        <input mdInput type="text" placeholder="Search" [(ngModel)]="searchText" />
+    </md-input-container><!--
+    --><button type="button" md-raised-button aria-label="Search" (click)="searchClicked.emit(searchText)">
+        <md-icon fontSet="fa" fontIcon="fa-search"></md-icon>
+    </button>
+</template>
+
+<md-menu #expansion="mdMenu" [overlapTrigger]="false">
+    <template [ngIf]="isCondensed">
+        <template [portalHost]="appMenu"></template>
+    </template>
+</md-menu>

@@ -3,6 +3,7 @@ import {
     ModuleWithProviders,
     NgModule,
 }                                   from '@angular/core';
+import { FlexLayoutModule }         from '@angular/flex-layout';
 import { FormsModule }              from '@angular/forms';
 import { MaterialModule }           from '@angular/material';
 import { RouterModule }             from '@angular/router';
@@ -19,6 +20,7 @@ import { MenuGroupComponent }       from './menu-group';
 @NgModule({
     imports: [
         CommonModule,
+        FlexLayoutModule,
         FormsModule,
         RouterModule,
         MaterialModule,

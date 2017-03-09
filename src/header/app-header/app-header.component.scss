@@ -8,7 +8,7 @@
     text-shadow: 0 1px 0 hsla(0, 0%, 100%, .3);
     transition: all .2s ease-in-out;
 
-    cf-menu-group {
+    .cf-menu-group {
         > cf-header-nav-item {
             a.mat-menu-item {
                 color: #00416a;
@@ -16,16 +16,11 @@
         }
     }
 
-    .app-menu {
-        flex: 1 1 auto;
-    }
-
     .search {
-        flex: 0 0 auto;
-
         .mat-input-wrapper {
             background-color: #fff;
-            line-height: 32px;
+            line-height: 34px;
+            margin: 0;
             width: 300px;
         }
 

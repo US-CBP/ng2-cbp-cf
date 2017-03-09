@@ -4,7 +4,10 @@
     Input,
     Output,
     ViewEncapsulation,
-}                       from '@angular/core';
+}                           from '@angular/core';
+import { ObservableMedia }  from '@angular/flex-layout';
+
+import { BaseHeader }       from '../base-header.model';
 
 @Component({
     selector: 'cf-cbp-header',
@@ -12,12 +15,13 @@
     styleUrls: ['cbp-header.component.scss'],
     encapsulation: ViewEncapsulation.None,
 })
-export class CbpHeaderComponent {
+export class CbpHeaderComponent extends BaseHeader {
     @Input() homeUrl: string = '';
     @Input() disableFeedback: boolean = false;
 
     @Output() feedbackClicked: EventEmitter<void> = new EventEmitter<void>();
 
-    constructor() {
+    constructor(media: ObservableMedia) {
+        super(media);
     }
 }
