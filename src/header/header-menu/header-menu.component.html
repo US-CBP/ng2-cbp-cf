@@ -5,7 +5,7 @@
     <template [ngTemplateOutlet]="content"></template>
 </button>
 
-<md-menu #dropdown="mdMenu" [overlapTrigger]="false" [class]="classes">
+<md-menu #dropdown="mdMenu" [overlapTrigger]="false" [class]="classes || ''">
     <ng-content select="cf-header-submenu"></ng-content>
 </md-menu>
 
