@@ -1,6 +1,5 @@
 ﻿import {
     Component,
-    Input,
     Optional,
     ViewEncapsulation,
 }                                   from '@angular/core';
@@ -15,8 +14,6 @@ import { CbpHeaderComponent }       from '../cbp-header';
     encapsulation: ViewEncapsulation.None,
 })
 export class HeaderMenuComponent {
-    @Input() text: string;
-
     private header: BaseHeader;
 
     constructor(

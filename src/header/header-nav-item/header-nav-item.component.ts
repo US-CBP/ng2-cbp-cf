@@ -12,7 +12,6 @@ export type NavItemType = 'href' | 'route';
     encapsulation: ViewEncapsulation.None,
 })
 export class HeaderNavItemComponent {
-    @Input() text: string;
     @Input() type: NavItemType;
     @Input() url: string;
 
