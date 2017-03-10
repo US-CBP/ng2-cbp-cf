@@ -3,11 +3,11 @@
     Input,
     Optional,
     ViewEncapsulation,
-}                               from '@angular/core';
+}                                   from '@angular/core';
 
-import { AppHeaderComponent }   from '../app-header';
-import { BaseHeader }           from '../base-header.model';
-import { CbpHeaderComponent }   from '../cbp-header';
+import { AppHeaderComponent }       from '../app-header';
+import { BaseHeader }               from '../base-header.model';
+import { CbpHeaderComponent }       from '../cbp-header';
 
 @Component({
     selector: 'cf-header-menu',

@@ -1,4 +1,5 @@
-﻿import {
+﻿/* tslint:disable:no-access-missing-member */
+import {
     Component,
     EventEmitter,
     Input,
@@ -25,3 +26,4 @@ export class CbpHeaderComponent extends BaseHeader {
         super(media);
     }
 }
+/* tslint:enable */

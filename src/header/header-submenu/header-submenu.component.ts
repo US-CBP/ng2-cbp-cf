@@ -4,11 +4,11 @@
 }                       from '@angular/core';
 
 @Component({
-    selector: 'cf-menu-group',
-    templateUrl: 'menu-group.component.html',
+    selector: 'cf-header-submenu',
+    templateUrl: 'header-submenu.component.html',
     encapsulation: ViewEncapsulation.None,
 })
-export class MenuGroupComponent {
+export class HeaderSubmenuComponent {
     constructor() {
     }
 }

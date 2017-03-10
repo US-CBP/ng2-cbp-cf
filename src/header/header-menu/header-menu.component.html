@@ -1,15 +1,15 @@
 ﻿<button type="button" md-button *ngIf="!isCondensed" [mdMenuTriggerFor]="dropdown">
-    <template [portalHost]="content"></template>
+    <template [ngTemplateOutlet]="content"></template>
 </button>
 <button type="button" md-menu-item *ngIf="isCondensed" [mdMenuTriggerFor]="dropdown">
-    <template [portalHost]="content"></template>
+    <template [ngTemplateOutlet]="content"></template>
 </button>
 
 <md-menu #dropdown="mdMenu" [overlapTrigger]="false">
-    <ng-content select="cf-header-nav-item"></ng-content>
+    <ng-content select="cf-header-submenu"></ng-content>
 </md-menu>
 
-<template portal #content="cdkPortal">
+<template #content>
     <span>
         <ng-content></ng-content>
     </span>

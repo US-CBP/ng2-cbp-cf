@@ -1,4 +1,5 @@
-﻿import {
+﻿/* tslint:disable:no-access-missing-member */
+import {
     Component,
     EventEmitter,
     Input,
@@ -17,11 +18,13 @@ import { BaseHeader }       from '../base-header.model';
 })
 export class AppHeaderComponent extends BaseHeader {
     @Input() disableSearch: boolean = false;
-    @Input() searchText: string = '';
 
     @Output() searchClicked: EventEmitter<string> = new EventEmitter<string>();
+
+    searchText: string = '';
 
     constructor(media: ObservableMedia) {
         super(media);
     }
 }
+/* tslint:enable */

@@ -17,9 +17,10 @@
         }
     }
 
-    .cf-menu-group {
+    .cf-header-menu-group {
         > cf-header-nav-item {
             font-weight: 500;
+            padding-top: 2px;
 
             a.mat-menu-item {
                 font-size: 15px;

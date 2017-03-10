@@ -7,7 +7,7 @@
     </div>
 
     <div class="cbp-menu" *ngIf="!isCondensed" fxFlex="1 1 auto">
-        <template [portalHost]="cbpMenu"></template>
+        <template [ngTemplateOutlet]="cbpMenu"></template>
     </div>
 
     <div class="feedback" *ngIf="!isCondensed && disableFeedback !== true" fxFlex="0 0 auto">
@@ -18,7 +18,7 @@
     </div>
 
     <div class="user-menu" *ngIf="!isCondensed" fxFlex="0 1 auto">
-        <template [portalHost]="userMenu"></template>
+        <template [ngTemplateOutlet]="userMenu"></template>
     </div>
 
     <div class="expand-when-condensed" *ngIf="isCondensed" fxFlex="0 0 auto">
@@ -29,23 +29,23 @@
     </div>
 </div>
 
-<template portal #cbpMenu="cdkPortal">
-    <ng-content select="cf-menu-group[cf-cbp-menu]"></ng-content>
+<template #cbpMenu>
+    <ng-content select="cf-header-menu-group[cf-cbp-menu]"></ng-content>
 </template>
 
-<template portal #userMenu="cdkPortal">
-    <ng-content select="cf-menu-group[cf-user-menu]"></ng-content>
+<template #userMenu>
+    <ng-content select="cf-header-menu-group[cf-user-menu]"></ng-content>
 </template>
 
 <md-menu #expansion="mdMenu" [overlapTrigger]="false">
     <template [ngIf]="isCondensed">
-        <template [portalHost]="cbpMenu">
+        <template [ngTemplateOutlet]="cbpMenu">
         </template>
         <button type="button" md-menu-item *ngIf="disableFeedback !== true" (click)="feedbackClicked.emit()">
             <md-icon fontSet="fa" fontIcon="fa-comment"></md-icon>
             <span>Feedback</span>
         </button>
-        <template [portalHost]="userMenu">
+        <template [ngTemplateOutlet]="userMenu">
         </template>
     </template>
 </md-menu>

@@ -2,11 +2,11 @@
     <div *ngIf="isCondensed" fxFlex="1 0 auto"></div>
 
     <div class="app-menu" *ngIf="!isCondensed" fxFlex="1 1 auto">
-        <template [portalHost]="appMenu"></template>
+        <template [ngTemplateOutlet]="appMenu"></template>
     </div>
 
     <div class="search" *ngIf="!isCondensed && disableSearch !== true" fxFlex="0 0 auto">
-        <template [portalHost]="search"></template>
+        <template [ngTemplateOutlet]="search"></template>
     </div>
 
     <div class="expand-when-condensed" *ngIf="isCondensed" fxFlex="0 0 auto">
@@ -17,11 +17,11 @@
     </div>
 </div>
 
-<template portal #appMenu="cdkPortal">
-    <ng-content select="cf-menu-group[cf-app-menu]"></ng-content>
+<template #appMenu>
+    <ng-content select="cf-header-menu-group[cf-app-menu]"></ng-content>
 </template>
 
-<template portal #search="cdkPortal">
+<template #search>
     <md-input-container floatPlaceholder="never">
         <input mdInput type="text" placeholder="Search" [(ngModel)]="searchText" />
     </md-input-container><!--

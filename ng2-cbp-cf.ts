@@ -38,7 +38,7 @@ const modules: any[] = [
         CheckboxModule.forRoot(),
         DropdownTreeFieldModule.forRoot(),
         DualListModule.forRoot(),
-        HeaderModule.forRoot(),
+        HeaderModule,
         ListGroupModule.forRoot(),
         PaginationModule.forRoot(),
         PayPeriodCalendarModule.forRoot(),

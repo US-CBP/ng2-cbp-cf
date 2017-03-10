@@ -1,21 +1,16 @@
 ﻿import { CommonModule }             from '@angular/common';
-import {
-    ModuleWithProviders,
-    NgModule,
-}                                   from '@angular/core';
+import { NgModule }                 from '@angular/core';
 import { FlexLayoutModule }         from '@angular/flex-layout';
 import { FormsModule }              from '@angular/forms';
 import { MaterialModule }           from '@angular/material';
 import { RouterModule }             from '@angular/router';
 
-import { ButtonModule }             from '../button';
 import { AppHeaderComponent }       from './app-header';
 import { CbpHeaderComponent }       from './cbp-header';
-import { HeaderMenuItemComponent }  from './header-menu-item';
 import { HeaderMenuComponent }      from './header-menu';
+import { HeaderMenuGroupComponent } from './header-menu-group';
 import { HeaderNavItemComponent }   from './header-nav-item';
-import { HeaderComponent }          from './header.component';
-import { MenuGroupComponent }       from './menu-group';
+import { HeaderSubmenuComponent }   from './header-submenu';
 
 @NgModule({
     imports: [
@@ -24,31 +19,23 @@ import { MenuGroupComponent }       from './menu-group';
         FormsModule,
         RouterModule,
         MaterialModule,
-        ButtonModule,
     ],
     exports: [
         AppHeaderComponent,
         CbpHeaderComponent,
-        HeaderComponent,
         HeaderMenuComponent,
+        HeaderMenuGroupComponent,
         HeaderNavItemComponent,
-        MenuGroupComponent,
+        HeaderSubmenuComponent,
     ],
     declarations: [
         AppHeaderComponent,
         CbpHeaderComponent,
-        HeaderComponent,
         HeaderMenuComponent,
-        HeaderMenuItemComponent,
+        HeaderMenuGroupComponent,
         HeaderNavItemComponent,
-        MenuGroupComponent,
+        HeaderSubmenuComponent,
     ],
 })
 export class HeaderModule {
-    static forRoot(): ModuleWithProviders {
-        return {
-            ngModule: HeaderModule,
-            providers: [],
-        };
-    }
 }
