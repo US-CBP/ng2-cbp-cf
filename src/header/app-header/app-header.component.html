@@ -32,6 +32,6 @@
 
 <md-menu #expansion="mdMenu" [overlapTrigger]="false">
     <template [ngIf]="isCondensed">
-        <template [portalHost]="appMenu"></template>
+        <template [ngTemplateOutlet]="appMenu"></template>
     </template>
 </md-menu>
