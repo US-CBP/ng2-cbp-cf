@@ -23,7 +23,7 @@ describe('DropdownTreeFieldComponent', () => {
         nodes = createNodeTree();
 
         TestBed.configureTestingModule({
-            imports: [DropdownTreeFieldModule.forRoot()],
+            imports: [DropdownTreeFieldModule],
         });
         fixture = TestBed.createComponent(DropdownTreeFieldComponent);
 

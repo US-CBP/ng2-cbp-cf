@@ -26,7 +26,7 @@ describe('CheckboxComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            imports: [FormsModule, CheckboxModule.forRoot()],
+            imports: [FormsModule, CheckboxModule],
             declarations: [
                 SingleCheckbox,
                 CheckboxWithFormDirectives,

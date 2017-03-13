@@ -1,8 +1,5 @@
 ﻿import { CommonModule }         from '@angular/common';
-import {
-    ModuleWithProviders,
-    NgModule,
-}                               from '@angular/core';
+import { NgModule }             from '@angular/core';
 import { FormsModule }          from '@angular/forms';
 import { MaterialModule }       from '@angular/material';
 
@@ -24,10 +21,4 @@ import { DualListComponent }    from './dual-list.component';
     ],
 })
 export class DualListModule {
-    static forRoot(): ModuleWithProviders {
-        return {
-            ngModule: DualListModule,
-            providers: [],
-        };
-    }
 }
