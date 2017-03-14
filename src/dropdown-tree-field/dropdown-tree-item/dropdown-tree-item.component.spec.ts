@@ -8,9 +8,9 @@ import {
     TestBed,
 }                                       from '@angular/core/testing';
 import { FormsModule }                  from '@angular/forms';
+import { MaterialModule }               from '@angular/material';
 import { By }                           from '@angular/platform-browser';
 
-import { DropdownTreeService }          from '../dropdown-tree.service';
 import { TreeNode }                     from '../tree-node.model';
 import { DropdownTreeItemComponent }    from './dropdown-tree-item.component';
 
@@ -23,10 +23,9 @@ describe('DropdownTreeItemComponent', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [CommonModule, FormsModule],
+            imports: [CommonModule, FormsModule, MaterialModule],
             declarations: [DropdownTreeItemComponent],
             schemas: [CUSTOM_ELEMENTS_SCHEMA],
-            providers: [DropdownTreeService],
         });
         fixture = TestBed.createComponent(DropdownTreeItemComponent);
 

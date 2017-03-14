@@ -1,67 +1,71 @@
-﻿<div class="dropdown-tree-field dtf--floating-label is-dirty" [class.is-focused]="isFocused">
-    <input type="text" id="{{id}}-input" class="dropdown-tree dt--hidden-accesible" [attr.aria-expanded]="isDropdownOpen" tabindex="-1" aria-hidden="true" />
-    <span #dropdownContainer
-          class="dropdown-tree dt--container dt--container-default"
-          [class.dt--selection-open]="isDropdownOpen"
-          [class.dt--selection-focus]="isFocused"
-          dir="ltr">
+﻿<div class="cf-dropdown-tree-trigger"
+     cdk-overlay-origin
+     (click)="toggle()"
+     #origin="cdkOverlayOrigin"
+     #trigger>
 
-        <span class="dt--selection">
-            <span #combobox
-                   class="dt--selection-combobox"
-                   role="combobox"
-                   aria-haspopup="true"
-                   [attr.aria-expanded]="isDropdownOpen"
-                   tabindex="0"
-                   [attr.aria-labelledby]="id + '-selection'"
-                   [attr.aria-owns]="ariaOwnsId"
-                   [attr.aria-activedescendant]="ariaActiveDescendentId"
-                   (keydown)="onComboboxKeydown($event)"
-                   (click)="onComboboxClick()"
-                   (focus)="onComboboxFocus()"
-                   (blur)="onComboboxBlur()">
+    <span class="cf-dropdown-tree-placeholder mat-floating-placeholder"
+          [@transformPlaceholder]="getPlaceholderAnimationState()"
+          [style.visibility]="getPlaceholderVisibility()"
+          [style.width.px]="selectedValueWidth">
 
-                <span class="dt--rendered" id="{{id}}-selection" [title]="selectedText">{{selectedText}}</span>
-                <span class="dt--arrow" role="presentation">
-                    <b role="presentation"></b>
-                </span>
-            </span>
-        </span>
-        <span class="dt--dropdown-wrapper" aria-hidden="true"></span>
+        {{placeholder}}
     </span>
-    <span *ngIf="isDropdownOpen"
-          class="dt--dropdown dt--container dt--container-default dt--container-open"
-          [style.left]="dropdownLeft"
-          [style.top]="dropdownTop"
-          (click)="onTreeClick($event)">
 
-        <span class="dt--dropdown dt--dropdown-below" dir="ltr" [style.width]="dropdownWidth">
-            <span class="dt--results">
-                <ul #tree *ngIf="!isLoading" [id]="treeId" role="tree" class="tree tree-root" aria-expanded="true" aria-hidden="false">
-                    <cf-dropdown-tree-item *ngIf="defaultNode"
-                                           [idPrefix]="treeItemIdPrefix"
-                                           [node]="defaultNode"
-                                           [highlightedNode]="highlightedNode"
-                                           [selectedNode]="effectiveSelectedNode"
-                                           [expandedNodes]="expandedNodes"
-                                           (nodeHighlighted)="onNodeHighlighted($event)"
-                                           (nodeSelected)="onNodeSelected($event)"></cf-dropdown-tree-item>
-                    <cf-dropdown-tree-item *ngFor="let n of nodes"
-                                           [idPrefix]="treeItemIdPrefix"
-                                           [node]="n"
-                                           [highlightedNode]="highlightedNode"
-                                           [selectedNode]="effectiveSelectedNode"
-                                           [expandedNodes]="expandedNodes"
-                                           (nodeCollapsed)="onNodeCollapsed($event)"
-                                           (nodeExpanded)="onNodeExpanded($event)"
-                                           (nodeHighlighted)="onNodeHighlighted($event)"
-                                           (nodeSelected)="onNodeSelected($event)"></cf-dropdown-tree-item>
-                </ul>
-                <div class="text-center text-muted" *ngIf="isLoading">
-                    <i class="fa fa-spinner fa-pulse fa-fw"></i>&nbsp;Loading...
-                </div>
-            </span>
-        </span>
+    <span class="cf-dropdown-tree-value">
+        <span class="cf-dropdown-tree-value-text">{{triggerValue}}</span>
     </span>
-    <label [attr.for]="id + '-input'" (click)="onLabelClick($event)">{{label}}</label>
+
+    <span class="cf-dropdown-tree-arrow"></span>
+    <span class="cf-dropdown-tree-underline"></span>
 </div>
+
+<template cdk-connected-overlay
+          [origin]="origin"
+          [open]="isPanelOpen"
+          hasBackdrop
+          (backdropClick)="close()"
+          backdropClass="cdk-overlay-transparent-backdrop"
+          [positions]="positions"
+          [height]="panelHeight"
+          [minWidth]="triggerWidth"
+          [offsetY]="offsetY"
+          [offsetX]="offsetX"
+          (attach)="setScrollTop()">
+
+    <div class="cf-dropdown-tree-panel"
+         [@transformPanel]="'showing'"
+         (@transformPanel.done)="onPanelDone()"
+         (keydown)="onPanelKeydown($event)"
+         [style.transformOrigin]="transformOrigin"
+         [class.cf-dropdown-tree-panel-done-animating]="panelDoneAnimating">
+
+        <div class="cf-dropdown-tree-content" [@fadeInContent]="'showing'" (@fadeInContent.done)="onFadeInDone()">
+            <ul #tree *ngIf="!isLoading" [id]="treeId" role="tree" class="tree tree-root" aria-expanded="true" aria-hidden="false">
+                <cf-dropdown-tree-item *ngIf="defaultNode"
+                                       [idPrefix]="treeItemIdPrefix"
+                                       [node]="defaultNode"
+                                       [highlightedNode]="highlightedNode"
+                                       [selectedNode]="effectiveSelectedNode"
+                                       [expandedNodes]="expandedNodes"
+                                       (nodeHighlighted)="onNodeHighlighted($event)"
+                                       (nodeSelected)="onNodeSelected($event)"></cf-dropdown-tree-item>
+                <cf-dropdown-tree-item *ngFor="let n of nodes"
+                                       [idPrefix]="treeItemIdPrefix"
+                                       [node]="n"
+                                       [highlightedNode]="highlightedNode"
+                                       [selectedNode]="effectiveSelectedNode"
+                                       [expandedNodes]="expandedNodes"
+                                       (nodeCollapsed)="onNodeCollapsed($event)"
+                                       (nodeExpanded)="onNodeExpanded($event)"
+                                       (nodeHighlighted)="onNodeHighlighted($event)"
+                                       (nodeSelected)="onNodeSelected($event)"></cf-dropdown-tree-item>
+            </ul>
+            <div class="cf-dropdown-tree-loading" *ngIf="isLoading">
+                <div>
+                    <md-spinner></md-spinner>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

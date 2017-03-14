@@ -1,1270 +1,2044 @@
-﻿import { DebugElement }                 from '@angular/core';
+﻿import {
+    Component,
+    DebugElement,
+    ViewChild,
+}                                       from '@angular/core';
 import {
     ComponentFixture,
     TestBed,
+    fakeAsync,
+    tick,
 }                                       from '@angular/core/testing';
+import { FormsModule }                  from '@angular/forms';
+import {
+    Dir,
+    OverlayContainer,
+}                                       from '@angular/material';
+import { ViewportRuler }                from '@angular/material/core/overlay/position/viewport-ruler';
 import { By }                           from '@angular/platform-browser';
 
 import { DropdownTreeFieldComponent }   from './dropdown-tree-field.component';
 import { DropdownTreeFieldModule }      from './dropdown-tree-field.module';
 import { TreeNode }                     from './tree-node.model';
 
-let currentId = 1;
+let currentId: number;
 
 describe('DropdownTreeFieldComponent', () => {
-    let fixture: ComponentFixture<DropdownTreeFieldComponent>;
-    let component: DropdownTreeFieldComponent;
-    let nodes: TreeNode[];
-    let dropdownContainer: DebugElement;
-    let combobox: DebugElement;
-    let nodeSelected: jasmine.Spy;
+    let overlayContainerElement: HTMLElement;
+    let dir: { value: string };
 
     beforeEach(() => {
-        nodes = createNodeTree();
+        currentId = 1;
 
         TestBed.configureTestingModule({
-            imports: [DropdownTreeFieldModule],
+            imports: [
+                FormsModule,
+                DropdownTreeFieldModule,
+            ],
+            declarations: [
+                BasicModelComponent,
+                PlainTabindexComponent,
+            ],
+            providers: [
+                { provide: OverlayContainer, useFactory: () => overlayContainerFactory() },
+                { provide: Dir, useFactory: () => { return dir = { value: 'ltr' }; } },
+                { provide: ViewportRuler, useClass: FakeViewportRuler },
+            ],
         });
-        fixture = TestBed.createComponent(DropdownTreeFieldComponent);
-
-        component = fixture.componentInstance;
-        component.nodes = nodes;
-
-        nodeSelected = jasmine.createSpy('nodeSelected');
-        component.nodeSelected.subscribe(nodeSelected);
-
-        dropdownContainer = fixture.debugElement.query(By.css('span.dropdown-tree.dt--container'));
-        combobox = fixture.debugElement.query(By.css('span.dt--selection-combobox'));
     });
 
-    describe('ngOnInit', () => {
-        let selectedNode: TreeNode;
+    afterEach(() => {
+        document.body.removeChild(overlayContainerElement);
+    });
+
+    function overlayContainerFactory(): any {
+        overlayContainerElement = document.createElement('div');
+        overlayContainerElement.classList.add('cdk-overlay-container');
+
+        document.body.appendChild(overlayContainerElement);
+
+        document.body.style.padding = '0';
+        document.body.style.margin = '0';
+
+        return { getContainerElement: () => overlayContainerElement };
+    }
+
+    describe('defaultNode', () => {
+        let fixture: ComponentFixture<BasicModelComponent>;
+        let component: BasicModelComponent;
 
         beforeEach(() => {
-            selectedNode = nodes[0].children[2].children[1];
-            component.selectedNode = selectedNode;
+            fixture = TestBed.createComponent(BasicModelComponent);
+            component = fixture.componentInstance;
         });
 
-        it('sets effectiveSelectedNode to selectedNode', () => {
-            fixture.detectChanges();
+        it('is null when value is not null and defaultLabel is null', fakeAsync(() => {
+            component.selectedNode = component.nodes[0];
+            component.defaultLabel = null;
 
-            expect(component.effectiveSelectedNode).toBe(component.selectedNode);
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.defaultNode).toBe(null);
+        }));
+
+        it('is not null when value is null and defaultLabel is null', fakeAsync(() => {
+            component.selectedNode = null;
+            component.defaultLabel = null;
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.defaultNode).not.toBe(null);
+        }));
+
+        it('is not null when value is null and defaultLabel is not null', fakeAsync(() => {
+            component.selectedNode = component.nodes[0];
+            component.defaultLabel = 'Any';
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.defaultNode).not.toBe(null);
+        }));
+
+        it('has defaultLabel text', fakeAsync(() => {
+            component.selectedNode = component.nodes[0];
+            component.defaultLabel = 'Any';
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.defaultNode.text).toBe('Any');
+        }));
+
+        it('has empty text when defaultLabel is null', fakeAsync(() => {
+            component.selectedNode = null;
+            component.defaultLabel = null;
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.defaultNode.text).toBe('');
+        }));
+
+        it('set to not null when value set to null and defaultLabel is null', fakeAsync(() => {
+            component.selectedNode = component.nodes[0];
+            component.defaultLabel = null;
+
+            fixture.detectChanges();
+            tick();
+
+            component.selectedNode = null;
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.defaultNode).not.toBe(null);
+        }));
+
+        it('set to null when value set to not null and defaultLabel is null', fakeAsync(() => {
+            component.selectedNode = null;
+            component.defaultLabel = null;
+
+            fixture.detectChanges();
+            tick();
+
+            component.selectedNode = component.nodes[0];
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.defaultNode).toBe(null);
+        }));
+
+        it('stays null when value set to another value and defaultLabel is null', fakeAsync(() => {
+            component.selectedNode = component.nodes[0];
+            component.defaultLabel = null;
+
+            fixture.detectChanges();
+            tick();
+
+            component.selectedNode = component.nodes[0].children[0];
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.defaultNode).toBe(null);
+        }));
+
+        it('stays not null when value set to not null and defaultLabel is not null', fakeAsync(() => {
+            component.selectedNode = null;
+            component.defaultLabel = 'Any';
+
+            fixture.detectChanges();
+            tick();
+
+            component.selectedNode = component.nodes[0].children[0];
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.defaultNode).not.toBe(null);
+        }));
+
+        it('set to not null when value is not null and defaultLabel set to not null', fakeAsync(() => {
+            component.selectedNode = component.nodes[0];
+            component.defaultLabel = null;
+
+            fixture.detectChanges();
+            tick();
+
+            component.defaultLabel = 'Any';
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.defaultNode).not.toBe(null);
+        }));
+
+        it('set to null when value is not null and defaultLabel set to null', fakeAsync(() => {
+            component.selectedNode = component.nodes[0];
+            component.defaultLabel = 'Any';
+
+            fixture.detectChanges();
+            tick();
+
+            component.defaultLabel = null;
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.defaultNode).toBe(null);
+        }));
+
+        it('changes text when defaultLabel changes', fakeAsync(() => {
+            component.selectedNode = component.nodes[0];
+            component.defaultLabel = 'Any';
+
+            fixture.detectChanges();
+            tick();
+
+            component.defaultLabel = 'Select One';
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.defaultNode.text).toBe('Select One');
+        }));
+
+        it('changes text to empty string when defaultLabel set to null', fakeAsync(() => {
+            component.selectedNode = null;
+            component.defaultLabel = 'Any';
+
+            fixture.detectChanges();
+            tick();
+
+            component.defaultLabel = null;
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.defaultNode.text).toBe('');
+        }));
+
+        it('changes text to defaultLabel when set to not null', fakeAsync(() => {
+            component.selectedNode = null;
+            component.defaultLabel = null;
+
+            fixture.detectChanges();
+            tick();
+
+            component.defaultLabel = 'Any';
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.defaultNode.text).toBe('Any');
+        }));
+    });
+
+    describe('triggerValue', () => {
+        let fixture: ComponentFixture<BasicModelComponent>;
+        let component: BasicModelComponent;
+
+        beforeEach(() => {
+            fixture = TestBed.createComponent(BasicModelComponent);
+            component = fixture.componentInstance;
         });
 
-        it('expands nodes to selectedNode', () => {
-            fixture.detectChanges();
+        it('is empty string when value is null and defaultLabel is null', fakeAsync(() => {
+            component.selectedNode = null;
+            component.defaultLabel = null;
+            component.showFullSelectedPath = false;
 
-            expect(component.expandedNodes).toEqual({
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.triggerValue).toBe('');
+        }));
+
+        it('is defaultLabel when value is null and defaultLabel is not null', fakeAsync(() => {
+            component.selectedNode = null;
+            component.defaultLabel = 'Any';
+            component.showFullSelectedPath = false;
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.triggerValue).toBe('Any');
+        }));
+
+        it('is value text', fakeAsync(() => {
+            component.selectedNode = component.nodes[0];
+            component.defaultLabel = 'Any';
+            component.showFullSelectedPath = false;
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.triggerValue).toBe(component.nodes[0].text);
+        }));
+
+        it('is value selectedText when not null', fakeAsync(() => {
+            component.nodes[0].selectedText = 'Special Text';
+
+            component.selectedNode = component.nodes[0];
+            component.defaultLabel = 'Any';
+            component.showFullSelectedPath = false;
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.triggerValue).toBe('Special Text');
+        }));
+
+        it('is empty string when value is null and defaultLabel is null and showFullSelectedPath is true', fakeAsync(() => {
+            component.selectedNode = null;
+            component.defaultLabel = null;
+            component.showFullSelectedPath = true;
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.triggerValue).toBe('');
+        }));
+
+        it('is defaultLabel when value is null and defaultLabel is not null and showFullSelectedPath is true', fakeAsync(() => {
+            component.selectedNode = null;
+            component.defaultLabel = 'Any';
+            component.showFullSelectedPath = true;
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.triggerValue).toBe('Any');
+        }));
+
+        it('is full path to value text and showFullSelectedPath is true', fakeAsync(() => {
+            component.selectedNode = component.nodes[0].children[1].children[0];
+            component.defaultLabel = 'Any';
+            component.showFullSelectedPath = true;
+
+            fixture.detectChanges();
+            tick();
+
+            let nodesInPath = [
+                component.nodes[0],
+                component.nodes[0].children[1],
+                component.nodes[0].children[1].children[0],
+            ];
+            expect(component.dropdownTree.triggerValue).toBe(`${nodesInPath[0].text} / ${nodesInPath[1].text} / ${nodesInPath[2].text}`);
+        }));
+
+        it('is full path to value selectedText when not null and showFullSelectedPath is true', fakeAsync(() => {
+            component.nodes[0].selectedText = 'First Special Text';
+            component.nodes[0].children[1].children[0].selectedText = 'Second Special Text';
+
+            component.selectedNode = component.nodes[0].children[1].children[0];
+            component.defaultLabel = 'Any';
+            component.showFullSelectedPath = true;
+
+            fixture.detectChanges();
+            tick();
+
+            let nodesInPath = [
+                component.nodes[0],
+                component.nodes[0].children[1],
+                component.nodes[0].children[1].children[0],
+            ];
+            expect(component.dropdownTree.triggerValue).toBe(`${nodesInPath[0].selectedText} / ${nodesInPath[1].text} / ${nodesInPath[2].selectedText}`);
+        }));
+
+        it('changes when defaultLabel changes', fakeAsync(() => {
+            component.selectedNode = null;
+            component.defaultLabel = 'Any';
+            component.showFullSelectedPath = false;
+
+            fixture.detectChanges();
+            tick();
+
+            component.defaultLabel = 'Select One';
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.triggerValue).toBe('Select One');
+        }));
+
+        it('changes when value changes to null', fakeAsync(() => {
+            component.selectedNode = component.nodes[0];
+            component.defaultLabel = 'Any';
+            component.showFullSelectedPath = false;
+
+            fixture.detectChanges();
+            tick();
+
+            component.selectedNode = null;
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.triggerValue).toBe('Any');
+        }));
+
+        it('changes when value changes from null', fakeAsync(() => {
+            component.selectedNode = null;
+            component.defaultLabel = 'Any';
+            component.showFullSelectedPath = false;
+
+            fixture.detectChanges();
+            tick();
+
+            component.selectedNode = component.nodes[0];
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.triggerValue).toBe(component.nodes[0].text);
+        }));
+
+        it('changes when value changes', fakeAsync(() => {
+            component.selectedNode = component.nodes[0].children[0];
+            component.defaultLabel = 'Any';
+            component.showFullSelectedPath = false;
+
+            fixture.detectChanges();
+            tick();
+
+            component.selectedNode = component.nodes[0];
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.triggerValue).toBe(component.nodes[0].text);
+        }));
+
+        it('changes when showFullSelectedPath changes to true', fakeAsync(() => {
+            component.selectedNode = component.nodes[0].children[0];
+            component.defaultLabel = 'Any';
+            component.showFullSelectedPath = false;
+
+            fixture.detectChanges();
+            tick();
+
+            component.showFullSelectedPath = true;
+
+            fixture.detectChanges();
+            tick();
+
+            let nodesInPath = [
+                component.nodes[0],
+                component.nodes[0].children[0],
+            ];
+            expect(component.dropdownTree.triggerValue).toBe(`${nodesInPath[0].text} / ${nodesInPath[1].text}`);
+        }));
+
+        it('changes when showFullSelectedPath changes to false', fakeAsync(() => {
+            component.selectedNode = component.nodes[0].children[0];
+            component.defaultLabel = 'Any';
+            component.showFullSelectedPath = true;
+
+            fixture.detectChanges();
+            tick();
+
+            component.showFullSelectedPath = false;
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.triggerValue).toBe(component.nodes[0].children[0].text);
+        }));
+    });
+
+    describe('expandedNodes', () => {
+        let fixture: ComponentFixture<BasicModelComponent>;
+        let component: BasicModelComponent;
+
+        beforeEach(() => {
+            fixture = TestBed.createComponent(BasicModelComponent);
+            component = fixture.componentInstance;
+        });
+
+        it('expands nodes to value', fakeAsync(() => {
+            component.selectedNode = component.nodes[0].children[2].children[0];
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.expandedNodes).toEqual({
                 asymmetricMatch(actual: Set<TreeNode>): boolean {
                     return actual.size === 2 &&
-                        actual.has(nodes[0]) &&
-                        actual.has(nodes[0].children[2]);
+                        actual.has(component.nodes[0]) &&
+                        actual.has(component.nodes[0].children[2]);
                 },
             });
-        });
+        }));
 
-        it('expands no nodes when selectedNode is null', () => {
+        it('expands no nodes when value is null', fakeAsync(() => {
             component.selectedNode = null;
 
             fixture.detectChanges();
+            tick();
 
-            expect(component.expandedNodes.size).toBe(0);
-        });
-
-        it('defaults isDropdownOpen to false', () => {
-            fixture.detectChanges();
-
-            expect(component.isDropdownOpen).toBe(false);
-        });
-
-        it('defaults ariaOwnsId to undefined', () => {
-            fixture.detectChanges();
-
-            expect(component.ariaOwnsId).toBeUndefined();
-        });
-
-        it('defaults ariaActiveDescendentId to undefined', () => {
-            fixture.detectChanges();
-
-            expect(component.ariaActiveDescendentId).toBeUndefined();
-        });
-
-        it('defaults defaultNode to null when defaultLabel is not provided', () => {
-            fixture.detectChanges();
-
-            expect(component.defaultNode).toBe(null);
-        });
-
-        it('defaults defaultNode to not null when defaultLabel is provided', () => {
-            component.defaultLabel = 'Select One';
-
-            fixture.detectChanges();
-
-            expect(component.defaultNode).not.toBe(null);
-        });
-
-        it('defaults defaultNode text to defaultLabel when defaultLabel is provided', () => {
-            component.defaultLabel = 'Select One';
-
-            fixture.detectChanges();
-
-            expect(component.defaultNode.text).toBe(component.defaultLabel);
-        });
-
-        it('defaults defaultNode to not null when defaultLabel is not provided and selectedNode is null', () => {
-            component.selectedNode = null;
-
-            fixture.detectChanges();
-
-            expect(component.defaultNode).not.toBe(null);
-        });
-
-        it('defaults defaultNode text to empty string when defaultLabel is not provided and selectedNode is null', () => {
-            component.selectedNode = null;
-
-            fixture.detectChanges();
-
-            expect(component.defaultNode.text).toBe('');
-        });
-
-        it('sets effectiveSelectedNode to defaultNode when selectedNode is null and defaultLabel is provided', () => {
-            component.selectedNode = null;
-            component.defaultLabel = 'Select One';
-
-            fixture.detectChanges();
-
-            expect(component.effectiveSelectedNode).toBe(component.defaultNode);
-        });
-
-        it('sets effectiveSelectedNode to defaultNode when selectedNode is null and defaultLabel is not provided', () => {
-            component.selectedNode = null;
-
-            fixture.detectChanges();
-
-            expect(component.effectiveSelectedNode).toBe(component.defaultNode);
-        });
-
-        it('sets selectedText to selectedNode text when showFullSelectedPath is false and selectedNode is not null', () => {
-            component.showFullSelectedPath = false;
-
-            fixture.detectChanges();
-
-            expect(component.selectedText).toBe(selectedNode.text);
-        });
-
-        it('sets selectedText to selectedNode selectedText when showFullSelectedPath is false and selectedNode is not null and selectedText is populated', () => {
-            selectedNode.selectedText = 'Selected Text';
-            component.showFullSelectedPath = false;
-
-            fixture.detectChanges();
-
-            expect(component.selectedText).toBe(selectedNode.selectedText);
-        });
-
-        it('sets selectedText to defaultLabel when showFullSelectedPath is false and selectedNode is null', () => {
-            component.selectedNode = null;
-            component.defaultLabel = 'Select One';
-            component.showFullSelectedPath = false;
-
-            fixture.detectChanges();
-
-            expect(component.selectedText).toBe(component.defaultLabel);
-        });
-
-        it('sets selectedText to selectedNode text preceded by parent nodes\' text when showFullSelectedPath is true and selectedNode is not null', () => {
-            component.showFullSelectedPath = true;
-
-            fixture.detectChanges();
-
-            expect(component.selectedText).toBe(`${nodes[0].text} / ${nodes[0].children[2].text} / ${selectedNode.text}`);
-        });
-
-        /* tslint:disable:max-line-length */
-        it('sets selectedText to selectedNode selectedText preceded by parent nodes\' text when showFullSelectedPath is true and selectedNode is not null and selectedText is populated', () => {
-        /* tslint:enable: */
-            selectedNode.selectedText = 'Selected Text';
-            component.showFullSelectedPath = true;
-
-            fixture.detectChanges();
-
-            expect(component.selectedText).toBe(`${nodes[0].text} / ${nodes[0].children[2].text} / ${selectedNode.selectedText}`);
-        });
-
-        /* tslint:disable:max-line-length */
-        it('sets selectedText to selectedNode text preceded by parent nodes\' selectedText when showFullSelectedPath is true and selectedNode is not null and parent selectedText is populated', () => {
-        /* tslint:enable */
-            nodes[0].selectedText = 'Selected Text';
-            component.showFullSelectedPath = true;
-
-            fixture.detectChanges();
-
-            expect(component.selectedText).toBe(`${nodes[0].selectedText} / ${nodes[0].children[2].text} / ${selectedNode.text}`);
-        });
-
-        it('sets selectedText to defaultLabel when showFullSelectedPath is true and selectedNode is null', () => {
-            component.selectedNode = null;
-            component.defaultLabel = 'Select One';
-            component.showFullSelectedPath = true;
-
-            fixture.detectChanges();
-
-            expect(component.selectedText).toBe(component.defaultLabel);
-        });
+            expect(component.dropdownTree.expandedNodes.size).toBe(0);
+        }));
     });
 
-    describe('setting selectedNode', () => {
-        it('sets effectiveSelectedNode to selectedNode', () => {
-            let selectedNode = nodes[0].children[2].children[1];
+    describe('opens', () => {
+        let fixture: ComponentFixture<BasicModelComponent>;
+        let component: BasicModelComponent;
+        let host: DebugElement;
+        let trigger: HTMLElement;
+
+        beforeEach(fakeAsync(() => {
+            fixture = TestBed.createComponent(BasicModelComponent);
+            component = fixture.componentInstance;
+
+            fixture.detectChanges();
+            tick();
+
+            host = fixture.debugElement.query(By.css('.cf-dropdown-tree'));
+            trigger = fixture.debugElement.query(By.css('.cf-dropdown-tree-trigger')).nativeElement;
+        }));
+
+        it('when clicked', fakeAsync(() => {
+            trigger.click();
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.isPanelOpen).toBe(true);
+        }));
+
+        it('and emits opened', fakeAsync(() => {
+            trigger.click();
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.opened).toHaveBeenCalled();
+        }));
+
+        xit('and sets the width of the overlay based on the trigger when clicked', fakeAsync(() => {
+            trigger.style.width = '200px';
+
+            fixture.detectChanges();
+            tick();
+
+            trigger.click();
+
+            fixture.detectChanges();
+            tick();
+
+            const pane = overlayContainerElement.querySelector('.cdk-overlay-pane') as HTMLElement;
+            expect(pane.style.minWidth).toBe('200px');
+        }));
+
+        it('and highlights value when visible', fakeAsync(() => {
+            let selectedNode = component.nodes[0].children[2].children[1];
             component.selectedNode = selectedNode;
 
-            component.selectedNode = nodes[1];
+            fixture.detectChanges();
+            tick();
 
-            expect(component.effectiveSelectedNode).toBe(nodes[1]);
-        });
+            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+                component.nodes[0],
+                component.nodes[0].children[2],
+                component.nodes[0].children[2].children[1],
+            ]);
 
-        it('does not emit nodeSelected event', () => {
-            let selectedNode = nodes[0].children[2].children[1];
+            trigger.click();
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.highlightedNode).toBe(selectedNode);
+        }));
+
+        it('and highlights first node when value is not visible and defaultNode does not exist', fakeAsync(() => {
+            let selectedNode = component.nodes[0].children[2].children[1];
             component.selectedNode = selectedNode;
+            component.defaultLabel = null;
+
             fixture.detectChanges();
+            tick();
 
-            component.selectedNode = nodes[1];
+            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+                component.nodes[0],
+            ]);
 
-            expect(nodeSelected).not.toHaveBeenCalled();
-        });
+            trigger.click();
 
-        it('sets selectedText', () => {
-            let selectedNode = nodes[0].children[2].children[1];
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[0]);
+        }));
+
+        it('and highlights defaultNode when value is not visible and defaultNode exists', fakeAsync(() => {
+            let selectedNode = component.nodes[0].children[2].children[1];
             component.selectedNode = selectedNode;
+            component.defaultLabel = 'Any';
+
             fixture.detectChanges();
+            tick();
 
-            component.selectedNode = nodes[1];
+            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+                component.nodes[0],
+            ]);
 
-            expect(component.selectedText).toBe(nodes[1].text);
-        });
+            trigger.click();
 
-        it('sets defaultNode to not null when new selectedNode is null and defaultLabel is null', () => {
-            let selectedNode = nodes[0].children[2].children[1];
-            component.selectedNode = selectedNode;
             fixture.detectChanges();
+            tick();
 
-            component.selectedNode = null;
+            expect(component.dropdownTree.highlightedNode).toBe(component.dropdownTree.defaultNode);
+        }));
 
-            expect(component.defaultNode).not.toBe(null);
-        });
+        it('when Alt+ArrowDown pressed', fakeAsync(() => {
+            let event = new KeyboardEvent('keydown', {
+                altKey: true,
+                key: 'ArrowDown',
+            });
+            host.triggerEventHandler('keydown', event);
 
-        it('sets effectiveSelectedNode to defaultNode when new selectedNode is null', () => {
-            let selectedNode = nodes[0].children[2].children[1];
-            component.selectedNode = selectedNode;
             fixture.detectChanges();
+            tick();
 
-            component.selectedNode = null;
+            expect(component.dropdownTree.isPanelOpen).toBe(true);
+        }));
 
-            expect(component.effectiveSelectedNode).toBe(component.defaultNode);
-        });
+        it('when Enter pressed', fakeAsync(() => {
+            let event = new KeyboardEvent('keydown', {
+                key: 'Enter',
+            });
+            host.triggerEventHandler('keydown', event);
 
-        it('sets selectedText to defaultNode text when new selectedNode is null', () => {
-            let selectedNode = nodes[0].children[2].children[1];
-            component.selectedNode = selectedNode;
             fixture.detectChanges();
+            tick();
 
-            component.selectedNode = null;
+            expect(component.dropdownTree.isPanelOpen).toBe(true);
+        }));
 
-            expect(component.selectedText).toBe(component.defaultNode.text);
-        });
+        it('when Space pressed', fakeAsync(() => {
+            let event = new KeyboardEvent('keydown', {
+                key: ' ',
+            });
+            host.triggerEventHandler('keydown', event);
 
-        it('does not emit nodeSelected event when new selectedNode is null', () => {
-            let selectedNode = nodes[0].children[2].children[1];
-            component.selectedNode = selectedNode;
             fixture.detectChanges();
+            tick();
 
-            component.selectedNode = null;
-
-            expect(nodeSelected).not.toHaveBeenCalled();
-        });
-
-        it('to value sets defaultNode to not null when defaultLabel is null', () => {
-            component.selectedNode = null;
-            fixture.detectChanges();
-
-            component.selectedNode = nodes[0].children[2].children[1];
-
-            expect(component.defaultNode).toBe(null);
-        });
+            expect(component.dropdownTree.isPanelOpen).toBe(true);
+        }));
     });
 
-    describe('setting defaultLabel', () => {
-        it('to null sets defaultNode to null when previous defaultLabel is not null', () => {
-            let selectedNode = nodes[0].children[2].children[1];
-            component.selectedNode = selectedNode;
-            component.defaultLabel = 'Select One';
+    describe('closes', () => {
+        let fixture: ComponentFixture<BasicModelComponent>;
+        let component: BasicModelComponent;
+        let panel: HTMLElement;
+        let trigger: HTMLElement;
+
+        beforeEach(fakeAsync(() => {
+            fixture = TestBed.createComponent(BasicModelComponent);
+            component = fixture.componentInstance;
+
             fixture.detectChanges();
+            tick();
 
-            component.defaultLabel = null;
+            trigger = fixture.debugElement.query(By.css('.cf-dropdown-tree-trigger')).nativeElement;
+            trigger.click();
 
-            expect(component.defaultNode).toBe(null);
-        });
-
-        it('to null sets defaultNode to new instance when previous defaultLabel is not null and selectedNode is null', () => {
-            component.selectedNode = null;
-            component.defaultLabel = 'Select One';
             fixture.detectChanges();
+            tick();
 
-            let previousValue = component.defaultNode;
+            panel = overlayContainerElement.querySelector('.cf-dropdown-tree-panel') as HTMLElement;
+        }));
 
-            component.defaultLabel = null;
+        it('when item clicked', fakeAsync(() => {
+            const item = overlayContainerElement.querySelectorAll('.cf-dropdown-tree-node > .cf-dropdown-tree-node-line > .cf-dropdown-tree-node-text')[1] as HTMLElement;
+            item.click();
 
-            expect(component.defaultNode).not.toBe(previousValue);
-        });
-
-        it('to null sets defaultNode text to empty string when previous defaultLabel is not null and selectedNode is null', () => {
-            component.selectedNode = null;
-            component.defaultLabel = 'Select One';
             fixture.detectChanges();
+            tick();
+            tick(1000);
 
-            component.defaultLabel = null;
+            expect(component.dropdownTree.isPanelOpen).toBe(false);
+        }));
 
-            expect(component.defaultNode.text).toBe('');
-        });
+        it('when backdrop clicked', fakeAsync(() => {
+            const backdrop = overlayContainerElement.querySelector('.cdk-overlay-backdrop') as HTMLElement;
+            backdrop.click();
 
-        it('to null sets effectiveSelectedNode to new defaultNode when previous defaultLabel is not null and selectedNode is null', () => {
-            component.selectedNode = null;
-            component.defaultLabel = 'Select One';
             fixture.detectChanges();
+            tick();
+            tick(1000);
 
-            component.defaultLabel = null;
+            expect(component.dropdownTree.isPanelOpen).toBe(false);
+        }));
 
-            expect(component.effectiveSelectedNode).toBe(component.defaultNode);
-        });
+        it('and emits closed', fakeAsync(() => {
+            const item = overlayContainerElement.querySelectorAll('.cf-dropdown-tree-node > .cf-dropdown-tree-node-line > .cf-dropdown-tree-node-text')[1] as HTMLElement;
+            item.click();
 
-        it('to null sets selectedText to new defaultNode text when previous defaultLabel is not null and selectedNode is null', () => {
-            component.selectedNode = null;
-            component.defaultLabel = 'Select One';
             fixture.detectChanges();
+            tick();
+            tick(1000);
 
-            component.defaultLabel = null;
+            expect(component.closed).toHaveBeenCalled();
+        }));
 
-            expect(component.selectedText).toBe(component.defaultNode.text);
-        });
+        it('when Alt+ArrowUp pressed', fakeAsync(() => {
+            let event = new KeyboardEvent('keydown', {
+                altKey: true,
+                key: 'ArrowUp',
+            });
+            panel.dispatchEvent(event);
 
-        it('to null does not raise nodeSelected when previous defaultLabel is not null and selectedNode is null', () => {
-            component.selectedNode = null;
-            component.defaultLabel = 'Select One';
             fixture.detectChanges();
+            tick();
+            tick(1000);
 
-            component.defaultLabel = null;
+            expect(component.dropdownTree.isPanelOpen).toBe(false);
+        }));
 
-            expect(nodeSelected).not.toHaveBeenCalled();
-        });
+        it('when Escape pressed', fakeAsync(() => {
+            let event = new KeyboardEvent('keydown', {
+                key: 'Escape',
+            });
+            panel.dispatchEvent(event);
 
-        it('sets defaultNode to new instance when previous defaultLabel is not null', () => {
-            let selectedNode = nodes[0].children[2].children[1];
-            component.selectedNode = selectedNode;
-            component.defaultLabel = 'Select One';
             fixture.detectChanges();
+            tick();
+            tick(1000);
 
-            let previousValue = component.defaultNode;
+            expect(component.dropdownTree.isPanelOpen).toBe(false);
+        }));
 
-            component.defaultLabel = 'New Select One';
+        it('when Tab pressed', fakeAsync(() => {
+            let event = new KeyboardEvent('keydown', {
+                key: 'Tab',
+            });
+            panel.dispatchEvent(event);
 
-            expect(component.defaultNode).not.toBe(previousValue);
-        });
-
-        it('sets defaultNode text to new value when previous defaultLabel is not null', () => {
-            let selectedNode = nodes[0].children[2].children[1];
-            component.selectedNode = selectedNode;
-            component.defaultLabel = 'Select One';
             fixture.detectChanges();
+            tick();
+            tick(1000);
 
-            component.defaultLabel = 'New Select One';
+            expect(component.dropdownTree.isPanelOpen).toBe(false);
+        }));
 
-            expect(component.defaultNode.text).toBe('New Select One');
-        });
+        it('when Space pressed', fakeAsync(() => {
+            let event = new KeyboardEvent('keydown', {
+                key: ' ',
+            });
+            panel.dispatchEvent(event);
 
-        it('sets effectiveSelectedNode to new defaultNode when previous defaultLabel is not null and selectedNode is null', () => {
-            component.selectedNode = null;
-            component.defaultLabel = 'Select One';
             fixture.detectChanges();
+            tick();
+            tick(1000);
 
-            component.defaultLabel = 'New Select One';
+            expect(component.dropdownTree.isPanelOpen).toBe(false);
+        }));
 
-            expect(component.effectiveSelectedNode).toBe(component.defaultNode);
-        });
+        it('when Ctrl+Space pressed', fakeAsync(() => {
+            let event = new KeyboardEvent('keydown', {
+                ctrlKey: true,
+                key: ' ',
+            });
+            panel.dispatchEvent(event);
 
-        it('sets selectedText to new defaultNode text when previous defaultLabel is not null and selectedNode is null', () => {
-            component.selectedNode = null;
-            component.defaultLabel = 'Select One';
             fixture.detectChanges();
+            tick();
+            tick(1000);
 
-            component.defaultLabel = 'New Select One';
+            expect(component.dropdownTree.isPanelOpen).toBe(false);
+        }));
 
-            expect(component.selectedText).toBe(component.defaultNode.text);
-        });
+        it('when Enter pressed', fakeAsync(() => {
+            let event = new KeyboardEvent('keydown', {
+                key: 'Enter',
+            });
+            panel.dispatchEvent(event);
 
-        it('does not raise nodeSelected when previous defaultLabel is not null and selectedNode is null', () => {
-            component.selectedNode = null;
-            component.defaultLabel = 'Select One';
             fixture.detectChanges();
+            tick();
+            tick(1000);
 
-            component.defaultLabel = 'New Select One';
-
-            expect(nodeSelected).not.toHaveBeenCalled();
-        });
-
-        it('sets defaultNode to not null when previous defaultLabel is null', () => {
-            let selectedNode = nodes[0].children[2].children[1];
-            component.selectedNode = selectedNode;
-            component.defaultLabel = null;
-            fixture.detectChanges();
-
-            component.defaultLabel = 'Select One';
-
-            expect(component.defaultNode).not.toBe(null);
-        });
-
-        it('sets defaultNode text to new value when previous defaultLabel is null', () => {
-            let selectedNode = nodes[0].children[2].children[1];
-            component.selectedNode = selectedNode;
-            component.defaultLabel = null;
-            fixture.detectChanges();
-
-            component.defaultLabel = 'Select One';
-
-            expect(component.defaultNode.text).toBe('Select One');
-        });
-
-        it('sets effectiveSelectedNode to new defaultNode when previous defaultLabel is null and selectedNode is null', () => {
-            component.selectedNode = null;
-            component.defaultLabel = null;
-            fixture.detectChanges();
-
-            component.defaultLabel = 'Select One';
-
-            expect(component.effectiveSelectedNode).toBe(component.defaultNode);
-        });
-
-        it('sets selectedText to new defaultNode text when previous defaultLabel is null and selectedNode is null', () => {
-            component.selectedNode = null;
-            component.defaultLabel = null;
-            fixture.detectChanges();
-
-            component.defaultLabel = 'Select One';
-
-            expect(component.selectedText).toBe(component.defaultNode.text);
-        });
-
-        it('does not raise nodeSelected when previous defaultLabel is null and selectedNode is null', () => {
-            component.selectedNode = null;
-            component.defaultLabel = null;
-            fixture.detectChanges();
-
-            component.defaultLabel = 'Select One';
-
-            expect(nodeSelected).not.toHaveBeenCalled();
-        });
+            expect(component.dropdownTree.isPanelOpen).toBe(false);
+        }));
     });
 
-    describe('onNodeSelected', () => {
-        let selectedNode: TreeNode;
+    describe('keyboard', () => {
+        let fixture: ComponentFixture<BasicModelComponent>;
+        let component: BasicModelComponent;
+        let panel: HTMLElement;
+        let trigger: HTMLElement;
 
-        beforeEach(() => {
-            selectedNode = nodes[0].children[2].children[1];
-            component.selectedNode = selectedNode;
-        });
+        beforeEach(fakeAsync(() => {
+            fixture = TestBed.createComponent(BasicModelComponent);
+            component = fixture.componentInstance;
 
-        it('does not emit nodeSelected event when selectNode does not change', () => {
-            fixture.detectChanges();
-
-            component.onNodeSelected(selectedNode);
-
-            expect(nodeSelected).not.toHaveBeenCalled();
-        });
-
-        it('emits nodeSelected event when selectedNode changes', () => {
-            fixture.detectChanges();
-
-            component.onNodeSelected(nodes[1]);
-
-            expect(nodeSelected).toHaveBeenCalledWith(nodes[1]);
-        });
-
-        it('does not change component.selectedNode directly when selectedNode changes', () => {
-            fixture.detectChanges();
-
-            component.onNodeSelected(nodes[1]);
-
-            expect(component.selectedNode).toEqual(selectedNode);
-        });
-
-        it('does not emit nodeSelected event when component.selectNode is null and service state.selectedNode is defaultNode', () => {
-            component.selectedNode = null;
+            component.defaultLabel = 'Any';
 
             fixture.detectChanges();
+            tick();
 
-            component.onNodeSelected(component.defaultNode);
+            trigger = fixture.debugElement.query(By.css('.cf-dropdown-tree-trigger')).nativeElement;
+            trigger.click();
 
-            expect(nodeSelected).not.toHaveBeenCalled();
-        });
-
-        it('emits nodeSelected event with null when selectedNode changes to defaultNode', () => {
-            component.defaultLabel = 'Select One';
             fixture.detectChanges();
+            tick();
 
-            component.onNodeSelected(component.defaultNode);
+            panel = overlayContainerElement.querySelector('.cf-dropdown-tree-panel') as HTMLElement;
+        }));
 
-            expect(nodeSelected).toHaveBeenCalledWith(null);
-        });
+        it('ArrowUp highlights previous visible node of current highlighted node', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[1];
+            component.selectedNode = component.nodes[2];
 
-        it('does not change selectedText when selectedNode changes', () => {
+            let event = new KeyboardEvent('keydown', {
+                key: 'ArrowUp',
+            });
+            panel.dispatchEvent(event);
+
             fixture.detectChanges();
-            let previousValue = component.selectedText;
+            tick();
 
-            component.onNodeSelected(nodes[1]);
+            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[0]);
+        }));
 
-            expect(component.selectedText).toBe(previousValue);
-        });
+        it('ArrowUp selects previous visible node of current highlighted node', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[1];
+            component.selectedNode = component.nodes[2];
+
+            let event = new KeyboardEvent('keydown', {
+                key: 'ArrowUp',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.selectedNode).toBe(component.nodes[0]);
+        }));
+
+        it('ArrowUp does not change highlighted node when current highlighted node is first visible node', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.dropdownTree.defaultNode;
+            component.selectedNode = component.nodes[2];
+
+            let event = new KeyboardEvent('keydown', {
+                key: 'ArrowUp',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.highlightedNode).toBe(component.dropdownTree.defaultNode);
+        }));
+
+        it('ArrowUp does not change selected node when current highlighted node is first visible node', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.dropdownTree.defaultNode;
+            component.selectedNode = component.nodes[2];
+
+            let event = new KeyboardEvent('keydown', {
+                key: 'ArrowUp',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.selectedNode).toBe(component.nodes[2]);
+        }));
+
+        it('Ctrl+ArrowUp highlights previous visible node of current highlighted node', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[1];
+            component.selectedNode = component.nodes[2];
+
+            let event = new KeyboardEvent('keydown', {
+                ctrlKey: true,
+                key: 'ArrowUp',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[0]);
+        }));
+
+        it('Ctrl+ArrowUp does not change selected node', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[1];
+            component.selectedNode = component.nodes[2];
+
+            let event = new KeyboardEvent('keydown', {
+                ctrlKey: true,
+                key: 'ArrowUp',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.selectedNode).toBe(component.nodes[2]);
+        }));
+
+        it('Ctrl+ArrowUp does not change highlighted node when current highlighted node is first visible node', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.dropdownTree.defaultNode;
+            component.selectedNode = component.nodes[2];
+
+            let event = new KeyboardEvent('keydown', {
+                ctrlKey: true,
+                key: 'ArrowUp',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.highlightedNode).toBe(component.dropdownTree.defaultNode);
+        }));
+
+        it('Ctrl+ArrowUp does not change selected node when current highlighted node is first visible node', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.dropdownTree.defaultNode;
+            component.selectedNode = component.nodes[2];
+
+            let event = new KeyboardEvent('keydown', {
+                ctrlKey: true,
+                key: 'ArrowUp',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.selectedNode).toBe(component.nodes[2]);
+        }));
+
+        it('ArrowDown highlights next visible node of current highlighted node', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[1];
+            component.selectedNode = component.nodes[0];
+
+            let event = new KeyboardEvent('keydown', {
+                key: 'ArrowDown',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[2]);
+        }));
+
+        it('ArrowDown selects next visible node of current highlighted node', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[1];
+            component.selectedNode = component.nodes[0];
+
+            let event = new KeyboardEvent('keydown', {
+                key: 'ArrowDown',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.selectedNode).toBe(component.nodes[2]);
+        }));
+
+        it('ArrowDown does not change highlighted node when current highlighted node is last visible node', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[2];
+            component.selectedNode = component.nodes[0];
+
+            let event = new KeyboardEvent('keydown', {
+                key: 'ArrowDown',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[2]);
+        }));
+
+        it('ArrowDown does not change selected node when current highlighted node is last visible node', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[2];
+            component.selectedNode = component.nodes[0];
+
+            let event = new KeyboardEvent('keydown', {
+                key: 'ArrowDown',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.selectedNode).toBe(component.nodes[0]);
+        }));
+
+        it('Ctrl+ArrowDown highlights next visible node of current highlighted node', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[1];
+            component.selectedNode = component.nodes[0];
+
+            let event = new KeyboardEvent('keydown', {
+                ctrlKey: true,
+                key: 'ArrowDown',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[2]);
+        }));
+
+        it('Ctrl+ArrowDown does not change selected node', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[1];
+            component.selectedNode = component.nodes[0];
+
+            let event = new KeyboardEvent('keydown', {
+                ctrlKey: true,
+                key: 'ArrowDown',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.selectedNode).toBe(component.nodes[0]);
+        }));
+
+        it('Ctrl+ArrowDown does not change highlighted node when current highlighted node is last visible node', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[2];
+            component.selectedNode = component.nodes[0];
+
+            let event = new KeyboardEvent('keydown', {
+                ctrlKey: true,
+                key: 'ArrowDown',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[2]);
+        }));
+
+        it('Ctrl+ArrowDown does not change selected node when current highlighted node is last visible node', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[2];
+            component.selectedNode = component.nodes[0];
+
+            let event = new KeyboardEvent('keydown', {
+                ctrlKey: true,
+                key: 'ArrowDown',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.selectedNode).toBe(component.nodes[0]);
+        }));
+
+        it('ArrowLeft does not change highlighted node when current highlighted node is expanded', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.selectedNode = component.nodes[2];
+
+            fixture.detectChanges();
+            tick();
+
+            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+                component.nodes[0],
+                component.nodes[0].children[1],
+            ]);
+
+            let event = new KeyboardEvent('keydown', {
+                key: 'ArrowLeft',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[0].children[1]);
+        }));
+
+        it('ArrowLeft does not change selected node when current highlighted node is expanded', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.selectedNode = component.nodes[2];
+
+            fixture.detectChanges();
+            tick();
+
+            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+                component.nodes[0],
+                component.nodes[0].children[1],
+            ]);
+
+            let event = new KeyboardEvent('keydown', {
+                key: 'ArrowLeft',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.selectedNode).toBe(component.nodes[2]);
+        }));
+
+        it('ArrowLeft collapses current highlighted node when current highlighted node is expanded', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.selectedNode = component.nodes[2];
+
+            fixture.detectChanges();
+            tick();
+
+            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+                component.nodes[0],
+                component.nodes[0].children[1],
+            ]);
+
+            let event = new KeyboardEvent('keydown', {
+                key: 'ArrowLeft',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.expandedNodes.has(component.nodes[0].children[1])).toBe(false);
+        }));
+
+        it('ArrowLeft changes highlighted node to parent of current highlighted node when current highlighted node is collapsed', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.selectedNode = component.nodes[2];
+
+            fixture.detectChanges();
+            tick();
+
+            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+                component.nodes[0],
+            ]);
+
+            let event = new KeyboardEvent('keydown', {
+                key: 'ArrowLeft',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[0]);
+        }));
+
+        it('ArrowLeft changes selected node to parent of current highlighted node when current highlighted node is collapsed', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.selectedNode = component.nodes[2];
+
+            fixture.detectChanges();
+            tick();
+
+            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+                component.nodes[0],
+            ]);
+
+            let event = new KeyboardEvent('keydown', {
+                key: 'ArrowLeft',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.selectedNode).toBe(component.nodes[0]);
+        }));
+
+        it('ArrowLeft does not change highlighted node when current highlighted node is collapsed and has no parent', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[0];
+            component.selectedNode = component.nodes[2];
+
+            fixture.detectChanges();
+            tick();
+
+            component.dropdownTree.expandedNodes = new Set<TreeNode>();
+
+            let event = new KeyboardEvent('keydown', {
+                key: 'ArrowLeft',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[0]);
+        }));
+
+        it('ArrowLeft does not change selected node when current highlighted node is collapsed and has no parent', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[0];
+            component.selectedNode = component.nodes[2];
+
+            fixture.detectChanges();
+            tick();
+
+            component.dropdownTree.expandedNodes = new Set<TreeNode>();
+
+            let event = new KeyboardEvent('keydown', {
+                key: 'ArrowLeft',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.selectedNode).toBe(component.nodes[2]);
+        }));
+
+        it('ArrowRight does not change highlighted node when current highlighted node is collapsed', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[0];
+            component.selectedNode = component.nodes[2];
+
+            fixture.detectChanges();
+            tick();
+
+            component.dropdownTree.expandedNodes = new Set<TreeNode>();
+
+            let event = new KeyboardEvent('keydown', {
+                key: 'ArrowRight',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[0]);
+        }));
+
+        it('ArrowRight does not change selected node when current highlighted node is collapsed', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[0];
+            component.selectedNode = component.nodes[2];
+
+            fixture.detectChanges();
+            tick();
+
+            component.dropdownTree.expandedNodes = new Set<TreeNode>();
+
+            let event = new KeyboardEvent('keydown', {
+                key: 'ArrowRight',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.selectedNode).toBe(component.nodes[2]);
+        }));
+
+        it('ArrowRight expands current highlighted node when current highlighted node is collapsed', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[0];
+            component.selectedNode = component.nodes[2];
+
+            fixture.detectChanges();
+            tick();
+
+            component.dropdownTree.expandedNodes = new Set<TreeNode>();
+
+            let event = new KeyboardEvent('keydown', {
+                key: 'ArrowRight',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.expandedNodes.has(component.nodes[0])).toBe(true);
+        }));
+
+        it('ArrowRight changes highlighted node to first child of the current highlighted node when current highlighted node is expanded', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[0];
+            component.selectedNode = component.nodes[2];
+
+            fixture.detectChanges();
+            tick();
+
+            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+                component.nodes[0],
+            ]);
+
+            let event = new KeyboardEvent('keydown', {
+                key: 'ArrowRight',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[0].children[0]);
+        }));
+
+        it('ArrowRight changes selected node to first child of the current highlighted node when current highlighted node is expanded', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[0];
+            component.selectedNode = component.nodes[2];
+
+            fixture.detectChanges();
+            tick();
+
+            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+                component.nodes[0],
+            ]);
+
+            let event = new KeyboardEvent('keydown', {
+                key: 'ArrowRight',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.selectedNode).toBe(component.nodes[0].children[0]);
+        }));
+
+        it('ArrowRight does not change highlighted node when current highlighted node has no children', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[0].children[0];
+            component.selectedNode = component.nodes[2];
+
+            fixture.detectChanges();
+            tick();
+
+            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+                component.nodes[0],
+            ]);
+
+            let event = new KeyboardEvent('keydown', {
+                key: 'ArrowRight',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[0].children[0]);
+        }));
+
+        it('ArrowRight does not change selected node when current highlighted node has no children', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[0].children[0];
+            component.selectedNode = component.nodes[2];
+
+            fixture.detectChanges();
+            tick();
+
+            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+                component.nodes[0],
+            ]);
+
+            let event = new KeyboardEvent('keydown', {
+                key: 'ArrowRight',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.selectedNode).toBe(component.nodes[2]);
+        }));
+
+        it('Home changes highlighted node to first visible node', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.selectedNode = component.nodes[2];
+
+            fixture.detectChanges();
+            tick();
+
+            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+                component.nodes[0],
+            ]);
+
+            let event = new KeyboardEvent('keydown', {
+                key: 'Home',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.highlightedNode).toBe(component.dropdownTree.defaultNode);
+        }));
+
+        it('Home changes selected node to first visible node', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.selectedNode = component.nodes[2];
+
+            fixture.detectChanges();
+            tick();
+
+            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+                component.nodes[0],
+            ]);
+
+            let event = new KeyboardEvent('keydown', {
+                key: 'Home',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.selectedNode).toBeNull();
+        }));
+
+        it('Ctrl+Home changes highlighted node to first visible node', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.selectedNode = component.nodes[2];
+
+            fixture.detectChanges();
+            tick();
+
+            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+                component.nodes[0],
+            ]);
+
+            let event = new KeyboardEvent('keydown', {
+                ctrlKey: true,
+                key: 'Home',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.highlightedNode).toBe(component.dropdownTree.defaultNode);
+        }));
+
+        it('Ctrl+Home does not change selected node', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.selectedNode = component.nodes[2];
+
+            fixture.detectChanges();
+            tick();
+
+            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+                component.nodes[0],
+            ]);
+
+            let event = new KeyboardEvent('keydown', {
+                ctrlKey: true,
+                key: 'Home',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.selectedNode).toBe(component.nodes[2]);
+        }));
+
+        it('End changes highlighted node to last visible node', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.selectedNode = component.nodes[0];
+
+            fixture.detectChanges();
+            tick();
+
+            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+                component.nodes[0],
+            ]);
+
+            let event = new KeyboardEvent('keydown', {
+                key: 'End',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[2]);
+        }));
+
+        it('End changes selected node to last visible node', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.selectedNode = component.nodes[0];
+
+            fixture.detectChanges();
+            tick();
+
+            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+                component.nodes[0],
+            ]);
+
+            let event = new KeyboardEvent('keydown', {
+                key: 'End',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.selectedNode).toBe(component.nodes[2]);
+        }));
+
+        it('Ctrl+End changes highlighted node to last visible node', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.selectedNode = component.nodes[0];
+
+            fixture.detectChanges();
+            tick();
+
+            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+                component.nodes[0],
+            ]);
+
+            let event = new KeyboardEvent('keydown', {
+                ctrlKey: true,
+                key: 'End',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[2]);
+        }));
+
+        it('Ctrl+End does not change selected node', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.selectedNode = component.nodes[0];
+
+            fixture.detectChanges();
+            tick();
+
+            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+                component.nodes[0],
+            ]);
+
+            let event = new KeyboardEvent('keydown', {
+                ctrlKey: true,
+                key: 'End',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.selectedNode).toBe(component.nodes[0]);
+        }));
+
+        it('Space changes selected node to current highlighted node', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.selectedNode = component.nodes[2];
+
+            fixture.detectChanges();
+            tick();
+
+            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+                component.nodes[0],
+            ]);
+
+            let event = new KeyboardEvent('keydown', {
+                key: ' ',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+            tick(1000);
+
+            expect(component.selectedNode).toBe(component.nodes[0].children[1]);
+        }));
+
+        it('Ctrl+Space changes selected node to current highlighted node', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.selectedNode = component.nodes[2];
+
+            fixture.detectChanges();
+            tick();
+
+            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+                component.nodes[0],
+            ]);
+
+            let event = new KeyboardEvent('keydown', {
+                ctrlKey: true,
+                key: ' ',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+            tick(1000);
+
+            expect(component.selectedNode).toBe(component.nodes[0].children[1]);
+        }));
+
+        it('Enter changes selected node to current highlighted node', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.selectedNode = component.nodes[2];
+
+            fixture.detectChanges();
+            tick();
+
+            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+                component.nodes[0],
+            ]);
+
+            let event = new KeyboardEvent('keydown', {
+                key: 'Enter',
+            });
+            panel.dispatchEvent(event);
+
+            fixture.detectChanges();
+            tick();
+            tick(1000);
+
+            expect(component.selectedNode).toBe(component.nodes[0].children[1]);
+        }));
     });
 
-    describe('on combobox focus', () => {
-        it('adds dt--selection-focus class to dropdown container', () => {
-            combobox.triggerEventHandler('focus', null);
-            fixture.detectChanges();
+    describe('when disabled', () => {
+        let fixture: ComponentFixture<BasicModelComponent>;
+        let component: BasicModelComponent;
+        let trigger: HTMLElement;
 
-            expect(dropdownContainer.classes['dt--selection-focus']).toBe(true);
-        });
+        beforeEach(fakeAsync(() => {
+            fixture = TestBed.createComponent(BasicModelComponent);
+            component = fixture.componentInstance;
+
+            fixture.detectChanges();
+            tick();
+
+            trigger = fixture.debugElement.query(By.css('.cf-dropdown-tree-trigger')).nativeElement;
+        }));
+
+        it('will not open when clicked', fakeAsync(() => {
+            component.disabled = true;
+
+            fixture.detectChanges();
+            tick();
+
+            trigger.click();
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.isPanelOpen).toBe(false);
+        }));
+
+        it('will open when clicked after reenabling', fakeAsync(() => {
+            component.disabled = true;
+
+            fixture.detectChanges();
+            tick();
+
+            component.disabled = false;
+
+            fixture.detectChanges();
+            tick();
+
+            trigger.click();
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.isPanelOpen).toBe(true);
+        }));
     });
 
-    describe('on combobox blur', () => {
-        it('removes dt--selection-focus class to dropdown container', () => {
-            combobox.triggerEventHandler('focus', null);
+    describe('animations', () => {
+        let fixture: ComponentFixture<BasicModelComponent>;
+        let component: BasicModelComponent;
+        let trigger: HTMLElement;
+
+        beforeEach(fakeAsync(() => {
+            fixture = TestBed.createComponent(BasicModelComponent);
+            component = fixture.componentInstance;
+
+            fixture.detectChanges();
+            tick();
+
+            trigger = fixture.debugElement.query(By.css('.cf-dropdown-tree-trigger')).nativeElement;
+        }));
+
+        it('should initially put placeholder in the normal position', fakeAsync(() => {
+            expect(component.dropdownTree.getPlaceholderAnimationState()).toBe('');
+        }));
+
+        it('should float the placeholder when the panel is open and unselected', fakeAsync(() => {
+            trigger.click();
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.getPlaceholderAnimationState()).toBe('floating-ltr');
+        }));
+
+        it('should revert placeholder back to normal position after panel closes', fakeAsync(() => {
+            trigger.click();
+
+            fixture.detectChanges();
+            tick();
+
+            const backdrop = overlayContainerElement.querySelector('.cdk-overlay-backdrop') as HTMLElement;
+            backdrop.click();
+
+            fixture.detectChanges();
+            tick();
+            tick(1000);
+
+            expect(component.dropdownTree.getPlaceholderAnimationState()).toBe('');
+        }));
+
+        it('should float the placeholder without animation when value is set', fakeAsync(() => {
+            component.selectedNode = component.nodes[0];
+
+            fixture.detectChanges();
+            tick();
+
+            const placeholder = fixture.debugElement.query(By.css('.cf-dropdown-tree-placeholder')).nativeElement as HTMLElement;
+            expect(placeholder.classList).toContain('mat-floating-placeholder', 'Expected placeholder to display as floating.');
+            expect(component.dropdownTree.getPlaceholderAnimationState()).toBe('', 'Expected animation state to be empty to avoid animation.');
+        }));
+
+        it('should use the floating-rtl state when the dir is rtl', fakeAsync(() => {
+            dir.value = 'rtl';
+
+            trigger.click();
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.getPlaceholderAnimationState()).toBe('floating-rtl');
+        }));
+
+        it('should not add class to the panel when the menu is still animating', fakeAsync(() => {
+            trigger.click();
+
+            fixture.detectChanges();
+            tick();
+
+            const panel = overlayContainerElement.querySelector('.cf-dropdown-tree-panel');
+
+            expect(panel.classList).not.toContain('cf-dropdown-tree-panel-done-animating');
+        }));
+
+        it('should add a class to the panel when the menu is done animating', fakeAsync(() => {
+            trigger.click();
+
+            fixture.detectChanges();
+            tick();
+
+            const panel = overlayContainerElement.querySelector('.cf-dropdown-tree-panel');
+
+            tick(250);
             fixture.detectChanges();
 
-            combobox.triggerEventHandler('blur', null);
-            fixture.detectChanges();
-
-            expect(dropdownContainer.classes['dt--selection-focus']).toBeFalsy();
-        });
+            expect(panel.classList).toContain('cf-dropdown-tree-panel-done-animating');
+        }));
     });
 
-    describe('on combobox click', () => {
-        beforeEach(() => {
+    xdescribe('positioning', () => {
+        let fixture: ComponentFixture<BasicModelComponent>;
+        let component: BasicModelComponent;
+        let trigger: HTMLElement;
+        let dropdownTree: HTMLElement;
+        let visibleNodes: TreeNode[];
+
+        beforeEach(fakeAsync(() => {
+            fixture = TestBed.createComponent(BasicModelComponent);
+            component = fixture.componentInstance;
+
+            component.defaultLabel = 'Any';
+
             fixture.detectChanges();
-        });
+            tick();
 
-        describe('when closed', () => {
-            it('sets isDropdownOpen to true', () => {
-                combobox.triggerEventHandler('click', null);
+            dropdownTree = fixture.debugElement.query(By.css('.cf-dropdown-tree')).nativeElement;
+            trigger = fixture.debugElement.query(By.css('.cf-dropdown-tree-trigger')).nativeElement;
+        }));
 
-                expect(component.isDropdownOpen).toBe(true);
-            });
-
-            it('adds dt--selection-focus class to dropdown container', () => {
-                combobox.triggerEventHandler('click', null);
-                fixture.detectChanges();
-
-                expect(dropdownContainer.classes['dt--selection-focus']).toBe(true);
-            });
-
-            it('adds dt--selection-open class to dropdown container', () => {
-                combobox.triggerEventHandler('click', null);
-                fixture.detectChanges();
-
-                expect(dropdownContainer.classes['dt--selection-open']).toBe(true);
-            });
-
-            it('sets ariaOwnsId to id of the tree element', () => {
-                combobox.triggerEventHandler('click', null);
-
-                expect(component.ariaOwnsId).toBe(component.treeId);
-            });
-
-            it('highlights selectedNode when visible', () => {
-                let selectedNode = nodes[0].children[2].children[1];
-                component.expandedNodes = new Set<TreeNode>([
-                    nodes[0],
-                    nodes[0].children[2],
-                    nodes[0].children[2].children[1]]);
-                component.selectedNode = selectedNode;
-
-                combobox.triggerEventHandler('click', null);
-
-                expect(component.highlightedNode).toBe(selectedNode);
-            });
-
-            it('highlights first node when selectedNode is not visible and defaultNode does not exist', () => {
-                let selectedNode = nodes[0].children[2].children[1];
-                component.expandedNodes = new Set<TreeNode>([nodes[0]]);
-                component.selectedNode = selectedNode;
-                component.defaultNode = null;
-
-                combobox.triggerEventHandler('click', null);
-
-                expect(component.highlightedNode).toBe(nodes[0]);
-            });
-
-            it('highlights defaultNode when selectedNode is not visible and defaultNode exists', () => {
-                let selectedNode = nodes[0].children[2].children[1];
-                component.expandedNodes = new Set<TreeNode>([nodes[0]]);
-                component.selectedNode = selectedNode;
-                component.defaultNode = createNode();
-
-                combobox.triggerEventHandler('click', null);
-
-                expect(component.highlightedNode).toBe(component.defaultNode);
-            });
-
-            it('sets ariaActiveDescendentId to highlightedNode element id', () => {
-                let selectedNode = nodes[0].children[2].children[1];
-                component.expandedNodes = new Set<TreeNode>([
-                    nodes[0],
-                    nodes[0].children[2],
-                    nodes[0].children[2].children[1]]);
-                component.selectedNode = selectedNode;
-
-                combobox.triggerEventHandler('click', null);
-
-                expect(component.ariaActiveDescendentId).toBe(component.treeItemIdPrefix + selectedNode.id.toString());
-            });
-        });
-
-        describe('when open', () => {
+        describe('with ample space to open', () => {
             beforeEach(() => {
-                combobox.triggerEventHandler('click', null);
+                dropdownTree.style.marginTop = '300px';
+                dropdownTree.style.marginLeft = '20px';
+                dropdownTree.style.marginRight = '20px';
+            });
+
+            it('should align the default node with the trigger text if value is null', fakeAsync(() => {
+                expandNodesToShow8Items();
+
+                trigger.click();
+
                 fixture.detectChanges();
-            });
+                tick();
 
-            it('sets isDropdownOpen to false', () => {
-                combobox.triggerEventHandler('click', null);
+                const scrollContainer = document.querySelector('.cdk-overlay-pane .cf-dropdown-tree-panel');
 
-                expect(component.isDropdownOpen).toBe(false);
-            });
+                expect(scrollContainer.scrollTop).toEqual(0, 'Expected panel not to be scrolled.');
+                checkTriggerAlignedWithOption(0);
+            }));
 
-            it('adds dt--selection-focus class to dropdown container', () => {
-                combobox.triggerEventHandler('click', null);
+            it('should align a selected node too high to be centered with the trigger text', fakeAsync(() => {
+                component.selectedNode = visibleNodes[1];
+
                 fixture.detectChanges();
+                tick();
 
-                expect(dropdownContainer.classes['dt--selection-focus']).toBe(true);
-            });
+                expandNodesToShow8Items();
 
-            it('removes dt--selection-open class to dropdown container', () => {
-                combobox.triggerEventHandler('click', null);
+                trigger.click();
+
                 fixture.detectChanges();
+                tick();
 
-                expect(dropdownContainer.classes['dt--selection-open']).toBeFalsy();
-            });
+                const scrollContainer = document.querySelector('.cdk-overlay-pane .cf-dropdown-tree-panel');
 
-            it('sets ariaOwnsId to undefined', () => {
-                combobox.triggerEventHandler('click', null);
-
-                expect(component.ariaOwnsId).toBeUndefined();
-            });
-
-            it('sets ariaActiveDescendentId to undefined', () => {
-                combobox.triggerEventHandler('click', null);
-
-                expect(component.ariaActiveDescendentId).toBeUndefined();
-            });
+                expect(scrollContainer.scrollTop).toEqual(0, 'Expected panel not to be scrolled.');
+                checkTriggerAlignedWithOption(1);
+            }));
         });
+
+        function expandNodesToShow8Items(): void {
+            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+                component.nodes[0],
+                component.nodes[0].children[1],
+            ]);
+
+            visibleNodes = [
+                null, // Default node
+                component.nodes[0],
+                component.nodes[0].children[0],
+                component.nodes[0].children[1],
+                component.nodes[0].children[1].children[0],
+                component.nodes[0].children[1].children[1],
+                component.nodes[0].children[2],
+                component.nodes[1],
+                component.nodes[2],
+            ];
+        }
+
+        function checkTriggerAlignedWithOption(index: number): void {
+            const overlayPane = overlayContainerElement.querySelector('.cdk-overlay-pane');
+            const triggerTop = trigger.getBoundingClientRect().top;
+            const overlayTop = overlayPane.getBoundingClientRect().top;
+            const nodes = overlayPane.querySelectorAll('.cf-dropdown-tree-node');
+            const nodeTop = nodes[index].getBoundingClientRect().top;
+
+            expect(nodeTop.toFixed(2)).toEqual((triggerTop - 9).toFixed(2), `Expected trigger to align with node ${index}.`);
+
+            const expectedOrigin = nodeTop - overlayTop + 24;
+            expect(component.dropdownTree.transformOrigin).toContain(`${expectedOrigin}px`, `Expected panel animation to originate in the center of option ${index}.`);
+        }
     });
 
-    describe('on combobox keydown', () => {
-        beforeEach(() => {
-            component.defaultLabel = 'Select One';
+    describe('accessibility', () => {
+        describe('for dropdown tree', () => {
+            let fixture: ComponentFixture<BasicModelComponent>;
+            let component: BasicModelComponent;
+            let dropdownTree: HTMLElement;
 
-            fixture.detectChanges();
-        });
-
-        describe('when closed', () => {
-            it('Alt+ArrowDown opens the dropdown', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    altKey: true,
-                    key: 'ArrowDown',
-                });
-
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(component.isDropdownOpen).toBe(true);
-            });
-        });
-
-        describe('when open', () => {
             beforeEach(() => {
-                combobox.triggerEventHandler('click', null);
+                fixture = TestBed.createComponent(BasicModelComponent);
+                component = fixture.componentInstance;
+
+                fixture.detectChanges();
+
+                dropdownTree = fixture.debugElement.query(By.css('.cf-dropdown-tree')).nativeElement;
             });
 
-            it('Alt+ArrowUp closes the dropdown', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    altKey: true,
-                    key: 'ArrowUp',
-                });
-
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(component.isDropdownOpen).toBe(false);
+            it('should set the role of the select to combobox', () => {
+                expect(dropdownTree.getAttribute('role')).toEqual('combobox');
             });
 
-            it('Escape closes the dropdown', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'Escape',
-                });
-
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(component.isDropdownOpen).toBe(false);
+            it('should set the aria label to the placeholder', () => {
+                expect(dropdownTree.getAttribute('aria-label')).toEqual('Basic Model');
             });
 
-            it('ArrowUp highlights previous visible node of current highlighted node', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowUp',
-                });
-                component.highlightedNode = nodes[1];
-                component.selectedNode = nodes[2];
-
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(component.highlightedNode).toBe(nodes[0]);
+            it('should set the tabindex of the select to 0 by default', () => {
+                expect(dropdownTree.getAttribute('tabindex')).toEqual('0');
             });
 
-            it('ArrowUp selects previous visible node of current highlighted node', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowUp',
-                });
-                component.highlightedNode = nodes[1];
-                component.selectedNode = nodes[2];
+            it('should be able to override the tabindex', () => {
+                component.tabIndexOverride = 3;
+                fixture.detectChanges();
 
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(nodeSelected).toHaveBeenCalledWith(nodes[0]);
+                expect(dropdownTree.getAttribute('tabindex')).toEqual('3');
             });
 
-            it('ArrowUp does not change highlighted node when current highlighted node is first visible node', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowUp',
-                });
-                component.highlightedNode = component.defaultNode;
-                component.selectedNode = nodes[2];
+            it('should be able to set the tabindex via the native attribute', () => {
+                fixture.destroy();
 
-                combobox.triggerEventHandler('keydown', $event);
+                const plainTabindexFixture = TestBed.createComponent(PlainTabindexComponent);
+                plainTabindexFixture.detectChanges();
 
-                expect(component.highlightedNode).toBe(component.defaultNode);
+                dropdownTree = plainTabindexFixture.debugElement.query(By.css('.cf-dropdown-tree')).nativeElement;
+
+                expect(dropdownTree.getAttribute('tabindex')).toEqual('5');
             });
 
-            it('ArrowUp does not change selected node when current highlighted node is first visible node', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowUp',
-                });
-                component.highlightedNode = component.defaultNode;
-                component.selectedNode = nodes[2];
-
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(nodeSelected).not.toHaveBeenCalled();
+            it('should not set aria-required for non-required dropdown trees', () => {
+                expect(dropdownTree.getAttribute('aria-required')).toEqual('false');
             });
 
-            it('Ctrl+ArrowUp highlights previous visible node of current highlighted node', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowUp',
-                    ctrlKey: true,
-                });
-                component.highlightedNode = nodes[1];
-                component.selectedNode = nodes[2];
+            it('should set aria-required for required dropdown trees', () => {
+                component.required = true;
+                fixture.detectChanges();
 
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(component.highlightedNode).toBe(nodes[0]);
+                expect(dropdownTree.getAttribute('aria-required')).toEqual('true');
             });
 
-            it('Ctrl+ArrowUp does not change selected node', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowUp',
-                    ctrlKey: true,
-                });
-                component.highlightedNode = nodes[1];
-                component.selectedNode = nodes[2];
-
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(nodeSelected).not.toHaveBeenCalled();
+            it('should not set aria-invalid for valid dropdown trees', () => {
+                expect(dropdownTree.getAttribute('aria-invalid')).toEqual('false');
             });
 
-            it('Ctrl+ArrowUp does not change highlighted node when current highlighted node is first visible node', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowUp',
-                    ctrlKey: true,
-                });
-                component.highlightedNode = component.defaultNode;
-                component.selectedNode = nodes[2];
+            it('should set aria-invalid for invalid dropdown trees', () => {
+                component.required = true;
+                fixture.detectChanges();
 
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(component.highlightedNode).toBe(component.defaultNode);
+                expect(dropdownTree.getAttribute('aria-invalid')).toEqual('true');
             });
 
-            it('Ctrl+ArrowUp does not change selected node when current highlighted node is first visible node', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowUp',
-                    ctrlKey: true,
-                });
-                component.highlightedNode = component.defaultNode;
-                component.selectedNode = nodes[2];
-
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(nodeSelected).not.toHaveBeenCalled();
+            it('should not set aria-disabled for enabled dropdown trees', () => {
+                expect(dropdownTree.getAttribute('aria-disabled')).toEqual('false');
             });
 
-            it('ArrowDown highlights next visible node of current highlighted node', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowDown',
-                });
-                component.highlightedNode = nodes[1];
-                component.selectedNode = nodes[0];
+            it('should set aria-disabled for disabled dropdown trees', () => {
+                component.disabled = true;
+                fixture.detectChanges();
 
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(component.highlightedNode).toBe(nodes[2]);
+                expect(dropdownTree.getAttribute('aria-disabled')).toEqual('true');
             });
 
-            it('ArrowDown selects next visible node of current highlighted node', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowDown',
-                });
-                component.highlightedNode = nodes[1];
-                component.selectedNode = nodes[0];
+            it('should set the tabindex of the dropdown tree to -1 if disabled', () => {
+                component.disabled = true;
+                fixture.detectChanges();
 
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(nodeSelected).toHaveBeenCalledWith(nodes[2]);
+                expect(dropdownTree.getAttribute('tabindex')).toEqual('-1');
             });
 
-            it('ArrowDown does not change highlighted node when current highlighted node is last visible node', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowDown',
-                });
-                component.highlightedNode = nodes[2];
-                component.selectedNode = nodes[0];
+            it('should set the tabindex of the dropdown tree to 0 if reenabled', () => {
+                component.disabled = true;
+                fixture.detectChanges();
 
-                combobox.triggerEventHandler('keydown', $event);
+                component.disabled = false;
+                fixture.detectChanges();
 
-                expect(component.highlightedNode).toBe(nodes[2]);
-            });
-
-            it('ArrowDown does not change selected node when current highlighted node is last visible node', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowDown',
-                });
-                component.highlightedNode = nodes[2];
-                component.selectedNode = nodes[0];
-
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(nodeSelected).not.toHaveBeenCalled();
-            });
-
-            it('Ctrl+ArrowDown highlights next visible node of current highlighted node', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowDown',
-                    ctrlKey: true,
-                });
-                component.highlightedNode = nodes[1];
-                component.selectedNode = nodes[0];
-
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(component.highlightedNode).toBe(nodes[2]);
-            });
-
-            it('Ctrl+ArrowDown does not change selected node', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowDown',
-                    ctrlKey: true,
-                });
-                component.highlightedNode = nodes[1];
-                component.selectedNode = nodes[0];
-
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(nodeSelected).not.toHaveBeenCalled();
-            });
-
-            it('Ctrl+ArrowDown does not change highlighted node when current highlighted node is last visible node', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowDown',
-                    ctrlKey: true,
-                });
-                component.highlightedNode = nodes[2];
-                component.selectedNode = nodes[0];
-
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(component.highlightedNode).toBe(nodes[2]);
-            });
-
-            it('Ctrl+ArrowDown does not change selected node when current highlighted node is last visible node', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowDown',
-                    ctrlKey: true,
-                });
-                component.highlightedNode = nodes[2];
-                component.selectedNode = nodes[0];
-
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(nodeSelected).not.toHaveBeenCalled();
-            });
-
-            it('ArrowLeft does not change highlighted node when current highlighted node is expanded', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowLeft',
-                });
-                component.expandedNodes = new Set<TreeNode>([
-                    nodes[0],
-                    nodes[0].children[1],
-                ]);
-                component.highlightedNode = nodes[0].children[1];
-                component.selectedNode = nodes[2];
-
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(component.highlightedNode).toBe(nodes[0].children[1]);
-            });
-
-            it('ArrowLeft does not change selected node when current highlighted node is expanded', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowLeft',
-                });
-                component.expandedNodes = new Set<TreeNode>([
-                    nodes[0],
-                    nodes[0].children[1],
-                ]);
-                component.highlightedNode = nodes[0].children[1];
-                component.selectedNode = nodes[2];
-
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(nodeSelected).not.toHaveBeenCalled();
-            });
-
-            it('ArrowLeft collapses current highlighted node when current highlighted node is expanded', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowLeft',
-                });
-                component.expandedNodes = new Set<TreeNode>([
-                    nodes[0],
-                    nodes[0].children[1],
-                ]);
-                component.highlightedNode = nodes[0].children[1];
-                component.selectedNode = nodes[2];
-
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(component.expandedNodes.has(nodes[0].children[1])).toBe(false);
-            });
-
-            it('ArrowLeft changes highlighted node to parent of current highlighted node when current highlighted node is collapsed', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowLeft',
-                });
-                component.expandedNodes = new Set<TreeNode>([nodes[0]]);
-                component.highlightedNode = nodes[0].children[1];
-                component.selectedNode = nodes[2];
-
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(component.highlightedNode).toBe(nodes[0]);
-            });
-
-            it('ArrowLeft changes selected node to parent of current highlighted node when current highlighted node is collapsed', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowLeft',
-                });
-                component.expandedNodes = new Set<TreeNode>([nodes[0]]);
-                component.highlightedNode = nodes[0].children[1];
-                component.selectedNode = nodes[2];
-
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(nodeSelected).toHaveBeenCalledWith(nodes[0]);
-            });
-
-            it('ArrowLeft does not change highlighted node when current highlighted node is collapsed and has no parent', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowLeft',
-                });
-                component.highlightedNode = nodes[0];
-                component.selectedNode = nodes[2];
-
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(component.highlightedNode).toBe(nodes[0]);
-            });
-
-            it('ArrowLeft does not change selected node when current highlighted node is collapsed and has no parent', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowLeft',
-                });
-                component.highlightedNode = nodes[0];
-                component.selectedNode = nodes[2];
-
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(nodeSelected).not.toHaveBeenCalled();
-            });
-
-            it('ArrowRight does not change highlighted node when current highlighted node is collapsed', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowRight',
-                });
-                component.highlightedNode = nodes[0];
-                component.selectedNode = nodes[2];
-
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(component.highlightedNode).toBe(nodes[0]);
-            });
-
-            it('ArrowRight does not change selected node when current highlighted node is collapsed', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowRight',
-                });
-                component.highlightedNode = nodes[0];
-                component.selectedNode = nodes[2];
-
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(nodeSelected).not.toHaveBeenCalled();
-            });
-
-            it('ArrowRight expands current highlighted node when current highlighted node is collapsed', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowRight',
-                });
-                component.highlightedNode = nodes[0];
-                component.selectedNode = nodes[2];
-
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(component.expandedNodes.has(nodes[0])).toBe(true);
-            });
-
-            it('ArrowRight changes highlighted node to first child of the current highlighted node when current highlighted node is expanded', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowRight',
-                });
-                component.expandedNodes = new Set<TreeNode>([nodes[0]]);
-                component.highlightedNode = nodes[0];
-                component.selectedNode = nodes[2];
-
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(component.highlightedNode).toBe(nodes[0].children[0]);
-            });
-
-            it('ArrowRight changes selected node to first child of the current highlighted node when current highlighted node is expanded', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowRight',
-                });
-                component.expandedNodes = new Set<TreeNode>([nodes[0]]);
-                component.highlightedNode = nodes[0];
-                component.selectedNode = nodes[2];
-
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(nodeSelected).toHaveBeenCalledWith(nodes[0].children[0]);
-            });
-
-            it('ArrowRight does not change highlighted node when current highlighted node has no children', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowRight',
-                });
-                component.highlightedNode = nodes[0];
-                component.selectedNode = nodes[2];
-
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(component.highlightedNode).toBe(nodes[0]);
-            });
-
-            it('ArrowRight does not change selected node when current highlighted node has no children', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'ArrowRight',
-                });
-                component.highlightedNode = nodes[0];
-                component.selectedNode = nodes[2];
-
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(nodeSelected).not.toHaveBeenCalled();
-            });
-
-            it('Home changes highlighted node to first visible node', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'Home',
-                });
-                component.expandedNodes = new Set<TreeNode>([nodes[0]]);
-                component.highlightedNode = nodes[0].children[1];
-                component.selectedNode = nodes[2];
-
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(component.highlightedNode).toBe(component.defaultNode);
-            });
-
-            it('Home changes selected node to first visible node', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'Home',
-                });
-                component.expandedNodes = new Set<TreeNode>([nodes[0]]);
-                component.highlightedNode = nodes[0].children[1];
-                component.selectedNode = nodes[2];
-
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(nodeSelected).toHaveBeenCalledWith(null);
-            });
-
-            it('Ctrl+Home changes highlighted node to first visible node', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'Home',
-                    ctrlKey: true,
-                });
-                component.expandedNodes = new Set<TreeNode>([nodes[0]]);
-                component.highlightedNode = nodes[0].children[1];
-                component.selectedNode = nodes[2];
-
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(component.highlightedNode).toBe(component.defaultNode);
-            });
-
-            it('Ctrl+Home does not change selected node', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'Home',
-                    ctrlKey: true,
-                });
-                component.expandedNodes = new Set<TreeNode>([nodes[0]]);
-                component.highlightedNode = nodes[0].children[1];
-                component.selectedNode = nodes[2];
-
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(nodeSelected).not.toHaveBeenCalled();
-            });
-
-            it('End changes highlighted node to last visible node', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'End',
-                });
-                component.expandedNodes = new Set<TreeNode>([nodes[0]]);
-                component.highlightedNode = nodes[0].children[1];
-                component.selectedNode = nodes[0];
-
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(component.highlightedNode).toBe(nodes[2]);
-            });
-
-            it('End changes selected node to last visible node', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'End',
-                });
-                component.expandedNodes = new Set<TreeNode>([nodes[0]]);
-                component.highlightedNode = nodes[0].children[1];
-                component.selectedNode = nodes[0];
-
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(nodeSelected).toHaveBeenCalledWith(nodes[2]);
-            });
-
-            it('Ctrl+End changes highlighted node to last visible node', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'End',
-                    ctrlKey: true,
-                });
-                component.expandedNodes = new Set<TreeNode>([nodes[0]]);
-                component.highlightedNode = nodes[0].children[1];
-                component.selectedNode = nodes[0];
-
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(component.highlightedNode).toBe(nodes[2]);
-            });
-
-            it('Ctrl+End does not change selected node', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: 'End',
-                    ctrlKey: true,
-                });
-                component.expandedNodes = new Set<TreeNode>([nodes[0]]);
-                component.highlightedNode = nodes[0].children[1];
-                component.selectedNode = nodes[0];
-
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(nodeSelected).not.toHaveBeenCalled();
-            });
-
-            it('Space changes selected node to current highlighted node', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: ' ',
-                });
-                component.expandedNodes = new Set<TreeNode>([nodes[0]]);
-                component.highlightedNode = nodes[0].children[1];
-                component.selectedNode = nodes[2];
-
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(nodeSelected).toHaveBeenCalledWith(nodes[0].children[1]);
-            });
-
-            it('Ctrl+Space changes selected node to current highlighted node', () => {
-                let $event = new KeyboardEvent('keydown', {
-                    key: ' ',
-                    ctrlKey: true,
-                });
-                component.expandedNodes = new Set<TreeNode>([nodes[0]]);
-                component.highlightedNode = nodes[0].children[1];
-                component.selectedNode = nodes[2];
-
-                combobox.triggerEventHandler('keydown', $event);
-
-                expect(nodeSelected).toHaveBeenCalledWith(nodes[0].children[1]);
+                expect(dropdownTree.getAttribute('tabindex')).toEqual('0');
             });
         });
     });
+});
 
-    function createNode(...children: TreeNode[]): TreeNode {
-        let id = currentId++;
+@Component({
+    template: `
+<cf-dropdown-tree-field
+    placeholder="Basic Model"
+    [(ngModel)]="selectedNode"
+    [defaultLabel]="defaultLabel"
+    [disabled]="disabled"
+    [nodes]="nodes"
+    [required]="required"
+    [showFullSelectedPath]="showFullSelectedPath"
+    [tabIndex]="tabIndexOverride"
+    (opened)="opened()"
+    (closed)="closed()">
+</cf-dropdown-tree-field>`,
+})
+class BasicModelComponent {
+    defaultLabel: string = null;
+    disabled: boolean = false;
+    nodes: TreeNode[] = createNodeTree();
+    required: boolean = false;
+    selectedNode: TreeNode = null;
+    showFullSelectedPath: boolean = false;
+    tabIndexOverride: number;
 
+    @ViewChild(DropdownTreeFieldComponent) dropdownTree: DropdownTreeFieldComponent;
+
+    opened: jasmine.Spy = jasmine.createSpy('opened');
+    closed: jasmine.Spy = jasmine.createSpy('closed');
+}
+
+@Component({
+    template: `
+<cf-dropdown-tree-field
+    placeholder="Basic Model"
+    [(ngModel)]="selectedNode"
+    [nodes]="nodes"
+    tabindex="5">
+</cf-dropdown-tree-field>`,
+})
+class PlainTabindexComponent {
+    nodes: TreeNode[] = createNodeTree();
+    selectedNode: TreeNode = null;
+}
+
+class FakeViewportRuler {
+    getViewportRect(): ClientRect {
         return {
-            id,
-            text: 'ABC-' + id,
-            children,
+            left: 0,
+            top: 0,
+            width: 1014,
+            height: 686,
+            bottom: 686,
+            right: 1014,
         };
     }
 
-    function createNodeTree(): TreeNode[] {
-        return [
+    getViewportScrollPosition(): { top: number, left: number } {
+        return { top: 0, left: 0 };
+    }
+}
+
+function createNode(...children: TreeNode[]): TreeNode {
+    let id = currentId++;
+
+    return {
+        id,
+        text: 'ABC-' + id,
+        children,
+    };
+}
+
+function createNodeTree(): TreeNode[] {
+    return [
+        createNode(
+            createNode(),
+            createNode(
+                createNode(),
+                createNode(),
+            ),
             createNode(
                 createNode(),
                 createNode(
                     createNode(),
-                    createNode(),
                 ),
-                createNode(
-                    createNode(),
-                    createNode(
-                        createNode(),
-                    ),
-                    createNode(),
-                ),
+                createNode(),
             ),
+        ),
+        createNode(
             createNode(
-                createNode(
-                    createNode(),
-                ),
+                createNode(),
             ),
-            createNode(),
-        ];
-    }
-});
+        ),
+        createNode(),
+    ];
+}

@@ -1,241 +1,242 @@
-﻿@import '../shared/_variables.scss';
+﻿@import '~@angular/material/core/style/menu-common';
+@import '~@angular/material/core/style/list-common';
+@import '~@angular/material/core/style/form-common';
+@import '~@angular/material/core/style/variables';
+@import '~@angular/material/core/a11y/a11y';
+@import '../shared/_variables.scss';
 
-:host .dropdown-tree-field {
-    box-sizing: border-box;
+$cf-dropdown-tree-arrow-size: 5px !default;
+$cf-dropdown-tree-arrow-margin: 4px !default;
+$cf-dropdown-tree-node-font-size: 16px !default;
+$cf-dropdown-tree-node-height: 48px !default;
+$cf-dropdown-tree-panel-max-height: 256px !default;
+$cf-dropdown-tree-panel-max-width: 400px !default;
+$cf-dropdown-tree-trigger-font-size: 16px !default;
+$cf-dropdown-tree-trigger-height: 30px !default;
+$cf-dropdown-tree-trigger-min-width: 112px !default;
+
+.cf-dropdown-tree {
     display: inline-block;
-    margin: 0;
-    max-width: 100%;
-    padding: 20px 0;
-    position: relative;
-    width: 100%;
+    font-family: $mat-font-family;
+    outline: none;
+}
 
-    .dropdown-tree.dt--hidden-accesible {
-        border: 0 !important;
-        clip: rect(0, 0, 0, 0) !important;
-        height: 1px !important;
-        margin: -1px !important;
-        overflow: hidden !important;
-        padding: 0 !important;
-        position: absolute !important;
-        width: 1px !important;
+.cf-dropdown-tree-trigger {
+    align-items: center;
+    box-sizing: border-box;
+    cursor: pointer;
+    display: flex;
+    font-size: $cf-dropdown-tree-trigger-font-size;
+    height: $cf-dropdown-tree-trigger-height;
+    min-width: $cf-dropdown-tree-trigger-min-width;
+    position: relative;
+
+    [aria-disabled='true'] & {
+        cursor: default;
+        user-select: none;
+    }
+}
+
+.cf-dropdown-tree-underline {
+    bottom: 0;
+    height: 1px;
+    left: 0;
+    position: absolute;
+    right: 0;
+
+    [aria-disabled='true'] & {
+        @include mat-control-disabled-underline();
+        background-color: transparent;
+        background-position: 0 bottom;
+    }
+}
+
+.cf-dropdown-tree-placeholder {
+    flex-grow: 1;
+    padding: 0 2px;
+    position: relative;
+    transform-origin: left top;
+    // These values are duplicated from animation code in order to
+    // allow placeholders to sometimes float without animating,
+    // for example when the value is set programmatically.
+    // TODO(kara): Change when animations API supports skipping animation.
+    &.mat-floating-placeholder {
+        left: -2px;
+        text-align: left;
+        top: -22px;
+        transform: scale(0.75);
     }
 
-    .dt--container {
-        box-sizing: border-box;
-        display: block;
+    [dir='rtl'] & {
+        transform-origin: right top;
+
+        &.mat-floating-placeholder {
+            left: 2px;
+            text-align: right;
+        }
+    }
+    // TODO: Double-check accessibility of this style
+    [aria-required=true] &::after {
+        content: '*';
+    }
+}
+
+.cf-dropdown-tree-value {
+    align-items: center;
+    display: flex;
+    flex-grow: 1;
+    max-width: calc(100% - #{($cf-dropdown-tree-arrow-size + $cf-dropdown-tree-arrow-margin) * 2});
+    position: absolute;
+    // Firefox and some versions of IE incorrectly keep absolutely
+    // positioned children of flex containers in the flex flow when calculating
+    // position. This has been fixed for Firefox 52, slated for early 2017.
+    // Bug report: https://bugzilla.mozilla.org/show_bug.cgi?id=874718
+    //
+    // In the meantime, we must adjust the position to fit the top, left, and bottom edge of the
+    // containing trigger element. In doing so, we can use align-items: center to allow the text to
+    // correctly position itself in the middle of the container.
+    bottom: 0;
+    left: 0;
+    top: 0;
+
+    [dir='rtl'] & {
+        left: auto;
+        right: 0;
+    }
+}
+
+.cf-dropdown-tree-value-text {
+    @include mat-truncate-line();
+    line-height: $cf-dropdown-tree-trigger-height;
+}
+
+.cf-dropdown-tree-arrow {
+    border-left: $cf-dropdown-tree-arrow-size solid transparent;
+    border-right: $cf-dropdown-tree-arrow-size solid transparent;
+    border-top: $cf-dropdown-tree-arrow-size solid;
+    height: 0;
+    margin: 0 $cf-dropdown-tree-arrow-margin;
+    width: 0;
+}
+
+.cf-dropdown-tree-panel {
+    @include mat-menu-base();
+    max-height: $cf-dropdown-tree-panel-max-height;
+    max-width: $cf-dropdown-tree-panel-max-width;
+    padding-bottom: 0;
+    padding-top: 0;
+
+    @include cdk-high-contrast {
+        outline: solid 1px;
+    }
+
+    ul.tree-root {
+        list-style: none;
         margin: 0;
-        position: relative;
-        vertical-align: middle;
-        width: 100%;
+        padding-left: 5px;
 
-        &.dropdown-tree {
-            z-index: 1;
+        cf-dropdown-tree-item ul {
+            list-style: none;
+            margin: 0;
+            padding-left: 1.2em;
+        }
 
-            &.dt--selection-focus .dt--selection .dt--selection-combobox {
-                background-color: $brand-default-highlight;
-                color: $gray-dark;
-            }
+        cf-dropdown-tree-item li {
+            box-sizing: border-box;
 
-            .dt--selection {
-                background-color: transparent;
-                z-index: inherit;
+            > .cf-dropdown-tree-node-line {
+                align-items: center;
+                display: flex;
+                flex-direction: row;
 
-                .dt--selection-combobox {
-                    background-color: inherit;
-                    border: none;
-                    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-                    border-radius: 0;
-                    box-sizing: border-box;
-                    cursor: pointer;
-                    display: block;
-                    height: 2.67em;
-                    outline: 0;
-                    -moz-user-select: none;
-                    -ms-user-select: none;
-                    -webkit-user-select: none;
-                    user-select: none;
+                > .cf-dropdown-tree-node-arrow {
+                    flex: 0 0 1em;
 
-                    &:hover,
-                    &[aria-expanded="true"] {
-                        background-color: $brand-default-highlight;
-                        color: $gray-dark;
-                    }
-
-                    .dt--rendered {
-                        color: #444;
-                        display: block;
-                        line-height: 2.67em;
-                        overflow: hidden;
-                        padding: 0 8px;
-                        text-overflow: ellipsis;
-                        white-space: nowrap;
-                    }
-
-                    .dt--arrow {
-                        height: 2.67em;
-                        position: absolute;
-                        top: 1px;
-                        right: 1px;
-                        width: 2.67em;
+                    span {
+                        cursor: pointer;
+                        left: 5px;
+                        position: relative;
 
                         b {
-                            border-color: #808080 transparent transparent transparent;
                             border-style: solid;
-                            border-width: 5px 5px 0 5px;
                             height: 0;
                             left: 50%;
-                            margin-left: -4px;
-                            margin-top: -2px;
                             position: absolute;
                             top: 50%;
                             width: 0;
                         }
                     }
                 }
-            }
-        }
 
-        &.dt--dropdown {
-            position: absolute;
+                > .cf-dropdown-tree-node-text {
+                    cursor: pointer;
+                    flex: 1 1 auto;
+                    font-size: $cf-dropdown-tree-node-font-size;
+                    font-family: $mat-font-family;
+                    height: $cf-dropdown-tree-node-height;
+                    line-height: $cf-dropdown-tree-node-height;
+                    outline: none;
+                    overflow: hidden;
+                    padding: 0 .5em;
+                    position: relative;
+                    text-align: left;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
 
-            .dt--dropdown {
-                background-color: $white;
-                border: 1px solid $gray-light;
-                border-radius: 2px;
-                box-sizing: border-box;
-                display: block;
-                position: absolute;
-                width: 100%;
-                z-index: 1051;
-
-                &.dt--dropdown-below {
-                    border-top: none;
-                    border-top-left-radius: 0;
-                    border-top-right-radius: 0;
-                }
-
-                ul.tree-root {
-                    list-style: none;
-                    max-height: 13em;
-                    overflow-y: auto;
-                    padding: 5px;
-
-                    >>> cf-dropdown-tree-item ul {
-                        list-style: none;
-                        padding: 0 5px 0 1.2em;
+                    &[disabled] {
+                        cursor: default;
                     }
 
-                    >>> cf-dropdown-tree-item li {
-                        box-sizing: border-box;
-                        display: block;
+                    &[dir='rtl'] {
+                        text-align: right;
+                    }
 
-                        > .arrow {
-                            display: inline-block;
-                            height: 1.6em;
-                            vertical-align: middle;
-                            width: 1em;
+                    .cf-dropdown-tree-node-ripple {
+                        bottom: 0;
+                        left: 0;
+                        position: absolute;
+                        right: 0;
+                        top: 0;
 
-                            span {
-                                height: 1.33em;
-                                left: 5px;
-                                position: relative;
-                                top: 0.8em;
-                                width: 1.33em;
-
-                                b {
-                                    border-style: solid;
-                                    height: 0;
-                                    left: 50%;
-                                    position: absolute;
-                                    top: 50%;
-                                    width: 0;
-                                }
-                            }
-                        }
-
-                        > .text {
-                            display: inline-block;
-                            padding: 2px .5em;
-                        }
-
-                        &.tree--no-children > .arrow span {
-                            display: none;
-                        }
-
-                        &.tree--has-children.tree--expanded > .arrow span b {
-                            border-color: #808080 transparent transparent transparent;
-                            border-width: 5px 5px 0 5px;
-                            margin-left: -2px;
-                            margin-top: -4px;
-                        }
-
-                        &.tree--has-children.tree--collapsed > .arrow span b {
-                            border-color: transparent transparent transparent #808080;
-                            border-width: 5px 0 5px 5px;
-                            margin-left: 1px;
-                            margin-top: -6px;
-                        }
-
-                        &.tree--highlighted > .text {
-                            background-color: $brand-default-highlight;
-                            color: $gray-dark;
-                        }
-
-                        &.tree--selected > .text {
-                            background-color: #ddd;
+                        @include cdk-high-contrast {
+                            opacity: 0.5;
                         }
                     }
                 }
             }
+
+            &.tree--no-children > .cf-dropdown-tree-node-line > .cf-dropdown-tree-node-arrow span {
+                display: none;
+            }
+
+            &.tree--has-children.tree--expanded > .cf-dropdown-tree-node-line > .cf-dropdown-tree-node-arrow span b {
+                border-color: #808080 transparent transparent transparent;
+                border-width: 5px 5px 0 5px;
+                margin-left: -2px;
+                margin-top: -4px;
+            }
+
+            &.tree--has-children.tree--collapsed > .cf-dropdown-tree-node-line > .cf-dropdown-tree-node-arrow span b {
+                border-color: transparent transparent transparent #808080;
+                border-width: 5px 0 5px 5px;
+                margin-left: 1px;
+                margin-top: -6px;
+            }
         }
     }
 
-    .dt--selection-combobox::after {
-        background-color: $brand-info;
-        bottom: 0px;
-        content: "";
-        height: 2px;
-        left: 45%;
-        position: absolute;
-        visibility: hidden;
-        width: 10px;
-        -webkit-transition-duration: 0.2s;
-        transition-duration: 0.2s;
-        -webkit-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    }
+    .cf-dropdown-tree-loading {
+        text-align: center;
+        vertical-align: middle;
 
-    &.is-focused .dt--selection .dt--selection-combobox::after {
-        left: 0;
-        visibility: visible;
-        width: 100%;
-    }
 
-    &.dtf--floating-label {
-        label {
-            color: #3f51b5;
-            display: block;
-            margin: 0;
-            overflow: hidden;
-            padding-left: 8px;
-            position: absolute;
-            text-align: left;
-            top: 30px;
-            white-space: nowrap;
-            width: 100%;
-            -webkit-transition-duration: 0.2s;
-            transition-duration: 0.2s;
-            -webkit-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-        }
+        > div {
+            display: inline-block;
 
-        &.is-focused label,
-        &.is-dirty label {
-            color: $brand-info;
-            display: block;
-            font-size: 0.8em;
-            padding-left: 0;
-            top: 0;
+            .mat-spinner {
+                height: $cf-dropdown-tree-node-height;
+                width: $cf-dropdown-tree-node-height;
+            }
         }
     }
 }

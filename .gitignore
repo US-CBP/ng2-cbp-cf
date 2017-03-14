@@ -19,7 +19,7 @@ coverage
 *.shim.ts
 dts/*
 dist/*
-
+.vs/*
 
 #################
 ## JetBrains

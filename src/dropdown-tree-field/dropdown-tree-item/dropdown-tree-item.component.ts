@@ -6,16 +6,18 @@
     Input,
     OnInit,
     Output,
+    Renderer,
     ViewChild,
+    ViewEncapsulation,
 }                                       from '@angular/core';
 
-import { DropdownTreeService }          from '../dropdown-tree.service';
 import { TreeNode }                     from '../tree-node.model';
 
 @Component({
     selector: 'cf-dropdown-tree-item',
     templateUrl: 'dropdown-tree-item.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
+    encapsulation: ViewEncapsulation.None,
 })
 export class DropdownTreeItemComponent implements OnInit {
     @Input() idPrefix: string;
@@ -38,7 +40,7 @@ export class DropdownTreeItemComponent implements OnInit {
     private _selectedNode: TreeNode;
     private _expandedNodes: Set<TreeNode>;
 
-    constructor(private _service: DropdownTreeService) {
+    constructor(private _renderer: Renderer) {
     }
 
     ngOnInit(): void {
@@ -105,16 +107,14 @@ export class DropdownTreeItemComponent implements OnInit {
 
     private _processHighlightedNode(): void {
         this.isHighlighted = this.highlightedNode === this.node;
+
         if(this.isHighlighted) {
-            this._service.elementToScrollTo = this.textElement;
+            this._renderer.invokeElementMethod(this.textElement.nativeElement, 'focus');
         }
     }
 
     private _processSelectedNode(): void {
         this.isSelected = this.selectedNode === this.node;
-        if(this.isSelected) {
-            this._service.elementToScrollTo = this.textElement;
-        }
     }
 
     onExpanderClick(): void {
