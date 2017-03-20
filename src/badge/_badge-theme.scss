@@ -1,0 +1,30 @@
+﻿@mixin cf-badge-theme($theme) {
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+
+    .cf-badge {
+        &.mat-primary {
+            background-color: mat-color($primary, 'default');
+            border-color: mat-color($primary, 'default');
+            color: mat-color($primary, default-contrast);
+        }
+
+        &.mat-accent {
+            background-color: mat-color($accent, 'default');
+            border-color: mat-color($accent, 'default');
+            color: mat-color($accent, default-contrast);
+        }
+
+        &.mat-warn {
+            background-color: mat-color($warn, 'default');
+            border-color: mat-color($warn, 'default');
+            color: mat-color($warn, default-contrast);
+        }
+
+        background-color: mat-color($background, raised-button);
+        color: mat-color($foreground, text);
+    }
+}

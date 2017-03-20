@@ -1,0 +1,44 @@
+﻿@import '~@angular/material/core/style/elevation';
+
+.cf-badge {
+    @include mat-elevation(6);
+
+    border-radius: 10px;
+    border-style: solid;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1;
+    min-width: 10px;
+    padding: 3px 6px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.mat-icon-button,
+.mat-fab,
+.mat-mini-fab {
+    .cf-badge {
+        border-width: 1px;
+        font-size: 0.75em;
+        font-weight: normal;
+        left: 23px;
+        padding: 2px 4px;
+        position: absolute;
+        top: 5px;
+    }
+}
+
+.mat-fab {
+    .cf-badge {
+        left: 30px;
+        top: 11px;
+    }
+
+    .mat-button-wrapper {
+        .mat-icon {
+            padding: 0;
+        }
+    }
+}

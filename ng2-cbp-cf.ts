@@ -1,6 +1,7 @@
 import { NgModule }             from '@angular/core';
 
 import {
+    BadgeModule,
     CheckboxModule,
     DropdownTreeFieldModule,
     DualListModule,
@@ -12,6 +13,7 @@ import {
 }                               from './src';
 
 const modules: any[] = [
+    BadgeModule,
     CheckboxModule,
     DropdownTreeFieldModule,
     DualListModule,

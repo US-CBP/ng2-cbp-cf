@@ -1,5 +1,6 @@
 // ### order has some importance here ###
 export * from './shared';
+export * from './badge';
 export * from './header';
 export * from './checkbox';
 export * from './dropdown-tree-field';

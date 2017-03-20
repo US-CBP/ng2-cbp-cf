@@ -1,4 +1,6 @@
 ﻿@import '~@angular/material/core/theming/all-theme';
+@import '../src/badge/_badge.scss';
+@import '../src/badge/_badge-theme.scss';
 @import '../src/dropdown-tree-field/_dropdown-tree-field-theme.scss';
 @import './_typography.scss';
 @import './_header-base.scss';
@@ -123,3 +125,4 @@ $cbp-theme: mat-light-theme($cbp-primary, $cbp-accent, $cbp-warn);
 // that you are using.
 @include angular-material-theme($cbp-theme);
 @include cf-dropdown-tree-theme($cbp-theme);
+@include cf-badge-theme($cbp-theme);
