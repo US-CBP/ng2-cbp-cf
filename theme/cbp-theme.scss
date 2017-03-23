@@ -2,127 +2,49 @@
 @import '../src/badge/_badge.scss';
 @import '../src/badge/_badge-theme.scss';
 @import '../src/dropdown-tree-field/_dropdown-tree-field-theme.scss';
+@import '../src/header/_header-theme.scss';
 @import './_typography.scss';
 @import './_header-base.scss';
+@import './_theme.scss';
 
 // Include the base styles for Angular Material core. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 @include mat-core();
 
-$cbp-blue: (
-  50: #a1d0ff,
-  100: #009cde,
-  200: #1d8fff,
-  300: #006bd4,
-  400: #005bb6,
-  500: #004c97,
-  600: #003d78,
-  700: #003865,
-  800: #001e3b,
-  900: #000e1d,
-  A100: #c4e5f6,
-  A200: #95d9ff,
-  A400: #005bb6,
-  A700: #002d5a,
-  contrast: (
-    50: $black-87-opacity,
-    100: $black-87-opacity,
-    200: $black-87-opacity,
-    300: $black-87-opacity,
-    400: $black-87-opacity,
-    500: white,
-    600: white,
-    700: white,
-    800: $white-87-opacity,
-    900: $white-87-opacity,
-    A100: $black-87-opacity,
-    A200: white,
-    A400: white,
-    A700: white,
-  )
-);
-
-$cbp-green: (
-  50: #8aff8a,
-  100: #1bab00,
-  200: #06ff06,
-  300: #00bd00,
-  400: #009f00,
-  500: #008000,
-  600: #006100,
-  700: #134d13,
-  800: #002400,
-  900: #000600,
-  A100: #8aff8a,
-  A200: #c1e8b0,
-  A400: #009f00,
-  A700: #134d13,
-  contrast: (
-    50: $black-87-opacity,
-    100: $black-87-opacity,
-    200: $black-87-opacity,
-    300: $black-87-opacity,
-    400: $black-87-opacity,
-    500: white,
-    600: white,
-    700: white,
-    800: $white-87-opacity,
-    900: $white-87-opacity,
-    A100: $black-87-opacity,
-    A200: white,
-    A400: white,
-    A700: white,
-  )
-);
-
-$cbp-red: (
-  50: #ffaaaa,
-  100: #ff5e5e,
-  200: #e00000,
-  300: #dd0000,
-  400: #bf0000,
-  500: #a00000,
-  600: #810000,
-  700: #600000,
-  800: #440000,
-  900: #260000,
-  A100: #fec0c0,
-  A200: #fab2aa,
-  A400: #bf0000,
-  A700: #630000,
-  contrast: (
-    50: $black-87-opacity,
-    100: $black-87-opacity,
-    200: $black-87-opacity,
-    300: $black-87-opacity,
-    400: $black-87-opacity,
-    500: white,
-    600: white,
-    700: white,
-    800: $white-87-opacity,
-    900: $white-87-opacity,
-    A100: $black-87-opacity,
-    A200: white,
-    A400: white,
-    A700: white,
-  )
-);
-
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue.
-$cbp-primary: mat-palette($cbp-blue);
-$cbp-accent: mat-palette($cbp-green);
-
-// The warn palette is optional (defaults to red).
-$cbp-warn: mat-palette($cbp-red, 500, 200, 700);
-
-// Create the theme object (a Sass map containing all of the palettes).
-$cbp-theme: mat-light-theme($cbp-primary, $cbp-accent, $cbp-warn);
-
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include angular-material-theme($cbp-theme);
-@include cf-dropdown-tree-theme($cbp-theme);
 @include cf-badge-theme($cbp-theme);
+@include cf-dropdown-tree-theme($cbp-theme);
+@include cf-header-theme($cbp-theme);
+
+// Customize the theme
+$foreground: map-get($cbp-theme, foreground);
+
+.mat-toolbar.mat-primary {
+    color: #fff;
+
+    .mat-button.mat-accent[disabled],
+    .mat-button.mat-primary[disabled],
+    .mat-button.mat-warn[disabled],
+    .mat-button[disabled],
+    .mat-icon-button.mat-accent[disabled],
+    .mat-icon-button.mat-primary[disabled],
+    .mat-icon-button.mat-warn[disabled],
+    .mat-icon-button[disabled] {
+        color: rgba(255, 255, 255, 0.3);
+    }
+}
+
+.mat-input-placeholder {
+    color: mat-color($foreground, enabled-hint-text);
+}
+
+.mat-select-trigger {
+    color: mat-color($foreground, enabled-hint-text);
+}
+
+.mat-select-arrow {
+    color: mat-color($foreground, enabled-hint-text);
+}

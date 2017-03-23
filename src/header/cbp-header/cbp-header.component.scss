@@ -1,25 +1,12 @@
 ﻿cf-cbp-header {
-    background-color: #003e65;
-    border-color: #003b60;
     border-style: solid;
     border-width: 0 0 1px;
-    color: #fff;
     display: block;
     padding-right: 8px;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
     transition: all .1s linear;
-
-    .cf-header-menu-group {
-        > cf-header-nav-item {
-            a.mat-menu-item {
-                color: #fff;
-            }
-        }
-    }
 
     .brand {
         a {
-            color: #fff;
             font-size: 19px;
             height: 50px;
             line-height: 21px;

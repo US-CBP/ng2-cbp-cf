@@ -1,0 +1,26 @@
+﻿@import '~@angular/material/core/theming/palette';
+@import '~@angular/material/core/theming/theming';
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue.
+$cbp-primary: mat-palette($mat-indigo, 600, 100, 900);
+$cbp-accent: mat-palette($mat-amber, A400);
+
+// The warn palette is optional (defaults to red).
+$cbp-warn: mat-palette($mat-red, 900);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$cbp-pre-theme: mat-light-theme($cbp-primary, $cbp-accent, $cbp-warn);
+$cbp-pre-background: map-get($cbp-pre-theme, background);
+$cbp-pre-foreground: map-get($cbp-pre-theme, foreground);
+
+$cbp-theme: map-merge($cbp-pre-theme, (
+    background: map-merge($cbp-pre-background, (
+        modified: #ffeb3b,
+    )),
+    foreground: map-merge($cbp-pre-foreground, (
+        enabled-hint-text: rgba(0, 0, 0, 0.87),
+        modified: rgba(0, 0, 0, 0.87),
+    )),
+));

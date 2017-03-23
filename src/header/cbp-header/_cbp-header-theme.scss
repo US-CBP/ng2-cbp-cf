@@ -1,0 +1,24 @@
+﻿@mixin cf-cbp-header-theme($theme) {
+    $primary: map-get($theme, primary);
+
+    cf-cbp-header {
+        background-color: mat-color($primary, darker);
+        border-color: mat-color($primary, darker);
+        color: mat-color($primary, darker-contrast);
+        text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
+
+        .cf-header-menu-group {
+            > cf-header-nav-item {
+                a.mat-menu-item {
+                    color: mat-color($primary, darker-contrast);
+                }
+            }
+        }
+
+        .brand {
+            a {
+                color: mat-color($primary, darker-contrast);
+            }
+        }
+    }
+}

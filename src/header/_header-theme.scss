@@ -1,0 +1,5 @@
+﻿@import './cbp-header/_cbp-header-theme.scss';
+
+@mixin cf-header-theme($theme) {
+    @include cf-cbp-header-theme($theme);
+}

@@ -8,7 +8,7 @@
     $warn: map-get($theme, warn);
 
     .cf-dropdown-tree-trigger {
-        color: mat-color($foreground, hint-text);
+        color: mat-color($foreground, enabled-hint-text);
 
         .cf-dropdown-tree:focus:not(.cf-dropdown-tree-disabled) & {
             color: mat-color($primary);
@@ -32,7 +32,7 @@
     }
 
     .cf-dropdown-tree-arrow {
-        color: mat-color($foreground, hint-text);
+        color: mat-color($foreground, enabled-hint-text);
 
         .cf-dropdown-tree:focus:not(.cf-dropdown-tree-disabled) & {
             color: mat-color($primary);
