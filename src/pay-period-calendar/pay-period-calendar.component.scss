@@ -63,6 +63,8 @@
         }
 
         tbody {
+            cursor: pointer;
+            
             tr {
                 th.pp {
                     button {
@@ -97,6 +99,8 @@
                 }
 
                 &.not-selectable {
+                    cursor: default;
+                    
                     td.day {
                         color: #ccc;
                     }
