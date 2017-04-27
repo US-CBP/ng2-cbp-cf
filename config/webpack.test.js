@@ -70,7 +70,7 @@ config.plugins = [
         _: 'lodash'
     }),
     new ContextReplacementPlugin(
-        /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
+        /angular(\\|\/)core(\\|\/)@angular/,
         path.resolve('src')
     ),
     new WatchIgnorePlugin([

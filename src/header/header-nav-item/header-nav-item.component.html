@@ -1,10 +1,10 @@
 ﻿<a *ngIf="type === 'href'" md-menu-item [href]="url">
-    <template [ngTemplateOutlet]="content"></template>
+    <ng-template [ngTemplateOutlet]="content"></ng-template>
 </a>
 <a *ngIf="type === 'route'" md-menu-item [routerLink]="url">
-    <template [ngTemplateOutlet]="content"></template>
+    <ng-template [ngTemplateOutlet]="content"></ng-template>
 </a>
 
-<template #content>
+<ng-template #content>
     <ng-content></ng-content>
-</template>
+</ng-template>

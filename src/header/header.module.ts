@@ -2,7 +2,12 @@
 import { NgModule }                 from '@angular/core';
 import { FlexLayoutModule }         from '@angular/flex-layout';
 import { FormsModule }              from '@angular/forms';
-import { MaterialModule }           from '@angular/material';
+import {
+    MdButtonModule,
+    MdIconModule,
+    MdInputModule,
+    MdMenuModule,
+}                                   from '@angular/material';
 import { RouterModule }             from '@angular/router';
 
 import { AppHeaderComponent }       from './app-header';
@@ -18,7 +23,10 @@ import { HeaderSubmenuComponent }   from './header-submenu';
         FlexLayoutModule,
         FormsModule,
         RouterModule,
-        MaterialModule,
+        MdButtonModule,
+        MdIconModule,
+        MdInputModule,
+        MdMenuModule,
     ],
     exports: [
         AppHeaderComponent,

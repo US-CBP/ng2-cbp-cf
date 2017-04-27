@@ -1,16 +1,23 @@
 ﻿import { CommonModule }                 from '@angular/common';
 import { NgModule }                     from '@angular/core';
 import { FormsModule }                  from '@angular/forms';
-import { MaterialModule }               from '@angular/material';
+import {
+    MdProgressSpinnerModule,
+    MdRippleModule,
+    OverlayModule,
+}                                       from '@angular/material';
 
 import { DropdownTreeFieldComponent }   from './dropdown-tree-field.component';
 import { DropdownTreeItemComponent }    from './dropdown-tree-item';
+import { VIEWPORT_RULER_PROVIDER }      from './viewport-ruler';
 
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
-        MaterialModule,
+        MdProgressSpinnerModule,
+        MdRippleModule,
+        OverlayModule,
     ],
     exports: [
         DropdownTreeFieldComponent,
@@ -18,6 +25,9 @@ import { DropdownTreeItemComponent }    from './dropdown-tree-item';
     declarations: [
         DropdownTreeFieldComponent,
         DropdownTreeItemComponent,
+    ],
+    providers: [
+        VIEWPORT_RULER_PROVIDER,
     ],
 })
 export class DropdownTreeFieldModule {

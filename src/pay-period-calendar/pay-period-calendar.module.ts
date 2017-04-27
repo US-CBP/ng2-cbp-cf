@@ -4,7 +4,11 @@ import {
     NgModule,
 }                                       from '@angular/core';
 import { FormsModule }                  from '@angular/forms';
-import { MaterialModule }               from '@angular/material';
+import {
+    MdButtonModule,
+    MdIconModule,
+    MdSelectModule,
+}                                       from '@angular/material';
 
 import { PayPeriodCalendarComponent }   from './pay-period-calendar.component';
 
@@ -12,7 +16,9 @@ import { PayPeriodCalendarComponent }   from './pay-period-calendar.component';
     imports: [
         CommonModule,
         FormsModule,
-        MaterialModule,
+        MdButtonModule,
+        MdIconModule,
+        MdSelectModule,
     ],
     exports: [
         PayPeriodCalendarComponent,

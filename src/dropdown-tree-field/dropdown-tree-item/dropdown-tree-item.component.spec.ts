@@ -8,8 +8,9 @@ import {
     TestBed,
 }                                       from '@angular/core/testing';
 import { FormsModule }                  from '@angular/forms';
-import { MaterialModule }               from '@angular/material';
+import { MdRippleModule }               from '@angular/material';
 import { By }                           from '@angular/platform-browser';
+import { NoopAnimationsModule }         from '@angular/platform-browser/animations';
 
 import { TreeNode }                     from '../tree-node.model';
 import { DropdownTreeItemComponent }    from './dropdown-tree-item.component';
@@ -23,7 +24,7 @@ describe('DropdownTreeItemComponent', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [CommonModule, FormsModule, MaterialModule],
+            imports: [CommonModule, FormsModule, MdRippleModule, NoopAnimationsModule],
             declarations: [DropdownTreeItemComponent],
             schemas: [CUSTOM_ELEMENTS_SCHEMA],
         });

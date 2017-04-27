@@ -14,12 +14,13 @@ import {
     Dir,
     OverlayContainer,
 }                                       from '@angular/material';
-import { ViewportRuler }                from '@angular/material/core/overlay/position/viewport-ruler';
 import { By }                           from '@angular/platform-browser';
+import { NoopAnimationsModule }         from '@angular/platform-browser/animations';
 
 import { DropdownTreeFieldComponent }   from './dropdown-tree-field.component';
 import { DropdownTreeFieldModule }      from './dropdown-tree-field.module';
 import { TreeNode }                     from './tree-node.model';
+import { ViewportRuler }                from './viewport-ruler';
 
 let currentId: number;
 
@@ -34,6 +35,7 @@ describe('DropdownTreeFieldComponent', () => {
             imports: [
                 FormsModule,
                 DropdownTreeFieldModule,
+                NoopAnimationsModule,
             ],
             declarations: [
                 BasicModelComponent,

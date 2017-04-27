@@ -2,11 +2,11 @@
     <div *ngIf="isCondensed" fxFlex="1 0 auto"></div>
 
     <div class="app-menu" *ngIf="!isCondensed" fxFlex="1 1 auto">
-        <template [ngTemplateOutlet]="appMenu"></template>
+        <ng-template [ngTemplateOutlet]="appMenu"></ng-template>
     </div>
 
     <div class="search" *ngIf="!isCondensed && disableSearch !== true" fxFlex="0 0 auto">
-        <template [ngTemplateOutlet]="search"></template>
+        <ng-template [ngTemplateOutlet]="search"></ng-template>
     </div>
 
     <div class="expand-when-condensed" *ngIf="isCondensed" fxFlex="0 0 auto">
@@ -17,21 +17,21 @@
     </div>
 </div>
 
-<template #appMenu>
+<ng-template #appMenu>
     <ng-content select="cf-header-menu-group[cf-app-menu]"></ng-content>
-</template>
+</ng-template>
 
-<template #search>
+<ng-template #search>
     <md-input-container floatPlaceholder="never">
         <input mdInput type="text" placeholder="Search" [(ngModel)]="searchText" />
     </md-input-container><!--
     --><button type="button" md-raised-button aria-label="Search" (click)="searchClicked.emit(searchText)">
         <md-icon fontSet="fa" fontIcon="fa-search"></md-icon>
     </button>
-</template>
+</ng-template>
 
 <md-menu #expansion="mdMenu" [overlapTrigger]="false">
-    <template [ngIf]="isCondensed">
-        <template [ngTemplateOutlet]="appMenu"></template>
-    </template>
+    <ng-template [ngIf]="isCondensed">
+        <ng-template [ngTemplateOutlet]="appMenu"></ng-template>
+    </ng-template>
 </md-menu>

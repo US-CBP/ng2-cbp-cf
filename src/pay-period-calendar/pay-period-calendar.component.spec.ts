@@ -3,6 +3,7 @@ import {
     ComponentFixture,
     TestBed,
 }                                       from '@angular/core/testing';
+import { NoopAnimationsModule }         from '@angular/platform-browser/animations';
 import * as moment                      from 'moment/moment';
 
 import { PayPeriodCalendarComponent }   from './pay-period-calendar.component';
@@ -22,7 +23,7 @@ describe('PayPeriodCalendarComponent', () => {
         months = createMonthsFromCurrent(-12, 12);
 
         TestBed.configureTestingModule({
-            imports: [PayPeriodCalendarModule],
+            imports: [PayPeriodCalendarModule, NoopAnimationsModule],
             declarations: [],
             schemas: [CUSTOM_ELEMENTS_SCHEMA],
         });

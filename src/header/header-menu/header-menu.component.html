@@ -1,17 +1,17 @@
 ﻿<button type="button" md-button *ngIf="!isCondensed" [mdMenuTriggerFor]="dropdown">
-    <template [ngTemplateOutlet]="content"></template>
+    <ng-template [ngTemplateOutlet]="content"></ng-template>
 </button>
 <button type="button" md-menu-item *ngIf="isCondensed" [mdMenuTriggerFor]="dropdown">
-    <template [ngTemplateOutlet]="content"></template>
+    <ng-template [ngTemplateOutlet]="content"></ng-template>
 </button>
 
 <md-menu #dropdown="mdMenu" [overlapTrigger]="false" [class]="classes || ''">
     <ng-content select="cf-header-submenu"></ng-content>
 </md-menu>
 
-<template #content>
+<ng-template #content>
     <span>
         <ng-content></ng-content>
     </span>
     <md-icon fontSet="fa" fontIcon="fa-caret-down"></md-icon>
-</template>
+</ng-template>

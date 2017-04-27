@@ -29,13 +29,13 @@ import {
     ConnectionPositionPair,
     Dir,
 }                               from '@angular/material';
-import { ViewportRuler }        from '@angular/material/core/overlay/position/viewport-ruler';
 
 import {
     BooleanFieldValue,
     isKey,
 }                               from '../shared';
 import { TreeNode }             from './tree-node.model';
+import { ViewportRuler }        from './viewport-ruler';
 
 const transformPlaceholder: AnimationEntryMetadata = trigger('transformPlaceholder', [
     state('floating-ltr', style({

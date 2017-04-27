@@ -37,7 +37,7 @@
             </tr>
         </thead>
         <tbody>
-            <template ngFor let-pp [ngForOf]="payPeriodsOfMonth" [ngForTrackBy]="payPeriodTrackBy" let-even="even" let-last="last">
+            <ng-template ngFor let-pp [ngForOf]="payPeriodsOfMonth" [ngForTrackBy]="payPeriodTrackBy" let-even="even" let-last="last">
                 <tr id="{{id}}-pay-period-{{pp.id}}-week1"
                     class="week week1"
                     [class.even]="even"
@@ -80,7 +80,7 @@
                     <td class="day friday">{{dayOfMonth(pp, 2, 5)}}</td>
                     <td class="day saturday">{{dayOfMonth(pp, 2, 6)}}</td>
                 </tr>
-            </template>
+            </ng-template>
         </tbody>
     </table>
 </div>
