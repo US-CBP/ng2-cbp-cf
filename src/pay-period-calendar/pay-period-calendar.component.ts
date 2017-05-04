@@ -102,16 +102,12 @@ export class PayPeriodCalendarComponent implements OnInit {
     private _initializeShownValues(): void {
         let startDateMoment = this.selectedPayPeriod == null ? moment() : moment(this.selectedPayPeriod.startDate);
         let year = startDateMoment.year();
-        let months = this._monthsByYear.get(year);
-
-        if(months == null) {
-            startDateMoment = moment();
-            year = startDateMoment.year();
-            months = this._monthsByYear.get(year);
-        }
-
         let monthNumber = startDateMoment.month() + 1;
-        let month = months.find(m => monthNumber === m.number);
+        let month = null;
+
+        if(this._monthsByYear.has(year)) {
+            month = this._monthsByYear.get(year).find(m => monthNumber === m.number);
+        }
 
         if(month == null) {
             year = this.years[0];

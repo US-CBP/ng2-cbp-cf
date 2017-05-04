@@ -12,7 +12,7 @@
 
     <div class="feedback" *ngIf="!isCondensed && disableFeedback !== true" fxFlex="0 0 auto">
         <button type="button" md-button (click)="feedbackClicked.emit()">
-            <md-icon fontSet="fa" fontIcon="fa-comment"></md-icon>
+            <md-icon>comment</md-icon>
             <span>Feedback</span>
         </button>
     </div>
@@ -23,7 +23,7 @@
 
     <div class="expand-when-condensed" *ngIf="isCondensed" fxFlex="0 0 auto">
         <button type="button" md-icon-button [mdMenuTriggerFor]="expansion">
-            <md-icon fontSet="fa" fontIcon="fa-bars"></md-icon>
+            <md-icon>menu</md-icon>
             <span class="sr-only">Toggle Global Navigation</span>
         </button>
     </div>
@@ -42,7 +42,7 @@
         <ng-template [ngTemplateOutlet]="cbpMenu">
         </ng-template>
         <button type="button" md-menu-item *ngIf="disableFeedback !== true" (click)="feedbackClicked.emit()">
-            <md-icon fontSet="fa" fontIcon="fa-comment"></md-icon>
+            <md-icon>comment</md-icon>
             <span>Feedback</span>
         </button>
         <ng-template [ngTemplateOutlet]="userMenu">

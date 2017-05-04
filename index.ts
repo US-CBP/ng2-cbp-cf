@@ -7,6 +7,7 @@ import 'cbp-theme/dist/inputmask.js';
 import 'cbp-theme/dist/cbp-theme.js';
 import 'hammerjs';
 
+import 'material-design-icons/iconfont/material-icons.css';
 import './theme/cbp-theme.scss';
 
 export * from './src';
