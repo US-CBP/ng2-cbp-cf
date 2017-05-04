@@ -6,12 +6,12 @@
 // Unlike using a border, a gradient allows us to adjust the spacing of the dotted line
 // to match the Material Design spec.
 $mat-underline-disabled-background-image:
-        linear-gradient(to right, rgba(0, 0, 0, 0.26) 0%, rgba(0, 0, 0, 0.26) 33%, transparent 0%);
+    linear-gradient(to right, rgba(0, 0, 0, 0.26) 0%, rgba(0, 0, 0, 0.26) 33%, transparent 0%);
 
 @mixin mat-control-disabled-underline {
-  background-image: $mat-underline-disabled-background-image;
-  background-size: 4px 1px;
-  background-repeat: repeat-x;
+    background-image: $mat-underline-disabled-background-image;
+    background-repeat: repeat-x;
+    background-size: 4px 1px;
 }
 /* From Angular Material - end */
 
@@ -105,9 +105,12 @@ $cf-dropdown-tree-trigger-min-width: 112px !default;
     // In the meantime, we must adjust the position to fit the top, left, and bottom edge of the
     // containing trigger element. In doing so, we can use align-items: center to allow the text to
     // correctly position itself in the middle of the container.
+
+    /* stylelint-disable order/properties-alphabetical-order */
     bottom: 0;
     left: 0;
     top: 0;
+    /* stylelint-enable order/properties-alphabetical-order */
 
     [dir='rtl'] & {
         left: auto;
@@ -181,13 +184,13 @@ $cf-dropdown-tree-trigger-min-width: 112px !default;
                 > .cf-dropdown-tree-node-text {
                     cursor: pointer;
                     flex: 1 1 auto;
-                    font-size: $cf-dropdown-tree-node-font-size;
                     font-family: $mat-font-family;
+                    font-size: $cf-dropdown-tree-node-font-size;
                     height: $cf-dropdown-tree-node-height;
                     line-height: $cf-dropdown-tree-node-height;
                     outline: none;
                     overflow: hidden;
-                    padding: 0 .5em;
+                    padding: 0 0.5em;
                     position: relative;
                     text-align: left;
                     text-overflow: ellipsis;
@@ -220,8 +223,8 @@ $cf-dropdown-tree-trigger-min-width: 112px !default;
             }
 
             &.tree--has-children.tree--expanded > .cf-dropdown-tree-node-line > .cf-dropdown-tree-node-arrow span b {
-                border-color: #808080 transparent transparent transparent;
-                border-width: 5px 5px 0 5px;
+                border-color: #808080 transparent;
+                border-width: 5px 5px 0;
                 margin-left: -2px;
                 margin-top: -4px;
             }

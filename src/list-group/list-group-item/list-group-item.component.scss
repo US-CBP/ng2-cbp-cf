@@ -2,7 +2,7 @@
 
 cf-list-group-item {
     .list-group-item {
-        border-radius: 0px !important;
+        border-radius: 0 !important;
         margin-bottom: -1px !important;
 
         &:hover {
@@ -11,15 +11,15 @@ cf-list-group-item {
     }
     &:first-child {
         .list-group-item {
-            border-top-right-radius: 2px !important;
             border-top-left-radius: 2px !important;
+            border-top-right-radius: 2px !important;
         }
     }
     &:last-child {
         .list-group-item {
-            margin-bottom: 0 !important;
-            border-bottom-right-radius: 2px !important;
             border-bottom-left-radius: 2px !important;
+            border-bottom-right-radius: 2px !important;
+            margin-bottom: 0 !important;
         }
     }
 }

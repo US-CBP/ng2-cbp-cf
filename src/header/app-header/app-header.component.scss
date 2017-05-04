@@ -1,12 +1,12 @@
 ﻿cf-app-header {
     background-color: #eee;
-    border-color: #e7e7e7;
     border: 1px solid transparent;
+    border-color: #e7e7e7;
     color: #00416a;
     display: block;
     padding-right: 8px;
-    text-shadow: 0 1px 0 hsla(0, 0%, 100%, .3);
-    transition: all .2s ease-in-out;
+    text-shadow: 0 1px 0 hsla(0, 0%, 100%, 0.3);
+    transition: all 200ms ease-in-out;
 
     .cf-header-menu-group {
         > cf-header-nav-item {
