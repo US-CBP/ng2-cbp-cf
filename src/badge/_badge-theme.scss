@@ -6,6 +6,9 @@
     $foreground: map-get($theme, foreground);
 
     .cf-badge {
+        background-color: mat-color($background, raised-button);
+        color: mat-color($foreground, text);
+
         &.mat-primary {
             background-color: mat-color($primary, 'default');
             border-color: mat-color($primary, 'default');
@@ -23,8 +26,5 @@
             border-color: mat-color($warn, 'default');
             color: mat-color($warn, default-contrast);
         }
-
-        background-color: mat-color($background, raised-button);
-        color: mat-color($foreground, text);
     }
 }

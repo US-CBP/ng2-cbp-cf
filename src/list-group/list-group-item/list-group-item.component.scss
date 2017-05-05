@@ -9,12 +9,14 @@ cf-list-group-item {
             background-color: $gray-lighter;
         }
     }
+
     &:first-child {
         .list-group-item {
             border-top-left-radius: 2px !important;
             border-top-right-radius: 2px !important;
         }
     }
+
     &:last-child {
         .list-group-item {
             border-bottom-left-radius: 2px !important;

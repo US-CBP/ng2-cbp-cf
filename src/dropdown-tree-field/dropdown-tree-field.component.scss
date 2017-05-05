@@ -13,6 +13,7 @@ $mat-underline-disabled-background-image:
     background-repeat: repeat-x;
     background-size: 4px 1px;
 }
+
 /* From Angular Material - end */
 
 $cf-dropdown-tree-arrow-size: 5px !default;
@@ -56,6 +57,7 @@ $cf-dropdown-tree-trigger-min-width: 112px !default;
 
     [aria-disabled='true'] & {
         @include mat-control-disabled-underline();
+
         background-color: transparent;
         background-position: 0 bottom;
     }
@@ -66,6 +68,7 @@ $cf-dropdown-tree-trigger-min-width: 112px !default;
     padding: 0 2px;
     position: relative;
     transform-origin: left top;
+
     // These values are duplicated from animation code in order to
     // allow placeholders to sometimes float without animating,
     // for example when the value is set programmatically.
@@ -85,6 +88,7 @@ $cf-dropdown-tree-trigger-min-width: 112px !default;
             text-align: right;
         }
     }
+
     // TODO: Double-check accessibility of this style
     [aria-required=true] &::after {
         content: '*';
@@ -97,6 +101,7 @@ $cf-dropdown-tree-trigger-min-width: 112px !default;
     flex-grow: 1;
     max-width: calc(100% - #{($cf-dropdown-tree-arrow-size + $cf-dropdown-tree-arrow-margin) * 2});
     position: absolute;
+
     // Firefox and some versions of IE incorrectly keep absolutely
     // positioned children of flex containers in the flex flow when calculating
     // position. This has been fixed for Firefox 52, slated for early 2017.
@@ -120,6 +125,7 @@ $cf-dropdown-tree-trigger-min-width: 112px !default;
 
 .cf-dropdown-tree-value-text {
     @include mat-truncate-line();
+
     line-height: $cf-dropdown-tree-trigger-height;
 }
 
@@ -134,14 +140,15 @@ $cf-dropdown-tree-trigger-min-width: 112px !default;
 
 .cf-dropdown-tree-panel {
     @include mat-menu-base();
-    max-height: $cf-dropdown-tree-panel-max-height;
-    max-width: $cf-dropdown-tree-panel-max-width;
-    padding-bottom: 0;
-    padding-top: 0;
 
     @include cdk-high-contrast {
         outline: solid 1px;
     }
+
+    max-height: $cf-dropdown-tree-panel-max-height;
+    max-width: $cf-dropdown-tree-panel-max-width;
+    padding-bottom: 0;
+    padding-top: 0;
 
     ul.tree-root {
         list-style: none;
@@ -205,15 +212,15 @@ $cf-dropdown-tree-trigger-min-width: 112px !default;
                     }
 
                     .cf-dropdown-tree-node-ripple {
+                        @include cdk-high-contrast {
+                            opacity: 0.5;
+                        }
+
                         bottom: 0;
                         left: 0;
                         position: absolute;
                         right: 0;
                         top: 0;
-
-                        @include cdk-high-contrast {
-                            opacity: 0.5;
-                        }
                     }
                 }
             }

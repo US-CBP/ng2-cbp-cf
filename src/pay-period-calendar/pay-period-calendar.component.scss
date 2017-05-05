@@ -64,7 +64,7 @@
 
         tbody {
             cursor: pointer;
-            
+
             tr {
                 th.pp {
                     button {
@@ -77,7 +77,8 @@
                 }
 
                 &.week1 {
-                    th, td {
+                    th,
+                    td {
                         border-top: 1px solid #d5d5d5;
                     }
                 }
@@ -100,13 +101,14 @@
 
                 &.not-selectable {
                     cursor: default;
-                    
+
                     td.day {
                         color: #ccc;
                     }
                 }
 
-                th, td {
+                th,
+                td {
                     text-align: center;
 
                     &.day {

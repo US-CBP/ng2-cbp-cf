@@ -25,12 +25,28 @@
         "unit-no-unknown": true,
         "unit-whitelist": [ "px", "%", "deg", "ms", "em", "vh", "vw" ],
 
-        "value-list-comma-space-after": "always-single-line",
+        "value-list-comma-space-after": "always",
         "value-list-comma-space-before": "never",
+
+        "custom-property-empty-line-before": [
+            "always",
+            {
+                "except": [ "first-nested" ],
+                "ignore": [ "after-comment" ]
+            }
+        ],
 
         "shorthand-property-no-redundant-values": true,
 
         "property-case": "lower",
+
+        "declaration-empty-line-before": [
+            "always",
+            {
+                "except": [ "first-nested", "after-declaration" ],
+                "ignore": [ "after-comment" ]
+            }
+        ],
 
         "declaration-block-no-duplicate-properties": [
             true,
@@ -67,6 +83,51 @@
         "selector-type-case": "lower",
         "selector-no-id": true,
 
-        "order/properties-alphabetical-order":  true
+        "selector-list-comma-newline-after": "always",
+
+        "rule-empty-line-before": [
+            "always",
+            {
+                "except": [ "first-nested" ],
+                "ignore": [ "after-comment" ]
+            }
+        ],
+
+        "at-rule-empty-line-before": [
+            "always",
+            {
+                "except": [ "first-nested", "blockless-after-blockless" ],
+                "ignore": [ "after-comment" ]
+            }
+        ],
+
+        "comment-empty-line-before": [
+            "always",
+            {
+                "except": [ "first-nested" ],
+                "ignore": [ "after-comment", "stylelint-commands" ]
+            }
+        ],
+
+        "indentation": 4,
+        "no-eol-whitespace": true,
+        "no-extra-semicolons": true,
+        "no-missing-end-of-source-newline": true,
+
+        "order/order": [
+            {
+                "type": "at-rule",
+                "name": "extend"
+            },
+            {
+                "type": "at-rule",
+                "name": "include"
+            },
+            "custom-properties",
+            "declarations",
+            "rules",
+            "at-rules"
+        ],
+        "order/properties-alphabetical-order": true
     }
 }
