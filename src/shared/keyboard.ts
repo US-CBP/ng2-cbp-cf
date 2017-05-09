@@ -1,4 +1,4 @@
-﻿interface MetaKeyFlags {
+﻿export interface MetaKeyFlags {
     altKey?: boolean;
     ctrlKey?: boolean;
     shiftKey?: boolean;

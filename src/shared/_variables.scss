@@ -1,6 +1,11 @@
+@import '../../theme/_theme.scss';
+
 //
 // Variables
 // --------------------------------------------------
+$background: map-get($cbp-theme, background);
+$foreground: map-get($cbp-theme, foreground);
+
 
 $white:                             #fff;
 $gray-base:                         #000;
