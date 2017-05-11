@@ -1,0 +1,14 @@
+﻿<md-toolbar color="primary">
+    <span class="left-action">
+        <cf-toolbar-left-action [leftAction]="leftAction | async"></cf-toolbar-left-action>
+    </span>
+    <h1>{{title | async}}</h1>
+    <span class="toolbar-spacer"></span>
+    <span class="global-toolbar-buttons">
+        <ng-content></ng-content>
+    </span>
+    <span class="toolbar-buttons">
+        <ng-template [cfToolbarHost]="portal | async">
+        </ng-template>
+    </span>
+</md-toolbar>

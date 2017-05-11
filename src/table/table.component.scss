@@ -1,31 +1,36 @@
-.cbp-table{
+.cbp-table {
     th {
         text-align:left;
     }
+
     td {
         text-align:left;
     }
+
     &.floatingHeader {
         display: table;
         width: 100%;
+
         thead {
-            width: 100%;
-            overflow-y: scroll;
             display: table;
+            overflow-y: scroll;
             table-layout: fixed;
+            width: 100%;
             width: calc(100% - 16px); /* assuming scrollbar width as 16px */
         }
+
         tbody {
-            width: 100%;
-            overflow: auto;
-            height: 150px;
             display: block;
-        }
-        tr {
+            height: 150px;
+            overflow: auto;
             width: 100%;
-            text-align: left;
+        }
+
+        tr {
             display: table;
             table-layout: fixed;
+            text-align: left;
+            width: 100%;
         }
     }
 }

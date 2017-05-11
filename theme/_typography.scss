@@ -3,9 +3,9 @@
 }
 
 body {
+    height: 100%;
     padding-bottom: 0 !important;
     padding-top: 0 !important;
-    height: 100%;
 
     .cf-app {
         display: flex;
@@ -18,9 +18,9 @@ body {
 
         main {
             flex: 1 1 auto;
-            padding: 10px 10px;
-            position: relative;
             overflow-y: auto;
+            padding: 10px;
+            position: relative;
         }
 
         .content {

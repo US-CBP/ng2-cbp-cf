@@ -6,13 +6,14 @@
 // Unlike using a border, a gradient allows us to adjust the spacing of the dotted line
 // to match the Material Design spec.
 $mat-underline-disabled-background-image:
-        linear-gradient(to right, rgba(0, 0, 0, 0.26) 0%, rgba(0, 0, 0, 0.26) 33%, transparent 0%);
+    linear-gradient(to right, rgba(0, 0, 0, 0.26) 0%, rgba(0, 0, 0, 0.26) 33%, transparent 0%);
 
 @mixin mat-control-disabled-underline {
-  background-image: $mat-underline-disabled-background-image;
-  background-size: 4px 1px;
-  background-repeat: repeat-x;
+    background-image: $mat-underline-disabled-background-image;
+    background-repeat: repeat-x;
+    background-size: 4px 1px;
 }
+
 /* From Angular Material - end */
 
 $cf-dropdown-tree-arrow-size: 5px !default;
@@ -56,6 +57,7 @@ $cf-dropdown-tree-trigger-min-width: 112px !default;
 
     [aria-disabled='true'] & {
         @include mat-control-disabled-underline();
+
         background-color: transparent;
         background-position: 0 bottom;
     }
@@ -66,6 +68,7 @@ $cf-dropdown-tree-trigger-min-width: 112px !default;
     padding: 0 2px;
     position: relative;
     transform-origin: left top;
+
     // These values are duplicated from animation code in order to
     // allow placeholders to sometimes float without animating,
     // for example when the value is set programmatically.
@@ -85,6 +88,7 @@ $cf-dropdown-tree-trigger-min-width: 112px !default;
             text-align: right;
         }
     }
+
     // TODO: Double-check accessibility of this style
     [aria-required=true] &::after {
         content: '*';
@@ -97,6 +101,7 @@ $cf-dropdown-tree-trigger-min-width: 112px !default;
     flex-grow: 1;
     max-width: calc(100% - #{($cf-dropdown-tree-arrow-size + $cf-dropdown-tree-arrow-margin) * 2});
     position: absolute;
+
     // Firefox and some versions of IE incorrectly keep absolutely
     // positioned children of flex containers in the flex flow when calculating
     // position. This has been fixed for Firefox 52, slated for early 2017.
@@ -105,9 +110,12 @@ $cf-dropdown-tree-trigger-min-width: 112px !default;
     // In the meantime, we must adjust the position to fit the top, left, and bottom edge of the
     // containing trigger element. In doing so, we can use align-items: center to allow the text to
     // correctly position itself in the middle of the container.
+
+    /* stylelint-disable order/properties-alphabetical-order */
     bottom: 0;
     left: 0;
     top: 0;
+    /* stylelint-enable order/properties-alphabetical-order */
 
     [dir='rtl'] & {
         left: auto;
@@ -117,6 +125,7 @@ $cf-dropdown-tree-trigger-min-width: 112px !default;
 
 .cf-dropdown-tree-value-text {
     @include mat-truncate-line();
+
     line-height: $cf-dropdown-tree-trigger-height;
 }
 
@@ -131,14 +140,15 @@ $cf-dropdown-tree-trigger-min-width: 112px !default;
 
 .cf-dropdown-tree-panel {
     @include mat-menu-base();
-    max-height: $cf-dropdown-tree-panel-max-height;
-    max-width: $cf-dropdown-tree-panel-max-width;
-    padding-bottom: 0;
-    padding-top: 0;
 
     @include cdk-high-contrast {
         outline: solid 1px;
     }
+
+    max-height: $cf-dropdown-tree-panel-max-height;
+    max-width: $cf-dropdown-tree-panel-max-width;
+    padding-bottom: 0;
+    padding-top: 0;
 
     ul.tree-root {
         list-style: none;
@@ -181,13 +191,13 @@ $cf-dropdown-tree-trigger-min-width: 112px !default;
                 > .cf-dropdown-tree-node-text {
                     cursor: pointer;
                     flex: 1 1 auto;
-                    font-size: $cf-dropdown-tree-node-font-size;
                     font-family: $mat-font-family;
+                    font-size: $cf-dropdown-tree-node-font-size;
                     height: $cf-dropdown-tree-node-height;
                     line-height: $cf-dropdown-tree-node-height;
                     outline: none;
                     overflow: hidden;
-                    padding: 0 .5em;
+                    padding: 0 0.5em;
                     position: relative;
                     text-align: left;
                     text-overflow: ellipsis;
@@ -202,15 +212,15 @@ $cf-dropdown-tree-trigger-min-width: 112px !default;
                     }
 
                     .cf-dropdown-tree-node-ripple {
+                        @include cdk-high-contrast {
+                            opacity: 0.5;
+                        }
+
                         bottom: 0;
                         left: 0;
                         position: absolute;
                         right: 0;
                         top: 0;
-
-                        @include cdk-high-contrast {
-                            opacity: 0.5;
-                        }
                     }
                 }
             }
@@ -220,8 +230,8 @@ $cf-dropdown-tree-trigger-min-width: 112px !default;
             }
 
             &.tree--has-children.tree--expanded > .cf-dropdown-tree-node-line > .cf-dropdown-tree-node-arrow span b {
-                border-color: #808080 transparent transparent transparent;
-                border-width: 5px 5px 0 5px;
+                border-color: #808080 transparent;
+                border-width: 5px 5px 0;
                 margin-left: -2px;
                 margin-top: -4px;
             }

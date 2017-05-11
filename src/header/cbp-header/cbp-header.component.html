@@ -12,7 +12,7 @@
 
     <div class="feedback" *ngIf="!isCondensed && disableFeedback !== true" fxFlex="0 0 auto">
         <button type="button" md-button (click)="feedbackClicked.emit()">
-            <md-icon>comment</md-icon>
+            <md-icon>feedback</md-icon>
             <span>Feedback</span>
         </button>
     </div>
@@ -42,7 +42,7 @@
         <ng-template [ngTemplateOutlet]="cbpMenu">
         </ng-template>
         <button type="button" md-menu-item *ngIf="disableFeedback !== true" (click)="feedbackClicked.emit()">
-            <md-icon>comment</md-icon>
+            <md-icon>feedback</md-icon>
             <span>Feedback</span>
         </button>
         <ng-template [ngTemplateOutlet]="userMenu">

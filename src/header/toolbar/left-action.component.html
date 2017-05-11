@@ -1,0 +1,4 @@
+﻿<button *ngIf="leftAction" md-icon-button [title]="leftAction.text" (click)="leftAction.action()">
+    <md-icon>{{leftAction.iconClasses}}</md-icon>
+    <span class="sr-only">{{leftAction.text}}</span>
+</button>

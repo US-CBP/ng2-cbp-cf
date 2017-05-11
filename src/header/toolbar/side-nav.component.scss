@@ -1,0 +1,94 @@
+﻿@import '../../shared/_variables.scss';
+
+:host {
+    $primary: map-get($cbp-theme, primary);
+
+    .side-nav-wrapper {
+        width: 340px;
+
+        nav {
+            box-sizing: border-box;
+            min-height: 100%;
+            padding-bottom: 96px;
+            padding-top: 30px;
+
+            dl {
+                margin: 0;
+            }
+
+            dt {
+                border-left: 2px solid transparent;
+                color: #212121;
+                cursor: pointer;
+                font-weight: 700;
+                margin-top: 0;
+                padding: 15px 0 10px 24px;
+
+                md-icon {
+                    vertical-align: middle;
+                }
+
+                a {
+                    border-left: 2px solid transparent;
+                    color: #212121;
+                    display: block;
+                    font-weight: 700;
+                    padding: 15px 0 10px 24px;
+                    text-decoration: none;
+                    text-overflow: ellipsis;
+                }
+            }
+
+            dt.no-child {
+                padding: 0;
+            }
+
+            div.hide-sub-menu {
+                display: none;
+            }
+
+            dd {
+                a {
+                    border-left: 2px solid transparent;
+                    color: #212121;
+                    display: block;
+                    font-weight: 400;
+                    letter-spacing: 0.1px;
+                    padding: 10px 10px 10px 48px;
+                    text-decoration: none;
+                    text-overflow: ellipsis;
+                }
+
+                a.selected {
+                    background-color: mat-color($background, hover);
+                    color: mat-color($primary);
+                }
+            }
+
+            a:focus,
+            dt:focus {
+                background-color: #eee;
+                outline: 0;
+            }
+        }
+
+        .logo {
+            background-color: mat-color($primary, darker);
+            border-color: mat-color($primary, darker);
+            box-sizing: border-box;
+            color: mat-color($primary, darker-contrast);
+            display: block;
+            font-size: 1.4em;
+            font-weight: 700;
+            height: 64px;
+            padding: 12px 0 11px 24px;
+            position: relative;
+
+            >>> span { /* stylelint-disable-line selector-combinator-space-after, selector-combinator-space-before */
+                display: block;
+                font-size: 0.7em;
+                font-weight: 400;
+            }
+        }
+    }
+}

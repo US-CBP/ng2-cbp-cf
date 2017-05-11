@@ -3,7 +3,7 @@
     border-width: 0 0 1px;
     display: block;
     padding-right: 8px;
-    transition: all .1s linear;
+    transition: all 100ms linear;
 
     .brand {
         a {
@@ -11,7 +11,7 @@
             height: 50px;
             line-height: 21px;
             padding: 5px 70px 5px 17px;
-            transition: color .2s ease-in-out;
+            transition: color 200ms ease-in-out;
 
             &:hover,
             &:focus {
@@ -20,16 +20,17 @@
                 text-decoration: none;
             }
 
-            .cbp:before {
+            .cbp::before {
                 font-size: 18px;
                 line-height: 16px;
             }
+
             .dhs {
                 line-height: 14px;
                 margin: 0;
 
-                &:before {
-                    content: "U.S. Department of Homeland Security";
+                &::before {
+                    content: 'U.S. Department of Homeland Security';
                     font-size: 12px;
                     font-style: italic;
                 }
@@ -41,8 +42,8 @@
 @media(min-width: 960px) {
     cf-cbp-header {
         .brand {
-            .cbp:before {
-                content: "U.S. Customs & Border Protection";
+            .cbp::before {
+                content: 'U.S. Customs & Border Protection';
             }
         }
     }
@@ -55,8 +56,8 @@
                 padding: 16px 70px 16px 17px;
             }
 
-            .cbp:before {
-                content: "U.S. CBP";
+            .cbp::before {
+                content: 'U.S. CBP';
             }
         }
     }

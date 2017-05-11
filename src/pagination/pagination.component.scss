@@ -1,10 +1,11 @@
-.form-group{
-    .btn-group{
-        .btn{
-            &.ellipsis{
+.form-group {
+    .btn-group {
+        .btn {
+            &.ellipsis {
                 border:none;
                 cursor:default;
-                &:hover{
+
+                &:hover {
                     background-color:transparent;
                 }
             }
