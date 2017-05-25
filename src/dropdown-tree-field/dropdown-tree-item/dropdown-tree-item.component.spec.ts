@@ -8,7 +8,10 @@ import {
     TestBed,
 }                                       from '@angular/core/testing';
 import { FormsModule }                  from '@angular/forms';
-import { MdRippleModule }               from '@angular/material';
+import {
+    MATERIAL_SANITY_CHECKS,
+    MdRippleModule,
+}                                       from '@angular/material';
 import { By }                           from '@angular/platform-browser';
 import { NoopAnimationsModule }         from '@angular/platform-browser/animations';
 
@@ -26,6 +29,9 @@ describe('DropdownTreeItemComponent', () => {
         TestBed.configureTestingModule({
             imports: [CommonModule, FormsModule, MdRippleModule, NoopAnimationsModule],
             declarations: [DropdownTreeItemComponent],
+            providers: [
+                { provide: MATERIAL_SANITY_CHECKS, useValue: false },
+            ],
             schemas: [CUSTOM_ELEMENTS_SCHEMA],
         });
         fixture = TestBed.createComponent(DropdownTreeItemComponent);

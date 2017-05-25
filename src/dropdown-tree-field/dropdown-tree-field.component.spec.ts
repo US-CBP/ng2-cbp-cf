@@ -12,6 +12,7 @@ import {
 import { FormsModule }                  from '@angular/forms';
 import {
     Dir,
+    MATERIAL_SANITY_CHECKS,
     OverlayContainer,
 }                                       from '@angular/material';
 import { By }                           from '@angular/platform-browser';
@@ -45,6 +46,7 @@ describe('DropdownTreeFieldComponent', () => {
                 { provide: OverlayContainer, useFactory: () => overlayContainerFactory() },
                 { provide: Dir, useFactory: () => { return dir = { value: 'ltr' }; } },
                 { provide: ViewportRuler, useClass: FakeViewportRuler },
+                { provide: MATERIAL_SANITY_CHECKS, useValue: false },
             ],
         });
     });

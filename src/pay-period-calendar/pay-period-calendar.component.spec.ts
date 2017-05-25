@@ -3,6 +3,7 @@ import {
     ComponentFixture,
     TestBed,
 }                                       from '@angular/core/testing';
+import { MATERIAL_SANITY_CHECKS }       from '@angular/material';
 import { NoopAnimationsModule }         from '@angular/platform-browser/animations';
 import * as moment                      from 'moment/moment';
 
@@ -25,6 +26,9 @@ describe('PayPeriodCalendarComponent', () => {
         TestBed.configureTestingModule({
             imports: [PayPeriodCalendarModule, NoopAnimationsModule],
             declarations: [],
+            providers: [
+                { provide: MATERIAL_SANITY_CHECKS, useValue: false },
+            ],
             schemas: [CUSTOM_ELEMENTS_SCHEMA],
         });
         fixture = TestBed.createComponent(PayPeriodCalendarComponent);
