@@ -13,12 +13,16 @@ import {
 import { LeftAction }       from './left-action.model';
 import { Toolbar }          from './toolbar.model';
 
+export type ToolbarGlobalButtonAlign = 'left' | 'right';
+
 @Injectable()
 export class ToolbarService {
     private _leftAction: BehaviorSubject<LeftAction> = new BehaviorSubject<LeftAction>(null);
     private _portal: BehaviorSubject<Portal<any>> = new BehaviorSubject<Portal<any>>(null);
     private _title: BehaviorSubject<string> = new BehaviorSubject<string>(null);
     private _sideNavOpened: EventEmitter<void> = new EventEmitter<void>();
+    private _globalButtonAlign: BehaviorSubject<ToolbarGlobalButtonAlign>
+        = new BehaviorSubject<ToolbarGlobalButtonAlign>('right');
 
     constructor() {
     }
@@ -49,6 +53,14 @@ export class ToolbarService {
 
     get sideNavOpened(): EventEmitter<void> {
         return this._sideNavOpened;
+    }
+
+    setGlobalButtonAlign(newValue: ToolbarGlobalButtonAlign): void {
+        this._globalButtonAlign.next(newValue);
+    }
+
+    get globalButtonAlign(): Observable<ToolbarGlobalButtonAlign> {
+        return this._globalButtonAlign.asObservable();
     }
 
     openSideNav(): void {
