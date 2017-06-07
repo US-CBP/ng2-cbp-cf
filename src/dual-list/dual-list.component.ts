@@ -73,7 +73,7 @@ export class DualListComponent implements ControlValueAccessor {
     }
     set source(source: any[]) {
         /* tslint:disable:triple-equals */
-        if (source && source != this._source && source.length > 0) {
+        if(source && source != this._source && source.length > 0) {
         /* tslint:enable */
             this._source = this._sortMyList(source);
             this.availableL.list = _.cloneDeep(this._source);
@@ -86,7 +86,7 @@ export class DualListComponent implements ControlValueAccessor {
     }
     set selected(selected: any[]){
         /* tslint:disable:triple-equals */
-        if (selected && selected != this._selected && selected.length > 0) {
+        if(selected && selected != this._selected && selected.length > 0) {
         /* tslint:enable */
             this._selected = this._sortMyList(selected);
             this.selectedL.list = _.cloneDeep(this._selected);
@@ -113,7 +113,7 @@ export class DualListComponent implements ControlValueAccessor {
 
     allowDrop(event: DragEvent, list: BasicList): boolean {
         event.preventDefault();
-        if (!list.dragStart) {
+        if(!list.dragStart) {
             list.dragOver = true;
         }
         return false;
@@ -169,7 +169,7 @@ export class DualListComponent implements ControlValueAccessor {
     }
 
     _toggleItem(event: MouseEvent, item: any, objList: BasicList): void {
-        if (event) {
+        if(event) {
             event.stopPropagation();
         }
         let indexList = _.findIndex(objList.list, item);
@@ -177,11 +177,11 @@ export class DualListComponent implements ControlValueAccessor {
         let lastItem = objList.pick[objList.pick.length - 1];
         if(event && event.shiftKey && !_.isEqual(item, lastItem)) {
             let idx = _.findIndex(objList.list, lastItem);
-            if (indexList > idx) {
+            if(indexList > idx) {
                 for (let i = (idx + 1); i < indexList; i += 1) {
                     this._toggleItem(null, objList.list[i], objList);
                 }
-            } else if (idx !== -1) {
+            } else if(idx !== -1) {
                 for (let i = (indexList + 1); i < idx; i += 1)  {
                     this._toggleItem(null, objList.list[i], objList);
                 }
