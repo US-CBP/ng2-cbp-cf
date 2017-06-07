@@ -26,7 +26,7 @@ export function sortBy<T>(array: T[], ...sortKeys: Array<((item: T) => any) | So
 }
 
 export function toMap<T, TKey>(array: T[], getKey: (item: T) => TKey): Map<TKey, T>;
-export function toMap<T, TKey, TItem>(array: T[], getKey: (item: T) => TKey, getItem: (item: T) => TItem): Map<TKey, TItem>
+export function toMap<T, TKey, TItem>(array: T[], getKey: (item: T) => TKey, getItem: (item: T) => TItem): Map<TKey, TItem>;
 export function toMap<T, TKey, TItem>(array: T[], getKey: (item: T) => TKey, getItem: (item: T) => T | TItem = (item => item)): Map<TKey, T | TItem> {
     let map = new Map<TKey, T | TItem>();
 
