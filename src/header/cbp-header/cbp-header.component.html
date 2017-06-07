@@ -1,6 +1,10 @@
 ﻿<div class="header-navigation" role="navigation" fxLayout="row" fxLayoutWrap="wrap">
     <div class="brand" fxFlex="1 0 auto" fxFlex.gt-sm="0 0 auto">
-        <a [href]="homeUrl" fxLayout="column">
+        <a *ngIf="homeUrlType === 'href'" [href]="homeUrl" fxLayout="column">
+            <div class="cbp"></div>
+            <div class="dhs" *ngIf="!isCondensed"></div>
+        </a>
+        <a *ngIf="homeUrlType === 'route'" [routerLink]="homeUrl" fxLayout="column">
             <div class="cbp"></div>
             <div class="dhs" *ngIf="!isCondensed"></div>
         </a>

@@ -1,5 +1,4 @@
-﻿/* tslint:disable:no-access-missing-member */
-import {
+﻿import {
     Component,
     EventEmitter,
     Input,
@@ -9,6 +8,7 @@ import {
 import { ObservableMedia }  from '@angular/flex-layout';
 
 import { BaseHeader }       from '../base-header.model';
+import { NavItemType }      from '../nav-item-type.type';
 
 @Component({
     selector: 'cf-cbp-header',
@@ -18,6 +18,7 @@ import { BaseHeader }       from '../base-header.model';
 })
 export class CbpHeaderComponent extends BaseHeader {
     @Input() homeUrl: string = '';
+    @Input() homeUrlType: NavItemType = 'href';
     @Input() disableFeedback: boolean = false;
 
     @Output() feedbackClicked: EventEmitter<void> = new EventEmitter<void>();
@@ -26,4 +27,3 @@ export class CbpHeaderComponent extends BaseHeader {
         super(media);
     }
 }
-/* tslint:enable */

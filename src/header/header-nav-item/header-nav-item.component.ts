@@ -4,7 +4,7 @@
     ViewEncapsulation,
 }                                   from '@angular/core';
 
-export type NavItemType = 'href' | 'route';
+import { NavItemType }              from '../nav-item-type.type';
 
 @Component({
     selector: 'cf-header-nav-item',
