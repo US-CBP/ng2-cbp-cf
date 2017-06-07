@@ -5,7 +5,6 @@
     ViewEncapsulation,
 }                                   from '@angular/core';
 
-import { AppHeaderComponent }       from '../app-header';
 import { BaseHeader }               from '../base-header.model';
 import { CbpHeaderComponent }       from '../cbp-header';
 
@@ -21,11 +20,8 @@ export class HeaderMenuComponent {
 
     private header: BaseHeader;
 
-    constructor(
-        @Optional() appHeader: AppHeaderComponent,
-        @Optional() cbpHeader: CbpHeaderComponent) {
-
-        this.header = appHeader || cbpHeader;
+    constructor(@Optional() cbpHeader: CbpHeaderComponent) {
+        this.header = cbpHeader;
     }
 
     get isCondensed(): boolean {

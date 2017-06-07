@@ -10,7 +10,6 @@ import {
 }                                   from '@angular/material';
 import { RouterModule }             from '@angular/router';
 
-import { AppHeaderComponent }       from './app-header';
 import { CbpHeaderComponent }       from './cbp-header';
 import { HeaderMenuComponent }      from './header-menu';
 import { HeaderMenuGroupComponent } from './header-menu-group';
@@ -29,7 +28,6 @@ import { HeaderSubmenuComponent }   from './header-submenu';
         MdMenuModule,
     ],
     exports: [
-        AppHeaderComponent,
         CbpHeaderComponent,
         HeaderMenuComponent,
         HeaderMenuGroupComponent,
@@ -37,7 +35,6 @@ import { HeaderSubmenuComponent }   from './header-submenu';
         HeaderSubmenuComponent,
     ],
     declarations: [
-        AppHeaderComponent,
         CbpHeaderComponent,
         HeaderMenuComponent,
         HeaderMenuGroupComponent,

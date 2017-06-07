@@ -1,4 +1,3 @@
-export * from './app-header';
 export * from './cbp-header';
 export * from './toolbar';
 export * from './header-menu';
