@@ -195,7 +195,9 @@ export class PayPeriodCalendarComponent implements OnInit {
     }
 
     selectPayPeriod(pp: PayPeriod): void {
-        this.payPeriodSelected.emit(pp);
+        if(pp.isSelectable) {
+            this.payPeriodSelected.emit(pp);
+        }
     }
 
     dayOfMonth(pp: PayPeriod, week: number, dayOfWeek: number): number {
