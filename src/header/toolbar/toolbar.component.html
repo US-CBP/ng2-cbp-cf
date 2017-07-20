@@ -4,11 +4,17 @@
     </span>
     <h1>{{title | async}}</h1>
     <span class="toolbar-spacer"></span>
-    <span class="global-toolbar-buttons">
-        <ng-content></ng-content>
-    </span>
-    <span class="toolbar-buttons">
-        <ng-template [cfToolbarHost]="portal | async">
-        </ng-template>
-    </span>
+    <ng-container [ngSwitch]="globalButtonAlign | async">
+        <span *ngSwitchCase="'right'" class="toolbar-buttons">
+            <ng-template [cfToolbarHost]="portal | async">
+            </ng-template>
+        </span>
+        <span class="global-toolbar-buttons">
+            <ng-content></ng-content>
+        </span>
+        <span *ngSwitchDefault class="toolbar-buttons">
+            <ng-template [cfToolbarHost]="portal | async">
+            </ng-template>
+        </span>
+    </ng-container>
 </md-toolbar>
