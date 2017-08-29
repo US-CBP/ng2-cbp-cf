@@ -65,6 +65,7 @@
         "material-design-icons": "^3.0.1",
         "moment": "~2.17.1",
         "reflect-metadata": "~0.1.9",
+        "roboto-fontface": "^0.8.0",
         "rxjs": "^5.3.0",
         "zone.js": "^0.8.9"
     },
