@@ -139,7 +139,7 @@ $cf-dropdown-tree-trigger-min-width: 112px !default;
 }
 
 .cf-dropdown-tree-panel {
-    @include mat-menu-base();
+    @include mat-menu-base(8);
 
     @include cdk-high-contrast {
         outline: solid 1px;
