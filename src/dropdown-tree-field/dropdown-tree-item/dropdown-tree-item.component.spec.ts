@@ -10,7 +10,7 @@ import {
 import { FormsModule }                  from '@angular/forms';
 import {
     MATERIAL_SANITY_CHECKS,
-    MdRippleModule,
+    MatRippleModule,
 }                                       from '@angular/material';
 import { By }                           from '@angular/platform-browser';
 import { NoopAnimationsModule }         from '@angular/platform-browser/animations';
@@ -27,7 +27,7 @@ describe('DropdownTreeItemComponent', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [CommonModule, FormsModule, MdRippleModule, NoopAnimationsModule],
+            imports: [CommonModule, FormsModule, MatRippleModule, NoopAnimationsModule],
             declarations: [DropdownTreeItemComponent],
             providers: [
                 { provide: MATERIAL_SANITY_CHECKS, useValue: false },

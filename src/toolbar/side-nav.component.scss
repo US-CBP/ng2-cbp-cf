@@ -1,4 +1,4 @@
-﻿@import '../../shared/_variables.scss';
+﻿@import '../shared/_variables.scss';
 
 :host {
     $primary: map-get($cbp-theme, primary);
@@ -24,7 +24,7 @@
                 margin-top: 0;
                 padding: 15px 0 10px 24px;
 
-                md-icon {
+                .mat-icon {
                     vertical-align: middle;
                 }
 

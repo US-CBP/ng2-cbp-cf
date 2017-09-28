@@ -1,4 +1,5 @@
-﻿import {
+﻿import { OverlayContainer }             from '@angular/cdk/overlay';
+import {
     Component,
     DebugElement,
     ViewChild,
@@ -13,7 +14,6 @@ import { FormsModule }                  from '@angular/forms';
 import {
     Dir,
     MATERIAL_SANITY_CHECKS,
-    OverlayContainer,
 }                                       from '@angular/material';
 import { By }                           from '@angular/platform-browser';
 import { NoopAnimationsModule }         from '@angular/platform-browser/animations';

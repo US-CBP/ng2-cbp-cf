@@ -2,8 +2,9 @@
 import { NgModule }             from '@angular/core';
 import { FormsModule }          from '@angular/forms';
 import {
-    MdButtonModule,
-    MdIconModule,
+    MatButtonModule,
+    MatIconModule,
+    NoConflictStyleCompatibilityMode,
 }                               from '@angular/material';
 
 import { ListGroupModule }      from '../list-group';
@@ -13,8 +14,9 @@ import { DualListComponent }    from './dual-list.component';
     imports: [
         CommonModule,
         FormsModule,
-        MdButtonModule,
-        MdIconModule,
+        MatButtonModule,
+        MatIconModule,
+        NoConflictStyleCompatibilityMode,
         ListGroupModule,
     ],
     exports: [

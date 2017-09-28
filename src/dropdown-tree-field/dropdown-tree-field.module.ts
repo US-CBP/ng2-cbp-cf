@@ -1,10 +1,11 @@
-﻿import { CommonModule }                 from '@angular/common';
+﻿import { OverlayModule }                from '@angular/cdk/overlay';
+import { CommonModule }                 from '@angular/common';
 import { NgModule }                     from '@angular/core';
 import { FormsModule }                  from '@angular/forms';
 import {
-    MdProgressSpinnerModule,
-    MdRippleModule,
-    OverlayModule,
+    MatProgressSpinnerModule,
+    MatRippleModule,
+    NoConflictStyleCompatibilityMode,
 }                                       from '@angular/material';
 
 import { DropdownTreeFieldComponent }   from './dropdown-tree-field.component';
@@ -15,8 +16,9 @@ import { VIEWPORT_RULER_PROVIDER }      from './viewport-ruler';
     imports: [
         CommonModule,
         FormsModule,
-        MdProgressSpinnerModule,
-        MdRippleModule,
+        MatProgressSpinnerModule,
+        MatRippleModule,
+        NoConflictStyleCompatibilityMode,
         OverlayModule,
     ],
     exports: [

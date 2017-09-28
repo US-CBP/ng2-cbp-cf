@@ -8,7 +8,7 @@
                 <span *ngIf="item.type == null" [innerHTML]="item.html"></span>
                 <a *ngIf="item.type === 'href'" [href]="item.url" (click)="routeClicked()"><span [innerHTML]="item.html"></span></a>
                 <a *ngIf="item.type === 'route'" [routerLink]="item.url" (click)="routeClicked()" routerLinkActive="selected"><span [innerHTML]="item.html"></span></a>
-                <md-icon *ngIf="item.menu != null">{{getIcon(item.name)}}</md-icon>
+                <mat-icon *ngIf="item.menu != null">{{getIcon(item.name)}}</mat-icon>
             </dt>
             <div [class.hide-sub-menu]="isHidden(item.name)">
                 <dd *ngFor="let subitem of item.menu;">

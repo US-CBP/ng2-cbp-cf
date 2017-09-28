@@ -3,10 +3,11 @@ import { NgModule }                 from '@angular/core';
 import { FlexLayoutModule }         from '@angular/flex-layout';
 import { FormsModule }              from '@angular/forms';
 import {
-    MdButtonModule,
-    MdIconModule,
-    MdInputModule,
-    MdMenuModule,
+    MatButtonModule,
+    MatIconModule,
+    MatInputModule,
+    MatMenuModule,
+    NoConflictStyleCompatibilityMode,
 }                                   from '@angular/material';
 import { RouterModule }             from '@angular/router';
 
@@ -22,10 +23,11 @@ import { HeaderSubmenuComponent }   from './header-submenu';
         FlexLayoutModule,
         FormsModule,
         RouterModule,
-        MdButtonModule,
-        MdIconModule,
-        MdInputModule,
-        MdMenuModule,
+        MatButtonModule,
+        MatIconModule,
+        MatInputModule,
+        MatMenuModule,
+        NoConflictStyleCompatibilityMode,
     ],
     exports: [
         CbpHeaderComponent,

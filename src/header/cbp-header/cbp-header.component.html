@@ -15,8 +15,8 @@
     </div>
 
     <div class="feedback" *ngIf="!isCondensed && disableFeedback !== true" fxFlex="0 0 auto">
-        <button type="button" md-button (click)="feedbackClicked.emit()">
-            <md-icon>feedback</md-icon>
+        <button type="button" mat-button (click)="feedbackClicked.emit()">
+            <mat-icon>feedback</mat-icon>
             <span>Feedback</span>
         </button>
     </div>
@@ -26,8 +26,8 @@
     </div>
 
     <div class="expand-when-condensed" *ngIf="isCondensed" fxFlex="0 0 auto">
-        <button type="button" md-icon-button [mdMenuTriggerFor]="expansion">
-            <md-icon>menu</md-icon>
+        <button type="button" mat-icon-button [matMenuTriggerFor]="expansion">
+            <mat-icon>menu</mat-icon>
             <span class="sr-only">Toggle Global Navigation</span>
         </button>
     </div>
@@ -41,15 +41,15 @@
     <ng-content select="cf-header-menu-group[cf-user-menu]"></ng-content>
 </ng-template>
 
-<md-menu #expansion="mdMenu" [overlapTrigger]="false">
+<mat-menu #expansion="matMenu" [overlapTrigger]="false">
     <ng-template [ngIf]="isCondensed">
         <ng-template [ngTemplateOutlet]="cbpMenu">
         </ng-template>
-        <button type="button" md-menu-item *ngIf="disableFeedback !== true" (click)="feedbackClicked.emit()">
-            <md-icon>feedback</md-icon>
+        <button type="button" mat-menu-item *ngIf="disableFeedback !== true" (click)="feedbackClicked.emit()">
+            <mat-icon>feedback</mat-icon>
             <span>Feedback</span>
         </button>
         <ng-template [ngTemplateOutlet]="userMenu">
         </ng-template>
     </ng-template>
-</md-menu>
+</mat-menu>

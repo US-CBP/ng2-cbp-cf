@@ -1,24 +1,24 @@
 ﻿<div id="{{id}}-pay-period-calendar" class="pay-period-calendar">
     <div class="pay-period-calendar-nav">
         <div class="prev-month">
-            <button type="button" md-icon-button [disabled]="isFirstMonthShown()" (click)="showPreviousMonth()">
-                <md-icon>navigate_before</md-icon>
+            <button type="button" mat-icon-button [disabled]="isFirstMonthShown()" (click)="showPreviousMonth()">
+                <mat-icon>navigate_before</mat-icon>
                 <span class="sr-only">Previous Month</span>
             </button>
         </div><!--
         --><div class="quick-select year">
-            <md-select id="{{id}}-pay-period-year" aria-label="Year" [(ngModel)]="shownYear">
-                <md-option *ngFor="let year of years" [value]="year">{{year}}</md-option>
-            </md-select>
+            <mat-select id="{{id}}-pay-period-year" aria-label="Year" [(ngModel)]="shownYear">
+                <mat-option *ngFor="let year of years" [value]="year">{{year}}</mat-option>
+            </mat-select>
         </div><!--
         --><div class="quick-select month">
-            <md-select id="{{id}}-pay-period-month" aria-label="Month" [(ngModel)]="shownMonth">
-                <md-option *ngFor="let month of monthsOfYear" [value]="month">{{month.name}}</md-option>
-            </md-select>
+            <mat-select id="{{id}}-pay-period-month" aria-label="Month" [(ngModel)]="shownMonth">
+                <mat-option *ngFor="let month of monthsOfYear" [value]="month">{{month.name}}</mat-option>
+            </mat-select>
         </div><!--
         --><div class="next-month">
-            <button type="button" md-icon-button [disabled]="isLastMonthShown()" (click)="showNextMonth()">
-                <md-icon>navigate_next</md-icon>
+            <button type="button" mat-icon-button [disabled]="isLastMonthShown()" (click)="showNextMonth()">
+                <mat-icon>navigate_next</mat-icon>
                 <span class="sr-only">Next Month</span>
             </button>
         </div>
@@ -50,7 +50,7 @@
                     (click)="selectPayPeriod(pp)">
 
                     <th scope="row" class="pp" rowspan="2">
-                        <button type="button" md-raised-button color="primary" [disabled]="!pp.isSelectable" (click)="selectPayPeriod(pp); $event.stopPropagation();">{{pp.number}}</button>
+                        <button type="button" mat-raised-button color="primary" [disabled]="!pp.isSelectable" (click)="selectPayPeriod(pp); $event.stopPropagation();">{{pp.number}}</button>
                         <span class="selected-text" *ngIf="isSelected(pp)">(selected)</span>
                     </th>
                     <td class="day sunday">{{dayOfMonth(pp, 1, 0)}}</td>

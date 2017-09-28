@@ -1,7 +1,7 @@
-﻿<a *ngIf="type === 'href'" md-menu-item [href]="url">
+﻿<a *ngIf="type === 'href'" mat-menu-item [href]="url">
     <ng-template [ngTemplateOutlet]="content"></ng-template>
 </a>
-<a *ngIf="type === 'route'" md-menu-item [routerLink]="url">
+<a *ngIf="type === 'route'" mat-menu-item [routerLink]="url">
     <ng-template [ngTemplateOutlet]="content"></ng-template>
 </a>
 

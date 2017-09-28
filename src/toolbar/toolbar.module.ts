@@ -2,14 +2,13 @@
 import { CommonModule }                     from '@angular/common';
 import { NgModule }                         from '@angular/core';
 import {
-    MdButtonModule,
-    MdIconModule,
-    MdToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    MatToolbarModule,
 }                                           from '@angular/material';
 import { RouterModule }                     from '@angular/router';
 
-import { BadgeModule }                      from '../../badge';
-
+import { BadgeModule }                      from '../badge';
 import { LeftActionComponent }              from './left-action.component';
 import { SideNavComponent }                 from './side-nav.component';
 import { ToolbarComponent }                 from './toolbar.component';
@@ -18,9 +17,9 @@ import { toolbarServiceProvider }           from './toolbar.service';
 @NgModule({
     imports: [
         CommonModule,
-        MdButtonModule,
-        MdIconModule,
-        MdToolbarModule,
+        MatButtonModule,
+        MatIconModule,
+        MatToolbarModule,
         PortalModule,
         RouterModule,
         BadgeModule,
