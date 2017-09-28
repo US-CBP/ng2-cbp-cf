@@ -164,9 +164,6 @@ export class DropdownTreeFieldComponent implements OnInit, ControlValueAccessor 
     private _visibleNodes: TreeNode[];
     private _selectedNode: TreeNode;
 
-    private _onChange: (value: TreeNode) => void = () => { };
-    private _onTouched: () => void = () => { };
-
     /* tslint:disable:no-attribute-parameter-decorator */
     constructor(
         private _element: ElementRef,
@@ -500,6 +497,9 @@ export class DropdownTreeFieldComponent implements OnInit, ControlValueAccessor 
         this._emitSelectedNode(node);
         this.close();
     }
+
+    private _onChange: (value: TreeNode) => void = () => { };
+    private _onTouched: () => void = () => { };
 
     private _isRtl(): boolean {
         return this._dir ? this._dir.value === 'rtl' : false;

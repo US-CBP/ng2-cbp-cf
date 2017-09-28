@@ -8,6 +8,7 @@
             true,
             "ban-single-arg-parens"
         ],
+        "import-spacing": false,
         "interface-name": [ true, "never-prefix" ],
         "max-classes-per-file": [ false ],
         "max-line-length": [
@@ -17,9 +18,19 @@
         "member-access": false,
         "member-ordering": [
             true,
-            "static-before-instance",
-            "variables-before-functions"
+            {
+                "order": [
+                    "static-field",
+                    "static-method",
+                    "instance-field",
+                    "constructor",
+                    "public-instance-method",
+                    "protected-instance-method",
+                    "private-instance-method"
+                ]
+            }
         ],
+        "no-angle-bracket-type-assertion": false,
         "no-duplicate-variable": true,
         "no-empty": false,
         "no-inferrable-types": [ false ],
@@ -33,6 +44,7 @@
                 "named-imports-order": "lowercase-last"
             }
         ],
+        "prefer-const": false,
         "quotemark": [
             true,
             "single"
@@ -68,7 +80,6 @@
         "directive-selector": [ true, "attribute", "cf", "camelCase" ],
         "import-destructuring-spacing": true,
         "invoke-injectable": true,
-        "no-access-missing-member": true,
         "no-attribute-parameter-decorator": true,
         "no-forward-ref": true,
         "no-input-rename": true,

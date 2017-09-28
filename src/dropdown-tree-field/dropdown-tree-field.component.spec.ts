@@ -44,7 +44,7 @@ describe('DropdownTreeFieldComponent', () => {
             ],
             providers: [
                 { provide: OverlayContainer, useFactory: () => overlayContainerFactory() },
-                { provide: Dir, useFactory: () => { return dir = { value: 'ltr' }; } },
+                { provide: Dir, useFactory: () => dir = { value: 'ltr' } },
                 { provide: ViewportRuler, useClass: FakeViewportRuler },
                 { provide: MATERIAL_SANITY_CHECKS, useValue: false },
             ],

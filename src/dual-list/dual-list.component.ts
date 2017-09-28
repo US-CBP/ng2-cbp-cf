@@ -54,18 +54,10 @@ export class DualListComponent implements ControlValueAccessor {
 
     private _source: any[] = [];
     private _selected: any[] = [];
-    private _controlValueAccessorChangeFn: (value: any) => void = () => {};
-
-    onTouched: () => any = () => {};
 
     constructor() {}
 
-    private _sortMyList(list: any[]): any[] {
-        if(this.sort && this.attrToSort && this.attrToSort.length > 0) {
-            list = _.orderBy(list, this.attrToSort);
-        }
-        return list;
-    }
+    onTouched: () => any = () => { };
 
     @Input()
     get source(): any[] {
@@ -123,26 +115,6 @@ export class DualListComponent implements ControlValueAccessor {
         event.preventDefault();
         this.dragLeave();
         this.dragEnd();
-    }
-
-    private _moveItem(from: BasicList, to: BasicList): void {
-        to.list.push(...from.pick);
-        // Remove the item from the source list
-        _.remove(from.list, item => _.indexOf(from.pick, item) >= 0);
-        from.pick.splice(0, from.pick.length);
-        from.pick = [];
-        from.list = this._sortMyList(from.list);
-        to.list = this._sortMyList(to.list);
-        this._emitChangeEvent();
-    }
-
-    private _emitChangeEvent(): void {
-        let event = new DualListChange();
-        event.source = this;
-        event.items = _.cloneDeep(this.selectedL.list);
-
-        this._controlValueAccessorChangeFn(this.selectedL.list);
-        this.change.emit(event);
     }
 
     selectItem(event: MouseEvent, item: any): void {
@@ -207,16 +179,6 @@ export class DualListComponent implements ControlValueAccessor {
         this._dragToggle(event, item, this.selectedL);
     }
 
-    private _dragToggle(event: DragEvent, item: any, objList: BasicList): void {
-        if(_.findIndex(objList.pick, item) === -1) {
-            this._toggleItem(null, item, objList);
-        }
-        objList.dragStart = true;
-        let sourceID = _.findIndex(this.source, item);
-        let uniqueId: string =  this.id + '_' + sourceID.toString();
-        event.dataTransfer.setData('text', uniqueId);
-    }
-
     dragEnd(): boolean {
         this.availableL.dragStart = false;
         this.selectedL.dragStart = false;
@@ -239,13 +201,6 @@ export class DualListComponent implements ControlValueAccessor {
         this._moveAll(this.selectedL, this.availableL);
     }
 
-    private _moveAll(fromList: BasicList, toList: BasicList): void {
-        fromList.pick.splice(0, fromList.pick.length);
-        fromList.list = _.cloneDeep(this.source);
-        fromList.pick = fromList.list;
-        this._moveItem(fromList, toList);
-    }
-
     writeValue(selectedValues: any): void {
         this.selected = selectedValues;
     }
@@ -256,5 +211,51 @@ export class DualListComponent implements ControlValueAccessor {
 
     registerOnTouched(fn: any): void {
         this.onTouched = fn;
+    }
+
+    private _controlValueAccessorChangeFn: (value: any) => void = () => { };
+
+    private _sortMyList(list: any[]): any[] {
+        if(this.sort && this.attrToSort && this.attrToSort.length > 0) {
+            list = _.orderBy(list, this.attrToSort);
+        }
+        return list;
+    }
+
+    private _moveItem(from: BasicList, to: BasicList): void {
+        to.list.push(...from.pick);
+        // Remove the item from the source list
+        _.remove(from.list, item => _.indexOf(from.pick, item) >= 0);
+        from.pick.splice(0, from.pick.length);
+        from.pick = [];
+        from.list = this._sortMyList(from.list);
+        to.list = this._sortMyList(to.list);
+        this._emitChangeEvent();
+    }
+
+    private _emitChangeEvent(): void {
+        let event = new DualListChange();
+        event.source = this;
+        event.items = _.cloneDeep(this.selectedL.list);
+
+        this._controlValueAccessorChangeFn(this.selectedL.list);
+        this.change.emit(event);
+    }
+
+    private _dragToggle(event: DragEvent, item: any, objList: BasicList): void {
+        if(_.findIndex(objList.pick, item) === -1) {
+            this._toggleItem(null, item, objList);
+        }
+        objList.dragStart = true;
+        let sourceID = _.findIndex(this.source, item);
+        let uniqueId: string = this.id + '_' + sourceID.toString();
+        event.dataTransfer.setData('text', uniqueId);
+    }
+
+    private _moveAll(fromList: BasicList, toList: BasicList): void {
+        fromList.pick.splice(0, fromList.pick.length);
+        fromList.list = _.cloneDeep(this.source);
+        fromList.pick = fromList.list;
+        this._moveItem(fromList, toList);
     }
 }

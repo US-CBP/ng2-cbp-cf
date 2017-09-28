@@ -75,13 +75,13 @@
         "selector-attribute-operator-space-before": "never",
         "selector-combinator-space-after": "always",
         "selector-combinator-space-before": "always",
+        "selector-max-id": 0,
         "selector-pseudo-class-case": "lower",
         "selector-pseudo-class-parentheses-space-inside": "never",
         "selector-pseudo-element-case": "lower",
         "selector-pseudo-element-colon-notation": "double",
         "selector-pseudo-element-no-unknown": true,
         "selector-type-case": "lower",
-        "selector-no-id": true,
 
         "selector-list-comma-newline-after": "always",
 

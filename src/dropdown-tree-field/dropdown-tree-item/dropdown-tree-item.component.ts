@@ -98,25 +98,6 @@ export class DropdownTreeItemComponent implements OnInit {
         }
     }
 
-    private _processExpansion(): void {
-        if(this.node && this.expandedNodes) {
-            this.isExpanded = this.hasChildren ? this.expandedNodes.has(this.node) : undefined;
-            this.showChildren = this.hasChildren && this.isExpanded;
-        }
-    }
-
-    private _processHighlightedNode(): void {
-        this.isHighlighted = this.highlightedNode === this.node;
-
-        if(this.isHighlighted) {
-            this._renderer.invokeElementMethod(this.textElement.nativeElement, 'focus');
-        }
-    }
-
-    private _processSelectedNode(): void {
-        this.isSelected = this.selectedNode === this.node;
-    }
-
     onExpanderClick(): void {
         if(this.hasChildren) {
             if(this.isExpanded) {
@@ -149,5 +130,24 @@ export class DropdownTreeItemComponent implements OnInit {
 
     onChildNodeSelected(childNode: TreeNode): void {
         this.nodeSelected.emit(childNode);
+    }
+
+    private _processExpansion(): void {
+        if(this.node && this.expandedNodes) {
+            this.isExpanded = this.hasChildren ? this.expandedNodes.has(this.node) : undefined;
+            this.showChildren = this.hasChildren && this.isExpanded;
+        }
+    }
+
+    private _processHighlightedNode(): void {
+        this.isHighlighted = this.highlightedNode === this.node;
+
+        if(this.isHighlighted) {
+            this._renderer.invokeElementMethod(this.textElement.nativeElement, 'focus');
+        }
+    }
+
+    private _processSelectedNode(): void {
+        this.isSelected = this.selectedNode === this.node;
     }
 }

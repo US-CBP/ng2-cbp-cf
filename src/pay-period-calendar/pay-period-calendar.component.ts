@@ -42,6 +42,84 @@ export class PayPeriodCalendarComponent implements OnInit {
         this._initialized = true;
     }
 
+    @Input()
+    get months(): PayPeriodMonth[] {
+        return this._months;
+    }
+    set months(newValue: PayPeriodMonth[]) {
+        if(this._months !== newValue) {
+            this._months = newValue;
+
+            if(this._initialized) {
+                this._initialize();
+            }
+        }
+    }
+
+    get shownYear(): number {
+        return this._shownYear;
+    }
+    set shownYear(value: number) {
+        if(this._shownYear !== value) {
+            this._shownYear = value;
+            this.monthsOfYear = this._monthsByYear.get(value);
+            this.shownMonth = this.monthsOfYear[0];
+        }
+    }
+
+    get shownMonth(): PayPeriodMonth {
+        return this._shownMonth;
+    }
+    set shownMonth(value: PayPeriodMonth) {
+        if(this._shownMonth !== value) {
+            this._shownMonth = value;
+            this.shownYear = value.year;
+            this._emitMonthSelected();
+        }
+    }
+
+    showPreviousMonth(): void {
+        let previousMonth = this.previousMonths.get(this._shownMonth);
+        if(previousMonth != null) {
+            this.shownYear = previousMonth.year;
+            this.shownMonth = previousMonth;
+        }
+    }
+
+    showNextMonth(): void {
+        let nextMonth = this.nextMonths.get(this._shownMonth);
+        if(nextMonth != null) {
+            this.shownYear = nextMonth.year;
+            this.shownMonth = nextMonth;
+        }
+    }
+
+    isFirstMonthShown(): boolean {
+        return this.previousMonths.get(this._shownMonth) == null;
+    }
+
+    isLastMonthShown(): boolean {
+        return this.nextMonths.get(this._shownMonth) == null;
+    }
+
+    payPeriodTrackBy(_index: number, pp: PayPeriod): number {
+        return pp.id;
+    }
+
+    isSelected(pp: PayPeriod): boolean {
+        return this.selectedPayPeriod != null && this.selectedPayPeriod.id === pp.id;
+    }
+
+    selectPayPeriod(pp: PayPeriod): void {
+        if(pp.isSelectable) {
+            this.payPeriodSelected.emit(pp);
+        }
+    }
+
+    dayOfMonth(pp: PayPeriod, week: number, dayOfWeek: number): number {
+        return moment(pp.startDate).add(week - 1, 'weeks').add(dayOfWeek, 'days').date();
+    }
+
     private _initialize(): void {
         this._initializeMonths();
         this._initializeYears();
@@ -124,83 +202,5 @@ export class PayPeriodCalendarComponent implements OnInit {
 
     private _findFirstAvailableMonth(year: number): PayPeriodMonth {
         return this._monthsByYear.get(year)[0];
-    }
-
-    @Input()
-    get months(): PayPeriodMonth[] {
-        return this._months;
-    }
-    set months(newValue: PayPeriodMonth[]) {
-        if(this._months !== newValue) {
-            this._months = newValue;
-
-            if(this._initialized) {
-                this._initialize();
-            }
-        }
-    }
-
-    get shownYear(): number {
-        return this._shownYear;
-    }
-    set shownYear(value: number) {
-        if(this._shownYear !== value) {
-            this._shownYear = value;
-            this.monthsOfYear = this._monthsByYear.get(value);
-            this.shownMonth = this.monthsOfYear[0];
-        }
-    }
-
-    get shownMonth(): PayPeriodMonth {
-        return this._shownMonth;
-    }
-    set shownMonth(value: PayPeriodMonth) {
-        if(this._shownMonth !== value) {
-            this._shownMonth = value;
-            this.shownYear = value.year;
-            this._emitMonthSelected();
-        }
-    }
-
-    showPreviousMonth(): void {
-        let previousMonth = this.previousMonths.get(this._shownMonth);
-        if(previousMonth != null) {
-            this.shownYear = previousMonth.year;
-            this.shownMonth = previousMonth;
-        }
-    }
-
-    showNextMonth(): void {
-        let nextMonth = this.nextMonths.get(this._shownMonth);
-        if(nextMonth != null) {
-            this.shownYear = nextMonth.year;
-            this.shownMonth = nextMonth;
-        }
-    }
-
-    isFirstMonthShown(): boolean {
-        return this.previousMonths.get(this._shownMonth) == null;
-    }
-
-    isLastMonthShown(): boolean {
-        return this.nextMonths.get(this._shownMonth) == null;
-    }
-
-    payPeriodTrackBy(_index: number, pp: PayPeriod): number {
-        return pp.id;
-    }
-
-    isSelected(pp: PayPeriod): boolean {
-        return this.selectedPayPeriod != null && this.selectedPayPeriod.id === pp.id;
-    }
-
-    selectPayPeriod(pp: PayPeriod): void {
-        if(pp.isSelectable) {
-            this.payPeriodSelected.emit(pp);
-        }
-    }
-
-    dayOfMonth(pp: PayPeriod, week: number, dayOfWeek: number): number {
-        return moment(pp.startDate).add(week - 1, 'weeks').add(dayOfWeek, 'days').date();
     }
 }

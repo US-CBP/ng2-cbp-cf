@@ -11,7 +11,7 @@
  *   <component myField="">
  * @deprecated
  */
-function booleanFieldValueFactory(): Function {
+function booleanFieldValueFactory(): (target: any, key: string) => void {
     /* tslint:disable:only-arrow-functions */
     return function booleanFieldValueMetadata(target: any, key: string): void {
         const defaultValue = target[key];

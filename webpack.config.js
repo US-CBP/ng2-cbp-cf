@@ -180,7 +180,7 @@ if(ENV_PRODUCTION) {
                 warnings: false
             },
             mangle: {
-                screw_ie8: true  // eslint-disable-line camelcase
+                screw_ie8: true // eslint-disable-line camelcase
             }
         })
     );
