@@ -347,7 +347,7 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            let nodesInPath = [
+            const nodesInPath = [
                 component.nodes[0],
                 component.nodes[0].children[1],
                 component.nodes[0].children[1].children[0],
@@ -366,7 +366,7 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            let nodesInPath = [
+            const nodesInPath = [
                 component.nodes[0],
                 component.nodes[0].children[1],
                 component.nodes[0].children[1].children[0],
@@ -451,7 +451,7 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            let nodesInPath = [
+            const nodesInPath = [
                 component.nodes[0],
                 component.nodes[0].children[0],
             ];
@@ -560,7 +560,7 @@ describe('DropdownTreeFieldComponent', () => {
         }));
 
         it('and highlights value when visible', fakeAsync(() => {
-            let selectedNode = component.nodes[0].children[2].children[1];
+            const selectedNode = component.nodes[0].children[2].children[1];
             component.selectedNode = selectedNode;
 
             fixture.detectChanges();
@@ -581,7 +581,7 @@ describe('DropdownTreeFieldComponent', () => {
         }));
 
         it('and highlights first node when value is not visible and defaultNode does not exist', fakeAsync(() => {
-            let selectedNode = component.nodes[0].children[2].children[1];
+            const selectedNode = component.nodes[0].children[2].children[1];
             component.selectedNode = selectedNode;
             component.defaultLabel = null;
 
@@ -601,7 +601,7 @@ describe('DropdownTreeFieldComponent', () => {
         }));
 
         it('and highlights defaultNode when value is not visible and defaultNode exists', fakeAsync(() => {
-            let selectedNode = component.nodes[0].children[2].children[1];
+            const selectedNode = component.nodes[0].children[2].children[1];
             component.selectedNode = selectedNode;
             component.defaultLabel = 'Any';
 
@@ -621,7 +621,7 @@ describe('DropdownTreeFieldComponent', () => {
         }));
 
         it('when Alt+ArrowDown pressed', fakeAsync(() => {
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 altKey: true,
                 key: 'ArrowDown',
             });
@@ -634,7 +634,7 @@ describe('DropdownTreeFieldComponent', () => {
         }));
 
         it('when Enter pressed', fakeAsync(() => {
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 key: 'Enter',
             });
             host.triggerEventHandler('keydown', event);
@@ -646,7 +646,7 @@ describe('DropdownTreeFieldComponent', () => {
         }));
 
         it('when Space pressed', fakeAsync(() => {
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 key: ' ',
             });
             host.triggerEventHandler('keydown', event);
@@ -714,7 +714,7 @@ describe('DropdownTreeFieldComponent', () => {
         }));
 
         it('when Alt+ArrowUp pressed', fakeAsync(() => {
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 altKey: true,
                 key: 'ArrowUp',
             });
@@ -728,7 +728,7 @@ describe('DropdownTreeFieldComponent', () => {
         }));
 
         it('when Escape pressed', fakeAsync(() => {
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 key: 'Escape',
             });
             panel.dispatchEvent(event);
@@ -741,7 +741,7 @@ describe('DropdownTreeFieldComponent', () => {
         }));
 
         it('when Tab pressed', fakeAsync(() => {
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 key: 'Tab',
             });
             panel.dispatchEvent(event);
@@ -754,7 +754,7 @@ describe('DropdownTreeFieldComponent', () => {
         }));
 
         it('when Space pressed', fakeAsync(() => {
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 key: ' ',
             });
             panel.dispatchEvent(event);
@@ -767,7 +767,7 @@ describe('DropdownTreeFieldComponent', () => {
         }));
 
         it('when Ctrl+Space pressed', fakeAsync(() => {
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 ctrlKey: true,
                 key: ' ',
             });
@@ -781,7 +781,7 @@ describe('DropdownTreeFieldComponent', () => {
         }));
 
         it('when Enter pressed', fakeAsync(() => {
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 key: 'Enter',
             });
             panel.dispatchEvent(event);
@@ -822,7 +822,7 @@ describe('DropdownTreeFieldComponent', () => {
             component.dropdownTree.highlightedNode = component.nodes[1];
             component.selectedNode = component.nodes[2];
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 key: 'ArrowUp',
             });
             panel.dispatchEvent(event);
@@ -837,7 +837,7 @@ describe('DropdownTreeFieldComponent', () => {
             component.dropdownTree.highlightedNode = component.nodes[1];
             component.selectedNode = component.nodes[2];
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 key: 'ArrowUp',
             });
             panel.dispatchEvent(event);
@@ -852,7 +852,7 @@ describe('DropdownTreeFieldComponent', () => {
             component.dropdownTree.highlightedNode = component.dropdownTree.defaultNode;
             component.selectedNode = component.nodes[2];
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 key: 'ArrowUp',
             });
             panel.dispatchEvent(event);
@@ -867,7 +867,7 @@ describe('DropdownTreeFieldComponent', () => {
             component.dropdownTree.highlightedNode = component.dropdownTree.defaultNode;
             component.selectedNode = component.nodes[2];
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 key: 'ArrowUp',
             });
             panel.dispatchEvent(event);
@@ -882,7 +882,7 @@ describe('DropdownTreeFieldComponent', () => {
             component.dropdownTree.highlightedNode = component.nodes[1];
             component.selectedNode = component.nodes[2];
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 ctrlKey: true,
                 key: 'ArrowUp',
             });
@@ -898,7 +898,7 @@ describe('DropdownTreeFieldComponent', () => {
             component.dropdownTree.highlightedNode = component.nodes[1];
             component.selectedNode = component.nodes[2];
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 ctrlKey: true,
                 key: 'ArrowUp',
             });
@@ -914,7 +914,7 @@ describe('DropdownTreeFieldComponent', () => {
             component.dropdownTree.highlightedNode = component.dropdownTree.defaultNode;
             component.selectedNode = component.nodes[2];
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 ctrlKey: true,
                 key: 'ArrowUp',
             });
@@ -930,7 +930,7 @@ describe('DropdownTreeFieldComponent', () => {
             component.dropdownTree.highlightedNode = component.dropdownTree.defaultNode;
             component.selectedNode = component.nodes[2];
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 ctrlKey: true,
                 key: 'ArrowUp',
             });
@@ -946,7 +946,7 @@ describe('DropdownTreeFieldComponent', () => {
             component.dropdownTree.highlightedNode = component.nodes[1];
             component.selectedNode = component.nodes[0];
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 key: 'ArrowDown',
             });
             panel.dispatchEvent(event);
@@ -961,7 +961,7 @@ describe('DropdownTreeFieldComponent', () => {
             component.dropdownTree.highlightedNode = component.nodes[1];
             component.selectedNode = component.nodes[0];
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 key: 'ArrowDown',
             });
             panel.dispatchEvent(event);
@@ -976,7 +976,7 @@ describe('DropdownTreeFieldComponent', () => {
             component.dropdownTree.highlightedNode = component.nodes[2];
             component.selectedNode = component.nodes[0];
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 key: 'ArrowDown',
             });
             panel.dispatchEvent(event);
@@ -991,7 +991,7 @@ describe('DropdownTreeFieldComponent', () => {
             component.dropdownTree.highlightedNode = component.nodes[2];
             component.selectedNode = component.nodes[0];
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 key: 'ArrowDown',
             });
             panel.dispatchEvent(event);
@@ -1006,7 +1006,7 @@ describe('DropdownTreeFieldComponent', () => {
             component.dropdownTree.highlightedNode = component.nodes[1];
             component.selectedNode = component.nodes[0];
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 ctrlKey: true,
                 key: 'ArrowDown',
             });
@@ -1022,7 +1022,7 @@ describe('DropdownTreeFieldComponent', () => {
             component.dropdownTree.highlightedNode = component.nodes[1];
             component.selectedNode = component.nodes[0];
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 ctrlKey: true,
                 key: 'ArrowDown',
             });
@@ -1038,7 +1038,7 @@ describe('DropdownTreeFieldComponent', () => {
             component.dropdownTree.highlightedNode = component.nodes[2];
             component.selectedNode = component.nodes[0];
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 ctrlKey: true,
                 key: 'ArrowDown',
             });
@@ -1054,7 +1054,7 @@ describe('DropdownTreeFieldComponent', () => {
             component.dropdownTree.highlightedNode = component.nodes[2];
             component.selectedNode = component.nodes[0];
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 ctrlKey: true,
                 key: 'ArrowDown',
             });
@@ -1078,7 +1078,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.nodes[0].children[1],
             ]);
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 key: 'ArrowLeft',
             });
             panel.dispatchEvent(event);
@@ -1101,7 +1101,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.nodes[0].children[1],
             ]);
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 key: 'ArrowLeft',
             });
             panel.dispatchEvent(event);
@@ -1124,7 +1124,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.nodes[0].children[1],
             ]);
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 key: 'ArrowLeft',
             });
             panel.dispatchEvent(event);
@@ -1146,7 +1146,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.nodes[0],
             ]);
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 key: 'ArrowLeft',
             });
             panel.dispatchEvent(event);
@@ -1168,7 +1168,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.nodes[0],
             ]);
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 key: 'ArrowLeft',
             });
             panel.dispatchEvent(event);
@@ -1188,7 +1188,7 @@ describe('DropdownTreeFieldComponent', () => {
 
             component.dropdownTree.expandedNodes = new Set<TreeNode>();
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 key: 'ArrowLeft',
             });
             panel.dispatchEvent(event);
@@ -1208,7 +1208,7 @@ describe('DropdownTreeFieldComponent', () => {
 
             component.dropdownTree.expandedNodes = new Set<TreeNode>();
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 key: 'ArrowLeft',
             });
             panel.dispatchEvent(event);
@@ -1228,7 +1228,7 @@ describe('DropdownTreeFieldComponent', () => {
 
             component.dropdownTree.expandedNodes = new Set<TreeNode>();
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 key: 'ArrowRight',
             });
             panel.dispatchEvent(event);
@@ -1248,7 +1248,7 @@ describe('DropdownTreeFieldComponent', () => {
 
             component.dropdownTree.expandedNodes = new Set<TreeNode>();
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 key: 'ArrowRight',
             });
             panel.dispatchEvent(event);
@@ -1268,7 +1268,7 @@ describe('DropdownTreeFieldComponent', () => {
 
             component.dropdownTree.expandedNodes = new Set<TreeNode>();
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 key: 'ArrowRight',
             });
             panel.dispatchEvent(event);
@@ -1290,7 +1290,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.nodes[0],
             ]);
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 key: 'ArrowRight',
             });
             panel.dispatchEvent(event);
@@ -1312,7 +1312,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.nodes[0],
             ]);
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 key: 'ArrowRight',
             });
             panel.dispatchEvent(event);
@@ -1334,7 +1334,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.nodes[0],
             ]);
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 key: 'ArrowRight',
             });
             panel.dispatchEvent(event);
@@ -1356,7 +1356,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.nodes[0],
             ]);
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 key: 'ArrowRight',
             });
             panel.dispatchEvent(event);
@@ -1378,7 +1378,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.nodes[0],
             ]);
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 key: 'Home',
             });
             panel.dispatchEvent(event);
@@ -1400,7 +1400,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.nodes[0],
             ]);
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 key: 'Home',
             });
             panel.dispatchEvent(event);
@@ -1422,7 +1422,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.nodes[0],
             ]);
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 ctrlKey: true,
                 key: 'Home',
             });
@@ -1445,7 +1445,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.nodes[0],
             ]);
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 ctrlKey: true,
                 key: 'Home',
             });
@@ -1468,7 +1468,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.nodes[0],
             ]);
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 key: 'End',
             });
             panel.dispatchEvent(event);
@@ -1490,7 +1490,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.nodes[0],
             ]);
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 key: 'End',
             });
             panel.dispatchEvent(event);
@@ -1512,7 +1512,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.nodes[0],
             ]);
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 ctrlKey: true,
                 key: 'End',
             });
@@ -1535,7 +1535,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.nodes[0],
             ]);
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 ctrlKey: true,
                 key: 'End',
             });
@@ -1558,7 +1558,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.nodes[0],
             ]);
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 key: ' ',
             });
             panel.dispatchEvent(event);
@@ -1581,7 +1581,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.nodes[0],
             ]);
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 ctrlKey: true,
                 key: ' ',
             });
@@ -1605,7 +1605,7 @@ describe('DropdownTreeFieldComponent', () => {
                 component.nodes[0],
             ]);
 
-            let event = new KeyboardEvent('keydown', {
+            const event = new KeyboardEvent('keydown', {
                 key: 'Enter',
             });
             panel.dispatchEvent(event);
@@ -2013,7 +2013,7 @@ class FakeViewportRuler {
 }
 
 function createNode(...children: TreeNode[]): TreeNode {
-    let id = currentId++;
+    const id = currentId++;
 
     return {
         id,

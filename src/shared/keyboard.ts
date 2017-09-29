@@ -28,7 +28,7 @@ export function isAlphaKey($event: KeyboardEvent): boolean {
         return false;
     }
 
-    let code = $event.key.charCodeAt(0);
+    const code = $event.key.charCodeAt(0);
     return (code >= keyCodeUpperA && code <= keyCodeUpperZ) || (code >= keyCodeLowerA && code <= keyCodeLowerZ);
 }
 
@@ -37,7 +37,7 @@ export function isNumberKey($event: KeyboardEvent): boolean {
         return false;
     }
 
-    let code = $event.key.charCodeAt(0);
+    const code = $event.key.charCodeAt(0);
     return code >= keyCode0 && code <= keyCode9;
 }
 

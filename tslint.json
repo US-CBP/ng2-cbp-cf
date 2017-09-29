@@ -44,7 +44,6 @@
                 "named-imports-order": "lowercase-last"
             }
         ],
-        "prefer-const": false,
         "quotemark": [
             true,
             "single"

@@ -40,8 +40,8 @@ describe('PayPeriodCalendarComponent', () => {
 
     describe('on init', () => {
         it('should set shownYear to year of the selectedPayPeriod', () => {
-            let startDate = moment().startOf('day').startOf('month').add(2, 'months');
-            let selectedPayPeriod = {
+            const startDate = moment().startOf('day').startOf('month').add(2, 'months');
+            const selectedPayPeriod = {
                 id: 22,
                 number: 22,
                 startDate: startDate.toDate(),
@@ -55,8 +55,8 @@ describe('PayPeriodCalendarComponent', () => {
         });
 
         it('should set shownMonth to month of the selectedPayPeriod', () => {
-            let startDate = moment().startOf('day').startOf('month').add(2, 'months');
-            let selectedPayPeriod = {
+            const startDate = moment().startOf('day').startOf('month').add(2, 'months');
+            const selectedPayPeriod = {
                 id: 22,
                 number: 22,
                 startDate: startDate.toDate(),
@@ -66,13 +66,13 @@ describe('PayPeriodCalendarComponent', () => {
             component.selectedPayPeriod = selectedPayPeriod;
             fixture.detectChanges();
 
-            let month = months.find(m => m.year === startDate.year() && m.number === startDate.month() + 1);
+            const month = months.find(m => m.year === startDate.year() && m.number === startDate.month() + 1);
             expect(component.shownMonth).toBe(month);
         });
 
         it('should set shownYear to earliest valid year when selectedPayPeriod is not in months', () => {
-            let startDate = moment().startOf('day').startOf('month').add(20, 'months');
-            let selectedPayPeriod = {
+            const startDate = moment().startOf('day').startOf('month').add(20, 'months');
+            const selectedPayPeriod = {
                 id: 22,
                 number: 22,
                 startDate: startDate.toDate(),
@@ -86,8 +86,8 @@ describe('PayPeriodCalendarComponent', () => {
         });
 
         it('should set shownMonth to earliest valid month when selectedPayPeriod is not in months', () => {
-            let startDate = moment().startOf('day').startOf('month').add(20, 'months');
-            let selectedPayPeriod = {
+            const startDate = moment().startOf('day').startOf('month').add(20, 'months');
+            const selectedPayPeriod = {
                 id: 22,
                 number: 22,
                 startDate: startDate.toDate(),
@@ -109,8 +109,8 @@ describe('PayPeriodCalendarComponent', () => {
         it('should set shownMonth to current month when selectedPayPeriod is null', () => {
             fixture.detectChanges();
 
-            let currentMoment = moment();
-            let month = months.find(m => m.year === currentMoment.year() && m.number === currentMoment.month() + 1);
+            const currentMoment = moment();
+            const month = months.find(m => m.year === currentMoment.year() && m.number === currentMoment.month() + 1);
             expect(component.shownMonth).toBe(month);
         });
 
@@ -135,23 +135,23 @@ describe('PayPeriodCalendarComponent', () => {
         it('should set years to distinct years in months', () => {
             fixture.detectChanges();
 
-            let currentYear = moment().year();
+            const currentYear = moment().year();
             expect(component.years).toEqual([currentYear - 1, currentYear, currentYear + 1]);
         });
 
         it('should set monthsOfYear to months in shown year', () => {
             fixture.detectChanges();
 
-            let currentYear = moment().year();
-            let monthsOfYear = months.filter(m => m.year === currentYear);
+            const currentYear = moment().year();
+            const monthsOfYear = months.filter(m => m.year === currentYear);
             expect(component.monthsOfYear).toEqual(monthsOfYear);
         });
 
         it('should raise monthSelected event with shownMonth', () => {
             fixture.detectChanges();
 
-            let currentMoment = moment();
-            let month = months.find(m => m.year === currentMoment.year() && m.number === currentMoment.month() + 1);
+            const currentMoment = moment();
+            const month = months.find(m => m.year === currentMoment.year() && m.number === currentMoment.month() + 1);
             expect(monthSelected).toHaveBeenCalledWith(month);
         });
     });
@@ -231,8 +231,8 @@ describe('PayPeriodCalendarComponent', () => {
         });
 
         it('should not change shownYear when previous month in the same year', () => {
-            let currentYear = moment().year();
-            let middleMonth = months.find(m => m.year === currentYear && m.number === 6);
+            const currentYear = moment().year();
+            const middleMonth = months.find(m => m.year === currentYear && m.number === 6);
 
             component.shownYear = currentYear;
             component.shownMonth = middleMonth;
@@ -243,21 +243,21 @@ describe('PayPeriodCalendarComponent', () => {
         });
 
         it('should change shownMonth when previous month in the same year', () => {
-            let currentYear = moment().year();
-            let middleMonth = months.find(m => m.year === currentYear && m.number === 6);
+            const currentYear = moment().year();
+            const middleMonth = months.find(m => m.year === currentYear && m.number === 6);
 
             component.shownYear = currentYear;
             component.shownMonth = middleMonth;
 
             component.showPreviousMonth();
 
-            let previousMonth = months.find(m => m.year === currentYear && m.number === 5);
+            const previousMonth = months.find(m => m.year === currentYear && m.number === 5);
             expect(component.shownMonth).toBe(previousMonth);
         });
 
         it('should change shownYear when previous month in the different year', () => {
-            let currentYear = moment().year();
-            let firstMonth = months.find(m => m.year === currentYear && m.number === 1);
+            const currentYear = moment().year();
+            const firstMonth = months.find(m => m.year === currentYear && m.number === 1);
 
             component.shownYear = currentYear;
             component.shownMonth = firstMonth;
@@ -268,21 +268,21 @@ describe('PayPeriodCalendarComponent', () => {
         });
 
         it('should change shownMonth when previous month in the same year', () => {
-            let currentYear = moment().year();
-            let firstMonth = months.find(m => m.year === currentYear && m.number === 1);
+            const currentYear = moment().year();
+            const firstMonth = months.find(m => m.year === currentYear && m.number === 1);
 
             component.shownYear = currentYear;
             component.shownMonth = firstMonth;
 
             component.showPreviousMonth();
 
-            let previousMonth = months.find(m => m.year === currentYear - 1 && m.number === 12);
+            const previousMonth = months.find(m => m.year === currentYear - 1 && m.number === 12);
             expect(component.shownMonth).toBe(previousMonth);
         });
 
         it('should raise monthSelected event', () => {
-            let currentYear = moment().year();
-            let middleMonth = months.find(m => m.year === currentYear && m.number === 6);
+            const currentYear = moment().year();
+            const middleMonth = months.find(m => m.year === currentYear && m.number === 6);
 
             component.shownYear = currentYear;
             component.shownMonth = middleMonth;
@@ -290,7 +290,7 @@ describe('PayPeriodCalendarComponent', () => {
 
             component.showPreviousMonth();
 
-            let previousMonth = months.find(m => m.year === currentYear && m.number === 5);
+            const previousMonth = months.find(m => m.year === currentYear && m.number === 5);
             expect(monthSelected).toHaveBeenCalledWith(previousMonth);
         });
     });
@@ -330,8 +330,8 @@ describe('PayPeriodCalendarComponent', () => {
         });
 
         it('should not change shownYear when next month in the same year', () => {
-            let currentYear = moment().year();
-            let middleMonth = months.find(m => m.year === currentYear && m.number === 6);
+            const currentYear = moment().year();
+            const middleMonth = months.find(m => m.year === currentYear && m.number === 6);
 
             component.shownYear = currentYear;
             component.shownMonth = middleMonth;
@@ -342,21 +342,21 @@ describe('PayPeriodCalendarComponent', () => {
         });
 
         it('should change shownMonth when next month in the same year', () => {
-            let currentYear = moment().year();
-            let middleMonth = months.find(m => m.year === currentYear && m.number === 6);
+            const currentYear = moment().year();
+            const middleMonth = months.find(m => m.year === currentYear && m.number === 6);
 
             component.shownYear = currentYear;
             component.shownMonth = middleMonth;
 
             component.showNextMonth();
 
-            let nextMonth = months.find(m => m.year === currentYear && m.number === 7);
+            const nextMonth = months.find(m => m.year === currentYear && m.number === 7);
             expect(component.shownMonth).toBe(nextMonth);
         });
 
         it('should change shownYear when next month in the different year', () => {
-            let currentYear = moment().year();
-            let lastMonth = months.find(m => m.year === currentYear && m.number === 12);
+            const currentYear = moment().year();
+            const lastMonth = months.find(m => m.year === currentYear && m.number === 12);
 
             component.shownYear = currentYear;
             component.shownMonth = lastMonth;
@@ -367,21 +367,21 @@ describe('PayPeriodCalendarComponent', () => {
         });
 
         it('should change shownMonth when next month in the same year', () => {
-            let currentYear = moment().year();
-            let firstMonth = months.find(m => m.year === currentYear && m.number === 12);
+            const currentYear = moment().year();
+            const firstMonth = months.find(m => m.year === currentYear && m.number === 12);
 
             component.shownYear = currentYear;
             component.shownMonth = firstMonth;
 
             component.showNextMonth();
 
-            let nextMonth = months.find(m => m.year === currentYear + 1 && m.number === 1);
+            const nextMonth = months.find(m => m.year === currentYear + 1 && m.number === 1);
             expect(component.shownMonth).toBe(nextMonth);
         });
 
         it('should raise monthSelected event', () => {
-            let currentYear = moment().year();
-            let middleMonth = months.find(m => m.year === currentYear && m.number === 6);
+            const currentYear = moment().year();
+            const middleMonth = months.find(m => m.year === currentYear && m.number === 6);
 
             component.shownYear = currentYear;
             component.shownMonth = middleMonth;
@@ -389,15 +389,15 @@ describe('PayPeriodCalendarComponent', () => {
 
             component.showNextMonth();
 
-            let nextMonth = months.find(m => m.year === currentYear && m.number === 7);
+            const nextMonth = months.find(m => m.year === currentYear && m.number === 7);
             expect(monthSelected).toHaveBeenCalledWith(nextMonth);
         });
     });
 
     describe('isSelected', () => {
         beforeEach(() => {
-            let startDate = moment().startOf('day').startOf('month');
-            let selectedPayPeriod = {
+            const startDate = moment().startOf('day').startOf('month');
+            const selectedPayPeriod = {
                 id: 22,
                 number: 22,
                 startDate: startDate.toDate(),
@@ -409,8 +409,8 @@ describe('PayPeriodCalendarComponent', () => {
         });
 
         it('should return false when pay periods has different id as selected pay period', () => {
-            let startDate = moment().startOf('day').startOf('month');
-            let payPeriod = {
+            const startDate = moment().startOf('day').startOf('month');
+            const payPeriod = {
                 id: 1,
                 number: 1,
                 startDate: startDate.toDate(),
@@ -421,8 +421,8 @@ describe('PayPeriodCalendarComponent', () => {
         });
 
         it('should return true when pay periods has same id as selected pay period', () => {
-            let startDate = moment().startOf('day').startOf('month');
-            let payPeriod = {
+            const startDate = moment().startOf('day').startOf('month');
+            const payPeriod = {
                 id: 22,
                 number: 22,
                 startDate: startDate.toDate(),
@@ -439,8 +439,8 @@ describe('PayPeriodCalendarComponent', () => {
         });
 
         it('should not change selectedPayPeriod directly', () => {
-            let startDate = moment().startOf('day').startOf('month');
-            let payPeriod = {
+            const startDate = moment().startOf('day').startOf('month');
+            const payPeriod = {
                 id: 1,
                 number: 1,
                 startDate: startDate.toDate(),
@@ -453,11 +453,11 @@ describe('PayPeriodCalendarComponent', () => {
         });
 
         it('should raise payPeriodSelected event', () => {
-            let subscriber = jasmine.createSpy('onPayPeriodSelected');
+            const subscriber = jasmine.createSpy('onPayPeriodSelected');
             component.payPeriodSelected.subscribe(subscriber);
 
-            let startDate = moment().startOf('day').startOf('month');
-            let payPeriod = {
+            const startDate = moment().startOf('day').startOf('month');
+            const payPeriod = {
                 id: 1,
                 number: 1,
                 startDate: startDate.toDate(),
@@ -477,8 +477,8 @@ describe('PayPeriodCalendarComponent', () => {
         });
 
         it('to same value should not change shownMonth', () => {
-            let shownYear = component.shownYear;
-            let shownMonth = component.shownMonth;
+            const shownYear = component.shownYear;
+            const shownMonth = component.shownMonth;
 
             component.shownYear = shownYear;
 
@@ -486,7 +486,7 @@ describe('PayPeriodCalendarComponent', () => {
         });
 
         it('to same value should not raise monthSelected event', () => {
-            let shownYear = component.shownYear;
+            const shownYear = component.shownYear;
 
             component.shownYear = shownYear;
 
@@ -494,8 +494,8 @@ describe('PayPeriodCalendarComponent', () => {
         });
 
         it('to new value should change shownMonth to first month of new year', () => {
-            let shownYear = component.shownYear;
-            let firstMonth = months.find(m => m.year === shownYear + 1 && m.number === 1);
+            const shownYear = component.shownYear;
+            const firstMonth = months.find(m => m.year === shownYear + 1 && m.number === 1);
 
             component.shownYear = shownYear + 1;
 
@@ -503,8 +503,8 @@ describe('PayPeriodCalendarComponent', () => {
         });
 
         it('to new value should raise monthSelected event', () => {
-            let shownYear = component.shownYear;
-            let firstMonth = months.find(m => m.year === shownYear + 1 && m.number === 1);
+            const shownYear = component.shownYear;
+            const firstMonth = months.find(m => m.year === shownYear + 1 && m.number === 1);
 
             component.shownYear = shownYear + 1;
 
@@ -512,8 +512,8 @@ describe('PayPeriodCalendarComponent', () => {
         });
 
         it('to new value should change shownMonth to first available month of new year when first month is not available', () => {
-            let shownYear = component.shownYear;
-            let firstAvailableMonth = months[0];
+            const shownYear = component.shownYear;
+            const firstAvailableMonth = months[0];
 
             component.shownYear = shownYear - 1;
 
@@ -521,8 +521,8 @@ describe('PayPeriodCalendarComponent', () => {
         });
 
         it('to new value should change monthsOfYear to months for the new year', () => {
-            let shownYear = component.shownYear;
-            let monthsOfYear = months.filter(m => m.year === shownYear - 1);
+            const shownYear = component.shownYear;
+            const monthsOfYear = months.filter(m => m.year === shownYear - 1);
 
             component.shownYear = shownYear - 1;
 
@@ -538,7 +538,7 @@ describe('PayPeriodCalendarComponent', () => {
         });
 
         it('to same value should not raise monthSelected event', () => {
-            let shownMonth = component.shownMonth;
+            const shownMonth = component.shownMonth;
 
             component.shownMonth = shownMonth;
 
@@ -585,10 +585,10 @@ describe('PayPeriodCalendarComponent', () => {
     });
 
     function createMonthsFromCurrent(startIndex: number, endIndex: number): PayPeriodMonth[] {
-        let results: any[] = [];
-        let currentMoment = moment().startOf('day').startOf('month');
+        const results: any[] = [];
+        const currentMoment = moment().startOf('day').startOf('month');
         for(let i = startIndex; i <= endIndex; i++) {
-            let m = currentMoment.clone().add(i, 'months');
+            const m = currentMoment.clone().add(i, 'months');
             results.push({ year: m.year(), number: m.month() + 1, name: m.format('MMM') });
         }
 

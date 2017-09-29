@@ -144,11 +144,11 @@ export class DualListComponent implements ControlValueAccessor {
         if(event) {
             event.stopPropagation();
         }
-        let indexList = _.findIndex(objList.list, item);
-        let indexPick = _.findIndex(objList.pick, item);
-        let lastItem = objList.pick[objList.pick.length - 1];
+        const indexList = _.findIndex(objList.list, item);
+        const indexPick = _.findIndex(objList.pick, item);
+        const lastItem = objList.pick[objList.pick.length - 1];
         if(event && event.shiftKey && !_.isEqual(item, lastItem)) {
-            let idx = _.findIndex(objList.list, lastItem);
+            const idx = _.findIndex(objList.list, lastItem);
             if(indexList > idx) {
                 for (let i = (idx + 1); i < indexList; i += 1) {
                     this._toggleItem(null, objList.list[i], objList);
@@ -234,7 +234,7 @@ export class DualListComponent implements ControlValueAccessor {
     }
 
     private _emitChangeEvent(): void {
-        let event = new DualListChange();
+        const event = new DualListChange();
         event.source = this;
         event.items = _.cloneDeep(this.selectedL.list);
 
@@ -247,8 +247,8 @@ export class DualListComponent implements ControlValueAccessor {
             this._toggleItem(null, item, objList);
         }
         objList.dragStart = true;
-        let sourceID = _.findIndex(this.source, item);
-        let uniqueId: string = this.id + '_' + sourceID.toString();
+        const sourceID = _.findIndex(this.source, item);
+        const uniqueId: string = this.id + '_' + sourceID.toString();
         event.dataTransfer.setData('text', uniqueId);
     }
 

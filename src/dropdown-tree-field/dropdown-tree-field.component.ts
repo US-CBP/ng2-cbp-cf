@@ -370,7 +370,7 @@ export class DropdownTreeFieldComponent implements OnInit, ControlValueAccessor 
         } else if(isKey(event, 'ArrowUp') ||
             isKey(event, 'Up')) {
 
-            let previousNode = this._previousVisibleNode();
+            const previousNode = this._previousVisibleNode();
             if(previousNode != null) {
                 this.highlightedNode = previousNode;
                 this._emitSelectedNode(previousNode);
@@ -378,14 +378,14 @@ export class DropdownTreeFieldComponent implements OnInit, ControlValueAccessor 
         } else if(isKey(event, 'ArrowUp', { ctrlKey: true }) ||
             isKey(event, 'Up', { ctrlKey: true })) {
 
-            let previousNode = this._previousVisibleNode();
+            const previousNode = this._previousVisibleNode();
             if(previousNode != null) {
                 this.highlightedNode = previousNode;
             }
         } else if(isKey(event, 'ArrowDown') ||
             isKey(event, 'Down')) {
 
-            let nextNode = this._nextVisibleNode();
+            const nextNode = this._nextVisibleNode();
             if(nextNode != null) {
                 this.highlightedNode = nextNode;
                 this._emitSelectedNode(nextNode);
@@ -393,7 +393,7 @@ export class DropdownTreeFieldComponent implements OnInit, ControlValueAccessor 
         } else if(isKey(event, 'ArrowDown', { ctrlKey: true }) ||
             isKey(event, 'Down', { ctrlKey: true })) {
 
-            let nextNode = this._nextVisibleNode();
+            const nextNode = this._nextVisibleNode();
             if(nextNode != null) {
                 this.highlightedNode = nextNode;
             }
@@ -403,7 +403,7 @@ export class DropdownTreeFieldComponent implements OnInit, ControlValueAccessor 
             if(this.expandedNodes.has(this.highlightedNode)) {
                 this.collapseNode(this.highlightedNode);
             } else {
-                let parentNode = this._parentMap.get(this.highlightedNode);
+                const parentNode = this._parentMap.get(this.highlightedNode);
                 if(parentNode != null) {
                     this.highlightedNode = parentNode;
                     this._emitSelectedNode(parentNode);
@@ -412,7 +412,7 @@ export class DropdownTreeFieldComponent implements OnInit, ControlValueAccessor 
         } else if(isKey(event, 'ArrowRight') ||
             isKey(event, 'Right')) {
 
-            let originalHighlightedNode = this.highlightedNode;
+            const originalHighlightedNode = this.highlightedNode;
             if(this.expandedNodes.has(originalHighlightedNode)) {
                 this.highlightedNode = originalHighlightedNode.children[0];
                 this._emitSelectedNode(originalHighlightedNode.children[0]);
@@ -466,7 +466,7 @@ export class DropdownTreeFieldComponent implements OnInit, ControlValueAccessor 
     }
 
     collapseNode(node: TreeNode): void {
-        let newExpandedNodes = new Set<TreeNode>(this.expandedNodes);
+        const newExpandedNodes = new Set<TreeNode>(this.expandedNodes);
         newExpandedNodes.delete(node);
 
         this.expandedNodes = newExpandedNodes;
@@ -474,7 +474,7 @@ export class DropdownTreeFieldComponent implements OnInit, ControlValueAccessor 
     }
 
     expandNode(node: TreeNode): void {
-        let newExpandedNodes = new Set<TreeNode>(this.expandedNodes);
+        const newExpandedNodes = new Set<TreeNode>(this.expandedNodes);
         newExpandedNodes.add(node);
 
         this.expandedNodes = newExpandedNodes;
@@ -646,12 +646,12 @@ export class DropdownTreeFieldComponent implements OnInit, ControlValueAccessor 
     }
 
     private _previousVisibleNode(): TreeNode {
-        let highlightedNodeIndex = this._visibleNodes.indexOf(this.highlightedNode);
+        const highlightedNodeIndex = this._visibleNodes.indexOf(this.highlightedNode);
         return (highlightedNodeIndex > 0) ? this._visibleNodes[highlightedNodeIndex - 1] : null;
     }
 
     private _nextVisibleNode(): TreeNode {
-        let highlightedNodeIndex = this._visibleNodes.indexOf(this.highlightedNode);
+        const highlightedNodeIndex = this._visibleNodes.indexOf(this.highlightedNode);
         return (highlightedNodeIndex < this._visibleNodes.length - 1) ? this._visibleNodes[highlightedNodeIndex + 1] : null;
     }
 
@@ -694,8 +694,8 @@ export class DropdownTreeFieldComponent implements OnInit, ControlValueAccessor 
             return '';
         }
 
-        let parent = this._parentMap.get(currentNode);
-        let selectedText = currentNode.selectedText || currentNode.text;
+        const parent = this._parentMap.get(currentNode);
+        const selectedText = currentNode.selectedText || currentNode.text;
         return parent == null ? selectedText : `${this._buildFullSelectedPathText(parent)} / ${selectedText}`;
     }
 

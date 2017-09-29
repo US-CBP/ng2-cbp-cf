@@ -79,7 +79,7 @@ export class PayPeriodCalendarComponent implements OnInit {
     }
 
     showPreviousMonth(): void {
-        let previousMonth = this.previousMonths.get(this._shownMonth);
+        const previousMonth = this.previousMonths.get(this._shownMonth);
         if(previousMonth != null) {
             this.shownYear = previousMonth.year;
             this.shownMonth = previousMonth;
@@ -87,7 +87,7 @@ export class PayPeriodCalendarComponent implements OnInit {
     }
 
     showNextMonth(): void {
-        let nextMonth = this.nextMonths.get(this._shownMonth);
+        const nextMonth = this.nextMonths.get(this._shownMonth);
         if(nextMonth != null) {
             this.shownYear = nextMonth.year;
             this.shownMonth = nextMonth;
@@ -163,8 +163,8 @@ export class PayPeriodCalendarComponent implements OnInit {
         this.previousMonths = new Map<PayPeriodMonth, PayPeriodMonth>();
 
         let previous: PayPeriodMonth = null;
-        for(let y of this.years) {
-            for(let m of this._monthsByYear.get(y)) {
+        for(const y of this.years) {
+            for(const m of this._monthsByYear.get(y)) {
                 this.previousMonths.set(m, previous);
 
                 if(previous != null) {
@@ -178,9 +178,9 @@ export class PayPeriodCalendarComponent implements OnInit {
     }
 
     private _initializeShownValues(): void {
-        let startDateMoment = this.selectedPayPeriod == null ? moment() : moment(this.selectedPayPeriod.startDate);
+        const startDateMoment = this.selectedPayPeriod == null ? moment() : moment(this.selectedPayPeriod.startDate);
         let year = startDateMoment.year();
-        let monthNumber = startDateMoment.month() + 1;
+        const monthNumber = startDateMoment.month() + 1;
         let month = null;
 
         if(this._monthsByYear.has(year)) {

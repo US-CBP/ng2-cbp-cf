@@ -41,7 +41,7 @@ export class ListGroupComponent implements AfterContentInit, OnDestroy {
     ngAfterContentInit(): void {
         if(!this.multiSelect) {
             this._menuItems.forEach(item => {
-                let sub = item.click.subscribe(event => { this.onToggleItemEvent(event); });
+                const sub = item.click.subscribe(event => { this.onToggleItemEvent(event); });
                 this._subscription.push(sub);
             });
         }
