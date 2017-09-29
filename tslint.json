@@ -30,7 +30,6 @@
                 ]
             }
         ],
-        "no-angle-bracket-type-assertion": false,
         "no-duplicate-variable": true,
         "no-empty": false,
         "no-inferrable-types": [ false ],

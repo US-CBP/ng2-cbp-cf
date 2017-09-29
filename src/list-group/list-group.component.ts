@@ -53,7 +53,7 @@ export class ListGroupComponent implements AfterContentInit, OnDestroy {
 
     onToggleItemEvent(event: Event): void {
         this._menuItems.forEach((item: ListGroupItemComponent) => {
-            if((<Element>event.target).id !== item.id) {
+            if((event.target as Element).id !== item.id) {
                 item.active = false;
             }
         });

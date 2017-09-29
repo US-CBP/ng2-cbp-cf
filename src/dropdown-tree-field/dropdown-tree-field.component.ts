@@ -510,7 +510,7 @@ export class DropdownTreeFieldComponent implements OnInit, ControlValueAccessor 
     }
 
     private _getTriggerRect(): ClientRect {
-        return (<Element>this.trigger.nativeElement).getBoundingClientRect();
+        return (this.trigger.nativeElement as Element).getBoundingClientRect();
     }
 
     private _setValueWidth(): void {
