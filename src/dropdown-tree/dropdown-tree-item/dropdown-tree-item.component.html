@@ -1,22 +1,20 @@
 ﻿<li role="treeitem"
     id="{{id}}"
     class="cf-dropdown-tree-node"
-    [class.tree--has-children]="hasChildren"
-    [class.tree--no-children]="!hasChildren"
-    [class.tree--expanded]="isExpanded"
-    [class.tree--collapsed]="isExpanded === false"
-    [class.tree--highlighted]="isHighlighted"
-    [class.tree--selected]="isSelected"
+    [class.cf-dropdown-tree-node-has-children]="hasChildren"
+    [class.cf-dropdown-tree-node-no-children]="!hasChildren"
+    [class.cf-dropdown-tree-node-expanded]="isExpanded"
+    [class.cf-dropdown-tree-node-collapsed]="isExpanded === false"
+    [class.cf-dropdown-tree-node-highlighted]="isHighlighted"
+    [class.cf-dropdown-tree-node-selected]="isSelected"
     [attr.aria-selected]="isSelected"
     [attr.aria-expanded]="isExpanded">
 
     <div class="cf-dropdown-tree-node-line">
         <span class="cf-dropdown-tree-node-arrow" (click)="onExpanderClick()">
-            <span>
-                <b role="presentation"></b>
-            </span>
+            <mat-icon *ngIf="expanderIcon != null">{{expanderIcon}}</mat-icon>
         </span><!--
-        --><span #text class="cf-dropdown-tree-node-text" tabindex="-1" (click)="onNodeClick()" (mouseenter)="onNodeMouseEnter()">
+        --><span #text class="cf-dropdown-tree-node-text" (click)="onNodeClick()" (mouseenter)="onNodeMouseEnter()">
             {{node.text}}
             <span class="cf-dropdown-tree-node-ripple" mat-ripple [matRippleTrigger]="text.nativeElement"></span>
         </span>

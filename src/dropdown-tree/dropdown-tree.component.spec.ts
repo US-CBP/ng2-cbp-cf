@@ -1,4 +1,8 @@
-﻿import { OverlayContainer }             from '@angular/cdk/overlay';
+﻿import {
+    OverlayContainer,
+    ScrollDispatcher,
+    ViewportRuler,
+}                                       from '@angular/cdk/overlay';
 import {
     Component,
     DebugElement,
@@ -8,34 +12,38 @@ import {
     ComponentFixture,
     TestBed,
     fakeAsync,
+    inject,
     tick,
 }                                       from '@angular/core/testing';
 import { FormsModule }                  from '@angular/forms';
 import {
-    Dir,
+    Directionality,
     MATERIAL_SANITY_CHECKS,
 }                                       from '@angular/material';
 import { By }                           from '@angular/platform-browser';
 import { NoopAnimationsModule }         from '@angular/platform-browser/animations';
+import { Subject }                      from 'rxjs';
 
-import { DropdownTreeFieldComponent }   from './dropdown-tree-field.component';
-import { DropdownTreeFieldModule }      from './dropdown-tree-field.module';
+import { DropdownTreeComponent }        from './dropdown-tree.component';
+import { DropdownTreeModule }           from './dropdown-tree.module';
 import { TreeNode }                     from './tree-node.model';
-import { ViewportRuler }                from './viewport-ruler';
 
 let currentId: number;
 
-describe('DropdownTreeFieldComponent', () => {
+describe('DropdownTreeComponent', () => {
     let overlayContainerElement: HTMLElement;
-    let dir: { value: string };
+    let dir: { value: 'ltr' | 'rtl' };
+    let scrollableSubject: Subject<void>;
+    let viewportRuler: ViewportRuler;
 
     beforeEach(() => {
         currentId = 1;
+        scrollableSubject = new Subject<void>();
 
         TestBed.configureTestingModule({
             imports: [
                 FormsModule,
-                DropdownTreeFieldModule,
+                DropdownTreeModule,
                 NoopAnimationsModule,
             ],
             declarations: [
@@ -44,19 +52,23 @@ describe('DropdownTreeFieldComponent', () => {
             ],
             providers: [
                 { provide: OverlayContainer, useFactory: () => overlayContainerFactory() },
-                { provide: Dir, useFactory: () => dir = { value: 'ltr' } },
-                { provide: ViewportRuler, useClass: FakeViewportRuler },
+                { provide: Directionality, useFactory: () => dir = { value: 'ltr' } },
+                { provide: ScrollDispatcher, useFactory: () => scrollDispatcherFactory() },
                 { provide: MATERIAL_SANITY_CHECKS, useValue: false },
             ],
         });
     });
 
+    beforeEach(inject([ViewportRuler], (_ruler: ViewportRuler) => {
+        viewportRuler = _ruler;
+    }));
+
     afterEach(() => {
         document.body.removeChild(overlayContainerElement);
     });
 
-    function overlayContainerFactory(): any {
-        overlayContainerElement = document.createElement('div');
+    function overlayContainerFactory(): OverlayContainer {
+        overlayContainerElement = document.createElement('div') as HTMLElement;
         overlayContainerElement.classList.add('cdk-overlay-container');
 
         document.body.appendChild(overlayContainerElement);
@@ -64,7 +76,15 @@ describe('DropdownTreeFieldComponent', () => {
         document.body.style.padding = '0';
         document.body.style.margin = '0';
 
-        return { getContainerElement: () => overlayContainerElement };
+        return { getContainerElement: () => overlayContainerElement } as OverlayContainer;
+    }
+
+    function scrollDispatcherFactory(): ScrollDispatcher {
+        return {
+            scrolled: (_delay: number, callback: () => any) => {
+                return scrollableSubject.asObservable().subscribe(callback);
+            },
+        } as ScrollDispatcher;
     }
 
     describe('defaultNode', () => {
@@ -532,7 +552,7 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.isPanelOpen).toBe(true);
+            expect(component.dropdownTree.panelOpen).toBe(true);
         }));
 
         it('and emits opened', fakeAsync(() => {
@@ -544,7 +564,7 @@ describe('DropdownTreeFieldComponent', () => {
             expect(component.opened).toHaveBeenCalled();
         }));
 
-        xit('and sets the width of the overlay based on the trigger when clicked', fakeAsync(() => {
+        it('and sets the width of the overlay based on the trigger when clicked', fakeAsync(() => {
             trigger.style.width = '200px';
 
             fixture.detectChanges();
@@ -566,11 +586,14 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+            expandNodes(component.dropdownTree, [
                 component.nodes[0],
                 component.nodes[0].children[2],
                 component.nodes[0].children[2].children[1],
             ]);
+            component.dropdownTree.expandNode(component.nodes[0]);
+            component.dropdownTree.expandNode(component.nodes[0].children[2]);
+            component.dropdownTree.expandNode(component.nodes[0].children[2].children[1]);
 
             trigger.click();
 
@@ -588,7 +611,7 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+            expandNodes(component.dropdownTree, [
                 component.nodes[0],
             ]);
 
@@ -608,7 +631,7 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+            expandNodes(component.dropdownTree, [
                 component.nodes[0],
             ]);
 
@@ -630,7 +653,7 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.isPanelOpen).toBe(true);
+            expect(component.dropdownTree.panelOpen).toBe(true);
         }));
 
         it('when Enter pressed', fakeAsync(() => {
@@ -642,7 +665,7 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.isPanelOpen).toBe(true);
+            expect(component.dropdownTree.panelOpen).toBe(true);
         }));
 
         it('when Space pressed', fakeAsync(() => {
@@ -654,14 +677,14 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.isPanelOpen).toBe(true);
+            expect(component.dropdownTree.panelOpen).toBe(true);
         }));
     });
 
     describe('closes', () => {
         let fixture: ComponentFixture<BasicModelComponent>;
         let component: BasicModelComponent;
-        let panel: HTMLElement;
+        let host: DebugElement;
         let trigger: HTMLElement;
 
         beforeEach(fakeAsync(() => {
@@ -671,13 +694,12 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
+            host = fixture.debugElement.query(By.css('.cf-dropdown-tree'));
             trigger = fixture.debugElement.query(By.css('.cf-dropdown-tree-trigger')).nativeElement;
             trigger.click();
 
             fixture.detectChanges();
             tick();
-
-            panel = overlayContainerElement.querySelector('.cf-dropdown-tree-panel') as HTMLElement;
         }));
 
         it('when item clicked', fakeAsync(() => {
@@ -688,7 +710,7 @@ describe('DropdownTreeFieldComponent', () => {
             tick();
             tick(1000);
 
-            expect(component.dropdownTree.isPanelOpen).toBe(false);
+            expect(component.dropdownTree.panelOpen).toBe(false);
         }));
 
         it('when backdrop clicked', fakeAsync(() => {
@@ -699,7 +721,7 @@ describe('DropdownTreeFieldComponent', () => {
             tick();
             tick(1000);
 
-            expect(component.dropdownTree.isPanelOpen).toBe(false);
+            expect(component.dropdownTree.panelOpen).toBe(false);
         }));
 
         it('and emits closed', fakeAsync(() => {
@@ -718,52 +740,52 @@ describe('DropdownTreeFieldComponent', () => {
                 altKey: true,
                 key: 'ArrowUp',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
             tick(1000);
 
-            expect(component.dropdownTree.isPanelOpen).toBe(false);
+            expect(component.dropdownTree.panelOpen).toBe(false);
         }));
 
         it('when Escape pressed', fakeAsync(() => {
             const event = new KeyboardEvent('keydown', {
                 key: 'Escape',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
             tick(1000);
 
-            expect(component.dropdownTree.isPanelOpen).toBe(false);
+            expect(component.dropdownTree.panelOpen).toBe(false);
         }));
 
         it('when Tab pressed', fakeAsync(() => {
             const event = new KeyboardEvent('keydown', {
                 key: 'Tab',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
             tick(1000);
 
-            expect(component.dropdownTree.isPanelOpen).toBe(false);
+            expect(component.dropdownTree.panelOpen).toBe(false);
         }));
 
         it('when Space pressed', fakeAsync(() => {
             const event = new KeyboardEvent('keydown', {
                 key: ' ',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
             tick(1000);
 
-            expect(component.dropdownTree.isPanelOpen).toBe(false);
+            expect(component.dropdownTree.panelOpen).toBe(false);
         }));
 
         it('when Ctrl+Space pressed', fakeAsync(() => {
@@ -771,33 +793,33 @@ describe('DropdownTreeFieldComponent', () => {
                 ctrlKey: true,
                 key: ' ',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
             tick(1000);
 
-            expect(component.dropdownTree.isPanelOpen).toBe(false);
+            expect(component.dropdownTree.panelOpen).toBe(false);
         }));
 
         it('when Enter pressed', fakeAsync(() => {
             const event = new KeyboardEvent('keydown', {
                 key: 'Enter',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
             tick(1000);
 
-            expect(component.dropdownTree.isPanelOpen).toBe(false);
+            expect(component.dropdownTree.panelOpen).toBe(false);
         }));
     });
 
     describe('keyboard', () => {
         let fixture: ComponentFixture<BasicModelComponent>;
         let component: BasicModelComponent;
-        let panel: HTMLElement;
+        let host: DebugElement;
         let trigger: HTMLElement;
 
         beforeEach(fakeAsync(() => {
@@ -809,13 +831,12 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
+            host = fixture.debugElement.query(By.css('.cf-dropdown-tree'));
             trigger = fixture.debugElement.query(By.css('.cf-dropdown-tree-trigger')).nativeElement;
             trigger.click();
 
             fixture.detectChanges();
             tick();
-
-            panel = overlayContainerElement.querySelector('.cf-dropdown-tree-panel') as HTMLElement;
         }));
 
         it('ArrowUp highlights previous visible node of current highlighted node', fakeAsync(() => {
@@ -825,7 +846,7 @@ describe('DropdownTreeFieldComponent', () => {
             const event = new KeyboardEvent('keydown', {
                 key: 'ArrowUp',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -840,7 +861,7 @@ describe('DropdownTreeFieldComponent', () => {
             const event = new KeyboardEvent('keydown', {
                 key: 'ArrowUp',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -855,7 +876,7 @@ describe('DropdownTreeFieldComponent', () => {
             const event = new KeyboardEvent('keydown', {
                 key: 'ArrowUp',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -870,7 +891,7 @@ describe('DropdownTreeFieldComponent', () => {
             const event = new KeyboardEvent('keydown', {
                 key: 'ArrowUp',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -886,7 +907,7 @@ describe('DropdownTreeFieldComponent', () => {
                 ctrlKey: true,
                 key: 'ArrowUp',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -902,7 +923,7 @@ describe('DropdownTreeFieldComponent', () => {
                 ctrlKey: true,
                 key: 'ArrowUp',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -918,7 +939,7 @@ describe('DropdownTreeFieldComponent', () => {
                 ctrlKey: true,
                 key: 'ArrowUp',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -934,7 +955,7 @@ describe('DropdownTreeFieldComponent', () => {
                 ctrlKey: true,
                 key: 'ArrowUp',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -949,7 +970,7 @@ describe('DropdownTreeFieldComponent', () => {
             const event = new KeyboardEvent('keydown', {
                 key: 'ArrowDown',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -964,7 +985,7 @@ describe('DropdownTreeFieldComponent', () => {
             const event = new KeyboardEvent('keydown', {
                 key: 'ArrowDown',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -979,7 +1000,7 @@ describe('DropdownTreeFieldComponent', () => {
             const event = new KeyboardEvent('keydown', {
                 key: 'ArrowDown',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -994,7 +1015,7 @@ describe('DropdownTreeFieldComponent', () => {
             const event = new KeyboardEvent('keydown', {
                 key: 'ArrowDown',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -1010,7 +1031,7 @@ describe('DropdownTreeFieldComponent', () => {
                 ctrlKey: true,
                 key: 'ArrowDown',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -1026,7 +1047,7 @@ describe('DropdownTreeFieldComponent', () => {
                 ctrlKey: true,
                 key: 'ArrowDown',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -1042,7 +1063,7 @@ describe('DropdownTreeFieldComponent', () => {
                 ctrlKey: true,
                 key: 'ArrowDown',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -1058,7 +1079,7 @@ describe('DropdownTreeFieldComponent', () => {
                 ctrlKey: true,
                 key: 'ArrowDown',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -1073,7 +1094,7 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+            expandNodes(component.dropdownTree, [
                 component.nodes[0],
                 component.nodes[0].children[1],
             ]);
@@ -1081,7 +1102,7 @@ describe('DropdownTreeFieldComponent', () => {
             const event = new KeyboardEvent('keydown', {
                 key: 'ArrowLeft',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -1096,7 +1117,7 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+            expandNodes(component.dropdownTree, [
                 component.nodes[0],
                 component.nodes[0].children[1],
             ]);
@@ -1104,7 +1125,7 @@ describe('DropdownTreeFieldComponent', () => {
             const event = new KeyboardEvent('keydown', {
                 key: 'ArrowLeft',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -1119,7 +1140,7 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+            expandNodes(component.dropdownTree, [
                 component.nodes[0],
                 component.nodes[0].children[1],
             ]);
@@ -1127,7 +1148,7 @@ describe('DropdownTreeFieldComponent', () => {
             const event = new KeyboardEvent('keydown', {
                 key: 'ArrowLeft',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -1142,14 +1163,14 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+            expandNodes(component.dropdownTree, [
                 component.nodes[0],
             ]);
 
             const event = new KeyboardEvent('keydown', {
                 key: 'ArrowLeft',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -1164,14 +1185,14 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+            expandNodes(component.dropdownTree, [
                 component.nodes[0],
             ]);
 
             const event = new KeyboardEvent('keydown', {
                 key: 'ArrowLeft',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -1186,12 +1207,12 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            component.dropdownTree.expandedNodes = new Set<TreeNode>();
+            collapseAllNodes(component.dropdownTree);
 
             const event = new KeyboardEvent('keydown', {
                 key: 'ArrowLeft',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -1206,12 +1227,12 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            component.dropdownTree.expandedNodes = new Set<TreeNode>();
+            collapseAllNodes(component.dropdownTree);
 
             const event = new KeyboardEvent('keydown', {
                 key: 'ArrowLeft',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -1226,12 +1247,12 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            component.dropdownTree.expandedNodes = new Set<TreeNode>();
+            collapseAllNodes(component.dropdownTree);
 
             const event = new KeyboardEvent('keydown', {
                 key: 'ArrowRight',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -1246,12 +1267,12 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            component.dropdownTree.expandedNodes = new Set<TreeNode>();
+            collapseAllNodes(component.dropdownTree);
 
             const event = new KeyboardEvent('keydown', {
                 key: 'ArrowRight',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -1266,12 +1287,12 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            component.dropdownTree.expandedNodes = new Set<TreeNode>();
+            collapseAllNodes(component.dropdownTree);
 
             const event = new KeyboardEvent('keydown', {
                 key: 'ArrowRight',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -1286,14 +1307,14 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+            expandNodes(component.dropdownTree, [
                 component.nodes[0],
             ]);
 
             const event = new KeyboardEvent('keydown', {
                 key: 'ArrowRight',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -1308,14 +1329,14 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+            expandNodes(component.dropdownTree, [
                 component.nodes[0],
             ]);
 
             const event = new KeyboardEvent('keydown', {
                 key: 'ArrowRight',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -1330,14 +1351,14 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+            expandNodes(component.dropdownTree, [
                 component.nodes[0],
             ]);
 
             const event = new KeyboardEvent('keydown', {
                 key: 'ArrowRight',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -1352,14 +1373,14 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+            expandNodes(component.dropdownTree, [
                 component.nodes[0],
             ]);
 
             const event = new KeyboardEvent('keydown', {
                 key: 'ArrowRight',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -1374,14 +1395,14 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+            expandNodes(component.dropdownTree, [
                 component.nodes[0],
             ]);
 
             const event = new KeyboardEvent('keydown', {
                 key: 'Home',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -1396,14 +1417,14 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+            expandNodes(component.dropdownTree, [
                 component.nodes[0],
             ]);
 
             const event = new KeyboardEvent('keydown', {
                 key: 'Home',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -1418,7 +1439,7 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+            expandNodes(component.dropdownTree, [
                 component.nodes[0],
             ]);
 
@@ -1426,7 +1447,7 @@ describe('DropdownTreeFieldComponent', () => {
                 ctrlKey: true,
                 key: 'Home',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -1441,7 +1462,7 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+            expandNodes(component.dropdownTree, [
                 component.nodes[0],
             ]);
 
@@ -1449,7 +1470,7 @@ describe('DropdownTreeFieldComponent', () => {
                 ctrlKey: true,
                 key: 'Home',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -1464,14 +1485,14 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+            expandNodes(component.dropdownTree, [
                 component.nodes[0],
             ]);
 
             const event = new KeyboardEvent('keydown', {
                 key: 'End',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -1486,14 +1507,14 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+            expandNodes(component.dropdownTree, [
                 component.nodes[0],
             ]);
 
             const event = new KeyboardEvent('keydown', {
                 key: 'End',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -1508,7 +1529,7 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+            expandNodes(component.dropdownTree, [
                 component.nodes[0],
             ]);
 
@@ -1516,7 +1537,7 @@ describe('DropdownTreeFieldComponent', () => {
                 ctrlKey: true,
                 key: 'End',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -1531,7 +1552,7 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+            expandNodes(component.dropdownTree, [
                 component.nodes[0],
             ]);
 
@@ -1539,7 +1560,7 @@ describe('DropdownTreeFieldComponent', () => {
                 ctrlKey: true,
                 key: 'End',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -1554,14 +1575,14 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+            expandNodes(component.dropdownTree, [
                 component.nodes[0],
             ]);
 
             const event = new KeyboardEvent('keydown', {
                 key: ' ',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -1577,7 +1598,7 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+            expandNodes(component.dropdownTree, [
                 component.nodes[0],
             ]);
 
@@ -1585,7 +1606,7 @@ describe('DropdownTreeFieldComponent', () => {
                 ctrlKey: true,
                 key: ' ',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -1601,14 +1622,14 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            component.dropdownTree.expandedNodes = new Set<TreeNode>([
+            expandNodes(component.dropdownTree, [
                 component.nodes[0],
             ]);
 
             const event = new KeyboardEvent('keydown', {
                 key: 'Enter',
             });
-            panel.dispatchEvent(event);
+            host.triggerEventHandler('keydown', event);
 
             fixture.detectChanges();
             tick();
@@ -1644,7 +1665,7 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.isPanelOpen).toBe(false);
+            expect(component.dropdownTree.panelOpen).toBe(false);
         }));
 
         it('will open when clicked after reenabling', fakeAsync(() => {
@@ -1663,297 +1684,28 @@ describe('DropdownTreeFieldComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.isPanelOpen).toBe(true);
+            expect(component.dropdownTree.panelOpen).toBe(true);
         }));
     });
 
-    describe('animations', () => {
-        let fixture: ComponentFixture<BasicModelComponent>;
-        let component: BasicModelComponent;
-        let trigger: HTMLElement;
-
-        beforeEach(fakeAsync(() => {
-            fixture = TestBed.createComponent(BasicModelComponent);
-            component = fixture.componentInstance;
-
-            fixture.detectChanges();
-            tick();
-
-            trigger = fixture.debugElement.query(By.css('.cf-dropdown-tree-trigger')).nativeElement;
-        }));
-
-        it('should initially put placeholder in the normal position', fakeAsync(() => {
-            expect(component.dropdownTree.getPlaceholderAnimationState()).toBe('');
-        }));
-
-        it('should float the placeholder when the panel is open and unselected', fakeAsync(() => {
-            trigger.click();
-
-            fixture.detectChanges();
-            tick();
-
-            expect(component.dropdownTree.getPlaceholderAnimationState()).toBe('floating-ltr');
-        }));
-
-        it('should revert placeholder back to normal position after panel closes', fakeAsync(() => {
-            trigger.click();
-
-            fixture.detectChanges();
-            tick();
-
-            const backdrop = overlayContainerElement.querySelector('.cdk-overlay-backdrop') as HTMLElement;
-            backdrop.click();
-
-            fixture.detectChanges();
-            tick();
-            tick(1000);
-
-            expect(component.dropdownTree.getPlaceholderAnimationState()).toBe('');
-        }));
-
-        it('should float the placeholder without animation when value is set', fakeAsync(() => {
-            component.selectedNode = component.nodes[0];
-
-            fixture.detectChanges();
-            tick();
-
-            const placeholder = fixture.debugElement.query(By.css('.cf-dropdown-tree-placeholder')).nativeElement as HTMLElement;
-            expect(placeholder.classList).toContain('mat-floating-placeholder', 'Expected placeholder to display as floating.');
-            expect(component.dropdownTree.getPlaceholderAnimationState()).toBe('', 'Expected animation state to be empty to avoid animation.');
-        }));
-
-        it('should use the floating-rtl state when the dir is rtl', fakeAsync(() => {
-            dir.value = 'rtl';
-
-            trigger.click();
-
-            fixture.detectChanges();
-            tick();
-
-            expect(component.dropdownTree.getPlaceholderAnimationState()).toBe('floating-rtl');
-        }));
-
-        it('should not add class to the panel when the menu is still animating', fakeAsync(() => {
-            trigger.click();
-
-            fixture.detectChanges();
-            tick();
-
-            const panel = overlayContainerElement.querySelector('.cf-dropdown-tree-panel');
-
-            expect(panel.classList).not.toContain('cf-dropdown-tree-panel-done-animating');
-        }));
-
-        it('should add a class to the panel when the menu is done animating', fakeAsync(() => {
-            trigger.click();
-
-            fixture.detectChanges();
-            tick();
-
-            const panel = overlayContainerElement.querySelector('.cf-dropdown-tree-panel');
-
-            tick(250);
-            fixture.detectChanges();
-
-            expect(panel.classList).toContain('cf-dropdown-tree-panel-done-animating');
-        }));
-    });
-
-    xdescribe('positioning', () => {
-        let fixture: ComponentFixture<BasicModelComponent>;
-        let component: BasicModelComponent;
-        let trigger: HTMLElement;
-        let dropdownTree: HTMLElement;
-        let visibleNodes: TreeNode[];
-
-        beforeEach(fakeAsync(() => {
-            fixture = TestBed.createComponent(BasicModelComponent);
-            component = fixture.componentInstance;
-
-            component.defaultLabel = 'Any';
-
-            fixture.detectChanges();
-            tick();
-
-            dropdownTree = fixture.debugElement.query(By.css('.cf-dropdown-tree')).nativeElement;
-            trigger = fixture.debugElement.query(By.css('.cf-dropdown-tree-trigger')).nativeElement;
-        }));
-
-        describe('with ample space to open', () => {
-            beforeEach(() => {
-                dropdownTree.style.marginTop = '300px';
-                dropdownTree.style.marginLeft = '20px';
-                dropdownTree.style.marginRight = '20px';
-            });
-
-            it('should align the default node with the trigger text if value is null', fakeAsync(() => {
-                expandNodesToShow8Items();
-
-                trigger.click();
-
-                fixture.detectChanges();
-                tick();
-
-                const scrollContainer = document.querySelector('.cdk-overlay-pane .cf-dropdown-tree-panel');
-
-                expect(scrollContainer.scrollTop).toEqual(0, 'Expected panel not to be scrolled.');
-                checkTriggerAlignedWithOption(0);
-            }));
-
-            it('should align a selected node too high to be centered with the trigger text', fakeAsync(() => {
-                component.selectedNode = visibleNodes[1];
-
-                fixture.detectChanges();
-                tick();
-
-                expandNodesToShow8Items();
-
-                trigger.click();
-
-                fixture.detectChanges();
-                tick();
-
-                const scrollContainer = document.querySelector('.cdk-overlay-pane .cf-dropdown-tree-panel');
-
-                expect(scrollContainer.scrollTop).toEqual(0, 'Expected panel not to be scrolled.');
-                checkTriggerAlignedWithOption(1);
-            }));
-        });
-
-        function expandNodesToShow8Items(): void {
-            component.dropdownTree.expandedNodes = new Set<TreeNode>([
-                component.nodes[0],
-                component.nodes[0].children[1],
-            ]);
-
-            visibleNodes = [
-                null, // Default node
-                component.nodes[0],
-                component.nodes[0].children[0],
-                component.nodes[0].children[1],
-                component.nodes[0].children[1].children[0],
-                component.nodes[0].children[1].children[1],
-                component.nodes[0].children[2],
-                component.nodes[1],
-                component.nodes[2],
-            ];
+    function expandNodes(dropdownTree: DropdownTreeComponent, nodes: TreeNode[]): void {
+        collapseAllNodes(dropdownTree);
+        for(const node of nodes) {
+            dropdownTree.expandNode(node);
         }
+    }
 
-        function checkTriggerAlignedWithOption(index: number): void {
-            const overlayPane = overlayContainerElement.querySelector('.cdk-overlay-pane');
-            const triggerTop = trigger.getBoundingClientRect().top;
-            const overlayTop = overlayPane.getBoundingClientRect().top;
-            const nodes = overlayPane.querySelectorAll('.cf-dropdown-tree-node');
-            const nodeTop = nodes[index].getBoundingClientRect().top;
-
-            expect(nodeTop.toFixed(2)).toEqual((triggerTop - 9).toFixed(2), `Expected trigger to align with node ${index}.`);
-
-            const expectedOrigin = nodeTop - overlayTop + 24;
-            expect(component.dropdownTree.transformOrigin).toContain(`${expectedOrigin}px`, `Expected panel animation to originate in the center of option ${index}.`);
+    function collapseAllNodes(dropdownTree: DropdownTreeComponent): void {
+        const nodes = Array.from(dropdownTree.expandedNodes.values());
+        for(const node of nodes) {
+            dropdownTree.collapseNode(node);
         }
-    });
-
-    describe('accessibility', () => {
-        describe('for dropdown tree', () => {
-            let fixture: ComponentFixture<BasicModelComponent>;
-            let component: BasicModelComponent;
-            let dropdownTree: HTMLElement;
-
-            beforeEach(() => {
-                fixture = TestBed.createComponent(BasicModelComponent);
-                component = fixture.componentInstance;
-
-                fixture.detectChanges();
-
-                dropdownTree = fixture.debugElement.query(By.css('.cf-dropdown-tree')).nativeElement;
-            });
-
-            it('should set the role of the select to combobox', () => {
-                expect(dropdownTree.getAttribute('role')).toEqual('combobox');
-            });
-
-            it('should set the aria label to the placeholder', () => {
-                expect(dropdownTree.getAttribute('aria-label')).toEqual('Basic Model');
-            });
-
-            it('should set the tabindex of the select to 0 by default', () => {
-                expect(dropdownTree.getAttribute('tabindex')).toEqual('0');
-            });
-
-            it('should be able to override the tabindex', () => {
-                component.tabIndexOverride = 3;
-                fixture.detectChanges();
-
-                expect(dropdownTree.getAttribute('tabindex')).toEqual('3');
-            });
-
-            it('should be able to set the tabindex via the native attribute', () => {
-                fixture.destroy();
-
-                const plainTabindexFixture = TestBed.createComponent(PlainTabindexComponent);
-                plainTabindexFixture.detectChanges();
-
-                dropdownTree = plainTabindexFixture.debugElement.query(By.css('.cf-dropdown-tree')).nativeElement;
-
-                expect(dropdownTree.getAttribute('tabindex')).toEqual('5');
-            });
-
-            it('should not set aria-required for non-required dropdown trees', () => {
-                expect(dropdownTree.getAttribute('aria-required')).toEqual('false');
-            });
-
-            it('should set aria-required for required dropdown trees', () => {
-                component.required = true;
-                fixture.detectChanges();
-
-                expect(dropdownTree.getAttribute('aria-required')).toEqual('true');
-            });
-
-            it('should not set aria-invalid for valid dropdown trees', () => {
-                expect(dropdownTree.getAttribute('aria-invalid')).toEqual('false');
-            });
-
-            it('should set aria-invalid for invalid dropdown trees', () => {
-                component.required = true;
-                fixture.detectChanges();
-
-                expect(dropdownTree.getAttribute('aria-invalid')).toEqual('true');
-            });
-
-            it('should not set aria-disabled for enabled dropdown trees', () => {
-                expect(dropdownTree.getAttribute('aria-disabled')).toEqual('false');
-            });
-
-            it('should set aria-disabled for disabled dropdown trees', () => {
-                component.disabled = true;
-                fixture.detectChanges();
-
-                expect(dropdownTree.getAttribute('aria-disabled')).toEqual('true');
-            });
-
-            it('should set the tabindex of the dropdown tree to -1 if disabled', () => {
-                component.disabled = true;
-                fixture.detectChanges();
-
-                expect(dropdownTree.getAttribute('tabindex')).toEqual('-1');
-            });
-
-            it('should set the tabindex of the dropdown tree to 0 if reenabled', () => {
-                component.disabled = true;
-                fixture.detectChanges();
-
-                component.disabled = false;
-                fixture.detectChanges();
-
-                expect(dropdownTree.getAttribute('tabindex')).toEqual('0');
-            });
-        });
-    });
+    }
 });
 
 @Component({
     template: `
-<cf-dropdown-tree-field
+<cf-dropdown-tree
     placeholder="Basic Model"
     [(ngModel)]="selectedNode"
     [defaultLabel]="defaultLabel"
@@ -1964,7 +1716,7 @@ describe('DropdownTreeFieldComponent', () => {
     [tabIndex]="tabIndexOverride"
     (opened)="opened()"
     (closed)="closed()">
-</cf-dropdown-tree-field>`,
+</cf-dropdown-tree>`,
 })
 class BasicModelComponent {
     defaultLabel: string = null;
@@ -1975,7 +1727,7 @@ class BasicModelComponent {
     showFullSelectedPath: boolean = false;
     tabIndexOverride: number;
 
-    @ViewChild(DropdownTreeFieldComponent) dropdownTree: DropdownTreeFieldComponent;
+    @ViewChild(DropdownTreeComponent) dropdownTree: DropdownTreeComponent;
 
     opened: jasmine.Spy = jasmine.createSpy('opened');
     closed: jasmine.Spy = jasmine.createSpy('closed');
@@ -1983,33 +1735,16 @@ class BasicModelComponent {
 
 @Component({
     template: `
-<cf-dropdown-tree-field
+<cf-dropdown-tree
     placeholder="Basic Model"
     [(ngModel)]="selectedNode"
     [nodes]="nodes"
     tabindex="5">
-</cf-dropdown-tree-field>`,
+</cf-dropdown-tree>`,
 })
 class PlainTabindexComponent {
     nodes: TreeNode[] = createNodeTree();
     selectedNode: TreeNode = null;
-}
-
-class FakeViewportRuler {
-    getViewportRect(): ClientRect {
-        return {
-            left: 0,
-            top: 0,
-            width: 1014,
-            height: 686,
-            bottom: 686,
-            right: 1014,
-        };
-    }
-
-    getViewportScrollPosition(): { top: number, left: number } {
-        return { top: 0, left: 0 };
-    }
 }
 
 function createNode(...children: TreeNode[]): TreeNode {

@@ -3,34 +3,38 @@ import { CommonModule }                 from '@angular/common';
 import { NgModule }                     from '@angular/core';
 import { FormsModule }                  from '@angular/forms';
 import {
-    MatProgressSpinnerModule,
+    MatFormFieldModule,
+    MatIconModule,
     MatRippleModule,
     NoConflictStyleCompatibilityMode,
 }                                       from '@angular/material';
 
-import { DropdownTreeFieldComponent }   from './dropdown-tree-field.component';
 import { DropdownTreeItemComponent }    from './dropdown-tree-item';
-import { VIEWPORT_RULER_PROVIDER }      from './viewport-ruler';
+import {
+    DropdownTreeComponent,
+    dropdownTreeScrollStrategyProvider,
+}                                       from './dropdown-tree.component';
 
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
-        MatProgressSpinnerModule,
+        MatIconModule,
         MatRippleModule,
         NoConflictStyleCompatibilityMode,
         OverlayModule,
     ],
     exports: [
-        DropdownTreeFieldComponent,
+        MatFormFieldModule,
+        DropdownTreeComponent,
     ],
     declarations: [
-        DropdownTreeFieldComponent,
+        DropdownTreeComponent,
         DropdownTreeItemComponent,
     ],
     providers: [
-        VIEWPORT_RULER_PROVIDER,
+        dropdownTreeScrollStrategyProvider,
     ],
 })
-export class DropdownTreeFieldModule {
+export class DropdownTreeModule {
 }

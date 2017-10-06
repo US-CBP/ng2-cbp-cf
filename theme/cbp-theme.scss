@@ -1,16 +1,19 @@
 ﻿@import '~@angular/material/theming';
 @import '../src/badge/_badge.scss';
 @import '../src/badge/_badge-theme.scss';
-@import '../src/dropdown-tree-field/_dropdown-tree-field-theme.scss';
+@import '../src/dropdown-tree/_dropdown-tree-theme.scss';
 @import '../src/header/_header-theme.scss';
 @import './_roboto.scss';
 @import './_typography.scss';
 @import './_header-base.scss';
 @import './_theme.scss';
 
+$config: mat-typography-config();
+
 // Include the base styles for Angular Material core. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
-@include mat-core();
+@include mat-core($config);
+@include cf-dropdown-tree-typography($config);
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component

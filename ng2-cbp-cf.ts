@@ -2,7 +2,7 @@ import { NgModule }             from '@angular/core';
 
 import {
     BadgeModule,
-    DropdownTreeFieldModule,
+    DropdownTreeModule,
     DualListModule,
     HeaderModule,
     ListGroupModule,
@@ -11,7 +11,7 @@ import {
 
 const modules: any[] = [
     BadgeModule,
-    DropdownTreeFieldModule,
+    DropdownTreeModule,
     DualListModule,
     HeaderModule,
     ListGroupModule,

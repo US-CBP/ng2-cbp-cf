@@ -10,7 +10,9 @@ import {
 import { FormsModule }                  from '@angular/forms';
 import {
     MATERIAL_SANITY_CHECKS,
+    MatIconModule,
     MatRippleModule,
+    NoConflictStyleCompatibilityMode,
 }                                       from '@angular/material';
 import { By }                           from '@angular/platform-browser';
 import { NoopAnimationsModule }         from '@angular/platform-browser/animations';
@@ -27,7 +29,14 @@ describe('DropdownTreeItemComponent', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [CommonModule, FormsModule, MatRippleModule, NoopAnimationsModule],
+            imports: [
+                CommonModule,
+                FormsModule,
+                MatIconModule,
+                MatRippleModule,
+                NoConflictStyleCompatibilityMode,
+                NoopAnimationsModule,
+            ],
             declarations: [DropdownTreeItemComponent],
             providers: [
                 { provide: MATERIAL_SANITY_CHECKS, useValue: false },
@@ -54,18 +63,18 @@ describe('DropdownTreeItemComponent', () => {
             expect(component.hasChildren).toBe(false);
         });
 
-        it('adds tree--no-children class to li when node has no children', () => {
+        it('adds cf-dropdown-tree-node-no-children class to li when node has no children', () => {
             component.node = node;
 
             fixture.detectChanges();
-            expect(li.classes['tree--no-children']).toBe(true);
+            expect(li.classes['cf-dropdown-tree-node-no-children']).toBe(true);
         });
 
-        it('does not add tree--has-children class to li when node has no children', () => {
+        it('does not add cf-dropdown-tree-node-has-children class to li when node has no children', () => {
             component.node = node;
 
             fixture.detectChanges();
-            expect(li.classes['tree--has-children']).toBeFalsy();
+            expect(li.classes['cf-dropdown-tree-node-has-children']).toBeFalsy();
         });
 
         it('sets hasChildren to true when node has children', () => {
@@ -76,22 +85,22 @@ describe('DropdownTreeItemComponent', () => {
             expect(component.hasChildren).toBe(true);
         });
 
-        it('does not add tree--no-children class to li when node has children', () => {
+        it('does not add cf-dropdown-tree-node-no-children class to li when node has children', () => {
             node.children.push(createNode());
 
             component.node = node;
 
             fixture.detectChanges();
-            expect(li.classes['tree--no-children']).toBeFalsy();
+            expect(li.classes['cf-dropdown-tree-node-no-children']).toBeFalsy();
         });
 
-        it('adds tree--has-children class to li when node has children', () => {
+        it('adds cf-dropdown-tree-node-has-children class to li when node has children', () => {
             node.children.push(createNode());
 
             component.node = node;
 
             fixture.detectChanges();
-            expect(li.classes['tree--has-children']).toBe(true);
+            expect(li.classes['cf-dropdown-tree-node-has-children']).toBe(true);
         });
     });
 
@@ -110,22 +119,22 @@ describe('DropdownTreeItemComponent', () => {
             expect(component.isExpanded).toBeUndefined();
         });
 
-        it('does not add tree--expanded class to li when node has no children', () => {
+        it('does not add cf-dropdown-tree-node-expanded class to li when node has no children', () => {
             component.node = node;
 
             component.expandedNodes = new Set<TreeNode>();
 
             fixture.detectChanges();
-            expect(li.classes['tree--expanded']).toBeFalsy();
+            expect(li.classes['cf-dropdown-tree-node-expanded']).toBeFalsy();
         });
 
-        it('does not add tree--collapsed class to li when node has no children', () => {
+        it('does not add cf-dropdown-tree-node-collapsed class to li when node has no children', () => {
             component.node = node;
 
             component.expandedNodes = new Set<TreeNode>();
 
             fixture.detectChanges();
-            expect(li.classes['tree--collapsed']).toBeFalsy();
+            expect(li.classes['cf-dropdown-tree-node-collapsed']).toBeFalsy();
         });
 
         it('sets showChildren to false when node has no children', () => {
@@ -145,24 +154,24 @@ describe('DropdownTreeItemComponent', () => {
             expect(component.isExpanded).toBe(false);
         });
 
-        it('does not add tree--expanded class to li when node is not in expandedNodes', () => {
+        it('does not add cf-dropdown-tree-node-expanded class to li when node is not in expandedNodes', () => {
             node.children.push(createNode());
             component.node = node;
 
             component.expandedNodes = new Set<TreeNode>();
 
             fixture.detectChanges();
-            expect(li.classes['tree--expanded']).toBeFalsy();
+            expect(li.classes['cf-dropdown-tree-node-expanded']).toBeFalsy();
         });
 
-        it('adds tree--collapsed class to li when node is not in expandedNodes', () => {
+        it('adds cf-dropdown-tree-node-collapsed class to li when node is not in expandedNodes', () => {
             node.children.push(createNode());
             component.node = node;
 
             component.expandedNodes = new Set<TreeNode>();
 
             fixture.detectChanges();
-            expect(li.classes['tree--collapsed']).toBe(true);
+            expect(li.classes['cf-dropdown-tree-node-collapsed']).toBe(true);
         });
 
         it('sets showChildren to false when node is not in expandedNodes', () => {
@@ -183,24 +192,24 @@ describe('DropdownTreeItemComponent', () => {
             expect(component.isExpanded).toBe(true);
         });
 
-        it('adds tree--expanded class to li when node is in expandedNodes', () => {
+        it('adds cf-dropdown-tree-node-expanded class to li when node is in expandedNodes', () => {
             node.children.push(createNode());
             component.node = node;
 
             component.expandedNodes = new Set<TreeNode>([node]);
 
             fixture.detectChanges();
-            expect(li.classes['tree--expanded']).toBe(true);
+            expect(li.classes['cf-dropdown-tree-node-expanded']).toBe(true);
         });
 
-        it('does not add tree--collapsed class to li when node is in expandedNodes', () => {
+        it('does not add cf-dropdown-tree-node-collapsed class to li when node is in expandedNodes', () => {
             node.children.push(createNode());
             component.node = node;
 
             component.expandedNodes = new Set<TreeNode>([node]);
 
             fixture.detectChanges();
-            expect(li.classes['tree--collapsed']).toBeFalsy();
+            expect(li.classes['cf-dropdown-tree-node-collapsed']).toBeFalsy();
         });
 
         it('sets showChildren to true when node is in expandedNodes', () => {
@@ -228,11 +237,11 @@ describe('DropdownTreeItemComponent', () => {
             expect(component.isHighlighted).toBe(true);
         });
 
-        it('adds tree--highlighted class to li when node is highlightedNode', () => {
+        it('adds cf-dropdown-tree-node-highlighted class to li when node is highlightedNode', () => {
             component.highlightedNode = node;
 
             fixture.detectChanges();
-            expect(li.classes['tree--highlighted']).toBe(true);
+            expect(li.classes['cf-dropdown-tree-node-highlighted']).toBe(true);
         });
 
         it('set isHighlighted to false when node is not highlightedNode', () => {
@@ -241,11 +250,11 @@ describe('DropdownTreeItemComponent', () => {
             expect(component.isHighlighted).toBe(false);
         });
 
-        it('does not add tree--highlighted class to li when node is not highlightedNode', () => {
+        it('does not add cf-dropdown-tree-node-highlighted class to li when node is not highlightedNode', () => {
             component.highlightedNode = createNode();
 
             fixture.detectChanges();
-            expect(li.classes['tree--highlighted']).toBeFalsy();
+            expect(li.classes['cf-dropdown-tree-node-highlighted']).toBeFalsy();
         });
     });
 
@@ -264,11 +273,11 @@ describe('DropdownTreeItemComponent', () => {
             expect(component.isSelected).toBe(true);
         });
 
-        it('adds tree--selected class to li when node is selectedNode', () => {
+        it('adds cf-dropdown-tree-node-selected class to li when node is selectedNode', () => {
             component.selectedNode = node;
 
             fixture.detectChanges();
-            expect(li.classes['tree--selected']).toBe(true);
+            expect(li.classes['cf-dropdown-tree-node-selected']).toBe(true);
         });
 
         it('set isSelected to false when node is not selectedNode', () => {
@@ -277,11 +286,11 @@ describe('DropdownTreeItemComponent', () => {
             expect(component.isSelected).toBe(false);
         });
 
-        it('does not add tree--selected class to li when node is not selectedNode', () => {
+        it('does not add cf-dropdown-tree-node-selected class to li when node is not selectedNode', () => {
             component.selectedNode = createNode();
 
             fixture.detectChanges();
-            expect(li.classes['tree--selected']).toBeFalsy();
+            expect(li.classes['cf-dropdown-tree-node-selected']).toBeFalsy();
         });
     });
 

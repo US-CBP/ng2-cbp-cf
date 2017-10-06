@@ -1,0 +1,146 @@
+﻿@import '~@angular/material/theming';
+@import '../shared/_variables.scss';
+
+/* From Angular Material - start */
+// Gradient for showing the dashed line when the input is disabled.
+// Unlike using a border, a gradient allows us to adjust the spacing of the dotted line
+// to match the Material Design spec.
+$mat-underline-disabled-background-image:
+    linear-gradient(to right, rgba(0, 0, 0, 0.26) 0%, rgba(0, 0, 0, 0.26) 33%, transparent 0%);
+
+@mixin mat-control-disabled-underline {
+    background-image: $mat-underline-disabled-background-image;
+    background-repeat: repeat-x;
+    background-size: 4px 1px;
+}
+
+/* From Angular Material - end */
+
+$cf-dropdown-tree-arrow-size: 5px !default;
+$cf-dropdown-tree-arrow-margin: 4px !default;
+$cf-dropdown-tree-panel-max-height: 256px !default;
+$cf-dropdown-tree-node-height: 3em !default;
+
+$cf-dropdown-tree-placeholder-arrow-space: 2 * ($cf-dropdown-tree-arrow-size + $cf-dropdown-tree-arrow-margin);
+
+.cf-dropdown-tree {
+    display: inline-block;
+    outline: none;
+    width: 100%;
+}
+
+.cf-dropdown-tree-trigger {
+    box-sizing: border-box;
+    cursor: pointer;
+    display: inline-table;
+    position: relative;
+
+    .cf-dropdown-tree-disabled & {
+        @include user-select(none);
+
+        cursor: default;
+    }
+}
+
+.cf-dropdown-tree-value {
+    display: table-cell;
+    max-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+}
+
+.cf-dropdown-tree-value-text {
+    @include mat-truncate-line();
+}
+
+.cf-dropdown-tree-arrow-wrapper {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.cf-dropdown-tree-arrow {
+    border-left: $cf-dropdown-tree-arrow-size solid transparent;
+    border-right: $cf-dropdown-tree-arrow-size solid transparent;
+    border-top: $cf-dropdown-tree-arrow-size solid;
+    height: 0;
+    margin: 0 $cf-dropdown-tree-arrow-margin;
+    width: 0;
+}
+
+.cf-dropdown-tree-panel {
+    @include mat-menu-base(8);
+
+    @include cdk-high-contrast {
+        outline: solid 1px;
+    }
+
+    max-height: $cf-dropdown-tree-panel-max-height;
+    min-width: 100%;
+    padding-bottom: 0;
+    padding-top: 0;
+}
+
+.mat-form-field-type-cf-dropdown-tree {
+    .mat-form-field-flex {
+        cursor: pointer;
+    }
+
+    .mat-form-field-placeholder {
+        width: calc(100% - #{cf-dropdown-tree-placeholder-arrow-space});
+    }
+}
+
+.cf-dropdown-tree-panel {
+    ul.tree-root {
+        list-style: none;
+        margin: 0;
+        padding-left: 5px;
+    }
+}
+
+.cf-dropdown-tree-node {
+    ul {
+        list-style: none;
+        margin: 0;
+        padding-left: 1.2em;
+    }
+}
+
+.cf-dropdown-tree-node-line {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+}
+
+.cf-dropdown-tree-node-arrow {
+    cursor: pointer;
+    display: inline-block;
+    flex: 0 0 40px;
+
+    .cf-dropdown-tree-node-no-children > .cf-dropdown-tree-node-line > & .mat-icon {
+        display: none;
+    }
+}
+
+.cf-dropdown-tree-node-text {
+    @include mat-menu-item-base();
+
+    cursor: pointer;
+    display: inline-block;
+    flex: 1 1 auto;
+    height: $cf-dropdown-tree-node-height;
+    outline: none;
+    padding: 0 0.5em;
+    position: relative;
+}
+
+.cf-dropdown-tree-node-ripple {
+    @include mat-fill;
+
+    @include cdk-high-contrast {
+        opacity: 0.5;
+    }
+
+    pointer-events: none;
+}

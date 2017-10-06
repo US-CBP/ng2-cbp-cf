@@ -6,7 +6,6 @@
     Input,
     OnInit,
     Output,
-    Renderer,
     ViewChild,
     ViewEncapsulation,
 }                                       from '@angular/core';
@@ -40,8 +39,7 @@ export class DropdownTreeItemComponent implements OnInit {
     private _selectedNode: TreeNode;
     private _expandedNodes: Set<TreeNode>;
 
-    constructor(private _renderer: Renderer) {
-    }
+    constructor() { }
 
     ngOnInit(): void {
         this.id = this.idPrefix + this.node.id.toString();
@@ -98,6 +96,18 @@ export class DropdownTreeItemComponent implements OnInit {
         }
     }
 
+    get expanderIcon(): string {
+        if(!this.hasChildren) {
+            return null;
+        }
+
+        if(this.isExpanded) {
+            return 'keyboard_arrow_down';
+        } else {
+            return 'keyboard_arrow_right';
+        }
+    }
+
     onExpanderClick(): void {
         if(this.hasChildren) {
             if(this.isExpanded) {
@@ -141,10 +151,6 @@ export class DropdownTreeItemComponent implements OnInit {
 
     private _processHighlightedNode(): void {
         this.isHighlighted = this.highlightedNode === this.node;
-
-        if(this.isHighlighted) {
-            this._renderer.invokeElementMethod(this.textElement.nativeElement, 'focus');
-        }
     }
 
     private _processSelectedNode(): void {

@@ -1,0 +1,63 @@
+﻿<div cdk-overlay-origin
+     class="cf-dropdown-tree-trigger"
+     aria-hidden="true"
+     (click)="toggle()"
+     #origin="cdkOverlayOrigin"
+     #trigger>
+
+    <div class="cf-dropdown-tree-value">
+        <ng-container *ngIf="empty">&nbsp;</ng-container>
+        <span class="cf-dropdown-tree-value-text" *ngIf="!empty">{{triggerValue}}</span>
+    </div>
+
+    <div class="cf-dropdown-tree-arrow-wrapper">
+        <div class="cf-dropdown-tree-arrow"></div>
+    </div>
+</div>
+
+<ng-template cdk-connected-overlay
+             hasBackdrop
+             backdropClass="cdk-overlay-transparent-backdrop"
+             [scrollStrategy]="_scrollStrategy"
+             [origin]="origin"
+             [open]="panelOpen"
+             [positions]="_positions"
+             [minWidth]="_triggerRect?.width"
+             [offsetY]="_offsetY"
+             (backdropClick)="close()"
+             (attach)="_onAttached()"
+             (detach)="close()">
+
+    <div #panel
+         class="cf-dropdown-tree-panel {{_getPanelTheme()}}"
+         [ngClass]="panelClass"
+         [@transformPanel]="'showing'"
+         (@transformPanel.done)="_onPanelDone()"
+         [style.transformOrigin]="_transformOrigin"
+         [class.cf-dropdown-tree-panel-done-animating]="_panelDoneAnimating"
+         [style.font-size.px]="_triggerFontSize">
+
+        <div class="cf-dropdown-tree-content" [@fadeInContent]="'showing'" (@fadeInContent.done)="_onFadeInDone()">
+            <ul #tree [id]="treeId" role="tree" class="tree tree-root" aria-expanded="true" aria-hidden="false">
+                <cf-dropdown-tree-item *ngIf="defaultNode"
+                                       [idPrefix]="treeItemIdPrefix"
+                                       [node]="defaultNode"
+                                       [highlightedNode]="highlightedNode"
+                                       [selectedNode]="effectiveSelectedNode"
+                                       [expandedNodes]="expandedNodes"
+                                       (nodeHighlighted)="onNodeHighlighted($event)"
+                                       (nodeSelected)="onNodeSelected($event)"></cf-dropdown-tree-item>
+                <cf-dropdown-tree-item *ngFor="let n of nodes"
+                                       [idPrefix]="treeItemIdPrefix"
+                                       [node]="n"
+                                       [highlightedNode]="highlightedNode"
+                                       [selectedNode]="effectiveSelectedNode"
+                                       [expandedNodes]="expandedNodes"
+                                       (nodeCollapsed)="onNodeCollapsed($event)"
+                                       (nodeExpanded)="onNodeExpanded($event)"
+                                       (nodeHighlighted)="onNodeHighlighted($event)"
+                                       (nodeSelected)="onNodeSelected($event)"></cf-dropdown-tree-item>
+            </ul>
+        </div>
+    </div>
+</ng-template>

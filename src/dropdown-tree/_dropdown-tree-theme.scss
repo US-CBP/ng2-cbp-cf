@@ -1,0 +1,103 @@
+﻿@import '~@angular/material/theming';
+
+@mixin cf-dropdown-tree-theme($theme) {
+    $foreground: map-get($theme, foreground);
+    $background: map-get($theme, background);
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
+    $is-dark-theme: map-get($theme, is-dark);
+
+    .cf-dropdown-tree-disabled .cf-dropdown-tree-value,
+    .cf-dropdown-tree-arrow {
+        color: mat-color($foreground, secondary-text);
+    }
+
+    .cf-dropdown-tree-content,
+    .cf-dropdown-tree-panel-done-animating {
+        background: mat-color($background, card);
+    }
+
+    .cf-dropdown-tree-value {
+        color: mar-color($foreground, text);
+    }
+
+    .mat-form-field {
+        &.mat-focused {
+            &.mat-primary .cf-dropdown-tree-arrow {
+                color: mat-color($primary);
+            }
+
+            &.mat-accent .cf-dropdown-tree-arrow {
+                color: mat-color($accent);
+            }
+
+            &.mat-warn .cf-dropdown-tree-arrow {
+                color: mat-color($warn);
+            }
+        }
+    }
+
+    .cf-dropdown-tree.cf-dropdown-tree-disabled .cf-dropdown-tree-arrow {
+        color: mat-color($warn);
+    }
+
+    .cf-dropdown-tree-node {
+        color: mat-color($foreground, text);
+
+        &:not(.cf-dropdown-tree-node-disabled) > .cf-dropdown-tree-node-line > .cf-dropdown-tree-node-text:hover {
+            background: mat-color($background, hover);
+        }
+
+        .mat-primary &.cf-dropdown-tree-node-selected:not(.cf-dropdown-tree-node-disabled) > .cf-dropdown-tree-node-line > .cf-dropdown-tree-node-text {
+            color: mat-color($primary);
+        }
+
+        .mat-accent &.cf-dropdown-tree-node-selected:not(.cf-dropdown-tree-node-disabled) > .cf-dropdown-tree-node-line > .cf-dropdown-tree-node-text {
+            color: mat-color($accent);
+        }
+
+        .mat-warn &.cf-dropdown-tree-node-selected:not(.cf-dropdown-tree-node-disabled) > .cf-dropdown-tree-node-line > .cf-dropdown-tree-node-text {
+            color: mat-color($warn);
+        }
+
+        &.cf-dropdown-tree-node-selected:not(.cf-dropdown-tree-node-disabled) > .cf-dropdown-tree-node-line > .cf-dropdown-tree-node-text {
+            background: mat-color($background, hover);
+        }
+
+        &.cf-dropdown-tree-node-highlighted > .cf-dropdown-tree-node-line > .cf-dropdown-tree-node-text {
+            background: mat-color($background, hover);
+            color: mat-color($foreground, text);
+        }
+
+        &.cf-dropdown-tree-node-disabled > .cf-dropdown-tree-node-line > .cf-dropdown-tree-node-text {
+            color: mat-color($foreground, hint-text);
+        }
+    }
+}
+
+@mixin cf-dropdown-tree-typography($config) {
+    // Change to use config in Beta 12
+    $line-height: 1.125;
+
+    .cf-dropdown-tree {
+        font-family: mat-font-family($config);
+    }
+
+    .cf-dropdown-tree-trigger {
+        // Remove after Beta 12
+        font-size: 16px;
+        height: $line-height * 1em;
+    }
+
+    .cf-dropdown-tree-node {
+        font-family: mat-font-family($config, subheading-2);
+
+        // Change to use config in Beta 12
+        font-size: 16px;
+    }
+
+    .cf-dropdown-tree-node-arrow {
+        padding-top: 8px;
+    }
+}
