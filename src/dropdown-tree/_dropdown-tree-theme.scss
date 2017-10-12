@@ -19,7 +19,7 @@
     }
 
     .cf-dropdown-tree-value {
-        color: mar-color($foreground, text);
+        color: mat-color($foreground, text);
     }
 
     .mat-form-field {
@@ -77,24 +77,21 @@
 }
 
 @mixin cf-dropdown-tree-typography($config) {
-    // Change to use config in Beta 12
-    $line-height: 1.125;
+    $line-height: mat-line-height($config, input);
 
     .cf-dropdown-tree {
         font-family: mat-font-family($config);
+        font-size: mat-font-size($config, input);
     }
 
     .cf-dropdown-tree-trigger {
-        // Remove after Beta 12
-        font-size: 16px;
+        font-size: mat-font-size($config, input);
         height: $line-height * 1em;
     }
 
     .cf-dropdown-tree-node {
         font-family: mat-font-family($config, subheading-2);
-
-        // Change to use config in Beta 12
-        font-size: 16px;
+        font-size: mat-font-size($config, subheading-2);
     }
 
     .cf-dropdown-tree-node-arrow {

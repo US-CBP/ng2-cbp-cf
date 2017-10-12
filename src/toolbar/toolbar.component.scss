@@ -1,8 +1,8 @@
 ﻿:host {
-    >>> .mat-toolbar { /* stylelint-disable-line selector-combinator-space-after, selector-combinator-space-before */
+    /deep/ .mat-toolbar {
         min-height: 48px;
 
-        >>> .mat-toolbar-row { /* stylelint-disable-line selector-combinator-space-after, selector-combinator-space-before */
+        /deep/ .mat-toolbar-row {
             height: 48px;
 
             .left-action {

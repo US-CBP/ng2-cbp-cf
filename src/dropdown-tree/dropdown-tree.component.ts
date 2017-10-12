@@ -14,18 +14,21 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    DoCheck,
     ElementRef,
     EventEmitter,
     Inject,
     InjectionToken,
     Input,
     NgZone,
+    OnChanges,
     OnDestroy,
     OnInit,
     Optional,
     Output,
     Renderer2,
     Self,
+    SimpleChanges,
     ViewChild,
     ViewEncapsulation,
     animate,
@@ -43,13 +46,10 @@ import {
 }                               from '@angular/forms';
 import {
     CanDisable,
-    ErrorOptions,
     ErrorStateMatcher,
     HasTabIndex,
-    MAT_ERROR_GLOBAL_OPTIONS,
     MatFormField,
     MatFormFieldControl,
-    defaultErrorStateMatcher,
     mixinDisabled,
     mixinTabIndex,
 }                               from '@angular/material';
@@ -157,7 +157,7 @@ export const DropdownTreeComponentMixinBase = mixinTabIndex(mixinDisabled(Dropdo
 })
 export class DropdownTreeComponent
     extends DropdownTreeComponentMixinBase
-    implements OnInit, OnDestroy, ControlValueAccessor, CanDisable, HasTabIndex, MatFormFieldControl<TreeNode> {
+    implements OnInit, DoCheck, OnChanges, OnDestroy, ControlValueAccessor, CanDisable, HasTabIndex, MatFormFieldControl<TreeNode> {
 
     @Input('aria-label') ariaLabel: string = ''; // tslint:disable-line:no-input-rename
     @Input('aria-labelledby') ariaLabelledby: string; // tslint:disable-line:no-input-rename
@@ -173,6 +173,7 @@ export class DropdownTreeComponent
     stateChanges: Subject<void> = new Subject<void>();
     focused: boolean = false;
     controlType: string = 'cf-dropdown-tree';
+    errorState: boolean;
 
     treeId: string;
     treeItemIdPrefix: string;
@@ -211,7 +212,6 @@ export class DropdownTreeComponent
     private _placeholder: string;
     private _uid: string = `dropdown-tree-${nextUniqueId++}`;
     private _id: string = this._uid;
-    private _errorOptions: ErrorOptions;
 
     private _defaultLabel: string;
     private _selectedNode: TreeNode;
@@ -225,13 +225,13 @@ export class DropdownTreeComponent
         private _viewportRuler: ViewportRuler,
         private _changeDetector: ChangeDetectorRef,
         private _ngZone: NgZone,
+        private _defaultErrorStateMatcher: ErrorStateMatcher,
         renderer: Renderer2,
         element: ElementRef,
         @Optional() private _dir: Directionality,
         @Optional() private _parentForm: NgForm,
         @Optional() private _parentFormGroup: FormGroupDirective,
         @Optional() private _parentFormField: MatFormField,
-        @Optional() @Inject(MAT_ERROR_GLOBAL_OPTIONS) errorOptions: ErrorOptions,
         @Self() @Optional() public ngControl: NgControl,
         @Attribute('tabindex') tabIndex: string,
         @Inject(dropdownTreeScrollStrategy) private _scrollStrategyFactory: () => ScrollStrategy) {
@@ -243,8 +243,6 @@ export class DropdownTreeComponent
         }
 
         this.tabIndex = parseInt(tabIndex, 10) || 0;
-        this._errorOptions = errorOptions ? errorOptions : {};
-        this.errorStateMatcher = this._errorOptions.errorStateMatcher || defaultErrorStateMatcher;
     }
     /* tslint:enable */
 
@@ -258,6 +256,18 @@ export class DropdownTreeComponent
         this._resetVisibleNodes();
 
         this.stateChanges.next();
+    }
+
+    ngDoCheck(): void {
+        if(this.ngControl) {
+            this._updateErrorState();
+        }
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if(changes.disabled != null) {
+            this.stateChanges.next();
+        }
     }
 
     ngOnDestroy(): void {
@@ -347,14 +357,6 @@ export class DropdownTreeComponent
 
     get empty(): boolean {
         return this.effectiveSelectedNode == null || this.effectiveSelectedNode.text === '';
-    }
-
-    get errorState(): boolean {
-        const parent = this._parentFormGroup || this._parentForm;
-        const matcher = this.errorStateMatcher || defaultErrorStateMatcher;
-        const control = this.ngControl ? this.ngControl.control as FormControl : null;
-
-        return matcher(control, parent);
     }
 
     get shouldPlaceholderFloat(): boolean {
@@ -502,7 +504,6 @@ export class DropdownTreeComponent
 
     _onFadeInDone(): void {
         this._panelDoneAnimating = this.panelOpen;
-        this.panel.nativeElement.focus();
         this._changeDetector.markForCheck();
     }
 
@@ -523,9 +524,11 @@ export class DropdownTreeComponent
     }
 
     _onAttached(): void {
-        this._changeDetector.detectChanges();
-        this._calculateOverlayOffsetX();
-        this.panel.nativeElement.scrollTop = this._scrollTop;
+        first.call(this.overlayDir.positionChange).subscribe(() => {
+            this._changeDetector.detectChanges();
+            this._calculateOverlayOffsetX();
+            this.panel.nativeElement.scrollTop = this._scrollTop;
+        });
     }
 
     _getPanelTheme(): string {
@@ -779,6 +782,19 @@ export class DropdownTreeComponent
 
     private _getNodeHeight(): number {
         return this._triggerFontSize * dropdownTreeNodeHeightEM;
+    }
+
+    private _updateErrorState(): void {
+        const oldState = this.errorState;
+        const parent = this._parentFormGroup || this._parentForm;
+        const matcher = this.errorStateMatcher || this._defaultErrorStateMatcher;
+        const control = this.ngControl ? this.ngControl.control as FormControl : null;
+        const newState = matcher.isErrorState(control, parent);
+
+        if(newState !== oldState) {
+            this.errorState = newState;
+            this.stateChanges.next();
+        }
     }
 
     private _initializeNodes(): void {

@@ -60,14 +60,6 @@ $primary: map-get($cbp-theme, primary);
     }
 }
 
-.mat-input-placeholder {
-    color: mat-color($foreground, enabled-hint-text);
-}
-
-.mat-select-trigger {
-    color: mat-color($foreground, enabled-hint-text);
-}
-
-.mat-select-arrow {
+.mat-form-field-placeholder {
     color: mat-color($foreground, enabled-hint-text);
 }

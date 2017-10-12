@@ -1,4 +1,4 @@
-﻿import { Portal }           from '@angular/material';
+﻿import { Portal }           from '@angular/cdk/portal';
 
 import { LeftAction }       from './left-action.model';
 

@@ -22,7 +22,7 @@
             &.month {
                 text-align: center;
 
-                >>> .mat-select { /* stylelint-disable-line selector-combinator-space-after, selector-combinator-space-before */
+                /deep/ .mat-select { /* stylelint-disable-line selector-combinator-space-after, selector-combinator-space-before */
                     width: 4em;
 
                     .mat-select-trigger {

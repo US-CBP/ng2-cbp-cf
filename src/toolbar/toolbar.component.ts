@@ -1,8 +1,8 @@
-﻿import {
+﻿import { Portal }           from '@angular/cdk/portal';
+import {
     ChangeDetectionStrategy,
     Component,
 }                           from '@angular/core';
-import { Portal }           from '@angular/material';
 import { Observable }       from 'rxjs';
 
 import { LeftAction }       from './left-action.model';

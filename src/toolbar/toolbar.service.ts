@@ -1,10 +1,10 @@
-﻿import {
+﻿import { Portal }           from '@angular/cdk/portal';
+import {
     EventEmitter,
     Injectable,
     Optional,
     SkipSelf,
 }                           from '@angular/core';
-import { Portal }           from '@angular/material';
 import {
     BehaviorSubject,
     Observable,

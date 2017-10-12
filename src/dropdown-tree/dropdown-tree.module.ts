@@ -3,6 +3,7 @@ import { CommonModule }                 from '@angular/common';
 import { NgModule }                     from '@angular/core';
 import { FormsModule }                  from '@angular/forms';
 import {
+    ErrorStateMatcher,
     MatFormFieldModule,
     MatIconModule,
     MatRippleModule,
@@ -34,6 +35,7 @@ import {
     ],
     providers: [
         dropdownTreeScrollStrategyProvider,
+        ErrorStateMatcher,
     ],
 })
 export class DropdownTreeModule {

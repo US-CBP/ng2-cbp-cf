@@ -82,7 +82,7 @@ $cf-dropdown-tree-placeholder-arrow-space: 2 * ($cf-dropdown-tree-arrow-size + $
 }
 
 .mat-form-field-type-cf-dropdown-tree {
-    .mat-form-field-flex {
+    &:not(.mat-form-field-disabled) .mat-form-field-flex {
         cursor: pointer;
     }
 

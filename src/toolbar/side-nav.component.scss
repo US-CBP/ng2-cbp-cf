@@ -84,7 +84,7 @@
             padding: 12px 0 11px 24px;
             position: relative;
 
-            >>> span { /* stylelint-disable-line selector-combinator-space-after, selector-combinator-space-before */
+            /deep/ span {
                 display: block;
                 font-size: 0.7em;
                 font-weight: 400;
