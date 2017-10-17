@@ -897,6 +897,40 @@ describe('DropdownTreeComponent', () => {
             expect(component.selectedNode).toBe(component.nodes[2]);
         }));
 
+        it('ArrowUp highlights previous visible node when previous visible node is not selectable', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[1];
+            component.selectedNode = component.nodes[2];
+
+            component.nodes[0].selectable = false;
+
+            const event = new KeyboardEvent('keydown', {
+                key: 'ArrowUp',
+            });
+            host.triggerEventHandler('keydown', event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[0]);
+        }));
+
+        it('ArrowUp does not change selected node when previous visible node is not selectable', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[1];
+            component.selectedNode = component.nodes[2];
+
+            component.nodes[0].selectable = false;
+
+            const event = new KeyboardEvent('keydown', {
+                key: 'ArrowUp',
+            });
+            host.triggerEventHandler('keydown', event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.selectedNode).toBe(component.nodes[2]);
+        }));
+
         it('Ctrl+ArrowUp highlights previous visible node of current highlighted node', fakeAsync(() => {
             component.dropdownTree.highlightedNode = component.nodes[1];
             component.selectedNode = component.nodes[2];
@@ -948,6 +982,42 @@ describe('DropdownTreeComponent', () => {
         it('Ctrl+ArrowUp does not change selected node when current highlighted node is first visible node', fakeAsync(() => {
             component.dropdownTree.highlightedNode = component.dropdownTree.defaultNode;
             component.selectedNode = component.nodes[2];
+
+            const event = new KeyboardEvent('keydown', {
+                ctrlKey: true,
+                key: 'ArrowUp',
+            });
+            host.triggerEventHandler('keydown', event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.selectedNode).toBe(component.nodes[2]);
+        }));
+
+        it('Ctrl+ArrowUp highlights previous visible node when previous visible node is not selectable', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[1];
+            component.selectedNode = component.nodes[2];
+
+            component.nodes[0].selectable = false;
+
+            const event = new KeyboardEvent('keydown', {
+                ctrlKey: true,
+                key: 'ArrowUp',
+            });
+            host.triggerEventHandler('keydown', event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[0]);
+        }));
+
+        it('Ctrl+ArrowUp does not change selected node when previous visible node is not selectable', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[1];
+            component.selectedNode = component.nodes[2];
+
+            component.nodes[0].selectable = false;
 
             const event = new KeyboardEvent('keydown', {
                 ctrlKey: true,
@@ -1021,6 +1091,40 @@ describe('DropdownTreeComponent', () => {
             expect(component.selectedNode).toBe(component.nodes[0]);
         }));
 
+        it('ArrowDown highlights next visible node when next visible node is not selectable', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[1];
+            component.selectedNode = component.nodes[0];
+
+            component.nodes[2].selectable = false;
+
+            const event = new KeyboardEvent('keydown', {
+                key: 'ArrowDown',
+            });
+            host.triggerEventHandler('keydown', event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[2]);
+        }));
+
+        it('ArrowDown does not change selected node when next visible node is not selectable', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[1];
+            component.selectedNode = component.nodes[0];
+
+            component.nodes[2].selectable = false;
+
+            const event = new KeyboardEvent('keydown', {
+                key: 'ArrowDown',
+            });
+            host.triggerEventHandler('keydown', event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.selectedNode).toBe(component.nodes[0]);
+        }));
+
         it('Ctrl+ArrowDown highlights next visible node of current highlighted node', fakeAsync(() => {
             component.dropdownTree.highlightedNode = component.nodes[1];
             component.selectedNode = component.nodes[0];
@@ -1072,6 +1176,42 @@ describe('DropdownTreeComponent', () => {
         it('Ctrl+ArrowDown does not change selected node when current highlighted node is last visible node', fakeAsync(() => {
             component.dropdownTree.highlightedNode = component.nodes[2];
             component.selectedNode = component.nodes[0];
+
+            const event = new KeyboardEvent('keydown', {
+                ctrlKey: true,
+                key: 'ArrowDown',
+            });
+            host.triggerEventHandler('keydown', event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.selectedNode).toBe(component.nodes[0]);
+        }));
+
+        it('Ctrl+ArrowDown highlights next visible node when next visible node is not selectable', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[1];
+            component.selectedNode = component.nodes[0];
+
+            component.nodes[2].selectable = false;
+
+            const event = new KeyboardEvent('keydown', {
+                ctrlKey: true,
+                key: 'ArrowDown',
+            });
+            host.triggerEventHandler('keydown', event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[2]);
+        }));
+
+        it('Ctrl+ArrowDown does not change selected node when next visible node is not selectable', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[1];
+            component.selectedNode = component.nodes[0];
+
+            component.nodes[2].selectable = false;
 
             const event = new KeyboardEvent('keydown', {
                 ctrlKey: true,
@@ -1238,6 +1378,54 @@ describe('DropdownTreeComponent', () => {
             expect(component.selectedNode).toBe(component.nodes[2]);
         }));
 
+        it('ArrowLeft changes highlighted node to parent when current highlighted node is collapsed and parent node is not selectable', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.selectedNode = component.nodes[2];
+
+            component.nodes[0].selectable = false;
+
+            fixture.detectChanges();
+            tick();
+
+            expandNodes(component.dropdownTree, [
+                component.nodes[0],
+            ]);
+
+            const event = new KeyboardEvent('keydown', {
+                key: 'ArrowLeft',
+            });
+            host.triggerEventHandler('keydown', event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[0]);
+        }));
+
+        it('ArrowLeft does not change selected node when current highlighted node is collapsed and parent node is not selectable', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.selectedNode = component.nodes[2];
+
+            component.nodes[0].selectable = false;
+
+            fixture.detectChanges();
+            tick();
+
+            expandNodes(component.dropdownTree, [
+                component.nodes[0],
+            ]);
+
+            const event = new KeyboardEvent('keydown', {
+                key: 'ArrowLeft',
+            });
+            host.triggerEventHandler('keydown', event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.selectedNode).toBe(component.nodes[2]);
+        }));
+
         it('ArrowRight does not change highlighted node when current highlighted node is collapsed', fakeAsync(() => {
             component.dropdownTree.highlightedNode = component.nodes[0];
             component.selectedNode = component.nodes[2];
@@ -1386,7 +1574,101 @@ describe('DropdownTreeComponent', () => {
             expect(component.selectedNode).toBe(component.nodes[2]);
         }));
 
+        it('ArrowRight changes highlighted node to first child when current highlighted node is expanded and first child node is not selectable', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[0];
+            component.selectedNode = component.nodes[2];
+
+            component.nodes[0].children[0].selectable = false;
+
+            fixture.detectChanges();
+            tick();
+
+            expandNodes(component.dropdownTree, [
+                component.nodes[0],
+            ]);
+
+            const event = new KeyboardEvent('keydown', {
+                key: 'ArrowRight',
+            });
+            host.triggerEventHandler('keydown', event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[0].children[0]);
+        }));
+
+        it('ArrowRight does not change selected node when current highlighted node is expanded and first child node is not selectable', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[0];
+            component.selectedNode = component.nodes[2];
+
+            component.nodes[0].children[0].selectable = false;
+
+            fixture.detectChanges();
+            tick();
+
+            expandNodes(component.dropdownTree, [
+                component.nodes[0],
+            ]);
+
+            const event = new KeyboardEvent('keydown', {
+                key: 'ArrowRight',
+            });
+            host.triggerEventHandler('keydown', event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.selectedNode).toBe(component.nodes[2]);
+        }));
+
         it('Home changes highlighted node to first visible node', fakeAsync(() => {
+            component.defaultLabel = null;
+            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.selectedNode = component.nodes[2];
+
+            fixture.detectChanges();
+            tick();
+
+            expandNodes(component.dropdownTree, [
+                component.nodes[0],
+            ]);
+
+            const event = new KeyboardEvent('keydown', {
+                key: 'Home',
+            });
+            host.triggerEventHandler('keydown', event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[0]);
+        }));
+
+        it('Home changes selected node to first visible node', fakeAsync(() => {
+            component.defaultLabel = null;
+            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.selectedNode = component.nodes[2];
+
+            fixture.detectChanges();
+            tick();
+
+            expandNodes(component.dropdownTree, [
+                component.nodes[0],
+            ]);
+
+            const event = new KeyboardEvent('keydown', {
+                key: 'Home',
+            });
+            host.triggerEventHandler('keydown', event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.selectedNode).toBe(component.nodes[0]);
+        }));
+
+        it('Home changes highlighted node to default node when default label is not null', fakeAsync(() => {
             component.dropdownTree.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[2];
 
@@ -1408,7 +1690,7 @@ describe('DropdownTreeComponent', () => {
             expect(component.dropdownTree.highlightedNode).toBe(component.dropdownTree.defaultNode);
         }));
 
-        it('Home changes selected node to first visible node', fakeAsync(() => {
+        it('Home changes selected node to default node when default label is not null', fakeAsync(() => {
             component.dropdownTree.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[2];
 
@@ -1430,7 +1712,105 @@ describe('DropdownTreeComponent', () => {
             expect(component.selectedNode).toBeNull();
         }));
 
+        it('Home changes highlighted node to first visible node when first visible node is not selectable', fakeAsync(() => {
+            component.defaultLabel = null;
+            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.selectedNode = component.nodes[2];
+
+            component.nodes[0].selectable = false;
+
+            fixture.detectChanges();
+            tick();
+
+            expandNodes(component.dropdownTree, [
+                component.nodes[0],
+            ]);
+
+            const event = new KeyboardEvent('keydown', {
+                key: 'Home',
+            });
+            host.triggerEventHandler('keydown', event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[0]);
+        }));
+
+        it('Home does not change selected node when first visible node is not selectable', fakeAsync(() => {
+            component.defaultLabel = null;
+            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.selectedNode = component.nodes[2];
+
+            component.nodes[0].selectable = false;
+
+            fixture.detectChanges();
+            tick();
+
+            expandNodes(component.dropdownTree, [
+                component.nodes[0],
+            ]);
+
+            const event = new KeyboardEvent('keydown', {
+                key: 'Home',
+            });
+            host.triggerEventHandler('keydown', event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.selectedNode).toBe(component.nodes[2]);
+        }));
+
         it('Ctrl+Home changes highlighted node to first visible node', fakeAsync(() => {
+            component.defaultLabel = null;
+            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.selectedNode = component.nodes[2];
+
+            fixture.detectChanges();
+            tick();
+
+            expandNodes(component.dropdownTree, [
+                component.nodes[0],
+            ]);
+
+            const event = new KeyboardEvent('keydown', {
+                ctrlKey: true,
+                key: 'Home',
+            });
+            host.triggerEventHandler('keydown', event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[0]);
+        }));
+
+        it('Ctrl+Home does not change selected node', fakeAsync(() => {
+            component.defaultLabel = null;
+            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.selectedNode = component.nodes[2];
+
+            fixture.detectChanges();
+            tick();
+
+            expandNodes(component.dropdownTree, [
+                component.nodes[0],
+            ]);
+
+            const event = new KeyboardEvent('keydown', {
+                ctrlKey: true,
+                key: 'Home',
+            });
+            host.triggerEventHandler('keydown', event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.selectedNode).toBe(component.nodes[2]);
+        }));
+
+        it('Ctrl+Home changes highlighted node to first visible node when default label is not null', fakeAsync(() => {
             component.dropdownTree.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[2];
 
@@ -1453,9 +1833,61 @@ describe('DropdownTreeComponent', () => {
             expect(component.dropdownTree.highlightedNode).toBe(component.dropdownTree.defaultNode);
         }));
 
-        it('Ctrl+Home does not change selected node', fakeAsync(() => {
+        it('Ctrl+Home does not change selected node when default label is not null', fakeAsync(() => {
             component.dropdownTree.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[2];
+
+            fixture.detectChanges();
+            tick();
+
+            expandNodes(component.dropdownTree, [
+                component.nodes[0],
+            ]);
+
+            const event = new KeyboardEvent('keydown', {
+                ctrlKey: true,
+                key: 'Home',
+            });
+            host.triggerEventHandler('keydown', event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.selectedNode).toBe(component.nodes[2]);
+        }));
+
+        it('Ctrl+Home changes highlighted node to first visible node when first visible node is not selectable', fakeAsync(() => {
+            component.defaultLabel = null;
+            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.selectedNode = component.nodes[2];
+
+            component.nodes[0].selectable = false;
+
+            fixture.detectChanges();
+            tick();
+
+            expandNodes(component.dropdownTree, [
+                component.nodes[0],
+            ]);
+
+            const event = new KeyboardEvent('keydown', {
+                ctrlKey: true,
+                key: 'Home',
+            });
+            host.triggerEventHandler('keydown', event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[0]);
+        }));
+
+        it('Ctrl+Home does not change selected node when first visible node is not selectable', fakeAsync(() => {
+            component.defaultLabel = null;
+            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.selectedNode = component.nodes[2];
+
+            component.nodes[0].selectable = false;
 
             fixture.detectChanges();
             tick();
@@ -1520,6 +1952,54 @@ describe('DropdownTreeComponent', () => {
             expect(component.selectedNode).toBe(component.nodes[2]);
         }));
 
+        it('End changes highlighted node to last visible node when last visible node is not selectable', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.selectedNode = component.nodes[0];
+
+            component.nodes[2].selectable = false;
+
+            fixture.detectChanges();
+            tick();
+
+            expandNodes(component.dropdownTree, [
+                component.nodes[0],
+            ]);
+
+            const event = new KeyboardEvent('keydown', {
+                key: 'End',
+            });
+            host.triggerEventHandler('keydown', event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[2]);
+        }));
+
+        it('End does not change selected node when last visible node is not selectable', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.selectedNode = component.nodes[0];
+
+            component.nodes[2].selectable = false;
+
+            fixture.detectChanges();
+            tick();
+
+            expandNodes(component.dropdownTree, [
+                component.nodes[0],
+            ]);
+
+            const event = new KeyboardEvent('keydown', {
+                key: 'End',
+            });
+            host.triggerEventHandler('keydown', event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.selectedNode).toBe(component.nodes[0]);
+        }));
+
         it('Ctrl+End changes highlighted node to last visible node', fakeAsync(() => {
             component.dropdownTree.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[0];
@@ -1566,6 +2046,56 @@ describe('DropdownTreeComponent', () => {
             expect(component.selectedNode).toBe(component.nodes[0]);
         }));
 
+        it('Ctrl+End changes highlighted node to last visible node when last visible node is not selectable', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.selectedNode = component.nodes[0];
+
+            component.nodes[2].selectable = false;
+
+            fixture.detectChanges();
+            tick();
+
+            expandNodes(component.dropdownTree, [
+                component.nodes[0],
+            ]);
+
+            const event = new KeyboardEvent('keydown', {
+                ctrlKey: true,
+                key: 'End',
+            });
+            host.triggerEventHandler('keydown', event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[2]);
+        }));
+
+        it('Ctrl+End does not change selected node when last visible node is not selectable', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.selectedNode = component.nodes[0];
+
+            component.nodes[2].selectable = false;
+
+            fixture.detectChanges();
+            tick();
+
+            expandNodes(component.dropdownTree, [
+                component.nodes[0],
+            ]);
+
+            const event = new KeyboardEvent('keydown', {
+                ctrlKey: true,
+                key: 'End',
+            });
+            host.triggerEventHandler('keydown', event);
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.selectedNode).toBe(component.nodes[0]);
+        }));
+
         it('Space changes selected node to current highlighted node', fakeAsync(() => {
             component.dropdownTree.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[2];
@@ -1587,6 +2117,31 @@ describe('DropdownTreeComponent', () => {
             tick(1000);
 
             expect(component.selectedNode).toBe(component.nodes[0].children[1]);
+        }));
+
+        it('Space does not change selected node when highlighted node is not selectable', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.selectedNode = component.nodes[2];
+
+            component.nodes[0].children[1].selectable = false;
+
+            fixture.detectChanges();
+            tick();
+
+            expandNodes(component.dropdownTree, [
+                component.nodes[0],
+            ]);
+
+            const event = new KeyboardEvent('keydown', {
+                key: ' ',
+            });
+            host.triggerEventHandler('keydown', event);
+
+            fixture.detectChanges();
+            tick();
+            tick(1000);
+
+            expect(component.selectedNode).toBe(component.nodes[2]);
         }));
 
         it('Ctrl+Space changes selected node to current highlighted node', fakeAsync(() => {
@@ -1613,6 +2168,32 @@ describe('DropdownTreeComponent', () => {
             expect(component.selectedNode).toBe(component.nodes[0].children[1]);
         }));
 
+        it('Ctrl+Space does not change selected node when highlighted node is not selectable', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.selectedNode = component.nodes[2];
+
+            component.nodes[0].children[1].selectable = false;
+
+            fixture.detectChanges();
+            tick();
+
+            expandNodes(component.dropdownTree, [
+                component.nodes[0],
+            ]);
+
+            const event = new KeyboardEvent('keydown', {
+                ctrlKey: true,
+                key: ' ',
+            });
+            host.triggerEventHandler('keydown', event);
+
+            fixture.detectChanges();
+            tick();
+            tick(1000);
+
+            expect(component.selectedNode).toBe(component.nodes[2]);
+        }));
+
         it('Enter changes selected node to current highlighted node', fakeAsync(() => {
             component.dropdownTree.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[2];
@@ -1634,6 +2215,31 @@ describe('DropdownTreeComponent', () => {
             tick(1000);
 
             expect(component.selectedNode).toBe(component.nodes[0].children[1]);
+        }));
+
+        it('Enter does not change selected node when highlighted node is not selectable', fakeAsync(() => {
+            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.selectedNode = component.nodes[2];
+
+            component.nodes[0].children[1].selectable = false;
+
+            fixture.detectChanges();
+            tick();
+
+            expandNodes(component.dropdownTree, [
+                component.nodes[0],
+            ]);
+
+            const event = new KeyboardEvent('keydown', {
+                key: 'Enter',
+            });
+            host.triggerEventHandler('keydown', event);
+
+            fixture.detectChanges();
+            tick();
+            tick(1000);
+
+            expect(component.selectedNode).toBe(component.nodes[2]);
         }));
     });
 

@@ -133,6 +133,10 @@ $cf-dropdown-tree-placeholder-arrow-space: 2 * ($cf-dropdown-tree-arrow-size + $
     outline: none;
     padding: 0 0.5em;
     position: relative;
+
+    .cf-dropdown-tree-node-not-selectable > .cf-dropdown-tree-node-line > & {
+        cursor: default;
+    }
 }
 
 .cf-dropdown-tree-node-ripple {

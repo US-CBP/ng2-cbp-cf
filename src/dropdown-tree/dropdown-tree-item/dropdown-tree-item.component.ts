@@ -30,6 +30,7 @@ export class DropdownTreeItemComponent implements OnInit {
     id: string;
     isHighlighted: boolean;
     isSelected: boolean;
+    isSelectable: boolean;
     isExpanded: boolean;
     hasChildren: boolean;
     showChildren: boolean;
@@ -53,6 +54,7 @@ export class DropdownTreeItemComponent implements OnInit {
         if(this._node !== newValue) {
             this._node = newValue;
             this.hasChildren = this._node.children != null && this._node.children.length > 0;
+            this.isSelectable = this._node.selectable == null || this._node.selectable;
 
             this._processExpansion();
             this._processHighlightedNode();
@@ -135,7 +137,9 @@ export class DropdownTreeItemComponent implements OnInit {
     }
 
     onNodeClick(): void {
-        this.nodeSelected.emit(this.node);
+        if(this.node.selectable == null || this.node.selectable) {
+            this.nodeSelected.emit(this.node);
+        }
     }
 
     onChildNodeSelected(childNode: TreeNode): void {

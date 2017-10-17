@@ -472,8 +472,10 @@ export class DropdownTreeComponent
     }
 
     onNodeSelected(node: TreeNode): void {
-        this._emitSelectedNode(node);
-        this.close();
+        if(node.selectable == null || node.selectable) {
+            this._emitSelectedNode(node);
+            this.close();
+        }
     }
 
     _isRtl(): boolean {
@@ -574,7 +576,7 @@ export class DropdownTreeComponent
             const previousNode = this._previousVisibleNode();
             if(previousNode != null) {
                 this._setHighlightedNodeAndScroll(previousNode);
-                this._emitSelectedNode(previousNode);
+                this._trySelectNode(previousNode);
             }
         } else if(isKey(event, 'ArrowUp', { ctrlKey: true }) || isKey(event, 'Up', { ctrlKey: true })) {
             event.preventDefault();
@@ -589,7 +591,7 @@ export class DropdownTreeComponent
             const nextNode = this._nextVisibleNode();
             if(nextNode != null) {
                 this._setHighlightedNodeAndScroll(nextNode);
-                this._emitSelectedNode(nextNode);
+                this._trySelectNode(nextNode);
             }
         } else if(isKey(event, 'ArrowDown', { ctrlKey: true }) || isKey(event, 'Down', { ctrlKey: true })) {
             event.preventDefault();
@@ -607,7 +609,7 @@ export class DropdownTreeComponent
                 const parentNode = this._parentMap.get(this.highlightedNode);
                 if(parentNode != null) {
                     this._setHighlightedNodeAndScroll(parentNode);
-                    this._emitSelectedNode(parentNode);
+                    this._trySelectNode(parentNode);
                 }
             }
         } else if(isKey(event, 'ArrowRight') || isKey(event, 'Right')) {
@@ -616,7 +618,7 @@ export class DropdownTreeComponent
             const originalHighlightedNode = this.highlightedNode;
             if(this.expandedNodes.has(originalHighlightedNode)) {
                 this._setHighlightedNodeAndScroll(originalHighlightedNode.children[0]);
-                this._emitSelectedNode(originalHighlightedNode.children[0]);
+                this._trySelectNode(originalHighlightedNode.children[0]);
             } else {
                 this.expandNode(originalHighlightedNode);
             }
@@ -624,7 +626,7 @@ export class DropdownTreeComponent
             event.preventDefault();
 
             this._setHighlightedNodeAndScroll(this._visibleNodes[0]);
-            this._emitSelectedNode(this._visibleNodes[0]);
+            this._trySelectNode(this._visibleNodes[0]);
         } else if(isKey(event, 'Home', { ctrlKey: true })) {
             event.preventDefault();
 
@@ -633,7 +635,7 @@ export class DropdownTreeComponent
             event.preventDefault();
 
             this._setHighlightedNodeAndScroll(this._visibleNodes[this._visibleNodes.length - 1]);
-            this._emitSelectedNode(this._visibleNodes[this._visibleNodes.length - 1]);
+            this._trySelectNode(this._visibleNodes[this._visibleNodes.length - 1]);
         } else if(isKey(event, 'End', { ctrlKey: true })) {
             event.preventDefault();
 
@@ -646,8 +648,10 @@ export class DropdownTreeComponent
 
             event.preventDefault();
 
-            this._emitSelectedNode(this.highlightedNode);
-            this.close();
+            if(this.highlightedNode.selectable == null || this.highlightedNode.selectable) {
+                this._emitSelectedNode(this.highlightedNode);
+                this.close();
+            }
         }
     }
 
@@ -928,6 +932,12 @@ export class DropdownTreeComponent
 
         this._onChange(node === this.defaultNode ? null : node);
         this._changeDetector.markForCheck();
+    }
+
+    private _trySelectNode(node: TreeNode): void {
+        if(node.selectable == null || node.selectable) {
+            this._emitSelectedNode(node);
+        }
     }
 
     private _scrollHighlightedNodeIntoView(): void {

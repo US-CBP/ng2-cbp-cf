@@ -70,7 +70,8 @@
             color: mat-color($foreground, text);
         }
 
-        &.cf-dropdown-tree-node-disabled > .cf-dropdown-tree-node-line > .cf-dropdown-tree-node-text {
+        &.cf-dropdown-tree-node-disabled > .cf-dropdown-tree-node-line > .cf-dropdown-tree-node-text,
+        &.cf-dropdown-tree-node-not-selectable > .cf-dropdown-tree-node-line > .cf-dropdown-tree-node-text {
             color: mat-color($foreground, hint-text);
         }
     }
