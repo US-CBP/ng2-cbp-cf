@@ -525,6 +525,65 @@ describe('DropdownTreeComponent', () => {
 
             expect(component.dropdownTree.expandedNodes.size).toBe(0);
         }));
+
+        it('expands no nodes when defaultExpansionLevel is 0', fakeAsync(() => {
+            component.defaultExpansionLevel = 0;
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.expandedNodes.size).toBe(0);
+        }));
+
+        it('expands nodes to first level when defaultExpansionLevel is 1', fakeAsync(() => {
+            component.defaultExpansionLevel = 1;
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.expandedNodes).toEqual({
+                asymmetricMatch(actual: Set<TreeNode>): boolean {
+                    return actual.size === 2 &&
+                        actual.has(component.nodes[0]) &&
+                        actual.has(component.nodes[1]);
+                },
+            });
+        }));
+
+        it('expands nodes to second level when defaultExpansionLevel is 2', fakeAsync(() => {
+            component.defaultExpansionLevel = 2;
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.expandedNodes).toEqual({
+                asymmetricMatch(actual: Set<TreeNode>): boolean {
+                    return actual.size === 5 &&
+                        actual.has(component.nodes[0]) &&
+                        actual.has(component.nodes[0].children[1]) &&
+                        actual.has(component.nodes[0].children[2]) &&
+                        actual.has(component.nodes[1]) &&
+                        actual.has(component.nodes[1].children[0]);
+                },
+            });
+        }));
+
+        it('expands nodes to value and defaultExpansionLevel', fakeAsync(() => {
+            component.selectedNode = component.nodes[0].children[2].children[0];
+            component.defaultExpansionLevel = 1;
+
+            fixture.detectChanges();
+            tick();
+
+            expect(component.dropdownTree.expandedNodes).toEqual({
+                asymmetricMatch(actual: Set<TreeNode>): boolean {
+                    return actual.size === 3 &&
+                        actual.has(component.nodes[0]) &&
+                        actual.has(component.nodes[0].children[2]) &&
+                        actual.has(component.nodes[1]);
+                },
+            });
+        }));
     });
 
     describe('opens', () => {
@@ -2312,6 +2371,7 @@ describe('DropdownTreeComponent', () => {
 <cf-dropdown-tree
     placeholder="Basic Model"
     [(ngModel)]="selectedNode"
+    [defaultExpansionLevel]="defaultExpansionLevel"
     [defaultLabel]="defaultLabel"
     [disabled]="disabled"
     [nodes]="nodes"
@@ -2323,6 +2383,7 @@ describe('DropdownTreeComponent', () => {
 </cf-dropdown-tree>`,
 })
 class BasicModelComponent {
+    defaultExpansionLevel: number = 0;
     defaultLabel: string = null;
     disabled: boolean = false;
     nodes: TreeNode[] = createNodeTree();

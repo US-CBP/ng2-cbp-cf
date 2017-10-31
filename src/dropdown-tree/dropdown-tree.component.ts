@@ -217,6 +217,7 @@ export class DropdownTreeComponent
     private _selectedNode: TreeNode;
     private _showFullSelectedPath: boolean = false;
     private _nodes: TreeNode[];
+    private _defaultExpansionLevel: number = 0;
     private _parentMap: Map<TreeNode, TreeNode>;
     private _visibleNodes: TreeNode[];
 
@@ -343,6 +344,19 @@ export class DropdownTreeComponent
             this._nodes = newValue;
 
             this._initializeNodes();
+            this._resetVisibleNodes();
+        }
+    }
+
+    @Input()
+    get defaultExpansionLevel(): number {
+        return this._defaultExpansionLevel;
+    }
+    set defaultExpansionLevel(newValue: number) {
+        if(this._defaultExpansionLevel !== newValue) {
+            this._defaultExpansionLevel = newValue;
+
+            this._expandNodesToDefaultExpansionLevel();
             this._resetVisibleNodes();
         }
     }
@@ -808,6 +822,7 @@ export class DropdownTreeComponent
         this.highlightedNode = this.panelOpen ? this.effectiveSelectedNode : null;
 
         this.expandedNodes = new Set<TreeNode>();
+        this._expandNodesToDefaultExpansionLevel();
         if(this._selectedNode != null) {
             this._expandNodesToNode(this._selectedNode);
         }
@@ -902,6 +917,23 @@ export class DropdownTreeComponent
         while(parentNode != null) {
             this.expandedNodes.add(parentNode);
             parentNode = this._parentMap.get(parentNode);
+        }
+    }
+
+    private _expandNodesToLevel(node: TreeNode, level: number): void {
+        if(level < this.defaultExpansionLevel && node.children != null && node.children.length !== 0) {
+            this.expandedNodes.add(node);
+            for(const child of node.children) {
+                this._expandNodesToLevel(child, level + 1);
+            }
+        }
+    }
+
+    private _expandNodesToDefaultExpansionLevel(): void {
+        if(this.nodes != null) {
+            for(const node of this.nodes) {
+                this._expandNodesToLevel(node, 0);
+            }
         }
     }
 
