@@ -433,6 +433,58 @@ describe('PayPeriodCalendarComponent', () => {
         });
     });
 
+    describe('isDaySelected', () => {
+        beforeEach(() => {
+            const startDate = moment().startOf('day').startOf('month');
+            const selectedPayPeriod = {
+                id: 22,
+                number: 22,
+                startDate: startDate.toDate(),
+                isSelectable: true,
+            };
+            component.selectedPayPeriod = selectedPayPeriod;
+            component.selectedPayPeriodDayIndex = 10;
+
+            fixture.detectChanges();
+        });
+
+        it('should return false when pay period has different id as selected pay period', () => {
+            const startDate = moment().startOf('day').startOf('month');
+            const payPeriod = {
+                id: 1,
+                number: 1,
+                startDate: startDate.toDate(),
+                isSelectable: true,
+            };
+
+            expect(component.isDaySelected(payPeriod, 10)).toBe(false);
+        });
+
+        it('should return false when pay period day index has different value as selected pay period day index', () => {
+            const startDate = moment().startOf('day').startOf('month');
+            const payPeriod = {
+                id: 22,
+                number: 22,
+                startDate: startDate.toDate(),
+                isSelectable: true,
+            };
+
+            expect(component.isDaySelected(payPeriod, 11)).toBe(false);
+        });
+
+        it('should return true when pay period has same id as selected pay period and day indexx has same value as selcted pay period day index', () => {
+            const startDate = moment().startOf('day').startOf('month');
+            const payPeriod = {
+                id: 22,
+                number: 22,
+                startDate: startDate.toDate(),
+                isSelectable: true,
+            };
+
+            expect(component.isDaySelected(payPeriod, 10)).toBe(true);
+        });
+    });
+
     describe('selectPayPeriod', () => {
         beforeEach(() => {
             fixture.detectChanges();
@@ -452,7 +504,7 @@ describe('PayPeriodCalendarComponent', () => {
             expect(component.selectedPayPeriod).toBeUndefined();
         });
 
-        it('should raise payPeriodSelected event', () => {
+        it('should raise payPeriodSelected event with null day index when an entire pay period is selected', () => {
             const subscriber = jasmine.createSpy('onPayPeriodSelected');
             component.payPeriodSelected.subscribe(subscriber);
 
@@ -466,7 +518,25 @@ describe('PayPeriodCalendarComponent', () => {
 
             component.selectPayPeriod(payPeriod);
 
-            expect(subscriber).toHaveBeenCalledWith(payPeriod);
+            expect(subscriber).toHaveBeenCalledWith({ payPeriod, dayIndex: null });
+        });
+
+        it('should raise payPeriodSelected event with day index when a pay period day is selected', () => {
+            const subscriber = jasmine.createSpy('onPayPeriodSelected');
+            component.payPeriodSelected.subscribe(subscriber);
+
+            const startDate = moment().startOf('day').startOf('month');
+            const payPeriod = {
+                id: 1,
+                number: 1,
+                startDate: startDate.toDate(),
+                isSelectable: true,
+            };
+            const dayIndex = 5;
+
+            component.selectPayPeriod(payPeriod, dayIndex);
+
+            expect(subscriber).toHaveBeenCalledWith({ payPeriod, dayIndex });
         });
     });
 

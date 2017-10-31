@@ -8,6 +8,7 @@
 import * as moment                  from 'moment/moment';
 
 import { PayPeriodMonth }           from './pay-period-month.model';
+import { PayPeriodSelection }       from './pay-period-selection.model';
 import { PayPeriod }                from './pay-period.model';
 
 @Component({
@@ -18,9 +19,10 @@ import { PayPeriod }                from './pay-period.model';
 export class PayPeriodCalendarComponent implements OnInit {
     @Input() id: string;
     @Input() selectedPayPeriod: PayPeriod;
+    @Input() selectedPayPeriodDayIndex: number;
     @Input() payPeriodsOfMonth: PayPeriod[];
 
-    @Output() payPeriodSelected: EventEmitter<PayPeriod> = new EventEmitter<PayPeriod>();
+    @Output() payPeriodSelected: EventEmitter<PayPeriodSelection> = new EventEmitter<PayPeriodSelection>();
     @Output() monthSelected: EventEmitter<PayPeriodMonth> = new EventEmitter<PayPeriodMonth>();
 
     years: number[];
@@ -110,9 +112,16 @@ export class PayPeriodCalendarComponent implements OnInit {
         return this.selectedPayPeriod != null && this.selectedPayPeriod.id === pp.id;
     }
 
-    selectPayPeriod(pp: PayPeriod): void {
+    isDaySelected(pp: PayPeriod, ppDayIndex: number): boolean {
+        return this.isSelected(pp) && this.selectedPayPeriodDayIndex === ppDayIndex;
+    }
+
+    selectPayPeriod(pp: PayPeriod, ppDayIndex: number = null): void {
         if(pp.isSelectable) {
-            this.payPeriodSelected.emit(pp);
+            this.payPeriodSelected.emit({
+                payPeriod: pp,
+                dayIndex: ppDayIndex,
+            });
         }
     }
 

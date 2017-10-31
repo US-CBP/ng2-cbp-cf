@@ -53,13 +53,41 @@
                         <button type="button" mat-raised-button color="primary" [disabled]="!pp.isSelectable" (click)="selectPayPeriod(pp); $event.stopPropagation();">{{pp.number}}</button>
                         <span class="selected-text" *ngIf="isSelected(pp)">(selected)</span>
                     </th>
-                    <td class="day sunday">{{dayOfMonth(pp, 1, 0)}}</td>
-                    <td class="day monday">{{dayOfMonth(pp, 1, 1)}}</td>
-                    <td class="day tuesday">{{dayOfMonth(pp, 1, 2)}}</td>
-                    <td class="day wednesday">{{dayOfMonth(pp, 1, 3)}}</td>
-                    <td class="day thursday">{{dayOfMonth(pp, 1, 4)}}</td>
-                    <td class="day friday">{{dayOfMonth(pp, 1, 5)}}</td>
-                    <td class="day saturday">{{dayOfMonth(pp, 1, 6)}}</td>
+                    <td class="day sunday"
+                        [class.selected]="isDaySelected(pp, 0)"
+                        (click)="selectPayPeriod(pp, 0); $event.stopPropagation();">
+                        <span>{{dayOfMonth(pp, 1, 0)}}</span>
+                    </td>
+                    <td class="day monday"
+                        [class.selected]="isDaySelected(pp, 1)"
+                        (click)="selectPayPeriod(pp, 1); $event.stopPropagation();">
+                        <span>{{dayOfMonth(pp, 1, 1)}}</span>
+                    </td>
+                    <td class="day tuesday"
+                        [class.selected]="isDaySelected(pp, 2)"
+                        (click)="selectPayPeriod(pp, 2); $event.stopPropagation();">
+                        <span>{{dayOfMonth(pp, 1, 2)}}</span>
+                    </td>
+                    <td class="day wednesday"
+                        [class.selected]="isDaySelected(pp, 3)"
+                        (click)="selectPayPeriod(pp, 3); $event.stopPropagation();">
+                        <span>{{dayOfMonth(pp, 1, 3)}}</span>
+                    </td>
+                    <td class="day thursday"
+                        [class.selected]="isDaySelected(pp, 4)"
+                        (click)="selectPayPeriod(pp, 4); $event.stopPropagation();">
+                        <span>{{dayOfMonth(pp, 1, 4)}}</span>
+                    </td>
+                    <td class="day friday"
+                        [class.selected]="isDaySelected(pp, 5)"
+                        (click)="selectPayPeriod(pp, 5); $event.stopPropagation();">
+                        <span>{{dayOfMonth(pp, 1, 5)}}</span>
+                    </td>
+                    <td class="day saturday"
+                        [class.selected]="isDaySelected(pp, 6)"
+                        (click)="selectPayPeriod(pp, 6); $event.stopPropagation();">
+                        <span>{{dayOfMonth(pp, 1, 6)}}</span>
+                    </td>
                 </tr>
                 <tr id="{{id}}-pay-period-{{pp.id}}-week2"
                     class="week week2"
@@ -72,13 +100,41 @@
                     [attr.aria-disabled]="!pp.isSelectable"
                     (click)="selectPayPeriod(pp)">
 
-                    <td class="day sunday">{{dayOfMonth(pp, 2, 0)}}</td>
-                    <td class="day monday">{{dayOfMonth(pp, 2, 1)}}</td>
-                    <td class="day tuesday">{{dayOfMonth(pp, 2, 2)}}</td>
-                    <td class="day wednesday">{{dayOfMonth(pp, 2, 3)}}</td>
-                    <td class="day thursday">{{dayOfMonth(pp, 2, 4)}}</td>
-                    <td class="day friday">{{dayOfMonth(pp, 2, 5)}}</td>
-                    <td class="day saturday">{{dayOfMonth(pp, 2, 6)}}</td>
+                    <td class="day sunday"
+                        [class.selected]="isDaySelected(pp, 7)"
+                        (click)="selectPayPeriod(pp, 7); $event.stopPropagation();">
+                        <span>{{dayOfMonth(pp, 2, 0)}}</span>
+                    </td>
+                    <td class="day monday"
+                        [class.selected]="isDaySelected(pp, 8)"
+                        (click)="selectPayPeriod(pp, 8); $event.stopPropagation();">
+                        <span>{{dayOfMonth(pp, 2, 1)}}</span>
+                    </td>
+                    <td class="day tuesday"
+                        [class.selected]="isDaySelected(pp, 9)"
+                        (click)="selectPayPeriod(pp, 9); $event.stopPropagation();">
+                        <span>{{dayOfMonth(pp, 2, 2)}}</span>
+                    </td>
+                    <td class="day wednesday"
+                        [class.selected]="isDaySelected(pp, 10)"
+                        (click)="selectPayPeriod(pp, 10); $event.stopPropagation();">
+                        <span>{{dayOfMonth(pp, 2, 3)}}</span>
+                    </td>
+                    <td class="day thursday"
+                        [class.selected]="isDaySelected(pp, 11)"
+                        (click)="selectPayPeriod(pp, 11); $event.stopPropagation();">
+                        <span>{{dayOfMonth(pp, 2, 4)}}</span>
+                    </td>
+                    <td class="day friday"
+                        [class.selected]="isDaySelected(pp, 12)"
+                        (click)="selectPayPeriod(pp, 12); $event.stopPropagation();">
+                        <span>{{dayOfMonth(pp, 2, 5)}}</span>
+                    </td>
+                    <td class="day saturday"
+                        [class.selected]="isDaySelected(pp, 13)"
+                        (click)="selectPayPeriod(pp, 13); $event.stopPropagation();">
+                        <span>{{dayOfMonth(pp, 2, 6)}}</span>
+                    </td>
                 </tr>
             </ng-template>
         </tbody>
