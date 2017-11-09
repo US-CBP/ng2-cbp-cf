@@ -8,7 +8,6 @@ import {
     MatButtonModule,
     MatIconModule,
     MatSelectModule,
-    NoConflictStyleCompatibilityMode,
 }                                       from '@angular/material';
 
 import { PayPeriodCalendarComponent }   from './pay-period-calendar.component';
@@ -20,7 +19,6 @@ import { PayPeriodCalendarComponent }   from './pay-period-calendar.component';
         MatButtonModule,
         MatIconModule,
         MatSelectModule,
-        NoConflictStyleCompatibilityMode,
     ],
     exports: [
         PayPeriodCalendarComponent,

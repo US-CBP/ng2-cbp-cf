@@ -1,13 +1,12 @@
 ﻿import { Directionality }       from '@angular/cdk/bidi';
 import {
-    ConnectedOverlayDirective,
+    CdkConnectedOverlay,
     ConnectionPositionPair,
     Overlay,
     RepositionScrollStrategy,
     ScrollStrategy,
     ViewportRuler,
 }                               from '@angular/cdk/overlay';
-import { first }                from '@angular/cdk/rxjs';
 import {
     AnimationTriggerMetadata ,
     Attribute,
@@ -54,6 +53,7 @@ import {
     mixinTabIndex,
 }                               from '@angular/material';
 import { Subject }              from 'rxjs';
+import { first }                from 'rxjs/operators';
 
 import {
     BooleanFieldValue,
@@ -168,7 +168,7 @@ export class DropdownTreeComponent
 
     @ViewChild('trigger') trigger: ElementRef;
     @ViewChild('panel') panel: ElementRef;
-    @ViewChild(ConnectedOverlayDirective) overlayDir: ConnectedOverlayDirective;
+    @ViewChild(CdkConnectedOverlay) overlayDir: CdkConnectedOverlay;
 
     stateChanges: Subject<void> = new Subject<void>();
     focused: boolean = false;
@@ -190,18 +190,8 @@ export class DropdownTreeComponent
     _scrollStrategy: ScrollStrategy = this._scrollStrategyFactory();
     _offsetY: number = 0;
     _positions: ConnectionPositionPair[] = [
-        {
-            originX: 'start',
-            originY: 'top',
-            overlayX: 'start',
-            overlayY: 'top',
-        },
-        {
-            originX: 'start',
-            originY: 'bottom',
-            overlayX: 'start',
-            overlayY: 'bottom',
-        },
+        new ConnectionPositionPair({ originX: 'start', originY: 'top' }, { overlayX: 'start', overlayY: 'top' }),
+        new ConnectionPositionPair({ originX: 'start', originY: 'bottom' }, { overlayX: 'start', overlayY: 'bottom' }),
     ];
 
     private _destroy: Subject<void> = new Subject<void>();
@@ -399,7 +389,7 @@ export class DropdownTreeComponent
         this._calculateOverlayPosition();
         this._changeDetector.markForCheck();
 
-        first.call(this._ngZone.onStable).subscribe(() => {
+        this._ngZone.onStable.asObservable().pipe(first()).subscribe(() => {
             if(this._triggerFontSize && this.overlayDir.overlayRef && this.overlayDir.overlayRef.overlayElement) {
                 this.overlayDir.overlayRef.overlayElement.style.fontSize = `${this._triggerFontSize}px`;
             }
@@ -540,7 +530,7 @@ export class DropdownTreeComponent
     }
 
     _onAttached(): void {
-        first.call(this.overlayDir.positionChange).subscribe(() => {
+        this.overlayDir.positionChange.pipe(first()).subscribe(() => {
             this._changeDetector.detectChanges();
             this._calculateOverlayOffsetX();
             this.panel.nativeElement.scrollTop = this._scrollTop;
@@ -700,14 +690,14 @@ export class DropdownTreeComponent
 
     private _calculateOverlayOffsetX(): void {
         const overlayRect = this.overlayDir.overlayRef.overlayElement.getBoundingClientRect();
-        const viewportRect = this._viewportRuler.getViewportRect();
+        const viewportSize = this._viewportRuler.getViewportSize();
         const isRtl = this._isRtl();
         const paddingWidth = dropdownTreePanelPaddingX * 2;
 
         let offsetX = isRtl ? dropdownTreePanelPaddingX : -dropdownTreePanelPaddingX;
 
         const leftOverflow = 0 - (overlayRect.left + offsetX - (isRtl ? paddingWidth : 0));
-        const rightOverflow = overlayRect.right + offsetX - viewportRect.width + (isRtl ? 0 : paddingWidth);
+        const rightOverflow = overlayRect.right + offsetX - viewportSize.width + (isRtl ? 0 : paddingWidth);
 
         if(leftOverflow > 0) {
             offsetX += leftOverflow + dropdownTreePanelViewportPadding;
@@ -742,9 +732,9 @@ export class DropdownTreeComponent
 
     private _checkOverlayWithinViewport(maxScroll: number): void {
         const nodeHeight = this._getNodeHeight();
-        const viewportRect = this._viewportRuler.getViewportRect();
+        const viewportSize = this._viewportRuler.getViewportSize();
         const topSpaceAvailable = this._triggerRect.top - dropdownTreePanelViewportPadding;
-        const bottomSpaceAvailable = viewportRect.height - this._triggerRect.bottom - dropdownTreePanelViewportPadding;
+        const bottomSpaceAvailable = viewportSize.height - this._triggerRect.bottom - dropdownTreePanelViewportPadding;
         const panelHeightTop = Math.abs(this._offsetY);
         const totalPanelHeight = Math.min(this._getNodeCount() * nodeHeight, dropdownTreePanelMaxHeight);
         const panelHeightBottom = totalPanelHeight - panelHeightTop - this._triggerRect.height;

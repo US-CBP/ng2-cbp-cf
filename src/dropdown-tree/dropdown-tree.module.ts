@@ -7,7 +7,6 @@ import {
     MatFormFieldModule,
     MatIconModule,
     MatRippleModule,
-    NoConflictStyleCompatibilityMode,
 }                                       from '@angular/material';
 
 import { DropdownTreeItemComponent }    from './dropdown-tree-item';
@@ -22,7 +21,6 @@ import {
         FormsModule,
         MatIconModule,
         MatRippleModule,
-        NoConflictStyleCompatibilityMode,
         OverlayModule,
     ],
     exports: [

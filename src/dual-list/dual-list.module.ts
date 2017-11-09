@@ -4,7 +4,6 @@ import { FormsModule }          from '@angular/forms';
 import {
     MatButtonModule,
     MatIconModule,
-    NoConflictStyleCompatibilityMode,
 }                               from '@angular/material';
 
 import { ListGroupModule }      from '../list-group';
@@ -16,7 +15,6 @@ import { DualListComponent }    from './dual-list.component';
         FormsModule,
         MatButtonModule,
         MatIconModule,
-        NoConflictStyleCompatibilityMode,
         ListGroupModule,
     ],
     exports: [

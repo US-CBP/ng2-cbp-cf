@@ -12,7 +12,6 @@ import {
     MATERIAL_SANITY_CHECKS,
     MatIconModule,
     MatRippleModule,
-    NoConflictStyleCompatibilityMode,
 }                                       from '@angular/material';
 import { By }                           from '@angular/platform-browser';
 import { NoopAnimationsModule }         from '@angular/platform-browser/animations';
@@ -34,7 +33,6 @@ describe('DropdownTreeItemComponent', () => {
                 FormsModule,
                 MatIconModule,
                 MatRippleModule,
-                NoConflictStyleCompatibilityMode,
                 NoopAnimationsModule,
             ],
             declarations: [DropdownTreeItemComponent],

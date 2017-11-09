@@ -7,7 +7,6 @@ import {
     MatIconModule,
     MatInputModule,
     MatMenuModule,
-    NoConflictStyleCompatibilityMode,
 }                                   from '@angular/material';
 import { RouterModule }             from '@angular/router';
 
@@ -27,7 +26,6 @@ import { HeaderSubmenuComponent }   from './header-submenu';
         MatIconModule,
         MatInputModule,
         MatMenuModule,
-        NoConflictStyleCompatibilityMode,
     ],
     exports: [
         CbpHeaderComponent,

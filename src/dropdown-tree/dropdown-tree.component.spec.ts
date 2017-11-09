@@ -79,9 +79,7 @@ describe('DropdownTreeComponent', () => {
 
     function scrollDispatcherFactory(): ScrollDispatcher {
         return {
-            scrolled: (_delay: number, callback: () => any) => {
-                return scrollableSubject.asObservable().subscribe(callback);
-            },
+            scrolled: () => scrollableSubject.asObservable(),
         } as ScrollDispatcher;
     }
 
