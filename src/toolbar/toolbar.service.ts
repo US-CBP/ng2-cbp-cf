@@ -5,10 +5,8 @@ import {
     Optional,
     SkipSelf,
 }                           from '@angular/core';
-import {
-    BehaviorSubject,
-    Observable,
-}                           from 'rxjs';
+import { BehaviorSubject }  from 'rxjs/BehaviorSubject';
+import { Observable }       from 'rxjs/Observable';
 
 import { LeftAction }       from './left-action.model';
 import { Toolbar }          from './toolbar.model';

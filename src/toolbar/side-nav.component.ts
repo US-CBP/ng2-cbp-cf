@@ -5,7 +5,7 @@
     Input,
     Output,
 }                           from '@angular/core';
-import { Observable }       from 'rxjs';
+import { Observable }       from 'rxjs/Observable';
 
 export interface HeaderMenuItem {
     html: string;
@@ -37,8 +37,7 @@ export class SideNavComponent {
 
     openMenuNames: Set<string> = new Set<string>();
 
-    constructor() {
-    }
+    constructor() { }
 
     isHidden(menuName: string): boolean {
         return !this.openMenuNames.has(menuName);

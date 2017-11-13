@@ -20,7 +20,7 @@ import { FormsModule }                  from '@angular/forms';
 import { MATERIAL_SANITY_CHECKS }       from '@angular/material';
 import { By }                           from '@angular/platform-browser';
 import { NoopAnimationsModule }         from '@angular/platform-browser/animations';
-import { Subject }                      from 'rxjs';
+import { Subject }                      from 'rxjs/Subject';
 
 import { DropdownTreeComponent }        from './dropdown-tree.component';
 import { DropdownTreeModule }           from './dropdown-tree.module';
