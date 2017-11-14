@@ -52,7 +52,7 @@ import {
     mixinDisabled,
     mixinTabIndex,
 }                               from '@angular/material';
-import { first }                from 'rxjs/operators';
+import { first }                from 'rxjs/operators/first';
 import { Subject }              from 'rxjs/Subject';
 
 import {
