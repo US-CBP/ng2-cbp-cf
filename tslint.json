@@ -8,6 +8,12 @@
             true,
             "ban-single-arg-parens"
         ],
+        "import-blacklist": [
+            true,
+            "@angular/material",
+            "rxjs",
+            "rxjs/operators"
+        ],
         "import-spacing": false,
         "interface-name": [ true, "never-prefix" ],
         "max-classes-per-file": [ false ],
