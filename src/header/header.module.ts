@@ -2,12 +2,10 @@
 import { NgModule }                 from '@angular/core';
 import { FlexLayoutModule }         from '@angular/flex-layout';
 import { FormsModule }              from '@angular/forms';
-import {
-    MatButtonModule,
-    MatIconModule,
-    MatInputModule,
-    MatMenuModule,
-}                                   from '@angular/material';
+import { MatButtonModule }          from '@angular/material/button';
+import { MatIconModule }            from '@angular/material/icon';
+import { MatInputModule }           from '@angular/material/input';
+import { MatMenuModule }            from '@angular/material/menu';
 import { RouterModule }             from '@angular/router';
 
 import { CbpHeaderComponent }       from './cbp-header';

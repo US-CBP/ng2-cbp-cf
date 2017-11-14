@@ -47,11 +47,13 @@ import {
     CanDisable,
     ErrorStateMatcher,
     HasTabIndex,
-    MatFormField,
-    MatFormFieldControl,
     mixinDisabled,
     mixinTabIndex,
-}                               from '@angular/material';
+}                               from '@angular/material/core';
+import {
+    MatFormField,
+    MatFormFieldControl,
+}                               from '@angular/material/form-field';
 import { first }                from 'rxjs/operators/first';
 import { Subject }              from 'rxjs/Subject';
 

@@ -10,9 +10,9 @@ import {
 import { FormsModule }                  from '@angular/forms';
 import {
     MATERIAL_SANITY_CHECKS,
-    MatIconModule,
     MatRippleModule,
-}                                       from '@angular/material';
+}                                       from '@angular/material/core';
+import { MatIconModule }                from '@angular/material/icon';
 import { By }                           from '@angular/platform-browser';
 import { NoopAnimationsModule }         from '@angular/platform-browser/animations';
 

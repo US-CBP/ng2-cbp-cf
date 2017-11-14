@@ -3,7 +3,7 @@ import {
     ComponentFixture,
     TestBed,
 }                                       from '@angular/core/testing';
-import { MATERIAL_SANITY_CHECKS }       from '@angular/material';
+import { MATERIAL_SANITY_CHECKS }       from '@angular/material/core';
 import { NoopAnimationsModule }         from '@angular/platform-browser/animations';
 import * as moment                      from 'moment/moment';
 

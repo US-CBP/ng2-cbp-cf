@@ -17,7 +17,7 @@ import {
     tick,
 }                                       from '@angular/core/testing';
 import { FormsModule }                  from '@angular/forms';
-import { MATERIAL_SANITY_CHECKS }       from '@angular/material';
+import { MATERIAL_SANITY_CHECKS }       from '@angular/material/core';
 import { By }                           from '@angular/platform-browser';
 import { NoopAnimationsModule }         from '@angular/platform-browser/animations';
 import { Subject }                      from 'rxjs/Subject';
