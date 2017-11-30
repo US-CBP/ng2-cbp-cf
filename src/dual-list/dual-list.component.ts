@@ -76,7 +76,7 @@ export class DualListComponent implements ControlValueAccessor {
     get selected(): any[] {
         return this._selected;
     }
-    set selected(selected: any[]){
+    set selected(selected: any[]) {
         /* tslint:disable:triple-equals */
         if(selected && selected != this._selected && selected.length > 0) {
         /* tslint:enable */
