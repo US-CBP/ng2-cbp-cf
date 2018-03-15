@@ -69,14 +69,17 @@ $cf-dropdown-tree-placeholder-arrow-space: 2 * ($cf-dropdown-tree-arrow-size + $
 }
 
 .cf-dropdown-tree-panel {
-    @include mat-menu-base(8);
+    @include mat-overridable-elevation(8);
 
     @include cdk-high-contrast {
         outline: solid 1px;
     }
 
     max-height: $cf-dropdown-tree-panel-max-height;
+    max-width: 280px;
     min-width: 100%;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
     padding-bottom: 0;
     padding-top: 0;
 }
@@ -124,27 +127,51 @@ $cf-dropdown-tree-placeholder-arrow-space: 2 * ($cf-dropdown-tree-arrow-size + $
 }
 
 .cf-dropdown-tree-node-text {
-    @include mat-menu-item-base();
+    @include mat-truncate-line();
 
     cursor: pointer;
     display: inline-block;
     flex: 1 1 auto;
     height: $cf-dropdown-tree-node-height;
+    line-height: $cf-dropdown-tree-node-height;
     outline: none;
-    padding: 0 0.5em;
+    padding: 0 16px;
     position: relative;
+    text-align: left;
+    text-decoration: none;
 
     .cf-dropdown-tree-node-not-selectable > .cf-dropdown-tree-node-line > & {
         cursor: default;
     }
+
+    &[disabled] {
+        cursor: default;
+    }
+
+    [dir='rtl'] & {
+        text-align: right;
+    }
+
+    .mat-icon {
+        margin-right: 16px;
+        vertical-align: middle;
+
+        [dir='rtl'] & {
+            margin-left: 16px;
+            margin-right: 0;
+        }
+    }
 }
 
 .cf-dropdown-tree-node-ripple {
-    @include mat-fill;
-
     @include cdk-high-contrast {
         opacity: 0.5;
     }
 
+    bottom: 0;
+    left: 0;
     pointer-events: none;
+    position: absolute;
+    right: 0;
+    top: 0;
 }

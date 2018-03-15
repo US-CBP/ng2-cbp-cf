@@ -8,6 +8,7 @@
             true,
             "ban-single-arg-parens"
         ],
+        "curly": [ true, "ignore-same-line" ],
         "import-blacklist": [
             true,
             "@angular/material",
@@ -75,7 +76,8 @@
             "check-decl",
             "check-operator",
             "check-separator",
-            "check-type"
+            "check-type",
+            "check-type-operator"
         ],
 
         "component-class-suffix": true,
@@ -83,13 +85,11 @@
         "directive-class-suffix": true,
         "directive-selector": [ true, "attribute", "cf", "camelCase" ],
         "import-destructuring-spacing": true,
-        "invoke-injectable": true,
         "no-attribute-parameter-decorator": true,
         "no-forward-ref": true,
         "no-input-rename": true,
         "no-output-rename": true,
         "pipe-naming": [ true, "camelCase", "cf" ],
-        "templates-use-public": true,
         "use-host-property-decorator": true,
         "use-input-property-decorator": true,
         "use-life-cycle-interface": true,
