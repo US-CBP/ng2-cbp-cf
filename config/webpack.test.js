@@ -43,6 +43,8 @@ const rules = {
 //---------------------------------------------------------
 const config = module.exports = {};
 
+config.mode = 'none';
+
 config.resolve = {
     extensions: ['.ts', '.js', '.css', '.scss'],
     modules: [

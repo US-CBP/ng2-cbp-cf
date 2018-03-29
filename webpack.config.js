@@ -3,10 +3,10 @@ const autoprefixer = require('autoprefixer');
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const DefinePlugin = require('webpack/lib/DefinePlugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const ProgressPlugin = require('webpack/lib/ProgressPlugin');
-const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const WebpackShellPlugin = require('webpack-shell-plugin');
 const WatchIgnorePlugin = require('webpack/lib/WatchIgnorePlugin');
 
@@ -24,7 +24,10 @@ const ENV_DEVELOPMENT = NODE_ENV === 'development';
 const rules = {
     cssStyles: {
         test: /\.css$/,
-        use: ExtractTextPlugin.extract({ fallback: 'raw-loader', use: 'css-loader' })
+        use: [
+            MiniCssExtractPlugin.loader,
+            'css-loader'
+        ]
     },
     componentStyles: {
         test: /\.scss$/,
@@ -66,6 +69,8 @@ const rules = {
 //---------------------------------------------------------
 const config = module.exports = {};
 
+config.mode = 'none';
+
 config.resolve = {
     extensions: ['.ts', '.js', '.css', '.scss'],
     modules: [
@@ -91,7 +96,9 @@ config.module = {
 };
 
 config.plugins = [
-    new ExtractTextPlugin('[name].css'),
+    new MiniCssExtractPlugin({
+        filename: '[name].css', chunkFilename: '[id].css'
+    }),
     new ProvidePlugin({
         _: 'lodash',
         jQuery: 'jquery',
@@ -171,17 +178,6 @@ if(ENV_PRODUCTION) {
     config.devtool = 'hidden-source-map';
 
     config.plugins.push(
-        new UglifyJsPlugin({
-            comments: false,
-            compress: {
-                dead_code: true, // eslint-disable-line camelcase
-                screw_ie8: true, // eslint-disable-line camelcase
-                unused: true,
-                warnings: false
-            },
-            mangle: {
-                screw_ie8: true // eslint-disable-line camelcase
-            }
-        })
+        new UglifyJsPlugin()
     );
 }

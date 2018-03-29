@@ -22,6 +22,7 @@ import { By }                           from '@angular/platform-browser';
 import { NoopAnimationsModule }         from '@angular/platform-browser/animations';
 import { Subject }                      from 'rxjs/Subject';
 
+import { sortBy }                       from '../shared';
 import { DropdownTreeComponent }        from './dropdown-tree.component';
 import { DropdownTreeModule }           from './dropdown-tree.module';
 import { TreeNode }                     from './tree-node.model';
@@ -506,13 +507,10 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.expandedNodes).toEqual({
-                asymmetricMatch(actual: Set<TreeNode>): boolean {
-                    return actual.size === 2 &&
-                        actual.has(component.nodes[0]) &&
-                        actual.has(component.nodes[0].children[2]);
-                },
-            });
+            expect(sortBy(Array.from(component.dropdownTree.expandedNodes.keys()), i => i.id)).toEqual(sortBy([
+                component.nodes[0],
+                component.nodes[0].children[2],
+            ], i => i.id));
         }));
 
         it('expands no nodes when value is null', fakeAsync(() => {
@@ -539,13 +537,10 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.expandedNodes).toEqual({
-                asymmetricMatch(actual: Set<TreeNode>): boolean {
-                    return actual.size === 2 &&
-                        actual.has(component.nodes[0]) &&
-                        actual.has(component.nodes[1]);
-                },
-            });
+            expect(sortBy(Array.from(component.dropdownTree.expandedNodes.keys()), i => i.id)).toEqual(sortBy([
+                component.nodes[0],
+                component.nodes[1],
+            ], i => i.id));
         }));
 
         it('expands nodes to second level when defaultExpansionLevel is 2', fakeAsync(() => {
@@ -554,16 +549,13 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.expandedNodes).toEqual({
-                asymmetricMatch(actual: Set<TreeNode>): boolean {
-                    return actual.size === 5 &&
-                        actual.has(component.nodes[0]) &&
-                        actual.has(component.nodes[0].children[1]) &&
-                        actual.has(component.nodes[0].children[2]) &&
-                        actual.has(component.nodes[1]) &&
-                        actual.has(component.nodes[1].children[0]);
-                },
-            });
+            expect(sortBy(Array.from(component.dropdownTree.expandedNodes.keys()), i => i.id)).toEqual(sortBy([
+                component.nodes[0],
+                component.nodes[0].children[1],
+                component.nodes[0].children[2],
+                component.nodes[1],
+                component.nodes[1].children[0],
+            ], i => i.id));
         }));
 
         it('expands nodes to value and defaultExpansionLevel', fakeAsync(() => {
@@ -573,14 +565,11 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.expandedNodes).toEqual({
-                asymmetricMatch(actual: Set<TreeNode>): boolean {
-                    return actual.size === 3 &&
-                        actual.has(component.nodes[0]) &&
-                        actual.has(component.nodes[0].children[2]) &&
-                        actual.has(component.nodes[1]);
-                },
-            });
+            expect(sortBy(Array.from(component.dropdownTree.expandedNodes.keys()), i => i.id)).toEqual(sortBy([
+                component.nodes[0],
+                component.nodes[0].children[2],
+                component.nodes[1],
+            ], i => i.id));
         }));
     });
 
