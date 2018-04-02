@@ -7,7 +7,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const ProgressPlugin = require('webpack/lib/ProgressPlugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const WebpackShellPlugin = require('webpack-shell-plugin');
 const WatchIgnorePlugin = require('webpack/lib/WatchIgnorePlugin');
 
 //=========================================================
@@ -127,8 +126,7 @@ config.plugins = [
     new ContextReplacementPlugin(
         /angular(\\|\/)core(\\|\/)@angular/,
         path.resolve('src')
-    ),
-    new WebpackShellPlugin({ onBuildEnd: ['npm run tsc'], dev: false })
+    )
 ];
 
 config.entry = {

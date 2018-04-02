@@ -1,10 +1,10 @@
-﻿import { ObservableMedia }  from '@angular/flex-layout';
+﻿import { ViewportRuler }    from '@angular/cdk/scrolling';
 
 export class BaseHeader {
-    constructor(private media: ObservableMedia) {
+    constructor(private _viewportRuler: ViewportRuler) {
     }
 
     get isCondensed(): boolean {
-        return this.media.isActive('xs') || this.media.isActive('sm');
+        return this._viewportRuler.getViewportSize().width < 960;
     }
 }

@@ -8,11 +8,6 @@
     $warn: map-get($theme, warn);
     $is-dark-theme: map-get($theme, is-dark);
 
-    .cf-dropdown-tree-disabled .cf-dropdown-tree-value,
-    .cf-dropdown-tree-arrow {
-        color: mat-color($foreground, secondary-text);
-    }
-
     .cf-dropdown-tree-content,
     .cf-dropdown-tree-panel-done-animating {
         background: mat-color($background, card);
@@ -20,6 +15,18 @@
 
     .cf-dropdown-tree-value {
         color: mat-color($foreground, text);
+    }
+
+    .cf-dropdown-tree-placeholder {
+        color: mat-color($foreground, secondary-text, if($is-dark-theme, 0.5, 0.42));
+    }
+
+    .cf-dropdown-tree-disabled .cf-dropdown-tree-value {
+        color: mat-color($foreground, disabled-text);
+    }
+
+    .cf-dropdown-tree-arrow {
+        color: mat-color($foreground, secondary-text);
     }
 
     .mat-form-field {
@@ -36,18 +43,18 @@
                 color: mat-color($warn);
             }
         }
-    }
 
-    .cf-dropdown-tree.cf-dropdown-tree-disabled .cf-dropdown-tree-arrow {
-        color: mat-color($warn);
+        .cf-dropdown-tree.cf-dropdown-tree-invalid .cf-dropdown-tree-arrow {
+            color: mat-color($warn);
+        }
+
+        .cf-dropdown-tree.cf-dropdown-tree-disabled .cf-dropdown-tree-arrow {
+            color: mat-color($foreground, disabled-text);
+        }
     }
 
     .cf-dropdown-tree-node {
         color: mat-color($foreground, text);
-
-        &:not(.cf-dropdown-tree-node-disabled) > .cf-dropdown-tree-node-line > .cf-dropdown-tree-node-text:hover {
-            background: mat-color($background, hover);
-        }
 
         .mat-primary &.cf-dropdown-tree-node-selected:not(.cf-dropdown-tree-node-disabled) > .cf-dropdown-tree-node-line > .cf-dropdown-tree-node-text {
             color: mat-color($primary);
@@ -61,13 +68,16 @@
             color: mat-color($warn);
         }
 
-        &.cf-dropdown-tree-node-selected:not(.cf-dropdown-tree-node-disabled) > .cf-dropdown-tree-node-line > .cf-dropdown-tree-node-text {
+        &.cf-dropdown-tree-node-selected > .cf-dropdown-tree-node-line {
+            background: mat-color($background, hover, 0.12);
+        }
+
+        &:not(.cf-dropdown-tree-node-disabled) > .cf-dropdown-tree-node-line:hover {
             background: mat-color($background, hover);
         }
 
-        &.cf-dropdown-tree-node-highlighted > .cf-dropdown-tree-node-line > .cf-dropdown-tree-node-text {
+        &.cf-dropdown-tree-node-highlighted > .cf-dropdown-tree-node-line {
             background: mat-color($background, hover);
-            color: mat-color($foreground, text);
         }
 
         &.cf-dropdown-tree-node-disabled > .cf-dropdown-tree-node-line > .cf-dropdown-tree-node-text,
@@ -82,17 +92,14 @@
 
     .cf-dropdown-tree {
         font-family: mat-font-family($config);
-        font-size: mat-font-size($config, input);
     }
 
     .cf-dropdown-tree-trigger {
-        font-size: mat-font-size($config, input);
         height: $line-height * 1em;
     }
 
     .cf-dropdown-tree-node {
         font-family: mat-font-family($config, subheading-2);
-        font-size: mat-font-size($config, subheading-2);
     }
 
     .cf-dropdown-tree-node-arrow {

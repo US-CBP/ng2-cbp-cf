@@ -1,11 +1,11 @@
-﻿import {
+﻿import { ViewportRuler }    from '@angular/cdk/scrolling';
+import {
     Component,
     EventEmitter,
     Input,
     Output,
     ViewEncapsulation,
 }                           from '@angular/core';
-import { ObservableMedia }  from '@angular/flex-layout';
 
 import { BaseHeader }       from '../base-header.model';
 import { NavItemType }      from '../nav-item-type.type';
@@ -23,7 +23,7 @@ export class CbpHeaderComponent extends BaseHeader {
 
     @Output() feedbackClicked: EventEmitter<void> = new EventEmitter<void>();
 
-    constructor(media: ObservableMedia) {
-        super(media);
+    constructor(viewportRuler: ViewportRuler) {
+        super(viewportRuler);
     }
 }

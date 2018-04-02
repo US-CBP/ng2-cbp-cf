@@ -11,9 +11,7 @@
         "curly": [ true, "ignore-same-line" ],
         "import-blacklist": [
             true,
-            "@angular/material",
-            "rxjs",
-            "rxjs/operators"
+            "@angular/material"
         ],
         "import-spacing": false,
         "interface-name": [ true, "never-prefix" ],

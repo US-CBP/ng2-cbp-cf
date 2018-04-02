@@ -5,7 +5,7 @@
     Input,
     Output,
 }                           from '@angular/core';
-import { Observable }       from 'rxjs/Observable';
+import { Observable }       from 'rxjs';
 
 export interface HeaderMenuItem {
     html: string;

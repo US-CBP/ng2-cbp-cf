@@ -1,31 +1,31 @@
-﻿<div class="header-navigation" role="navigation" fxLayout="row" fxLayoutWrap="wrap">
-    <div class="brand" fxFlex="1 0 auto" fxFlex.gt-sm="0 0 auto">
-        <a *ngIf="homeUrlType === 'href'" [href]="homeUrl" fxLayout="column">
+﻿<div class="header-navigation" role="navigation">
+    <div class="brand">
+        <a *ngIf="homeUrlType === 'href'" [href]="homeUrl">
             <div class="cbp"></div>
             <div class="dhs" *ngIf="!isCondensed"></div>
         </a>
-        <a *ngIf="homeUrlType === 'route'" [routerLink]="homeUrl" fxLayout="column">
+        <a *ngIf="homeUrlType === 'route'" [routerLink]="homeUrl">
             <div class="cbp"></div>
             <div class="dhs" *ngIf="!isCondensed"></div>
         </a>
     </div>
 
-    <div class="cbp-menu" *ngIf="!isCondensed" fxFlex="1 1 auto">
+    <div class="cbp-menu" *ngIf="!isCondensed">
         <ng-template [ngTemplateOutlet]="cbpMenu"></ng-template>
     </div>
 
-    <div class="feedback" *ngIf="!isCondensed && disableFeedback !== true" fxFlex="0 0 auto">
+    <div class="feedback" *ngIf="!isCondensed && disableFeedback !== true">
         <button type="button" mat-button (click)="feedbackClicked.emit()">
             <mat-icon>feedback</mat-icon>
             <span>Feedback</span>
         </button>
     </div>
 
-    <div class="user-menu" *ngIf="!isCondensed" fxFlex="0 1 auto">
+    <div class="user-menu" *ngIf="!isCondensed">
         <ng-template [ngTemplateOutlet]="userMenu"></ng-template>
     </div>
 
-    <div class="expand-when-condensed" *ngIf="isCondensed" fxFlex="0 0 auto">
+    <div class="expand-when-condensed" *ngIf="isCondensed">
         <button type="button" mat-icon-button [matMenuTriggerFor]="expansion">
             <mat-icon>menu</mat-icon>
             <span class="sr-only">Toggle Global Navigation</span>

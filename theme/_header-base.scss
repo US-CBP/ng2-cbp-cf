@@ -18,6 +18,8 @@
     }
 
     .cf-header-menu-group {
+        display: flex;
+
         > cf-header-nav-item {
             font-weight: 500;
             padding-top: 2px;
@@ -40,5 +42,21 @@
 cf-header-nav-item {
     a.mat-menu-item {
         text-decoration: none;
+    }
+}
+
+@media(min-width: 960px) {
+    .header-navigation {
+        .cf-header-menu-group {
+            flex-wrap: wrap;
+        }
+    }
+}
+
+@media(max-width: 959px) {
+    .header-navigation {
+        .cf-header-menu-group {
+            flex-direction: column;
+        }
     }
 }

@@ -5,9 +5,12 @@
      #origin="cdkOverlayOrigin"
      #trigger>
 
-    <div class="cf-dropdown-tree-value">
-        <ng-container *ngIf="empty">&nbsp;</ng-container>
-        <span class="cf-dropdown-tree-value-text" *ngIf="!empty">{{triggerValue}}</span>
+    <div class="cf-dropdown-tree-value" [ngSwitch]="empty">
+        <span class="cf-dropdown-tree-placeholder" *ngSwitchCase="true">{{placeholder || '\u00A0'}}</span>
+        <span class="cf-dropdown-tree-value-text" *ngSwitchCase="false" [ngSwitch]="!!customTrigger">
+            <span *ngSwitchDefault>{{triggerValue}}</span>
+            <ng-content select="cf-dropdown-tree-trigger" *ngSwitchCase="true"></ng-content>
+        </span>
     </div>
 
     <div class="cf-dropdown-tree-arrow-wrapper">
@@ -16,14 +19,15 @@
 </div>
 
 <ng-template cdk-connected-overlay
-             hasBackdrop
-             backdropClass="cdk-overlay-transparent-backdrop"
-             [scrollStrategy]="_scrollStrategy"
-             [origin]="origin"
-             [open]="panelOpen"
-             [positions]="_positions"
-             [minWidth]="_triggerRect?.width"
-             [offsetY]="_offsetY"
+             cdkConnectedOverlayLockPosition
+             cdkConnectedOverlayHasBackdrop
+             cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+             [cdkConnectedOverlayScrollStrategy]="_scrollStrategy"
+             [cdkConnectedOverlayOrigin]="origin"
+             [cdkConnectedOverlayOpen]="panelOpen"
+             [cdkConnectedOverlayPositions]="_positions"
+             [cdkConnectedOverlayMinWidth]="_triggerRect?.width"
+             [cdkConnectedOverlayOffsetY]="_offsetY"
              (backdropClick)="close()"
              (attach)="_onAttached()"
              (detach)="close()">
@@ -35,7 +39,8 @@
          (@transformPanel.done)="_onPanelDone()"
          [style.transformOrigin]="_transformOrigin"
          [class.cf-dropdown-tree-panel-done-animating]="_panelDoneAnimating"
-         [style.font-size.px]="_triggerFontSize">
+         [style.font-size.px]="_triggerFontSize"
+         (keydown)="_handleKeydown($event)">
 
         <div class="cf-dropdown-tree-content" [@fadeInContent]="'showing'" (@fadeInContent.done)="_onFadeInDone()">
             <ul #tree [id]="treeId" role="tree" class="tree tree-root" aria-expanded="true" aria-hidden="false">

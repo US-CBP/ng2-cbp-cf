@@ -9,7 +9,7 @@
             <ng-content></ng-content>
         </span>
         <span class="toolbar-buttons">
-            <ng-template [cdkPortalHost]="portal | async">
+            <ng-template [cdkPortalOutlet]="portal | async">
             </ng-template>
         </span>
     </mat-toolbar-row>

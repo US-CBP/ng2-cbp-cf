@@ -5,8 +5,15 @@
     padding-right: 8px;
     transition: all 100ms linear;
 
+    .header-navigation {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
     .brand {
         a {
+            display: flex;
+            flex-direction: column;
             font-size: 19px;
             height: 50px;
             line-height: 21px;
@@ -38,11 +45,29 @@
             }
         }
     }
+
+    .cbp-menu {
+        flex: 1 1 auto;
+    }
+
+    .feedback {
+        flex: 0 0 auto;
+    }
+
+    .user-menu {
+        flex: 0 1 auto;
+    }
+
+    .expand-when-condensed {
+        flex: 0 0 auto;
+    }
 }
 
 @media(min-width: 960px) {
     cf-cbp-header {
         .brand {
+            flex: 0 0 auto;
+
             .cbp::before {
                 content: 'U.S. Customs & Border Protection';
             }
@@ -53,6 +78,8 @@
 @media(max-width: 959px) {
     cf-cbp-header {
         .brand {
+            flex: 1 0 auto;
+
             a {
                 padding: 16px 70px 16px 17px;
             }

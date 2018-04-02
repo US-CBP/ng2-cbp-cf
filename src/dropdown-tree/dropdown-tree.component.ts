@@ -1,4 +1,15 @@
-﻿import { Directionality }       from '@angular/cdk/bidi';
+﻿import {
+    AnimationTriggerMetadata,
+    animate,
+    animateChild,
+    group,
+    query,
+    state,
+    style,
+    transition,
+    trigger,
+}                               from '@angular/animations';
+import { Directionality }       from '@angular/cdk/bidi';
 import {
     CdkConnectedOverlay,
     ConnectionPositionPair,
@@ -8,7 +19,6 @@ import {
     ViewportRuler,
 }                               from '@angular/cdk/overlay';
 import {
-    AnimationTriggerMetadata ,
     Attribute,
     ChangeDetectionStrategy,
     ChangeDetectorRef,
@@ -25,37 +35,41 @@ import {
     OnInit,
     Optional,
     Output,
-    Renderer2,
     Self,
     SimpleChanges,
     ViewChild,
     ViewEncapsulation,
-    animate,
-    state,
-    style,
-    transition,
-    trigger,
 }                               from '@angular/core';
 import {
     ControlValueAccessor,
-    FormControl,
     FormGroupDirective,
     NgControl,
     NgForm,
 }                               from '@angular/forms';
 import {
     CanDisable,
+    CanDisableRipple,
+    CanUpdateErrorState,
     ErrorStateMatcher,
     HasTabIndex,
+    mixinDisableRipple,
     mixinDisabled,
+    mixinErrorState,
     mixinTabIndex,
 }                               from '@angular/material/core';
 import {
     MatFormField,
     MatFormFieldControl,
 }                               from '@angular/material/form-field';
-import { first }                from 'rxjs/operators/first';
-import { Subject }              from 'rxjs/Subject';
+import {
+    Observable,
+    Subject,
+}                               from 'rxjs';
+import {
+    filter,
+    map,
+    take,
+}                               from 'rxjs/operators';
 
 import {
     BooleanFieldValue,
@@ -63,32 +77,37 @@ import {
 }                               from '../shared';
 import { TreeNode }             from './tree-node.model';
 
-const transformPanel: AnimationTriggerMetadata  = trigger('transformPanel', [
-    state('showing', style({
-        opacity: 1,
-        minWidth: 'calc(100% + 32px)',
-        transform: 'scaleY(1)',
-    })),
-    transition('void => *', [
-        style({
-            opacity: 0,
-            minWidth: '100%',
+const dropdownTreeAnimations: {
+    readonly transformPanel: AnimationTriggerMetadata;
+    readonly fadeInContent: AnimationTriggerMetadata;
+} = {
+    transformPanel: trigger('transformPanel', [
+        state('void', style({
             transform: 'scaleY(0)',
-        }),
-        animate('150ms cubic-bezier(0.25, 0.8, 0.25, 1)'),
+            minWidth: '100%',
+            opacity: 0,
+        })),
+        state('showing', style({
+            opacity: 1,
+            minWidth: 'calc(100% + 32px)',
+            transform: 'scaleY(1)',
+        })),
+        transition('void => *', group([
+            query('@fadeInContent', animateChild()),
+            animate('150ms cubic-bezier(0.25, 0.8, 0.25, 1)'),
+        ])),
+        transition('* => void', [
+            animate('250ms 100ms linear', style({ opacity: 0 })),
+        ]),
     ]),
-    transition('* => void', [
-        animate('250ms 100ms linear', style({ opacity: 0 })),
+    fadeInContent: trigger('fadeInContent', [
+        state('showing', style({ opacity: 1 })),
+        transition('void => showing', [
+            style({ opacity: 0 }),
+            animate('150ms 100ms cubic-bezier(0.55, 0, 0.55, 0.2)'),
+        ]),
     ]),
-]);
-
-const fadeInContent: AnimationTriggerMetadata = trigger('fadeInContent', [
-    state('showing', style({ opacity: 1 })),
-    transition('void => showing', [
-        style({ opacity: 0 }),
-        animate('150ms 100ms cubic-bezier(0.55, 0, 0.55, 0.2)'),
-    ]),
-]);
+};
 
 let nextUniqueId = 0;
 
@@ -98,7 +117,7 @@ export const dropdownTreePanelIndentPaddingX: number = dropdownTreePanelPaddingX
 export const dropdownTreeNodeHeightEM: number = 3;
 export const dropdownTreePanelViewportPadding: number = 8;
 
-export const dropdownTreeScrollStrategy = new InjectionToken<() => ScrollStrategy>('dropdown-tree-scroll-strategy');
+export const dropdownTreeScrollStrategy = new InjectionToken<() => ScrollStrategy>('cf-dropdown-tree-scroll-strategy');
 
 export function dropdownTreeScrollStrategyProviderFactory(overlay: Overlay): () => RepositionScrollStrategy {
     return () => overlay.scrollStrategies.reposition();
@@ -111,9 +130,14 @@ export const dropdownTreeScrollStrategyProvider = {
 };
 
 export class DropdownTreeComponentBase {
-    constructor(protected _renderer: Renderer2, protected _element: ElementRef) { }
+    constructor(
+        public _elementRef: ElementRef,
+        public _defaultErrorStateMatcher: ErrorStateMatcher,
+        public _parentForm: NgForm,
+        public _parentFormGroup: FormGroupDirective,
+        public ngControl: NgControl) { }
 }
-export const DropdownTreeComponentMixinBase = mixinTabIndex(mixinDisabled(DropdownTreeComponentBase)); // tslint:disable-line:variable-name
+export const DropdownTreeComponentMixinBase = mixinDisableRipple(mixinTabIndex(mixinDisabled(mixinErrorState(DropdownTreeComponentBase)))); // tslint:disable-line:variable-name
 
 @Component({
     selector: 'cf-dropdown-tree',
@@ -122,11 +146,11 @@ export const DropdownTreeComponentMixinBase = mixinTabIndex(mixinDisabled(Dropdo
     /* tslint:disable:use-input-property-decorator */
     inputs: [
         'disabled',
+        'disableRipple',
         'tabIndex',
     ],
     /* tslint:enable */
     encapsulation: ViewEncapsulation.None,
-    preserveWhitespaces: false,
     changeDetection: ChangeDetectionStrategy.OnPush,
     /* tslint:disable:use-host-property-decorator */
     host: {
@@ -134,39 +158,41 @@ export const DropdownTreeComponentMixinBase = mixinTabIndex(mixinDisabled(Dropdo
         '[attr.id]': 'id',
         '[attr.tabindex]': 'tabIndex',
         '[attr.aria-label]': '_ariaLabel',
-        '[attr.aria-labelledby]': '_ariaLabelledby',
+        '[attr.aria-labelledby]': 'ariaLabelledby',
         '[attr.aria-required]': 'required.toString()',
         '[attr.aria-disabled]': 'disabled.toString()',
         '[attr.aria-invalid]': 'errorState',
-        '[attr.aria-owns]': 'treeId',
+        '[attr.aria-owns]': 'panelOpen ? treeId : null',
         '[attr.aria-describedby]': '_ariaDescribedby || null',
         '[attr.aria-activedescendant]': '_getAriaActiveDescendant()',
         '[class.cf-dropdown-tree-disabled]': 'disabled',
         '[class.cf-dropdown-tree-invalid]': 'errorState',
         '[class.cf-dropdown-tree-required]': 'required',
         'class': 'cf-dropdown-tree',
-        '(keydown)': '_onKeydown($event)',
+        '(keydown)': '_handleKeydown($event)',
         '(focus)': '_onFocus()',
         '(blur)': '_onBlur()',
     },
     /* tslint:enable */
     animations: [
-        transformPanel,
-        fadeInContent,
+        dropdownTreeAnimations.transformPanel,
+        dropdownTreeAnimations.fadeInContent,
     ],
     providers: [{ provide: MatFormFieldControl, useExisting: DropdownTreeComponent }],
     exportAs: 'cfDropdownTree',
 })
 export class DropdownTreeComponent
     extends DropdownTreeComponentMixinBase
-    implements OnInit, DoCheck, OnChanges, OnDestroy, ControlValueAccessor, CanDisable, HasTabIndex, MatFormFieldControl<TreeNode> {
+    implements OnInit, DoCheck, OnChanges, OnDestroy, ControlValueAccessor, CanDisable, HasTabIndex, MatFormFieldControl<TreeNode>, CanUpdateErrorState, CanDisableRipple {
 
+    @Input() panelClass: string | string[] | Set<string> | { [key: string]: any };
     @Input('aria-label') ariaLabel: string = ''; // tslint:disable-line:no-input-rename
     @Input('aria-labelledby') ariaLabelledby: string; // tslint:disable-line:no-input-rename
     @Input() errorStateMatcher: ErrorStateMatcher;
 
-    @Output() opened: EventEmitter<void> = new EventEmitter<void>();
-    @Output() closed: EventEmitter<void> = new EventEmitter<void>();
+    @Output() readonly openedChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+    @Output('opened') readonly _openedStream: Observable<void> = this.openedChange.pipe(filter(o => o), map(() => { })); // tslint:disable-line:no-output-rename
+    @Output('closed') readonly _closedStream: Observable<void> = this.openedChange.pipe(filter(o => !o), map(() => { })); // tslint:disable-line:no-output-rename
 
     @ViewChild('trigger') trigger: ElementRef;
     @ViewChild('panel') panel: ElementRef;
@@ -204,6 +230,7 @@ export class DropdownTreeComponent
     private _placeholder: string;
     private _uid: string = `dropdown-tree-${nextUniqueId++}`;
     private _id: string = this._uid;
+    private _disableNodeCentering: boolean = false;
 
     private _defaultLabel: string;
     private _selectedNode: TreeNode;
@@ -216,26 +243,28 @@ export class DropdownTreeComponent
     /* tslint:disable:no-attribute-parameter-decorator */
     constructor(
         private _viewportRuler: ViewportRuler,
-        private _changeDetector: ChangeDetectorRef,
+        private _changeDetectorRef: ChangeDetectorRef,
         private _ngZone: NgZone,
-        private _defaultErrorStateMatcher: ErrorStateMatcher,
-        renderer: Renderer2,
-        element: ElementRef,
+        _defaultErrorStateMatcher: ErrorStateMatcher,
+        elementRef: ElementRef,
         @Optional() private _dir: Directionality,
-        @Optional() private _parentForm: NgForm,
-        @Optional() private _parentFormGroup: FormGroupDirective,
+        @Optional() _parentForm: NgForm,
+        @Optional() _parentFormGroup: FormGroupDirective,
         @Optional() private _parentFormField: MatFormField,
         @Self() @Optional() public ngControl: NgControl,
         @Attribute('tabindex') tabIndex: string,
         @Inject(dropdownTreeScrollStrategy) private _scrollStrategyFactory: () => ScrollStrategy) {
 
-        super(renderer, element);
+        super(elementRef, _defaultErrorStateMatcher, _parentForm, _parentFormGroup, ngControl);
 
         if(this.ngControl) {
             this.ngControl.valueAccessor = this;
         }
 
         this.tabIndex = parseInt(tabIndex, 10) || 0;
+
+        // Force setter to be called in case id was not specified.
+        this.id = this.id;
     }
     /* tslint:enable */
 
@@ -253,7 +282,7 @@ export class DropdownTreeComponent
 
     ngDoCheck(): void {
         if(this.ngControl) {
-            this._updateErrorState();
+            this.updateErrorState();
         }
     }
 
@@ -266,6 +295,7 @@ export class DropdownTreeComponent
     ngOnDestroy(): void {
         this._destroy.next();
         this._destroy.complete();
+        this.stateChanges.complete();
     }
 
     @Input()
@@ -284,6 +314,14 @@ export class DropdownTreeComponent
     set required(newValue: boolean) {
         this._required = newValue;
         this.stateChanges.next();
+    }
+
+    @Input() @BooleanFieldValue()
+    get disableNodeCentering(): boolean {
+        return this._disableNodeCentering;
+    }
+    set disableNodeCentering(newValue: boolean) {
+        this._disableNodeCentering = newValue;
     }
 
     @Input()
@@ -365,7 +403,7 @@ export class DropdownTreeComponent
         return this.effectiveSelectedNode == null || this.effectiveSelectedNode.text === '';
     }
 
-    get shouldPlaceholderFloat(): boolean {
+    get shouldLabelFloat(): boolean {
         return this.panelOpen || !this.empty;
     }
 
@@ -389,9 +427,9 @@ export class DropdownTreeComponent
 
         this.highlightedNode = this._calculateHighlightedOnOpen();
         this._calculateOverlayPosition();
-        this._changeDetector.markForCheck();
+        this._changeDetectorRef.markForCheck();
 
-        this._ngZone.onStable.asObservable().pipe(first()).subscribe(() => {
+        this._ngZone.onStable.asObservable().pipe(take(1)).subscribe(() => {
             if(this._triggerFontSize && this.overlayDir.overlayRef && this.overlayDir.overlayRef.overlayElement) {
                 this.overlayDir.overlayRef.overlayElement.style.fontSize = `${this._triggerFontSize}px`;
             }
@@ -402,7 +440,8 @@ export class DropdownTreeComponent
         if(this._panelOpen) {
             this._panelOpen = false;
             this.highlightedNode = null;
-            this._changeDetector.markForCheck();
+            this._changeDetectorRef.markForCheck();
+            this._onTouched();
             this.focus();
         }
     }
@@ -419,7 +458,7 @@ export class DropdownTreeComponent
 
         this._resetVisibleNodes();
 
-        this._changeDetector.markForCheck();
+        this._changeDetectorRef.markForCheck();
     }
 
     registerOnChange(fn: (value: TreeNode) => void): void {
@@ -432,12 +471,12 @@ export class DropdownTreeComponent
 
     setDisabledState(isDisabled: boolean): void {
         this.disabled = isDisabled;
-        this._changeDetector.markForCheck();
+        this._changeDetectorRef.markForCheck();
         this.stateChanges.next();
     }
 
     focus(): void {
-        this._element.nativeElement.focus();
+        this._elementRef.nativeElement.focus();
     }
 
     setDescribedByIds(ids: string[]): void {
@@ -488,7 +527,7 @@ export class DropdownTreeComponent
         return this._dir ? this._dir.value === 'rtl' : false;
     }
 
-    _onKeydown(event: KeyboardEvent): void {
+    _handleKeydown(event: KeyboardEvent): void {
         if(!this.disabled) {
             if(this.panelOpen) {
                 this._onOpenedKeydown(event);
@@ -501,18 +540,18 @@ export class DropdownTreeComponent
     _onPanelDone(): void {
         if(this.panelOpen) {
             this._scrollTop = 0;
-            this.opened.emit();
+            this.openedChange.emit(true);
         } else {
-            this.closed.emit();
+            this.openedChange.emit(false);
             this._panelDoneAnimating = false;
             this.overlayDir.offsetX = 0;
-            this._changeDetector.markForCheck();
+            this._changeDetectorRef.markForCheck();
         }
     }
 
     _onFadeInDone(): void {
         this._panelDoneAnimating = this.panelOpen;
-        this._changeDetector.markForCheck();
+        this._changeDetectorRef.markForCheck();
     }
 
     _onFocus(): void {
@@ -523,17 +562,18 @@ export class DropdownTreeComponent
     }
 
     _onBlur(): void {
+        this.focused = false;
+
         if(!this.disabled && !this.panelOpen) {
-            this.focused = false;
             this._onTouched();
-            this._changeDetector.markForCheck();
+            this._changeDetectorRef.markForCheck();
             this.stateChanges.next();
         }
     }
 
     _onAttached(): void {
-        this.overlayDir.positionChange.pipe(first()).subscribe(() => {
-            this._changeDetector.detectChanges();
+        this.overlayDir.positionChange.pipe(take(1)).subscribe(() => {
+            this._changeDetectorRef.detectChanges();
             this._calculateOverlayOffsetX();
             this.panel.nativeElement.scrollTop = this._scrollTop;
         });
@@ -716,6 +756,10 @@ export class DropdownTreeComponent
         const nodeHeightAdjustment = (nodeHeight - this._triggerRect.height) / 2;
         const maxNodesDisplayed = Math.floor(dropdownTreePanelMaxHeight / nodeHeight);
 
+        if(this._disableNodeCentering) {
+            return 0;
+        }
+
         let nodeOffsetFromPanelTop: number;
         if(this._scrollTop === 0) {
             nodeOffsetFromPanelTop = highlightedIndex * nodeHeight;
@@ -792,19 +836,6 @@ export class DropdownTreeComponent
 
     private _getNodeHeight(): number {
         return this._triggerFontSize * dropdownTreeNodeHeightEM;
-    }
-
-    private _updateErrorState(): void {
-        const oldState = this.errorState;
-        const parent = this._parentFormGroup || this._parentForm;
-        const matcher = this.errorStateMatcher || this._defaultErrorStateMatcher;
-        const control = this.ngControl ? this.ngControl.control as FormControl : null;
-        const newState = matcher.isErrorState(control, parent);
-
-        if(newState !== oldState) {
-            this.errorState = newState;
-            this.stateChanges.next();
-        }
     }
 
     private _initializeNodes(): void {
@@ -955,7 +986,7 @@ export class DropdownTreeComponent
         this._initializeEffectiveSelectedNode();
 
         this._onChange(node === this.defaultNode ? null : node);
-        this._changeDetector.markForCheck();
+        this._changeDetectorRef.markForCheck();
     }
 
     private _trySelectNode(node: TreeNode): void {

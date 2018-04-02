@@ -3,7 +3,7 @@ import {
     ChangeDetectionStrategy,
     Component,
 }                           from '@angular/core';
-import { Observable }       from 'rxjs/Observable';
+import { Observable }       from 'rxjs';
 
 import { LeftAction }       from './left-action.model';
 import { ToolbarService }   from './toolbar.service';

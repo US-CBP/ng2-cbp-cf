@@ -16,6 +16,19 @@ $mat-underline-disabled-background-image:
 
 /* From Angular Material - end */
 
+/* From Angular Material - mat-menu-base start */
+$mat-menu-overlay-min-width: 112px !default; // 56 * 2
+$mat-menu-overlay-max-width: 280px !default; // 56 * 5
+
+/* From Angular Material - mat-menu-base end */
+
+/* From Angular Material - variables start */
+$swift-ease-out-duration: 400ms !default;
+$swift-ease-out-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1) !default;
+
+/* From Angular Material - variables end */
+
+
 $cf-dropdown-tree-arrow-size: 5px !default;
 $cf-dropdown-tree-arrow-margin: 4px !default;
 $cf-dropdown-tree-panel-max-height: 256px !default;
@@ -47,6 +60,7 @@ $cf-dropdown-tree-placeholder-arrow-space: 2 * ($cf-dropdown-tree-arrow-size + $
     max-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
     width: 100%;
 }
 
@@ -57,6 +71,15 @@ $cf-dropdown-tree-placeholder-arrow-space: 2 * ($cf-dropdown-tree-arrow-size + $
 .cf-dropdown-tree-arrow-wrapper {
     display: table-cell;
     vertical-align: middle;
+
+    .mat-form-field-appearance-fill &,
+    .mat-form-field-appearance-standard & {
+        transform: translateY(-50%);
+    }
+
+    .mat-form-field-appearance-outline & {
+        transform: translateY(-25%);
+    }
 }
 
 .cf-dropdown-tree-arrow {
@@ -69,19 +92,30 @@ $cf-dropdown-tree-placeholder-arrow-space: 2 * ($cf-dropdown-tree-arrow-size + $
 }
 
 .cf-dropdown-tree-panel {
+    // From mat-menu-base
     @include mat-overridable-elevation(8);
 
     @include cdk-high-contrast {
         outline: solid 1px;
     }
 
-    max-height: $cf-dropdown-tree-panel-max-height;
-    max-width: 280px;
-    min-width: 100%;
+    // From mat-menu-base
+    max-width: $mat-menu-overlay-max-width;
+    // min-width: $mat-menu-overlay-min-width;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
+
+    max-height: $cf-dropdown-tree-panel-max-height; /* stylelint-disable-line declaration-empty-line-before, order/properties-alphabetical-order */
+    min-width: 100%;
     padding-bottom: 0;
     padding-top: 0;
+}
+
+.cf-dropdown-tree-panel {
+    .cf-dropdown-tree-node {
+        font-size: inherit;
+        line-height: $cf-dropdown-tree-node-height;
+    }
 }
 
 .mat-form-field-type-cf-dropdown-tree {
@@ -89,8 +123,18 @@ $cf-dropdown-tree-placeholder-arrow-space: 2 * ($cf-dropdown-tree-arrow-size + $
         cursor: pointer;
     }
 
-    .mat-form-field-placeholder {
+    .mat-form-field-label {
         width: calc(100% - #{cf-dropdown-tree-placeholder-arrow-space});
+    }
+}
+
+.cf-dropdown-tree-placeholder {
+    transition: color $swift-ease-out-duration $swift-ease-out-duration / 3 $swift-ease-out-timing-function;
+
+    .mat-form-field-hide-placeholder & {
+        color: transparent;
+        display: block;
+        transition: none;
     }
 }
 
