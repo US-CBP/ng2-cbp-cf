@@ -2,7 +2,6 @@
 import {
     OverlayContainer,
     ScrollDispatcher,
-    ViewportRuler,
 }                                       from '@angular/cdk/overlay';
 import {
     Component,
@@ -13,7 +12,6 @@ import {
     ComponentFixture,
     TestBed,
     fakeAsync,
-    inject,
     tick,
 }                                       from '@angular/core/testing';
 import { FormsModule }                  from '@angular/forms';
@@ -33,7 +31,6 @@ describe('DropdownTreeComponent', () => {
     let overlayContainerElement: HTMLElement;
     let dir: { value: 'ltr' | 'rtl' };
     let scrollableSubject: Subject<void>;
-    let viewportRuler: ViewportRuler;
 
     beforeEach(() => {
         currentId = 1;
@@ -57,10 +54,6 @@ describe('DropdownTreeComponent', () => {
             ],
         });
     });
-
-    beforeEach(inject([ViewportRuler], (_ruler: ViewportRuler) => {
-        viewportRuler = _ruler;
-    }));
 
     afterEach(() => {
         document.body.removeChild(overlayContainerElement);
