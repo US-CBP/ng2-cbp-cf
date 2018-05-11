@@ -2,7 +2,7 @@
  * Note about importing.
  * non-webpack users of this library needs to override all paths e.g. $roboto-font-path
  */
-$roboto-font-path: '~roboto-fontface/fonts' !default;
+$roboto-font-path: '~roboto-fontface/fonts';
 
 //300
 @import '~roboto-fontface/css/roboto/sass/roboto-fontface-light';
