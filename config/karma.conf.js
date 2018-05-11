@@ -44,7 +44,7 @@ module.exports = config => {
 
         singleRun: false,
 
-        browsers: ['Chrome'],
+        browsers: ['ChromeHeadless'],
 
         browserDisconnectTimeout: 4000,
         browserNoActivityTimeout: 30000
