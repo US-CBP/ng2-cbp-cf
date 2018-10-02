@@ -1,4 +1,4 @@
-﻿<button *ngIf="leftAction" mat-icon-button [title]="leftAction.text" (click)="leftAction.action()">
+﻿<button #btn *ngIf="leftAction" mat-icon-button [title]="leftAction.text">
     <mat-icon>{{leftAction.iconClasses}}</mat-icon>
     <span class="sr-only">{{leftAction.text}}</span>
 </button>

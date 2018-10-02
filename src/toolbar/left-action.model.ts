@@ -1,4 +1,6 @@
-﻿import { ToolbarService }   from './toolbar.service';
+﻿import { Location }         from '@angular/common';
+
+import { ToolbarService }   from './toolbar.service';
 
 export class LeftAction {
     constructor(
@@ -17,6 +19,18 @@ export class BackAction extends LeftAction {
 export class CloseAction extends LeftAction {
     constructor(action: () => void) {
         super('Close', 'close', action);
+    }
+}
+
+export class LocationCloseAction extends CloseAction {
+    constructor(private _location: Location) {
+        super(() => this._location.back());
+    }
+}
+
+export class LocationBackAction extends BackAction {
+    constructor(private _location: Location) {
+        super(() => this._location.back());
     }
 }
 
