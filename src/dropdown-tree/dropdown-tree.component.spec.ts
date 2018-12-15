@@ -1,5 +1,4 @@
-﻿import { Directionality }               from '@angular/cdk/bidi';
-import {
+﻿import {
     OverlayContainer,
     ScrollDispatcher,
 }                                       from '@angular/cdk/overlay';
@@ -29,7 +28,6 @@ let currentId: number;
 
 describe('DropdownTreeComponent', () => {
     let overlayContainerElement: HTMLElement;
-    let dir: { value: 'ltr' | 'rtl' };
     let scrollableSubject: Subject<void>;
 
     beforeEach(() => {
@@ -48,7 +46,6 @@ describe('DropdownTreeComponent', () => {
             ],
             providers: [
                 { provide: OverlayContainer, useFactory: () => overlayContainerFactory() },
-                { provide: Directionality, useFactory: () => dir = { value: 'ltr' } },
                 { provide: ScrollDispatcher, useFactory: () => scrollDispatcherFactory() },
                 { provide: MATERIAL_SANITY_CHECKS, useValue: false },
             ],
