@@ -12,9 +12,8 @@ import { NavItemType }              from '../nav-item-type.type';
     encapsulation: ViewEncapsulation.None,
 })
 export class HeaderNavItemComponent {
-    @Input() type: NavItemType;
-    @Input() url: string;
+    @Input() type: NavItemType | undefined;
+    @Input() url: string | undefined;
 
-    constructor() {
-    }
+    constructor() { }
 }

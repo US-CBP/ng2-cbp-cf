@@ -90,7 +90,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.defaultNode).toBe(null);
+            expect(component.dropdownTree!.defaultNode).toBe(null);
         }));
 
         it('is not null when value is null and defaultLabel is null', fakeAsync(() => {
@@ -100,7 +100,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.defaultNode).not.toBe(null);
+            expect(component.dropdownTree!.defaultNode).not.toBe(null);
         }));
 
         it('is not null when value is null and defaultLabel is not null', fakeAsync(() => {
@@ -110,7 +110,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.defaultNode).not.toBe(null);
+            expect(component.dropdownTree!.defaultNode).not.toBe(null);
         }));
 
         it('has defaultLabel text', fakeAsync(() => {
@@ -120,7 +120,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.defaultNode.text).toBe('Any');
+            expect(component.dropdownTree!.defaultNode!.text).toBe('Any');
         }));
 
         it('has empty text when defaultLabel is null', fakeAsync(() => {
@@ -130,7 +130,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.defaultNode.text).toBe('');
+            expect(component.dropdownTree!.defaultNode!.text).toBe('');
         }));
 
         it('set to not null when value set to null and defaultLabel is null', fakeAsync(() => {
@@ -145,7 +145,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.defaultNode).not.toBe(null);
+            expect(component.dropdownTree!.defaultNode).not.toBe(null);
         }));
 
         it('set to null when value set to not null and defaultLabel is null', fakeAsync(() => {
@@ -160,7 +160,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.defaultNode).toBe(null);
+            expect(component.dropdownTree!.defaultNode).toBe(null);
         }));
 
         it('stays null when value set to another value and defaultLabel is null', fakeAsync(() => {
@@ -175,7 +175,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.defaultNode).toBe(null);
+            expect(component.dropdownTree!.defaultNode).toBe(null);
         }));
 
         it('stays not null when value set to not null and defaultLabel is not null', fakeAsync(() => {
@@ -190,7 +190,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.defaultNode).not.toBe(null);
+            expect(component.dropdownTree!.defaultNode).not.toBe(null);
         }));
 
         it('set to not null when value is not null and defaultLabel set to not null', fakeAsync(() => {
@@ -205,7 +205,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.defaultNode).not.toBe(null);
+            expect(component.dropdownTree!.defaultNode).not.toBe(null);
         }));
 
         it('set to null when value is not null and defaultLabel set to null', fakeAsync(() => {
@@ -220,7 +220,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.defaultNode).toBe(null);
+            expect(component.dropdownTree!.defaultNode).toBe(null);
         }));
 
         it('changes text when defaultLabel changes', fakeAsync(() => {
@@ -235,7 +235,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.defaultNode.text).toBe('Select One');
+            expect(component.dropdownTree!.defaultNode!.text).toBe('Select One');
         }));
 
         it('changes text to empty string when defaultLabel set to null', fakeAsync(() => {
@@ -250,7 +250,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.defaultNode.text).toBe('');
+            expect(component.dropdownTree!.defaultNode!.text).toBe('');
         }));
 
         it('changes text to defaultLabel when set to not null', fakeAsync(() => {
@@ -265,7 +265,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.defaultNode.text).toBe('Any');
+            expect(component.dropdownTree!.defaultNode!.text).toBe('Any');
         }));
     });
 
@@ -286,7 +286,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.triggerValue).toBe('');
+            expect(component.dropdownTree!.triggerValue).toBe('');
         }));
 
         it('is defaultLabel when value is null and defaultLabel is not null', fakeAsync(() => {
@@ -297,7 +297,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.triggerValue).toBe('Any');
+            expect(component.dropdownTree!.triggerValue).toBe('Any');
         }));
 
         it('is value text', fakeAsync(() => {
@@ -308,7 +308,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.triggerValue).toBe(component.nodes[0].text);
+            expect(component.dropdownTree!.triggerValue).toBe(component.nodes[0].text);
         }));
 
         it('is value selectedText when not null', fakeAsync(() => {
@@ -321,7 +321,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.triggerValue).toBe('Special Text');
+            expect(component.dropdownTree!.triggerValue).toBe('Special Text');
         }));
 
         it('is empty string when value is null and defaultLabel is null and showFullSelectedPath is true', fakeAsync(() => {
@@ -332,7 +332,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.triggerValue).toBe('');
+            expect(component.dropdownTree!.triggerValue).toBe('');
         }));
 
         it('is defaultLabel when value is null and defaultLabel is not null and showFullSelectedPath is true', fakeAsync(() => {
@@ -343,7 +343,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.triggerValue).toBe('Any');
+            expect(component.dropdownTree!.triggerValue).toBe('Any');
         }));
 
         it('is full path to value text and showFullSelectedPath is true', fakeAsync(() => {
@@ -359,7 +359,7 @@ describe('DropdownTreeComponent', () => {
                 component.nodes[0].children[1],
                 component.nodes[0].children[1].children[0],
             ];
-            expect(component.dropdownTree.triggerValue).toBe(`${nodesInPath[0].text} / ${nodesInPath[1].text} / ${nodesInPath[2].text}`);
+            expect(component.dropdownTree!.triggerValue).toBe(`${nodesInPath[0].text} / ${nodesInPath[1].text} / ${nodesInPath[2].text}`);
         }));
 
         it('is full path to value selectedText when not null and showFullSelectedPath is true', fakeAsync(() => {
@@ -378,7 +378,7 @@ describe('DropdownTreeComponent', () => {
                 component.nodes[0].children[1],
                 component.nodes[0].children[1].children[0],
             ];
-            expect(component.dropdownTree.triggerValue).toBe(`${nodesInPath[0].selectedText} / ${nodesInPath[1].text} / ${nodesInPath[2].selectedText}`);
+            expect(component.dropdownTree!.triggerValue).toBe(`${nodesInPath[0].selectedText} / ${nodesInPath[1].text} / ${nodesInPath[2].selectedText}`);
         }));
 
         it('changes when defaultLabel changes', fakeAsync(() => {
@@ -394,7 +394,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.triggerValue).toBe('Select One');
+            expect(component.dropdownTree!.triggerValue).toBe('Select One');
         }));
 
         it('changes when value changes to null', fakeAsync(() => {
@@ -410,7 +410,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.triggerValue).toBe('Any');
+            expect(component.dropdownTree!.triggerValue).toBe('Any');
         }));
 
         it('changes when value changes from null', fakeAsync(() => {
@@ -426,7 +426,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.triggerValue).toBe(component.nodes[0].text);
+            expect(component.dropdownTree!.triggerValue).toBe(component.nodes[0].text);
         }));
 
         it('changes when value changes', fakeAsync(() => {
@@ -442,7 +442,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.triggerValue).toBe(component.nodes[0].text);
+            expect(component.dropdownTree!.triggerValue).toBe(component.nodes[0].text);
         }));
 
         it('changes when showFullSelectedPath changes to true', fakeAsync(() => {
@@ -462,7 +462,7 @@ describe('DropdownTreeComponent', () => {
                 component.nodes[0],
                 component.nodes[0].children[0],
             ];
-            expect(component.dropdownTree.triggerValue).toBe(`${nodesInPath[0].text} / ${nodesInPath[1].text}`);
+            expect(component.dropdownTree!.triggerValue).toBe(`${nodesInPath[0].text} / ${nodesInPath[1].text}`);
         }));
 
         it('changes when showFullSelectedPath changes to false', fakeAsync(() => {
@@ -478,7 +478,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.triggerValue).toBe(component.nodes[0].children[0].text);
+            expect(component.dropdownTree!.triggerValue).toBe(component.nodes[0].children[0].text);
         }));
     });
 
@@ -497,7 +497,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(sortBy(Array.from(component.dropdownTree.expandedNodes.keys()), i => i.id)).toEqual(sortBy([
+            expect(sortBy(Array.from(component.dropdownTree!.expandedNodes.keys()), i => i.id)).toEqual(sortBy([
                 component.nodes[0],
                 component.nodes[0].children[2],
             ], i => i.id));
@@ -509,7 +509,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.expandedNodes.size).toBe(0);
+            expect(component.dropdownTree!.expandedNodes.size).toBe(0);
         }));
 
         it('expands no nodes when defaultExpansionLevel is 0', fakeAsync(() => {
@@ -518,7 +518,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.expandedNodes.size).toBe(0);
+            expect(component.dropdownTree!.expandedNodes.size).toBe(0);
         }));
 
         it('expands nodes to first level when defaultExpansionLevel is 1', fakeAsync(() => {
@@ -527,7 +527,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(sortBy(Array.from(component.dropdownTree.expandedNodes.keys()), i => i.id)).toEqual(sortBy([
+            expect(sortBy(Array.from(component.dropdownTree!.expandedNodes.keys()), i => i.id)).toEqual(sortBy([
                 component.nodes[0],
                 component.nodes[1],
             ], i => i.id));
@@ -539,7 +539,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(sortBy(Array.from(component.dropdownTree.expandedNodes.keys()), i => i.id)).toEqual(sortBy([
+            expect(sortBy(Array.from(component.dropdownTree!.expandedNodes.keys()), i => i.id)).toEqual(sortBy([
                 component.nodes[0],
                 component.nodes[0].children[1],
                 component.nodes[0].children[2],
@@ -555,7 +555,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(sortBy(Array.from(component.dropdownTree.expandedNodes.keys()), i => i.id)).toEqual(sortBy([
+            expect(sortBy(Array.from(component.dropdownTree!.expandedNodes.keys()), i => i.id)).toEqual(sortBy([
                 component.nodes[0],
                 component.nodes[0].children[2],
                 component.nodes[1],
@@ -586,7 +586,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.panelOpen).toBe(true);
+            expect(component.dropdownTree!.panelOpen).toBe(true);
         }));
 
         it('and emits opened', fakeAsync(() => {
@@ -620,21 +620,21 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
                 component.nodes[0].children[2],
                 component.nodes[0].children[2].children[1],
             ]);
-            component.dropdownTree.expandNode(component.nodes[0]);
-            component.dropdownTree.expandNode(component.nodes[0].children[2]);
-            component.dropdownTree.expandNode(component.nodes[0].children[2].children[1]);
+            component.dropdownTree!.expandNode(component.nodes[0]);
+            component.dropdownTree!.expandNode(component.nodes[0].children[2]);
+            component.dropdownTree!.expandNode(component.nodes[0].children[2].children[1]);
 
             trigger.click();
 
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.highlightedNode).toBe(selectedNode);
+            expect(component.dropdownTree!.highlightedNode).toBe(selectedNode);
         }));
 
         it('and highlights first node when value is not visible and defaultNode does not exist', fakeAsync(() => {
@@ -645,7 +645,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -654,7 +654,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[0]);
+            expect(component.dropdownTree!.highlightedNode).toBe(component.nodes[0]);
         }));
 
         it('and highlights defaultNode when value is not visible and defaultNode exists', fakeAsync(() => {
@@ -665,7 +665,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -674,7 +674,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.highlightedNode).toBe(component.dropdownTree.defaultNode);
+            expect(component.dropdownTree!.highlightedNode).toBe(component.dropdownTree!.defaultNode);
         }));
 
         it('when Alt+ArrowDown pressed', fakeAsync(() => {
@@ -687,7 +687,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.panelOpen).toBe(true);
+            expect(component.dropdownTree!.panelOpen).toBe(true);
         }));
 
         it('when Enter pressed', fakeAsync(() => {
@@ -699,7 +699,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.panelOpen).toBe(true);
+            expect(component.dropdownTree!.panelOpen).toBe(true);
         }));
 
         it('when Space pressed', fakeAsync(() => {
@@ -711,7 +711,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.panelOpen).toBe(true);
+            expect(component.dropdownTree!.panelOpen).toBe(true);
         }));
     });
 
@@ -744,7 +744,7 @@ describe('DropdownTreeComponent', () => {
             tick();
             tick(1000);
 
-            expect(component.dropdownTree.panelOpen).toBe(false);
+            expect(component.dropdownTree!.panelOpen).toBe(false);
         }));
 
         it('when backdrop clicked', fakeAsync(() => {
@@ -755,7 +755,7 @@ describe('DropdownTreeComponent', () => {
             tick();
             tick(1000);
 
-            expect(component.dropdownTree.panelOpen).toBe(false);
+            expect(component.dropdownTree!.panelOpen).toBe(false);
         }));
 
         it('and emits closed', fakeAsync(() => {
@@ -780,7 +780,7 @@ describe('DropdownTreeComponent', () => {
             tick();
             tick(1000);
 
-            expect(component.dropdownTree.panelOpen).toBe(false);
+            expect(component.dropdownTree!.panelOpen).toBe(false);
         }));
 
         it('when Escape pressed', fakeAsync(() => {
@@ -793,7 +793,7 @@ describe('DropdownTreeComponent', () => {
             tick();
             tick(1000);
 
-            expect(component.dropdownTree.panelOpen).toBe(false);
+            expect(component.dropdownTree!.panelOpen).toBe(false);
         }));
 
         it('when Tab pressed', fakeAsync(() => {
@@ -806,7 +806,7 @@ describe('DropdownTreeComponent', () => {
             tick();
             tick(1000);
 
-            expect(component.dropdownTree.panelOpen).toBe(false);
+            expect(component.dropdownTree!.panelOpen).toBe(false);
         }));
 
         it('when Space pressed', fakeAsync(() => {
@@ -819,7 +819,7 @@ describe('DropdownTreeComponent', () => {
             tick();
             tick(1000);
 
-            expect(component.dropdownTree.panelOpen).toBe(false);
+            expect(component.dropdownTree!.panelOpen).toBe(false);
         }));
 
         it('when Ctrl+Space pressed', fakeAsync(() => {
@@ -833,7 +833,7 @@ describe('DropdownTreeComponent', () => {
             tick();
             tick(1000);
 
-            expect(component.dropdownTree.panelOpen).toBe(false);
+            expect(component.dropdownTree!.panelOpen).toBe(false);
         }));
 
         it('when Enter pressed', fakeAsync(() => {
@@ -846,7 +846,7 @@ describe('DropdownTreeComponent', () => {
             tick();
             tick(1000);
 
-            expect(component.dropdownTree.panelOpen).toBe(false);
+            expect(component.dropdownTree!.panelOpen).toBe(false);
         }));
     });
 
@@ -874,7 +874,7 @@ describe('DropdownTreeComponent', () => {
         }));
 
         it('ArrowUp highlights previous visible node of current highlighted node', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[1];
+            component.dropdownTree!.highlightedNode = component.nodes[1];
             component.selectedNode = component.nodes[2];
 
             const event = new KeyboardEvent('keydown', {
@@ -885,11 +885,11 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[0]);
+            expect(component.dropdownTree!.highlightedNode).toBe(component.nodes[0]);
         }));
 
         it('ArrowUp selects previous visible node of current highlighted node', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[1];
+            component.dropdownTree!.highlightedNode = component.nodes[1];
             component.selectedNode = component.nodes[2];
 
             const event = new KeyboardEvent('keydown', {
@@ -904,7 +904,7 @@ describe('DropdownTreeComponent', () => {
         }));
 
         it('ArrowUp does not change highlighted node when current highlighted node is first visible node', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.dropdownTree.defaultNode;
+            component.dropdownTree!.highlightedNode = component.dropdownTree!.defaultNode;
             component.selectedNode = component.nodes[2];
 
             const event = new KeyboardEvent('keydown', {
@@ -915,11 +915,11 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.highlightedNode).toBe(component.dropdownTree.defaultNode);
+            expect(component.dropdownTree!.highlightedNode).toBe(component.dropdownTree!.defaultNode);
         }));
 
         it('ArrowUp does not change selected node when current highlighted node is first visible node', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.dropdownTree.defaultNode;
+            component.dropdownTree!.highlightedNode = component.dropdownTree!.defaultNode;
             component.selectedNode = component.nodes[2];
 
             const event = new KeyboardEvent('keydown', {
@@ -934,7 +934,7 @@ describe('DropdownTreeComponent', () => {
         }));
 
         it('ArrowUp highlights previous visible node when previous visible node is not selectable', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[1];
+            component.dropdownTree!.highlightedNode = component.nodes[1];
             component.selectedNode = component.nodes[2];
 
             component.nodes[0].selectable = false;
@@ -947,11 +947,11 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[0]);
+            expect(component.dropdownTree!.highlightedNode).toBe(component.nodes[0]);
         }));
 
         it('ArrowUp does not change selected node when previous visible node is not selectable', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[1];
+            component.dropdownTree!.highlightedNode = component.nodes[1];
             component.selectedNode = component.nodes[2];
 
             component.nodes[0].selectable = false;
@@ -968,7 +968,7 @@ describe('DropdownTreeComponent', () => {
         }));
 
         it('Ctrl+ArrowUp highlights previous visible node of current highlighted node', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[1];
+            component.dropdownTree!.highlightedNode = component.nodes[1];
             component.selectedNode = component.nodes[2];
 
             const event = new KeyboardEvent('keydown', {
@@ -980,11 +980,11 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[0]);
+            expect(component.dropdownTree!.highlightedNode).toBe(component.nodes[0]);
         }));
 
         it('Ctrl+ArrowUp does not change selected node', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[1];
+            component.dropdownTree!.highlightedNode = component.nodes[1];
             component.selectedNode = component.nodes[2];
 
             const event = new KeyboardEvent('keydown', {
@@ -1000,7 +1000,7 @@ describe('DropdownTreeComponent', () => {
         }));
 
         it('Ctrl+ArrowUp does not change highlighted node when current highlighted node is first visible node', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.dropdownTree.defaultNode;
+            component.dropdownTree!.highlightedNode = component.dropdownTree!.defaultNode;
             component.selectedNode = component.nodes[2];
 
             const event = new KeyboardEvent('keydown', {
@@ -1012,11 +1012,11 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.highlightedNode).toBe(component.dropdownTree.defaultNode);
+            expect(component.dropdownTree!.highlightedNode).toBe(component.dropdownTree!.defaultNode);
         }));
 
         it('Ctrl+ArrowUp does not change selected node when current highlighted node is first visible node', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.dropdownTree.defaultNode;
+            component.dropdownTree!.highlightedNode = component.dropdownTree!.defaultNode;
             component.selectedNode = component.nodes[2];
 
             const event = new KeyboardEvent('keydown', {
@@ -1032,7 +1032,7 @@ describe('DropdownTreeComponent', () => {
         }));
 
         it('Ctrl+ArrowUp highlights previous visible node when previous visible node is not selectable', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[1];
+            component.dropdownTree!.highlightedNode = component.nodes[1];
             component.selectedNode = component.nodes[2];
 
             component.nodes[0].selectable = false;
@@ -1046,11 +1046,11 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[0]);
+            expect(component.dropdownTree!.highlightedNode).toBe(component.nodes[0]);
         }));
 
         it('Ctrl+ArrowUp does not change selected node when previous visible node is not selectable', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[1];
+            component.dropdownTree!.highlightedNode = component.nodes[1];
             component.selectedNode = component.nodes[2];
 
             component.nodes[0].selectable = false;
@@ -1068,7 +1068,7 @@ describe('DropdownTreeComponent', () => {
         }));
 
         it('ArrowDown highlights next visible node of current highlighted node', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[1];
+            component.dropdownTree!.highlightedNode = component.nodes[1];
             component.selectedNode = component.nodes[0];
 
             const event = new KeyboardEvent('keydown', {
@@ -1079,11 +1079,11 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[2]);
+            expect(component.dropdownTree!.highlightedNode).toBe(component.nodes[2]);
         }));
 
         it('ArrowDown selects next visible node of current highlighted node', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[1];
+            component.dropdownTree!.highlightedNode = component.nodes[1];
             component.selectedNode = component.nodes[0];
 
             const event = new KeyboardEvent('keydown', {
@@ -1098,7 +1098,7 @@ describe('DropdownTreeComponent', () => {
         }));
 
         it('ArrowDown does not change highlighted node when current highlighted node is last visible node', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[2];
+            component.dropdownTree!.highlightedNode = component.nodes[2];
             component.selectedNode = component.nodes[0];
 
             const event = new KeyboardEvent('keydown', {
@@ -1109,11 +1109,11 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[2]);
+            expect(component.dropdownTree!.highlightedNode).toBe(component.nodes[2]);
         }));
 
         it('ArrowDown does not change selected node when current highlighted node is last visible node', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[2];
+            component.dropdownTree!.highlightedNode = component.nodes[2];
             component.selectedNode = component.nodes[0];
 
             const event = new KeyboardEvent('keydown', {
@@ -1128,7 +1128,7 @@ describe('DropdownTreeComponent', () => {
         }));
 
         it('ArrowDown highlights next visible node when next visible node is not selectable', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[1];
+            component.dropdownTree!.highlightedNode = component.nodes[1];
             component.selectedNode = component.nodes[0];
 
             component.nodes[2].selectable = false;
@@ -1141,11 +1141,11 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[2]);
+            expect(component.dropdownTree!.highlightedNode).toBe(component.nodes[2]);
         }));
 
         it('ArrowDown does not change selected node when next visible node is not selectable', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[1];
+            component.dropdownTree!.highlightedNode = component.nodes[1];
             component.selectedNode = component.nodes[0];
 
             component.nodes[2].selectable = false;
@@ -1162,7 +1162,7 @@ describe('DropdownTreeComponent', () => {
         }));
 
         it('Ctrl+ArrowDown highlights next visible node of current highlighted node', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[1];
+            component.dropdownTree!.highlightedNode = component.nodes[1];
             component.selectedNode = component.nodes[0];
 
             const event = new KeyboardEvent('keydown', {
@@ -1174,11 +1174,11 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[2]);
+            expect(component.dropdownTree!.highlightedNode).toBe(component.nodes[2]);
         }));
 
         it('Ctrl+ArrowDown does not change selected node', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[1];
+            component.dropdownTree!.highlightedNode = component.nodes[1];
             component.selectedNode = component.nodes[0];
 
             const event = new KeyboardEvent('keydown', {
@@ -1194,7 +1194,7 @@ describe('DropdownTreeComponent', () => {
         }));
 
         it('Ctrl+ArrowDown does not change highlighted node when current highlighted node is last visible node', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[2];
+            component.dropdownTree!.highlightedNode = component.nodes[2];
             component.selectedNode = component.nodes[0];
 
             const event = new KeyboardEvent('keydown', {
@@ -1206,11 +1206,11 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[2]);
+            expect(component.dropdownTree!.highlightedNode).toBe(component.nodes[2]);
         }));
 
         it('Ctrl+ArrowDown does not change selected node when current highlighted node is last visible node', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[2];
+            component.dropdownTree!.highlightedNode = component.nodes[2];
             component.selectedNode = component.nodes[0];
 
             const event = new KeyboardEvent('keydown', {
@@ -1226,7 +1226,7 @@ describe('DropdownTreeComponent', () => {
         }));
 
         it('Ctrl+ArrowDown highlights next visible node when next visible node is not selectable', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[1];
+            component.dropdownTree!.highlightedNode = component.nodes[1];
             component.selectedNode = component.nodes[0];
 
             component.nodes[2].selectable = false;
@@ -1240,11 +1240,11 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[2]);
+            expect(component.dropdownTree!.highlightedNode).toBe(component.nodes[2]);
         }));
 
         it('Ctrl+ArrowDown does not change selected node when next visible node is not selectable', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[1];
+            component.dropdownTree!.highlightedNode = component.nodes[1];
             component.selectedNode = component.nodes[0];
 
             component.nodes[2].selectable = false;
@@ -1262,13 +1262,13 @@ describe('DropdownTreeComponent', () => {
         }));
 
         it('ArrowLeft does not change highlighted node when current highlighted node is expanded', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.dropdownTree!.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[2];
 
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
                 component.nodes[0].children[1],
             ]);
@@ -1281,17 +1281,17 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[0].children[1]);
+            expect(component.dropdownTree!.highlightedNode).toBe(component.nodes[0].children[1]);
         }));
 
         it('ArrowLeft does not change selected node when current highlighted node is expanded', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.dropdownTree!.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[2];
 
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
                 component.nodes[0].children[1],
             ]);
@@ -1308,13 +1308,13 @@ describe('DropdownTreeComponent', () => {
         }));
 
         it('ArrowLeft collapses current highlighted node when current highlighted node is expanded', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.dropdownTree!.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[2];
 
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
                 component.nodes[0].children[1],
             ]);
@@ -1327,17 +1327,17 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.expandedNodes.has(component.nodes[0].children[1])).toBe(false);
+            expect(component.dropdownTree!.expandedNodes.has(component.nodes[0].children[1])).toBe(false);
         }));
 
         it('ArrowLeft changes highlighted node to parent of current highlighted node when current highlighted node is collapsed', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.dropdownTree!.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[2];
 
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -1349,17 +1349,17 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[0]);
+            expect(component.dropdownTree!.highlightedNode).toBe(component.nodes[0]);
         }));
 
         it('ArrowLeft changes selected node to parent of current highlighted node when current highlighted node is collapsed', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.dropdownTree!.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[2];
 
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -1375,13 +1375,13 @@ describe('DropdownTreeComponent', () => {
         }));
 
         it('ArrowLeft does not change highlighted node when current highlighted node is collapsed and has no parent', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[0];
+            component.dropdownTree!.highlightedNode = component.nodes[0];
             component.selectedNode = component.nodes[2];
 
             fixture.detectChanges();
             tick();
 
-            collapseAllNodes(component.dropdownTree);
+            collapseAllNodes(component.dropdownTree!);
 
             const event = new KeyboardEvent('keydown', {
                 key: 'ArrowLeft',
@@ -1391,17 +1391,17 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[0]);
+            expect(component.dropdownTree!.highlightedNode).toBe(component.nodes[0]);
         }));
 
         it('ArrowLeft does not change selected node when current highlighted node is collapsed and has no parent', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[0];
+            component.dropdownTree!.highlightedNode = component.nodes[0];
             component.selectedNode = component.nodes[2];
 
             fixture.detectChanges();
             tick();
 
-            collapseAllNodes(component.dropdownTree);
+            collapseAllNodes(component.dropdownTree!);
 
             const event = new KeyboardEvent('keydown', {
                 key: 'ArrowLeft',
@@ -1415,7 +1415,7 @@ describe('DropdownTreeComponent', () => {
         }));
 
         it('ArrowLeft changes highlighted node to parent when current highlighted node is collapsed and parent node is not selectable', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.dropdownTree!.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[2];
 
             component.nodes[0].selectable = false;
@@ -1423,7 +1423,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -1435,11 +1435,11 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[0]);
+            expect(component.dropdownTree!.highlightedNode).toBe(component.nodes[0]);
         }));
 
         it('ArrowLeft does not change selected node when current highlighted node is collapsed and parent node is not selectable', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.dropdownTree!.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[2];
 
             component.nodes[0].selectable = false;
@@ -1447,7 +1447,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -1463,13 +1463,13 @@ describe('DropdownTreeComponent', () => {
         }));
 
         it('ArrowRight does not change highlighted node when current highlighted node is collapsed', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[0];
+            component.dropdownTree!.highlightedNode = component.nodes[0];
             component.selectedNode = component.nodes[2];
 
             fixture.detectChanges();
             tick();
 
-            collapseAllNodes(component.dropdownTree);
+            collapseAllNodes(component.dropdownTree!);
 
             const event = new KeyboardEvent('keydown', {
                 key: 'ArrowRight',
@@ -1479,17 +1479,17 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[0]);
+            expect(component.dropdownTree!.highlightedNode).toBe(component.nodes[0]);
         }));
 
         it('ArrowRight does not change selected node when current highlighted node is collapsed', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[0];
+            component.dropdownTree!.highlightedNode = component.nodes[0];
             component.selectedNode = component.nodes[2];
 
             fixture.detectChanges();
             tick();
 
-            collapseAllNodes(component.dropdownTree);
+            collapseAllNodes(component.dropdownTree!);
 
             const event = new KeyboardEvent('keydown', {
                 key: 'ArrowRight',
@@ -1503,13 +1503,13 @@ describe('DropdownTreeComponent', () => {
         }));
 
         it('ArrowRight expands current highlighted node when current highlighted node is collapsed', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[0];
+            component.dropdownTree!.highlightedNode = component.nodes[0];
             component.selectedNode = component.nodes[2];
 
             fixture.detectChanges();
             tick();
 
-            collapseAllNodes(component.dropdownTree);
+            collapseAllNodes(component.dropdownTree!);
 
             const event = new KeyboardEvent('keydown', {
                 key: 'ArrowRight',
@@ -1519,17 +1519,17 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.expandedNodes.has(component.nodes[0])).toBe(true);
+            expect(component.dropdownTree!.expandedNodes.has(component.nodes[0])).toBe(true);
         }));
 
         it('ArrowRight changes highlighted node to first child of the current highlighted node when current highlighted node is expanded', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[0];
+            component.dropdownTree!.highlightedNode = component.nodes[0];
             component.selectedNode = component.nodes[2];
 
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -1541,17 +1541,17 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[0].children[0]);
+            expect(component.dropdownTree!.highlightedNode).toBe(component.nodes[0].children[0]);
         }));
 
         it('ArrowRight changes selected node to first child of the current highlighted node when current highlighted node is expanded', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[0];
+            component.dropdownTree!.highlightedNode = component.nodes[0];
             component.selectedNode = component.nodes[2];
 
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -1567,13 +1567,13 @@ describe('DropdownTreeComponent', () => {
         }));
 
         it('ArrowRight does not change highlighted node when current highlighted node has no children', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[0].children[0];
+            component.dropdownTree!.highlightedNode = component.nodes[0].children[0];
             component.selectedNode = component.nodes[2];
 
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -1585,17 +1585,17 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[0].children[0]);
+            expect(component.dropdownTree!.highlightedNode).toBe(component.nodes[0].children[0]);
         }));
 
         it('ArrowRight does not change selected node when current highlighted node has no children', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[0].children[0];
+            component.dropdownTree!.highlightedNode = component.nodes[0].children[0];
             component.selectedNode = component.nodes[2];
 
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -1611,7 +1611,7 @@ describe('DropdownTreeComponent', () => {
         }));
 
         it('ArrowRight changes highlighted node to first child when current highlighted node is expanded and first child node is not selectable', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[0];
+            component.dropdownTree!.highlightedNode = component.nodes[0];
             component.selectedNode = component.nodes[2];
 
             component.nodes[0].children[0].selectable = false;
@@ -1619,7 +1619,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -1631,11 +1631,11 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[0].children[0]);
+            expect(component.dropdownTree!.highlightedNode).toBe(component.nodes[0].children[0]);
         }));
 
         it('ArrowRight does not change selected node when current highlighted node is expanded and first child node is not selectable', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[0];
+            component.dropdownTree!.highlightedNode = component.nodes[0];
             component.selectedNode = component.nodes[2];
 
             component.nodes[0].children[0].selectable = false;
@@ -1643,7 +1643,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -1660,13 +1660,13 @@ describe('DropdownTreeComponent', () => {
 
         it('Home changes highlighted node to first visible node', fakeAsync(() => {
             component.defaultLabel = null;
-            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.dropdownTree!.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[2];
 
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -1678,18 +1678,18 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[0]);
+            expect(component.dropdownTree!.highlightedNode).toBe(component.nodes[0]);
         }));
 
         it('Home changes selected node to first visible node', fakeAsync(() => {
             component.defaultLabel = null;
-            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.dropdownTree!.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[2];
 
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -1705,13 +1705,13 @@ describe('DropdownTreeComponent', () => {
         }));
 
         it('Home changes highlighted node to default node when default label is not null', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.dropdownTree!.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[2];
 
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -1723,17 +1723,17 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.highlightedNode).toBe(component.dropdownTree.defaultNode);
+            expect(component.dropdownTree!.highlightedNode).toBe(component.dropdownTree!.defaultNode);
         }));
 
         it('Home changes selected node to default node when default label is not null', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.dropdownTree!.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[2];
 
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -1750,7 +1750,7 @@ describe('DropdownTreeComponent', () => {
 
         it('Home changes highlighted node to first visible node when first visible node is not selectable', fakeAsync(() => {
             component.defaultLabel = null;
-            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.dropdownTree!.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[2];
 
             component.nodes[0].selectable = false;
@@ -1758,7 +1758,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -1770,12 +1770,12 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[0]);
+            expect(component.dropdownTree!.highlightedNode).toBe(component.nodes[0]);
         }));
 
         it('Home does not change selected node when first visible node is not selectable', fakeAsync(() => {
             component.defaultLabel = null;
-            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.dropdownTree!.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[2];
 
             component.nodes[0].selectable = false;
@@ -1783,7 +1783,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -1800,13 +1800,13 @@ describe('DropdownTreeComponent', () => {
 
         it('Ctrl+Home changes highlighted node to first visible node', fakeAsync(() => {
             component.defaultLabel = null;
-            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.dropdownTree!.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[2];
 
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -1819,18 +1819,18 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[0]);
+            expect(component.dropdownTree!.highlightedNode).toBe(component.nodes[0]);
         }));
 
         it('Ctrl+Home does not change selected node', fakeAsync(() => {
             component.defaultLabel = null;
-            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.dropdownTree!.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[2];
 
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -1847,13 +1847,13 @@ describe('DropdownTreeComponent', () => {
         }));
 
         it('Ctrl+Home changes highlighted node to first visible node when default label is not null', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.dropdownTree!.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[2];
 
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -1866,17 +1866,17 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.highlightedNode).toBe(component.dropdownTree.defaultNode);
+            expect(component.dropdownTree!.highlightedNode).toBe(component.dropdownTree!.defaultNode);
         }));
 
         it('Ctrl+Home does not change selected node when default label is not null', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.dropdownTree!.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[2];
 
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -1894,7 +1894,7 @@ describe('DropdownTreeComponent', () => {
 
         it('Ctrl+Home changes highlighted node to first visible node when first visible node is not selectable', fakeAsync(() => {
             component.defaultLabel = null;
-            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.dropdownTree!.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[2];
 
             component.nodes[0].selectable = false;
@@ -1902,7 +1902,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -1915,12 +1915,12 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[0]);
+            expect(component.dropdownTree!.highlightedNode).toBe(component.nodes[0]);
         }));
 
         it('Ctrl+Home does not change selected node when first visible node is not selectable', fakeAsync(() => {
             component.defaultLabel = null;
-            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.dropdownTree!.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[2];
 
             component.nodes[0].selectable = false;
@@ -1928,7 +1928,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -1945,13 +1945,13 @@ describe('DropdownTreeComponent', () => {
         }));
 
         it('End changes highlighted node to last visible node', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.dropdownTree!.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[0];
 
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -1963,17 +1963,17 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[2]);
+            expect(component.dropdownTree!.highlightedNode).toBe(component.nodes[2]);
         }));
 
         it('End changes selected node to last visible node', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.dropdownTree!.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[0];
 
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -1989,7 +1989,7 @@ describe('DropdownTreeComponent', () => {
         }));
 
         it('End changes highlighted node to last visible node when last visible node is not selectable', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.dropdownTree!.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[0];
 
             component.nodes[2].selectable = false;
@@ -1997,7 +1997,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -2009,11 +2009,11 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[2]);
+            expect(component.dropdownTree!.highlightedNode).toBe(component.nodes[2]);
         }));
 
         it('End does not change selected node when last visible node is not selectable', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.dropdownTree!.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[0];
 
             component.nodes[2].selectable = false;
@@ -2021,7 +2021,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -2037,13 +2037,13 @@ describe('DropdownTreeComponent', () => {
         }));
 
         it('Ctrl+End changes highlighted node to last visible node', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.dropdownTree!.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[0];
 
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -2056,17 +2056,17 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[2]);
+            expect(component.dropdownTree!.highlightedNode).toBe(component.nodes[2]);
         }));
 
         it('Ctrl+End does not change selected node', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.dropdownTree!.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[0];
 
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -2083,7 +2083,7 @@ describe('DropdownTreeComponent', () => {
         }));
 
         it('Ctrl+End changes highlighted node to last visible node when last visible node is not selectable', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.dropdownTree!.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[0];
 
             component.nodes[2].selectable = false;
@@ -2091,7 +2091,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -2104,11 +2104,11 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.highlightedNode).toBe(component.nodes[2]);
+            expect(component.dropdownTree!.highlightedNode).toBe(component.nodes[2]);
         }));
 
         it('Ctrl+End does not change selected node when last visible node is not selectable', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.dropdownTree!.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[0];
 
             component.nodes[2].selectable = false;
@@ -2116,7 +2116,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -2133,13 +2133,13 @@ describe('DropdownTreeComponent', () => {
         }));
 
         it('Space changes selected node to current highlighted node', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.dropdownTree!.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[2];
 
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -2156,7 +2156,7 @@ describe('DropdownTreeComponent', () => {
         }));
 
         it('Space does not change selected node when highlighted node is not selectable', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.dropdownTree!.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[2];
 
             component.nodes[0].children[1].selectable = false;
@@ -2164,7 +2164,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -2181,13 +2181,13 @@ describe('DropdownTreeComponent', () => {
         }));
 
         it('Ctrl+Space changes selected node to current highlighted node', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.dropdownTree!.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[2];
 
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -2205,7 +2205,7 @@ describe('DropdownTreeComponent', () => {
         }));
 
         it('Ctrl+Space does not change selected node when highlighted node is not selectable', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.dropdownTree!.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[2];
 
             component.nodes[0].children[1].selectable = false;
@@ -2213,7 +2213,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -2231,13 +2231,13 @@ describe('DropdownTreeComponent', () => {
         }));
 
         it('Enter changes selected node to current highlighted node', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.dropdownTree!.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[2];
 
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -2254,7 +2254,7 @@ describe('DropdownTreeComponent', () => {
         }));
 
         it('Enter does not change selected node when highlighted node is not selectable', fakeAsync(() => {
-            component.dropdownTree.highlightedNode = component.nodes[0].children[1];
+            component.dropdownTree!.highlightedNode = component.nodes[0].children[1];
             component.selectedNode = component.nodes[2];
 
             component.nodes[0].children[1].selectable = false;
@@ -2262,7 +2262,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expandNodes(component.dropdownTree, [
+            expandNodes(component.dropdownTree!, [
                 component.nodes[0],
             ]);
 
@@ -2305,7 +2305,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.panelOpen).toBe(false);
+            expect(component.dropdownTree!.panelOpen).toBe(false);
         }));
 
         it('will open when clicked after reenabling', fakeAsync(() => {
@@ -2324,7 +2324,7 @@ describe('DropdownTreeComponent', () => {
             fixture.detectChanges();
             tick();
 
-            expect(component.dropdownTree.panelOpen).toBe(true);
+            expect(component.dropdownTree!.panelOpen).toBe(true);
         }));
     });
 
@@ -2361,15 +2361,15 @@ describe('DropdownTreeComponent', () => {
 })
 class BasicModelComponent {
     defaultExpansionLevel: number = 0;
-    defaultLabel: string = null;
+    defaultLabel: string | null = null;
     disabled: boolean = false;
     nodes: TreeNode[] = createNodeTree();
     required: boolean = false;
-    selectedNode: TreeNode = null;
+    selectedNode: TreeNode | null = null;
     showFullSelectedPath: boolean = false;
-    tabIndexOverride: number;
+    tabIndexOverride: number | undefined;
 
-    @ViewChild(DropdownTreeComponent) dropdownTree: DropdownTreeComponent;
+    @ViewChild(DropdownTreeComponent) dropdownTree: DropdownTreeComponent | undefined;
 
     opened: jasmine.Spy = jasmine.createSpy('opened');
     closed: jasmine.Spy = jasmine.createSpy('closed');
@@ -2386,7 +2386,7 @@ class BasicModelComponent {
 })
 class PlainTabindexComponent {
     nodes: TreeNode[] = createNodeTree();
-    selectedNode: TreeNode = null;
+    selectedNode: TreeNode | null = null;
 }
 
 function createNode(...children: TreeNode[]): TreeNode {

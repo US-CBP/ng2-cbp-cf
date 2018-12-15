@@ -15,7 +15,7 @@ import { CbpHeaderComponent }       from '../cbp-header';
 })
 export class HeaderMenuComponent {
     /* tslint:disable:no-input-rename */
-    @Input('class') classes: string;
+    @Input('class') classes: string | undefined;
     /* tslint:enable */
 
     private header: BaseHeader;

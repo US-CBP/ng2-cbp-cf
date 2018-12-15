@@ -15,5 +15,5 @@
     /* tslint:enable */
 })
 export class BadgeDirective {
-    @Input() color: 'primary' | 'accent' | 'warn';
+    @Input() color: 'primary' | 'accent' | 'warn' = 'primary';
 }

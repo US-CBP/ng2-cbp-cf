@@ -19,42 +19,44 @@ import { TreeNode }                     from '../tree-node.model';
     encapsulation: ViewEncapsulation.None,
 })
 export class DropdownTreeItemComponent implements OnInit {
-    @Input() idPrefix: string;
+    @Input() idPrefix: string | undefined;
+
     @Output() nodeCollapsed: EventEmitter<TreeNode> = new EventEmitter<TreeNode>();
     @Output() nodeExpanded: EventEmitter<TreeNode> = new EventEmitter<TreeNode>();
     @Output() nodeHighlighted: EventEmitter<TreeNode> = new EventEmitter<TreeNode>();
     @Output() nodeSelected: EventEmitter<TreeNode> = new EventEmitter<TreeNode>();
 
-    @ViewChild('text') textElement: ElementRef;
+    @ViewChild('text') textElement: ElementRef | undefined;
 
-    id: string;
-    isHighlighted: boolean;
-    isSelected: boolean;
-    isSelectable: boolean;
-    isExpanded: boolean;
-    hasChildren: boolean;
-    showChildren: boolean;
+    id: string | undefined;
+    isHighlighted: boolean = false;
+    isSelected: boolean = false;
+    isSelectable: boolean = false;
+    isExpanded: boolean | undefined;
+    hasChildren: boolean = false;
+    showChildren: boolean = false;
 
-    private _node: TreeNode;
-    private _highlightedNode: TreeNode;
-    private _selectedNode: TreeNode;
-    private _expandedNodes: Set<TreeNode>;
+    private _node: TreeNode | undefined;
+    private _highlightedNode: TreeNode | undefined;
+    private _selectedNode: TreeNode | undefined;
+    private _expandedNodes: Set<TreeNode> = new Set<TreeNode>();
 
     constructor() { }
 
     ngOnInit(): void {
-        this.id = this.idPrefix + this.node.id.toString();
+        const nodeId = this.node == null ? undefined : this.node.id.toString();
+        this.id = this.idPrefix + nodeId;
     }
 
     @Input()
-    get node(): TreeNode {
+    get node(): TreeNode | undefined {
         return this._node;
     }
-    set node(newValue: TreeNode) {
+    set node(newValue: TreeNode | undefined) {
         if(this._node !== newValue) {
             this._node = newValue;
-            this.hasChildren = this._node.children != null && this._node.children.length > 0;
-            this.isSelectable = this._node.selectable == null || this._node.selectable;
+            this.hasChildren = this._node != null && this._node.children != null && this._node.children.length > 0;
+            this.isSelectable = this._isNodeSelectable(this._node);
 
             this._processExpansion();
             this._processHighlightedNode();
@@ -63,10 +65,10 @@ export class DropdownTreeItemComponent implements OnInit {
     }
 
     @Input()
-    get highlightedNode(): TreeNode {
+    get highlightedNode(): TreeNode | undefined {
         return this._highlightedNode;
     }
-    set highlightedNode(newValue: TreeNode) {
+    set highlightedNode(newValue: TreeNode | undefined) {
         if(this._highlightedNode !== newValue) {
             this._highlightedNode = newValue;
 
@@ -75,10 +77,10 @@ export class DropdownTreeItemComponent implements OnInit {
     }
 
     @Input()
-    get selectedNode(): TreeNode {
+    get selectedNode(): TreeNode | undefined {
         return this._selectedNode;
     }
-    set selectedNode(newValue: TreeNode) {
+    set selectedNode(newValue: TreeNode | undefined) {
         if(this._selectedNode !== newValue) {
             this._selectedNode = newValue;
 
@@ -98,9 +100,9 @@ export class DropdownTreeItemComponent implements OnInit {
         }
     }
 
-    get expanderIcon(): string {
+    get expanderIcon(): string | undefined {
         if(!this.hasChildren) {
-            return null;
+            return undefined;
         }
 
         if(this.isExpanded) {
@@ -137,7 +139,7 @@ export class DropdownTreeItemComponent implements OnInit {
     }
 
     onNodeClick(): void {
-        if(this.node.selectable == null || this.node.selectable) {
+        if(this._isNodeSelectable(this.node)) {
             this.nodeSelected.emit(this.node);
         }
     }
@@ -149,7 +151,7 @@ export class DropdownTreeItemComponent implements OnInit {
     private _processExpansion(): void {
         if(this.node && this.expandedNodes) {
             this.isExpanded = this.hasChildren ? this.expandedNodes.has(this.node) : undefined;
-            this.showChildren = this.hasChildren && this.isExpanded;
+            this.showChildren = this.hasChildren && this.expandedNodes.has(this.node);
         }
     }
 
@@ -159,5 +161,9 @@ export class DropdownTreeItemComponent implements OnInit {
 
     private _processSelectedNode(): void {
         this.isSelected = this.selectedNode === this.node;
+    }
+
+    private _isNodeSelectable(node: TreeNode | undefined): boolean {
+        return node != null && (node.selectable == null || node.selectable);
     }
 }

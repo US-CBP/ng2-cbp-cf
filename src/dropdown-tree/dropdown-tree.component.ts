@@ -185,33 +185,33 @@ export class DropdownTreeComponent
     extends DropdownTreeComponentMixinBase
     implements OnInit, DoCheck, OnChanges, OnDestroy, ControlValueAccessor, CanDisable, HasTabIndex, MatFormFieldControl<TreeNode>, CanUpdateErrorState, CanDisableRipple {
 
-    @Input() panelClass: string | string[] | Set<string> | { [key: string]: any };
+    @Input() panelClass: string | string[] | Set<string> | { [key: string]: any } | undefined;
     @Input('aria-label') ariaLabel: string = ''; // tslint:disable-line:no-input-rename
-    @Input('aria-labelledby') ariaLabelledby: string; // tslint:disable-line:no-input-rename
-    @Input() errorStateMatcher: ErrorStateMatcher;
+    @Input('aria-labelledby') ariaLabelledby: string | undefined; // tslint:disable-line:no-input-rename
+    @Input() errorStateMatcher!: ErrorStateMatcher;
 
     @Output() readonly openedChange: EventEmitter<boolean> = new EventEmitter<boolean>();
     @Output('opened') readonly _openedStream: Observable<void> = this.openedChange.pipe(filter(o => o), map(() => { })); // tslint:disable-line:no-output-rename
     @Output('closed') readonly _closedStream: Observable<void> = this.openedChange.pipe(filter(o => !o), map(() => { })); // tslint:disable-line:no-output-rename
 
-    @ViewChild('trigger') trigger: ElementRef;
-    @ViewChild('panel') panel: ElementRef;
-    @ViewChild(CdkConnectedOverlay) overlayDir: CdkConnectedOverlay;
+    @ViewChild('trigger') trigger: ElementRef | undefined;
+    @ViewChild('panel') panel: ElementRef | undefined;
+    @ViewChild(CdkConnectedOverlay) overlayDir: CdkConnectedOverlay | undefined;
 
     stateChanges: Subject<void> = new Subject<void>();
     focused: boolean = false;
     controlType: string = 'cf-dropdown-tree';
-    errorState: boolean;
+    errorState: boolean = false;
 
-    treeId: string;
-    treeItemIdPrefix: string;
-    defaultNode: TreeNode;
-    highlightedNode: TreeNode;
-    expandedNodes: Set<TreeNode>;
-    effectiveSelectedNode: TreeNode;
+    treeId: string | undefined;
+    treeItemIdPrefix: string | undefined;
+    defaultNode: TreeNode | null = null;
+    highlightedNode: TreeNode | null = null;
+    expandedNodes: Set<TreeNode> = new Set<TreeNode>();
+    effectiveSelectedNode: TreeNode | null = null;
 
-    _triggerRect: ClientRect;
-    _ariaDescribedby: string;
+    _triggerRect: ClientRect | undefined;
+    _ariaDescribedby: string | undefined;
     _triggerFontSize: number = 0;
     _transformOrigin: string = 'top';
     _panelDoneAnimating: boolean = false;
@@ -227,18 +227,18 @@ export class DropdownTreeComponent
     private _panelOpen: boolean = false;
     private _required: boolean = false;
     private _scrollTop: number = 0;
-    private _placeholder: string;
+    private _placeholder: string = '';
     private _uid: string = `dropdown-tree-${nextUniqueId++}`;
     private _id: string = this._uid;
     private _disableNodeCentering: boolean = false;
 
-    private _defaultLabel: string;
-    private _selectedNode: TreeNode;
+    private _defaultLabel: string | undefined;
+    private _selectedNode: TreeNode | null = null;
     private _showFullSelectedPath: boolean = false;
-    private _nodes: TreeNode[];
+    private _nodes: TreeNode[] = [];
     private _defaultExpansionLevel: number = 0;
-    private _parentMap: Map<TreeNode, TreeNode>;
-    private _visibleNodes: TreeNode[];
+    private _parentMap: Map<TreeNode, TreeNode | undefined> = new Map<TreeNode, TreeNode | undefined>();
+    private _visibleNodes: TreeNode[] = [];
 
     /* tslint:disable:no-attribute-parameter-decorator */
     constructor(
@@ -334,20 +334,20 @@ export class DropdownTreeComponent
     }
 
     @Input()
-    get value(): TreeNode {
+    get value(): TreeNode | null {
         return this._selectedNode;
     }
-    set value(newValue: TreeNode) {
+    set value(newValue: TreeNode | null) {
         if(this._selectedNode !== newValue) {
             this.writeValue(newValue);
         }
     }
 
     @Input()
-    get defaultLabel(): string {
+    get defaultLabel(): string | undefined {
         return this._defaultLabel;
     }
-    set defaultLabel(newValue: string) {
+    set defaultLabel(newValue: string | undefined) {
         if(this._defaultLabel !== newValue) {
             this._defaultLabel = newValue;
 
@@ -420,8 +420,8 @@ export class DropdownTreeComponent
             return;
         }
 
-        this._triggerRect = this.trigger.nativeElement.getBoundingClientRect();
-        this._triggerFontSize = parseInt(getComputedStyle(this.trigger.nativeElement)['font-size'], 10);
+        this._triggerRect = this.trigger!.nativeElement.getBoundingClientRect();
+        this._triggerFontSize = parseInt(getComputedStyle(this.trigger!.nativeElement).fontSize || '0', 10);
 
         this._panelOpen = true;
 
@@ -430,8 +430,8 @@ export class DropdownTreeComponent
         this._changeDetectorRef.markForCheck();
 
         this._ngZone.onStable.asObservable().pipe(take(1)).subscribe(() => {
-            if(this._triggerFontSize && this.overlayDir.overlayRef && this.overlayDir.overlayRef.overlayElement) {
-                this.overlayDir.overlayRef.overlayElement.style.fontSize = `${this._triggerFontSize}px`;
+            if(this._triggerFontSize && this.overlayDir!.overlayRef && this.overlayDir!.overlayRef.overlayElement) {
+                this.overlayDir!.overlayRef.overlayElement.style.fontSize = `${this._triggerFontSize}px`;
             }
         });
     }
@@ -446,7 +446,7 @@ export class DropdownTreeComponent
         }
     }
 
-    writeValue(value: TreeNode): void {
+    writeValue(value: TreeNode | null): void {
         this._selectedNode = value;
 
         this._initializeDefaultNode();
@@ -461,7 +461,7 @@ export class DropdownTreeComponent
         this._changeDetectorRef.markForCheck();
     }
 
-    registerOnChange(fn: (value: TreeNode) => void): void {
+    registerOnChange(fn: (value: TreeNode | null) => void): void {
         this._onChange = fn;
     }
 
@@ -544,7 +544,7 @@ export class DropdownTreeComponent
         } else {
             this.openedChange.emit(false);
             this._panelDoneAnimating = false;
-            this.overlayDir.offsetX = 0;
+            this.overlayDir!.offsetX = 0;
             this._changeDetectorRef.markForCheck();
         }
     }
@@ -572,10 +572,10 @@ export class DropdownTreeComponent
     }
 
     _onAttached(): void {
-        this.overlayDir.positionChange.pipe(take(1)).subscribe(() => {
+        this.overlayDir!.positionChange.pipe(take(1)).subscribe(() => {
             this._changeDetectorRef.detectChanges();
             this._calculateOverlayOffsetX();
-            this.panel.nativeElement.scrollTop = this._scrollTop;
+            this.panel!.nativeElement.scrollTop = this._scrollTop;
         });
     }
 
@@ -591,7 +591,7 @@ export class DropdownTreeComponent
         return null;
     }
 
-    private _onChange: (value: TreeNode) => void = () => { };
+    private _onChange: (value: TreeNode | null) => void = () => { };
     private _onTouched = () => { };
 
     private _onClosedKeydown(event: KeyboardEvent): void {
@@ -649,7 +649,9 @@ export class DropdownTreeComponent
         } else if(isKey(event, 'ArrowLeft') || isKey(event, 'Left')) {
             event.preventDefault();
 
-            if(this.expandedNodes.has(this.highlightedNode)) {
+            if(this.highlightedNode == null) {
+                // Do nothing
+            } else if(this.expandedNodes.has(this.highlightedNode)) {
                 this.collapseNode(this.highlightedNode);
             } else {
                 const parentNode = this._parentMap.get(this.highlightedNode);
@@ -662,7 +664,9 @@ export class DropdownTreeComponent
             event.preventDefault();
 
             const originalHighlightedNode = this.highlightedNode;
-            if(this.expandedNodes.has(originalHighlightedNode)) {
+            if(originalHighlightedNode == null) {
+                // Do nothing
+            } else if(this.expandedNodes.has(originalHighlightedNode)) {
                 this._setHighlightedNodeAndScroll(originalHighlightedNode.children[0]);
                 this._trySelectNode(originalHighlightedNode.children[0]);
             } else {
@@ -694,16 +698,20 @@ export class DropdownTreeComponent
 
             event.preventDefault();
 
-            if(this.highlightedNode.selectable == null || this.highlightedNode.selectable) {
+            if(this.highlightedNode != null && (this.highlightedNode.selectable == null || this.highlightedNode.selectable)) {
                 this._emitSelectedNode(this.highlightedNode);
-                this.close();
             }
+            this.close();
         }
     }
 
-    private _getHighlightedNodeIndex(): number | null {
+    private _getHighlightedNodeIndex(): number {
+        if(this.highlightedNode == null) {
+            return 0;
+        }
+
         const index = this._visibleNodes.indexOf(this.highlightedNode);
-        return index === -1 ? null : index;
+        return index === -1 ? 0 : index;
     }
 
     private _calculateOverlayPosition(): void {
@@ -731,7 +739,7 @@ export class DropdownTreeComponent
     }
 
     private _calculateOverlayOffsetX(): void {
-        const overlayRect = this.overlayDir.overlayRef.overlayElement.getBoundingClientRect();
+        const overlayRect = this.overlayDir!.overlayRef.overlayElement.getBoundingClientRect();
         const viewportSize = this._viewportRuler.getViewportSize();
         const isRtl = this._isRtl();
         const paddingWidth = dropdownTreePanelPaddingX * 2;
@@ -747,13 +755,13 @@ export class DropdownTreeComponent
             offsetX -= rightOverflow + dropdownTreePanelViewportPadding;
         }
 
-        this.overlayDir.offsetX = offsetX;
-        this.overlayDir.overlayRef.updatePosition();
+        this.overlayDir!.offsetX = offsetX;
+        this.overlayDir!.overlayRef.updatePosition();
     }
 
     private _calculateOverlayOffsetY(highlightedIndex: number, scrollBuffer: number, maxScroll: number): number {
         const nodeHeight = this._getNodeHeight();
-        const nodeHeightAdjustment = (nodeHeight - this._triggerRect.height) / 2;
+        const nodeHeightAdjustment = (nodeHeight - this._triggerRect!.height) / 2;
         const maxNodesDisplayed = Math.floor(dropdownTreePanelMaxHeight / nodeHeight);
 
         if(this._disableNodeCentering) {
@@ -779,11 +787,11 @@ export class DropdownTreeComponent
     private _checkOverlayWithinViewport(maxScroll: number): void {
         const nodeHeight = this._getNodeHeight();
         const viewportSize = this._viewportRuler.getViewportSize();
-        const topSpaceAvailable = this._triggerRect.top - dropdownTreePanelViewportPadding;
-        const bottomSpaceAvailable = viewportSize.height - this._triggerRect.bottom - dropdownTreePanelViewportPadding;
+        const topSpaceAvailable = this._triggerRect!.top - dropdownTreePanelViewportPadding;
+        const bottomSpaceAvailable = viewportSize.height - this._triggerRect!.bottom - dropdownTreePanelViewportPadding;
         const panelHeightTop = Math.abs(this._offsetY);
         const totalPanelHeight = Math.min(this._getNodeCount() * nodeHeight, dropdownTreePanelMaxHeight);
-        const panelHeightBottom = totalPanelHeight - panelHeightTop - this._triggerRect.height;
+        const panelHeightBottom = totalPanelHeight - panelHeightTop - this._triggerRect!.height;
 
         if(panelHeightBottom > bottomSpaceAvailable) {
             this._adjustPanelUp(panelHeightBottom, bottomSpaceAvailable);
@@ -824,7 +832,7 @@ export class DropdownTreeComponent
 
     private _getOriginBasedOnTreeNode(): string {
         const nodeHeight = this._getNodeHeight();
-        const nodeHeightAdjustment = (nodeHeight - this._triggerRect.height) / 2;
+        const nodeHeightAdjustment = (nodeHeight - this._triggerRect!.height) / 2;
         const originY = Math.abs(this._offsetY) - nodeHeightAdjustment + nodeHeight / 2;
 
         return `50% ${originY}px 0px`;
@@ -851,7 +859,7 @@ export class DropdownTreeComponent
         }
     }
 
-    private _processNodeForMaps(currentNode: TreeNode, parentNode: TreeNode): void {
+    private _processNodeForMaps(currentNode: TreeNode, parentNode: TreeNode | undefined): void {
         this._parentMap.set(currentNode, parentNode);
 
         if(currentNode.children != null) {
@@ -860,9 +868,9 @@ export class DropdownTreeComponent
     }
 
     private _initializeMaps(): void {
-        this._parentMap = new Map<TreeNode, TreeNode>();
+        this._parentMap = new Map<TreeNode, TreeNode | undefined>();
 
-        this.nodes.forEach(node => this._processNodeForMaps(node, null));
+        this.nodes.forEach(node => this._processNodeForMaps(node, undefined));
     }
 
     private _processNodeForVisible(currentNode: TreeNode): void {
@@ -917,18 +925,28 @@ export class DropdownTreeComponent
         this.effectiveSelectedNode = this._selectedNode == null ? this.defaultNode : this._selectedNode;
     }
 
-    private _previousVisibleNode(): TreeNode {
+    private _previousVisibleNode(): TreeNode | null {
+        if(this.highlightedNode == null) {
+            return null;
+        }
+
         const highlightedNodeIndex = this._visibleNodes.indexOf(this.highlightedNode);
         return (highlightedNodeIndex > 0) ? this._visibleNodes[highlightedNodeIndex - 1] : null;
     }
 
-    private _nextVisibleNode(): TreeNode {
+    private _nextVisibleNode(): TreeNode | null {
+        if(this.highlightedNode == null) {
+            return null;
+        }
+
         const highlightedNodeIndex = this._visibleNodes.indexOf(this.highlightedNode);
         return (highlightedNodeIndex < this._visibleNodes.length - 1) ? this._visibleNodes[highlightedNodeIndex + 1] : null;
     }
 
-    private _calculateHighlightedOnOpen(): TreeNode {
-        if(this._visibleNodes.indexOf(this._selectedNode) === -1) {
+    private _calculateHighlightedOnOpen(): TreeNode | null {
+        if(this._selectedNode == null) {
+            return null;
+        } else if(this._visibleNodes.indexOf(this._selectedNode) === -1) {
             return this._visibleNodes[0];
         } else {
             return this._selectedNode;
@@ -999,12 +1017,12 @@ export class DropdownTreeComponent
         const nodeHeight = this._getNodeHeight();
         const highlightedNodeIndex = this._getHighlightedNodeIndex();
         const scrollOffset = highlightedNodeIndex * nodeHeight;
-        const panelTop = this.panel.nativeElement.scrollTop;
+        const panelTop = this.panel!.nativeElement.scrollTop;
 
         if(scrollOffset < panelTop) {
-            this.panel.nativeElement.scrollTop = scrollOffset;
+            this.panel!.nativeElement.scrollTop = scrollOffset;
         } else if(scrollOffset + nodeHeight > panelTop + dropdownTreePanelMaxHeight) {
-            this.panel.nativeElement.scrollTop = Math.max(0, scrollOffset - dropdownTreePanelMaxHeight + nodeHeight);
+            this.panel!.nativeElement.scrollTop = Math.max(0, scrollOffset - dropdownTreePanelMaxHeight + nodeHeight);
         }
     }
 
