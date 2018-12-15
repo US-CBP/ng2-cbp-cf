@@ -17,27 +17,26 @@ import { PayPeriod }                from './pay-period.model';
     styleUrls: ['pay-period-calendar.component.scss'],
 })
 export class PayPeriodCalendarComponent implements OnInit {
-    @Input() id: string;
-    @Input() selectedPayPeriod: PayPeriod;
-    @Input() selectedPayPeriodDayIndex: number;
-    @Input() payPeriodsOfMonth: PayPeriod[];
+    @Input() id: string | undefined;
+    @Input() selectedPayPeriod: PayPeriod | undefined;
+    @Input() selectedPayPeriodDayIndex: number | undefined;
+    @Input() payPeriodsOfMonth: PayPeriod[] | undefined;
 
     @Output() payPeriodSelected: EventEmitter<PayPeriodSelection> = new EventEmitter<PayPeriodSelection>();
     @Output() monthSelected: EventEmitter<PayPeriodMonth> = new EventEmitter<PayPeriodMonth>();
 
-    years: number[];
-    monthsOfYear: PayPeriodMonth[];
-    nextMonths: Map<PayPeriodMonth, PayPeriodMonth>;
-    previousMonths: Map<PayPeriodMonth, PayPeriodMonth>;
+    years: number[] = [];
+    monthsOfYear: PayPeriodMonth[] = [];
+    nextMonths: Map<PayPeriodMonth, PayPeriodMonth | undefined> = new Map<PayPeriodMonth, PayPeriodMonth | undefined>();
+    previousMonths: Map<PayPeriodMonth, PayPeriodMonth | undefined> = new Map<PayPeriodMonth, PayPeriodMonth | undefined>();
 
-    private _months: PayPeriodMonth[];
-    private _monthsByYear: Map<number, PayPeriodMonth[]>;
-    private _shownYear: number;
-    private _shownMonth: PayPeriodMonth;
+    private _months: PayPeriodMonth[] = [];
+    private _monthsByYear: Map<number, PayPeriodMonth[]> = new Map<number, PayPeriodMonth[]>();
+    private _shownYear: number | undefined;
+    private _shownMonth: PayPeriodMonth | undefined;
     private _initialized: boolean = false;
 
-    constructor() {
-    }
+    constructor() { }
 
     ngOnInit(): void {
         this._initialize();
@@ -58,30 +57,30 @@ export class PayPeriodCalendarComponent implements OnInit {
         }
     }
 
-    get shownYear(): number {
+    get shownYear(): number | undefined {
         return this._shownYear;
     }
-    set shownYear(value: number) {
+    set shownYear(value: number | undefined) {
         if(this._shownYear !== value) {
             this._shownYear = value;
-            this.monthsOfYear = this._monthsByYear.get(value);
+            this.monthsOfYear = value == null ? [] : this._monthsByYear.get(value) || [];
             this.shownMonth = this.monthsOfYear[0];
         }
     }
 
-    get shownMonth(): PayPeriodMonth {
+    get shownMonth(): PayPeriodMonth | undefined {
         return this._shownMonth;
     }
-    set shownMonth(value: PayPeriodMonth) {
+    set shownMonth(value: PayPeriodMonth | undefined) {
         if(this._shownMonth !== value) {
             this._shownMonth = value;
-            this.shownYear = value.year;
+            this.shownYear = value == null ? undefined : value.year;
             this._emitMonthSelected();
         }
     }
 
     showPreviousMonth(): void {
-        const previousMonth = this.previousMonths.get(this._shownMonth);
+        const previousMonth = this._shownMonth == null ? undefined : this.previousMonths.get(this._shownMonth);
         if(previousMonth != null) {
             this.shownYear = previousMonth.year;
             this.shownMonth = previousMonth;
@@ -89,7 +88,7 @@ export class PayPeriodCalendarComponent implements OnInit {
     }
 
     showNextMonth(): void {
-        const nextMonth = this.nextMonths.get(this._shownMonth);
+        const nextMonth = this._shownMonth == null ? undefined : this.nextMonths.get(this._shownMonth);
         if(nextMonth != null) {
             this.shownYear = nextMonth.year;
             this.shownMonth = nextMonth;
@@ -97,11 +96,11 @@ export class PayPeriodCalendarComponent implements OnInit {
     }
 
     isFirstMonthShown(): boolean {
-        return this.previousMonths.get(this._shownMonth) == null;
+        return this._shownMonth == null || this.previousMonths.get(this._shownMonth) == null;
     }
 
     isLastMonthShown(): boolean {
-        return this.nextMonths.get(this._shownMonth) == null;
+        return this._shownMonth == null || this.nextMonths.get(this._shownMonth) == null;
     }
 
     payPeriodTrackBy(_index: number, pp: PayPeriod): number {
@@ -116,7 +115,7 @@ export class PayPeriodCalendarComponent implements OnInit {
         return this.isSelected(pp) && this.selectedPayPeriodDayIndex === ppDayIndex;
     }
 
-    selectPayPeriod(pp: PayPeriod, ppDayIndex: number = null): void {
+    selectPayPeriod(pp: PayPeriod, ppDayIndex?: number): void {
         if(pp.isSelectable) {
             this.payPeriodSelected.emit({
                 payPeriod: pp,
@@ -135,7 +134,7 @@ export class PayPeriodCalendarComponent implements OnInit {
         this._initializeNextPrevious();
         this._initializeShownValues();
 
-        this.monthsOfYear = this._monthsByYear.get(this._shownYear);
+        this.monthsOfYear = this._shownYear == null ? [] : this._monthsByYear.get(this._shownYear) || [];
         this._emitMonthSelected();
     }
 
@@ -168,12 +167,13 @@ export class PayPeriodCalendarComponent implements OnInit {
     }
 
     private _initializeNextPrevious(): void {
-        this.nextMonths = new Map<PayPeriodMonth, PayPeriodMonth>();
-        this.previousMonths = new Map<PayPeriodMonth, PayPeriodMonth>();
+        this.nextMonths = new Map<PayPeriodMonth, PayPeriodMonth | undefined>();
+        this.previousMonths = new Map<PayPeriodMonth, PayPeriodMonth | undefined>();
 
-        let previous: PayPeriodMonth = null;
+        let previous: PayPeriodMonth | undefined;
         for(const y of this.years) {
-            for(const m of this._monthsByYear.get(y)) {
+            const months = this._monthsByYear.get(y) || [];
+            for(const m of months) {
                 this.previousMonths.set(m, previous);
 
                 if(previous != null) {
@@ -183,7 +183,9 @@ export class PayPeriodCalendarComponent implements OnInit {
                 previous = m;
             }
         }
-        this.nextMonths.set(previous, null);
+        if(previous != null) {
+            this.nextMonths.set(previous, undefined);
+        }
     }
 
     private _initializeShownValues(): void {
@@ -193,7 +195,7 @@ export class PayPeriodCalendarComponent implements OnInit {
         let month = null;
 
         if(this._monthsByYear.has(year)) {
-            month = this._monthsByYear.get(year).find(m => monthNumber === m.number);
+            month = this._monthsByYear.get(year)!.find(m => monthNumber === m.number);
         }
 
         if(month == null) {
@@ -209,7 +211,8 @@ export class PayPeriodCalendarComponent implements OnInit {
         this.monthSelected.emit(this._shownMonth);
     }
 
-    private _findFirstAvailableMonth(year: number): PayPeriodMonth {
-        return this._monthsByYear.get(year)[0];
+    private _findFirstAvailableMonth(year: number): PayPeriodMonth | undefined {
+        const months = this._monthsByYear.get(year);
+        return months == null ? undefined : months[0];
     }
 }

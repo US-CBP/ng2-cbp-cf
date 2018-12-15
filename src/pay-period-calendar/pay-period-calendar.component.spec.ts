@@ -518,7 +518,7 @@ describe('PayPeriodCalendarComponent', () => {
 
             component.selectPayPeriod(payPeriod);
 
-            expect(subscriber).toHaveBeenCalledWith({ payPeriod, dayIndex: null });
+            expect(subscriber).toHaveBeenCalledWith({ payPeriod, dayIndex: undefined });
         });
 
         it('should raise payPeriodSelected event with day index when a pay period day is selected', () => {
@@ -564,7 +564,7 @@ describe('PayPeriodCalendarComponent', () => {
         });
 
         it('to new value should change shownMonth to first month of new year', () => {
-            const shownYear = component.shownYear;
+            const shownYear = component.shownYear!;
             const firstMonth = months.find(m => m.year === shownYear + 1 && m.number === 1);
 
             component.shownYear = shownYear + 1;
@@ -573,7 +573,7 @@ describe('PayPeriodCalendarComponent', () => {
         });
 
         it('to new value should raise monthSelected event', () => {
-            const shownYear = component.shownYear;
+            const shownYear = component.shownYear!;
             const firstMonth = months.find(m => m.year === shownYear + 1 && m.number === 1);
 
             component.shownYear = shownYear + 1;
@@ -582,7 +582,7 @@ describe('PayPeriodCalendarComponent', () => {
         });
 
         it('to new value should change shownMonth to first available month of new year when first month is not available', () => {
-            const shownYear = component.shownYear;
+            const shownYear = component.shownYear!;
             const firstAvailableMonth = months[0];
 
             component.shownYear = shownYear - 1;
@@ -591,7 +591,7 @@ describe('PayPeriodCalendarComponent', () => {
         });
 
         it('to new value should change monthsOfYear to months for the new year', () => {
-            const shownYear = component.shownYear;
+            const shownYear = component.shownYear!;
             const monthsOfYear = months.filter(m => m.year === shownYear - 1);
 
             component.shownYear = shownYear - 1;
