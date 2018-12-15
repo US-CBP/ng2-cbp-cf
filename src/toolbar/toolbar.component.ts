@@ -15,9 +15,9 @@ import { ToolbarService }   from './toolbar.service';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ToolbarComponent {
-    leftAction: Observable<LeftAction>;
-    portal: Observable<Portal<any>>;
-    title: Observable<string>;
+    leftAction: Observable<LeftAction | null | undefined>;
+    portal: Observable<Portal<any> | null | undefined>;
+    title: Observable<string | null | undefined>;
 
     constructor(private _service: ToolbarService) {
         this.leftAction = this._service.leftAction;

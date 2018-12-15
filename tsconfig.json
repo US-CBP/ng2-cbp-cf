@@ -13,6 +13,7 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "removeComments": true,
+        "strict": true,
         "target": "es5",
         "types": [
             "jasmine",

@@ -22,7 +22,7 @@ let nextId = 0;
     encapsulation: ViewEncapsulation.None,
 })
 export class ListGroupComponent implements AfterContentInit, OnDestroy {
-    @ContentChildren(ListGroupItemComponent) _menuItems: QueryList<ListGroupItemComponent>;
+    @ContentChildren(ListGroupItemComponent) _menuItems: QueryList<ListGroupItemComponent> | undefined;
     @Input() id: string = `cf-list-group-${nextId++}`;
     @Input() height: string = 'auto';
     @Input() width: string = 'auto';
@@ -40,8 +40,8 @@ export class ListGroupComponent implements AfterContentInit, OnDestroy {
 
     ngAfterContentInit(): void {
         if(!this.multiSelect) {
-            this._menuItems.forEach(item => {
-                const sub = item.click.subscribe(event => { this.onToggleItemEvent(event); });
+            this._menuItems!.forEach(item => {
+                const sub = item.click.subscribe((event: Event) => { this.onToggleItemEvent(event); });
                 this._subscription.push(sub);
             });
         }
@@ -52,7 +52,7 @@ export class ListGroupComponent implements AfterContentInit, OnDestroy {
     }
 
     onToggleItemEvent(event: Event): void {
-        this._menuItems.forEach((item: ListGroupItemComponent) => {
+        this._menuItems!.forEach((item: ListGroupItemComponent) => {
             if((event.target as Element).id !== item.id) {
                 item.active = false;
             }

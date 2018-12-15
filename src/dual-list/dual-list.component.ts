@@ -25,8 +25,7 @@ export const dualListControlValueAccessor: any = {
 /* tslint:enable */
 
 export class DualListChange {
-    source: DualListComponent;
-    items: any[];
+    constructor(public readonly source: DualListComponent, public readonly items: any[]) { }
 }
 
 @Component({
@@ -140,7 +139,7 @@ export class DualListComponent implements ControlValueAccessor {
         return false;
     }
 
-    _toggleItem(event: MouseEvent, item: any, objList: BasicList): void {
+    _toggleItem(event: MouseEvent | null, item: any, objList: BasicList): void {
         if(event) {
             event.stopPropagation();
         }
@@ -234,9 +233,8 @@ export class DualListComponent implements ControlValueAccessor {
     }
 
     private _emitChangeEvent(): void {
-        const event = new DualListChange();
-        event.source = this;
-        event.items = _.cloneDeep(this.selectedL.list);
+        const items = _.cloneDeep(this.selectedL.list);
+        const event = new DualListChange(this, items);
 
         this._controlValueAccessorChangeFn(this.selectedL.list);
         this.change.emit(event);
@@ -249,7 +247,9 @@ export class DualListComponent implements ControlValueAccessor {
         objList.dragStart = true;
         const sourceID = _.findIndex(this.source, item);
         const uniqueId: string = this.id + '_' + sourceID.toString();
-        event.dataTransfer.setData('text', uniqueId);
+        if(event.dataTransfer != null) {
+            event.dataTransfer.setData('text', uniqueId);
+        }
     }
 
     private _moveAll(fromList: BasicList, toList: BasicList): void {

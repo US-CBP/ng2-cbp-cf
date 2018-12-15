@@ -32,7 +32,8 @@ export interface HeaderMenu {
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SideNavComponent {
-    @Input() appMenu: Observable<HeaderMenu>;
+    @Input() appMenu: Observable<HeaderMenu> | undefined;
+
     @Output() onRouteClicked: EventEmitter<void> = new EventEmitter<void>();
 
     openMenuNames: Set<string> = new Set<string>();

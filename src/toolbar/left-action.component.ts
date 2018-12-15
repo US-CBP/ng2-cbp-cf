@@ -31,16 +31,16 @@ import {
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LeftActionComponent implements AfterViewInit, OnDestroy {
-    @Input() leftAction: LeftAction = null;
+    @Input() leftAction: LeftAction | undefined;
 
-    @ViewChildren('btn', { read: ElementRef }) viewChildren: QueryList<ElementRef>;
+    @ViewChildren('btn', { read: ElementRef }) viewChildren: QueryList<ElementRef> | undefined;
 
     private _destroy$: Subject<void> = new Subject<void>();
 
     constructor() { }
 
     ngAfterViewInit(): void {
-        this.viewChildren.changes
+        this.viewChildren!.changes
             .pipe(
                 filter(buttons => buttons.length > 0),
                 mergeMap(buttons => this.leftAction instanceof LocationCloseAction ||
@@ -57,6 +57,8 @@ export class LeftActionComponent implements AfterViewInit, OnDestroy {
     }
 
     private _clickAction(): void {
-        this.leftAction.action();
+        if(this.leftAction != null) {
+            this.leftAction.action();
+        }
     }
 }

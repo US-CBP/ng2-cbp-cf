@@ -15,35 +15,34 @@ import { Toolbar }          from './toolbar.model';
 
 @Injectable()
 export class ToolbarService {
-    private _leftAction: BehaviorSubject<LeftAction> = new BehaviorSubject<LeftAction>(null);
-    private _portal: BehaviorSubject<Portal<any>> = new BehaviorSubject<Portal<any>>(null);
-    private _title: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+    private _leftAction: BehaviorSubject<LeftAction | null | undefined> = new BehaviorSubject<LeftAction | null | undefined>(null);
+    private _portal: BehaviorSubject<Portal<any> | null | undefined> = new BehaviorSubject<Portal<any> | null | undefined>(null);
+    private _title: BehaviorSubject<string | null | undefined> = new BehaviorSubject<string | null | undefined>(null);
     private _sideNavOpened: EventEmitter<void> = new EventEmitter<void>();
 
-    constructor() {
-    }
+    constructor() { }
 
-    get leftAction(): Observable<LeftAction> {
+    get leftAction(): Observable<LeftAction | null | undefined> {
         return this._leftAction.asObservable();
     }
 
-    setLeftAction(newValue: LeftAction): void {
+    setLeftAction(newValue: LeftAction | null | undefined): void {
         this._leftAction.next(newValue);
     }
 
-    get portal(): Observable<Portal<any>> {
+    get portal(): Observable<Portal<any> | null | undefined> {
         return this._portal.asObservable();
     }
 
-    setPortal(newValue: Portal<any>): void {
+    setPortal(newValue: Portal<any> | null | undefined): void {
         this._portal.next(newValue);
     }
 
-    get title(): Observable<string> {
+    get title(): Observable<string | null | undefined> {
         return this._title.asObservable();
     }
 
-    setTitle(newValue: string): void {
+    setTitle(newValue: string | null | undefined): void {
         this._title.next(newValue);
     }
 
