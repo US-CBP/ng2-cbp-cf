@@ -54,7 +54,7 @@ export class ToolbarService {
         this._sideNavOpened.emit();
     }
 
-    set(newValue: Toolbar): void {
+    set(newValue: Toolbar | null | undefined): void {
         if(newValue == null) {
             this.setLeftAction(null);
             this.setPortal(null);
