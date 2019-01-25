@@ -16,12 +16,12 @@
             <mat-icon *ngIf="expanderIcon != null">{{expanderIcon}}</mat-icon>
         </span><!--
         --><span #text class="cf-dropdown-tree-node-text" (click)="onNodeClick()" (mouseenter)="onNodeMouseEnter()">
-            {{node.text}}
+            {{node?.text}}
             <span class="cf-dropdown-tree-node-ripple" mat-ripple [matRippleTrigger]="text.nativeElement"></span>
         </span>
     </div>
     <ul role="group" *ngIf="showChildren">
-        <cf-dropdown-tree-item *ngFor="let n of node.children"
+        <cf-dropdown-tree-item *ngFor="let n of node?.children"
                                [node]="n"
                                [idPrefix]="idPrefix"
                                [highlightedNode]="highlightedNode"
@@ -30,6 +30,7 @@
                                (nodeCollapsed)="onChildNodeCollapsed($event)"
                                (nodeExpanded)="onChildNodeExpanded($event)"
                                (nodeHighlighted)="onChildNodeHighlighted($event)"
-                               (nodeSelected)="onChildNodeSelected($event)"></cf-dropdown-tree-item>
+                               (nodeSelected)="onChildNodeSelected($event)">
+        </cf-dropdown-tree-item>
     </ul>
 </li>
