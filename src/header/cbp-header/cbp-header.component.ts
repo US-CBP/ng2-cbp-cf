@@ -15,13 +15,16 @@ import { NavItemType }      from '../nav-item-type.type';
     templateUrl: 'cbp-header.component.html',
     styleUrls: ['cbp-header.component.scss'],
     encapsulation: ViewEncapsulation.None,
+    host: {
+        class: 'cf-legacy-box-sizing', // tslint:disable-line:use-host-property-decorator
+    },
 })
 export class CbpHeaderComponent extends BaseHeader {
     @Input() homeUrl: string = '';
     @Input() homeUrlType: NavItemType = 'href';
     @Input() disableFeedback: boolean = false;
 
-    @Output() feedbackClicked: EventEmitter<void> = new EventEmitter<void>();
+    @Output() readonly feedbackClicked: EventEmitter<void> = new EventEmitter<void>();
 
     constructor(viewportRuler: ViewportRuler) {
         super(viewportRuler);

@@ -1,37 +1,3 @@
-﻿:host {
-    /deep/ .mat-toolbar {
-        min-height: 48px;
-
-        /deep/ .mat-toolbar-row {
-            height: 48px;
-
-            .left-action {
-                display: block;
-                margin-left: -16px;
-                width: 42px;
-            }
-
-            h1 {
-                font-size: 20px;
-                font-weight: 700;
-            }
-
-            > .toolbar-spacer {
-                flex: 1 1 auto;
-            }
-
-            > .global-toolbar-buttons {
-                display: block;
-                margin-right: 5px;
-
-                button {
-                    vertical-align: middle;
-                }
-            }
-
-            > .toolbar-buttons {
-                display: block;
-            }
-        }
-    }
+﻿.cf-toolbar-spacer {
+    flex: 1 1 auto;
 }

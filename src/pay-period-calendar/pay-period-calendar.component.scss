@@ -1,41 +1,14 @@
 ﻿@import '../shared/_variables.scss';
 
 .pay-period-calendar {
-    font-size: 0.9em;
-    width: 22em;
+    width: 304px;
 
     .pay-period-calendar-nav {
-        > div {
-            display: inline-block;
-        }
-
-        .prev-month {
-            padding-left: 0.5em;
-            text-align: left;
-            width: 15%;
-        }
+        align-items: center;
+        display: flex;
 
         .quick-select {
-            width: 35%;
-
-            &.year,
-            &.month {
-                text-align: center;
-
-                /deep/ .mat-select { /* stylelint-disable-line selector-combinator-space-after, selector-combinator-space-before */
-                    width: 4em;
-
-                    .mat-select-trigger {
-                        min-width: 4em;
-                    }
-                }
-            }
-        }
-
-        .next-month {
-            padding-right: 0.5em;
-            text-align: right;
-            width: 15%;
+            flex: 1 0 auto;
         }
     }
 
@@ -51,11 +24,11 @@
 
                     th {
                         border-bottom: 2px solid #d5d5d5;
-                        padding: 0.7em 0.3em;
+                        padding: 8px 4px;
                         text-align: center;
 
                         &.day {
-                            width: 12%;
+                            width: 28px;
                         }
                     }
                 }
@@ -68,7 +41,7 @@
             tr {
                 th.pp {
                     button {
-                        min-width: 3.4em;
+                        min-width: 48px;
                     }
                 }
 
@@ -112,7 +85,7 @@
                     text-align: center;
 
                     &.day {
-                        padding: 0.3em;
+                        padding: 4px;
                     }
                 }
 
