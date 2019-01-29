@@ -7,6 +7,7 @@ import { MATERIAL_SANITY_CHECKS }       from '@angular/material/core';
 import { NoopAnimationsModule }         from '@angular/platform-browser/animations';
 import * as moment                      from 'moment/moment';
 
+import { standardISOFormat }            from '../shared';
 import { PayPeriodCalendarComponent }   from './pay-period-calendar.component';
 import { PayPeriodCalendarModule }      from './pay-period-calendar.module';
 import { PayPeriodMonth }               from './pay-period-month.model';
@@ -44,7 +45,7 @@ describe('PayPeriodCalendarComponent', () => {
             const selectedPayPeriod = {
                 id: 22,
                 number: 22,
-                startDate: startDate.toDate(),
+                startDate: startDate.format(standardISOFormat),
                 isSelectable: true,
             };
 
@@ -59,7 +60,7 @@ describe('PayPeriodCalendarComponent', () => {
             const selectedPayPeriod = {
                 id: 22,
                 number: 22,
-                startDate: startDate.toDate(),
+                startDate: startDate.format(standardISOFormat),
                 isSelectable: true,
             };
 
@@ -75,7 +76,7 @@ describe('PayPeriodCalendarComponent', () => {
             const selectedPayPeriod = {
                 id: 22,
                 number: 22,
-                startDate: startDate.toDate(),
+                startDate: startDate.format(standardISOFormat),
                 isSelectable: true,
             };
 
@@ -90,7 +91,7 @@ describe('PayPeriodCalendarComponent', () => {
             const selectedPayPeriod = {
                 id: 22,
                 number: 22,
-                startDate: startDate.toDate(),
+                startDate: startDate.format(standardISOFormat),
                 isSelectable: true,
             };
 
@@ -400,7 +401,7 @@ describe('PayPeriodCalendarComponent', () => {
             const selectedPayPeriod = {
                 id: 22,
                 number: 22,
-                startDate: startDate.toDate(),
+                startDate: startDate.format(standardISOFormat),
                 isSelectable: true,
             };
             component.selectedPayPeriod = selectedPayPeriod;
@@ -413,7 +414,7 @@ describe('PayPeriodCalendarComponent', () => {
             const payPeriod = {
                 id: 1,
                 number: 1,
-                startDate: startDate.toDate(),
+                startDate: startDate.format(standardISOFormat),
                 isSelectable: true,
             };
 
@@ -425,7 +426,7 @@ describe('PayPeriodCalendarComponent', () => {
             const payPeriod = {
                 id: 22,
                 number: 22,
-                startDate: startDate.toDate(),
+                startDate: startDate.format(standardISOFormat),
                 isSelectable: true,
             };
 
@@ -439,7 +440,7 @@ describe('PayPeriodCalendarComponent', () => {
             const selectedPayPeriod = {
                 id: 22,
                 number: 22,
-                startDate: startDate.toDate(),
+                startDate: startDate.format(standardISOFormat),
                 isSelectable: true,
             };
             component.selectedPayPeriod = selectedPayPeriod;
@@ -453,7 +454,7 @@ describe('PayPeriodCalendarComponent', () => {
             const payPeriod = {
                 id: 1,
                 number: 1,
-                startDate: startDate.toDate(),
+                startDate: startDate.format(standardISOFormat),
                 isSelectable: true,
             };
 
@@ -465,7 +466,7 @@ describe('PayPeriodCalendarComponent', () => {
             const payPeriod = {
                 id: 22,
                 number: 22,
-                startDate: startDate.toDate(),
+                startDate: startDate.format(standardISOFormat),
                 isSelectable: true,
             };
 
@@ -477,7 +478,7 @@ describe('PayPeriodCalendarComponent', () => {
             const payPeriod = {
                 id: 22,
                 number: 22,
-                startDate: startDate.toDate(),
+                startDate: startDate.format(standardISOFormat),
                 isSelectable: true,
             };
 
@@ -495,7 +496,7 @@ describe('PayPeriodCalendarComponent', () => {
             const payPeriod = {
                 id: 1,
                 number: 1,
-                startDate: startDate.toDate(),
+                startDate: startDate.format(standardISOFormat),
                 isSelectable: true,
             };
 
@@ -512,7 +513,7 @@ describe('PayPeriodCalendarComponent', () => {
             const payPeriod = {
                 id: 1,
                 number: 1,
-                startDate: startDate.toDate(),
+                startDate: startDate.format(standardISOFormat),
                 isSelectable: true,
             };
 
@@ -529,7 +530,7 @@ describe('PayPeriodCalendarComponent', () => {
             const payPeriod = {
                 id: 1,
                 number: 1,
-                startDate: startDate.toDate(),
+                startDate: startDate.format(standardISOFormat),
                 isSelectable: true,
             };
             const dayIndex = 5;
@@ -632,7 +633,7 @@ describe('PayPeriodCalendarComponent', () => {
                 {
                     id: 1,
                     number: 1,
-                    startDate: startDate.toDate(),
+                    startDate: startDate.format(standardISOFormat),
                     isSelectable: true,
                 },
             ];
